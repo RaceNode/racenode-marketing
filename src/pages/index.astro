@@ -2,20 +2,28 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import HeroSection from '../components/HeroSection.astro';
-import FeaturesSection from '../components/FeaturesSection.astro';
-import PricingSection from '../components/PricingSection.astro';
-import CTASection from '../components/CTASection.astro';
+import LandingHero from '../components/landing/LandingHero.astro';
+import LandingProblem from '../components/landing/LandingProblem.astro';
+import LandingSolution from '../components/landing/LandingSolution.astro';
+import LandingModules from '../components/landing/LandingModules.astro';
+import LandingSync from '../components/landing/LandingSync.astro';
+import LandingRoadmap from '../components/landing/LandingRoadmap.astro';
+import LandingCredibility from '../components/landing/LandingCredibility.astro';
+import LandingCTA from '../components/landing/LandingCTA.astro';
 ---
 
-<BaseLayout title="RaceNode - Manage Your Racing Team Faster & Smarter">
+<BaseLayout title="RaceNode - Your Racing Team's Operations, Finally in One Place">
   <div class="min-h-screen bg-gray-950 flex flex-col">
     <Header />
     <main class="flex-1">
-      <HeroSection />
-      <FeaturesSection />
-      <PricingSection />
-      <CTASection />
+      <LandingHero />
+      <LandingProblem />
+      <LandingSolution />
+      <LandingModules />
+      <LandingSync />
+      <LandingRoadmap />
+      <LandingCredibility />
+      <LandingCTA />
     </main>
     <Footer />
   </div>

@@ -1,0 +1,70 @@
+---
+const painPoints = [
+  {
+    title: "Centralized docs nobody reads",
+    description: "You spend hours consolidating information into a clean pre-event document, but each staff member only cares about their own part.",
+    icon: "file-text"
+  },
+  {
+    title: "Information buried in chat groups",
+    description: "Critical details get lost in WhatsApp threads and email chains. When you need something, it's impossible to find.",
+    icon: "message-circle"
+  },
+  {
+    title: "Roadbook blocked by missing data",
+    description: "You can't publish the roadbook because half the information is still missing — even though you already have data you could share.",
+    icon: "file-x"
+  },
+  {
+    title: "Last-minute changes after V3",
+    description: "Information changes at the last minute, after you've already sent the \"final\" version. Again.",
+    icon: "refresh-cw"
+  }
+];
+
+const icons: Record<string, string> = {
+  "file-text": '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+  "message-circle": '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+  "file-x": '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m14.5 12.5-5 5"/><path d="m9.5 12.5 5 5"/>',
+  "refresh-cw": '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>'
+};
+---
+
+<section id="how-it-works" class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/50">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 md:mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Running a race team means juggling everything at once.
+      </h2>
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+        If any of this sounds familiar, you're not alone.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {painPoints.map((point) => (
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-colors">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-red-900/20 rounded-lg flex items-center justify-center shrink-0 border border-red-500/30">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-6 h-6 text-red-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                set:html={icons[point.icon]}
+              />
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white mb-2">{point.title}</h3>
+              <p class="text-gray-400">{point.description}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

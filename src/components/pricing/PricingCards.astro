@@ -11,10 +11,9 @@ const appUrl = "https://app.racenode.com";
         <div class="flex items-center gap-3 mb-4">
           <div class="w-10 h-10 bg-orange-900/20 rounded-lg flex items-center justify-center border border-orange-500/30">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <path d="m9 14 2 2 4-4"/>
             </svg>
           </div>
           <h3 class="text-white font-semibold text-lg">Management</h3>
@@ -63,6 +62,17 @@ const appUrl = "https://app.racenode.com";
           </li>
         </ul>
 
+        <!-- Included modules -->
+        <div class="mb-6 pt-4 border-t border-gray-800">
+          <p class="text-gray-500 text-xs uppercase mb-3">Includes access to</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2 py-1 bg-cyan-900/20 text-cyan-400 rounded text-xs border border-cyan-500/20">Personal</span>
+            <span class="px-2 py-1 bg-green-900/20 text-green-400 rounded text-xs border border-green-500/20">Staff</span>
+            <span class="px-2 py-1 bg-red-900/20 text-red-400 rounded text-xs border border-red-500/20">Racecars</span>
+            <span class="px-2 py-1 bg-blue-900/20 text-blue-400 rounded text-xs border border-blue-500/20">Events</span>
+          </div>
+        </div>
+
         <a
           href={`${appUrl}/signup`}
           class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-center"
@@ -76,10 +86,11 @@ const appUrl = "https://app.racenode.com";
         <div class="flex items-center gap-3 mb-4">
           <div class="w-10 h-10 bg-purple-900/20 rounded-lg flex items-center justify-center border border-purple-500/30">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 17h4V5H2v12h3"/>
-              <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/>
-              <circle cx="7.5" cy="17.5" r="2.5"/>
-              <circle cx="17.5" cy="17.5" r="2.5"/>
+              <path d="M6 20h0a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h0"/>
+              <path d="M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14"/>
+              <path d="M10 20h4"/>
+              <circle cx="16" cy="20" r="2"/>
+              <circle cx="8" cy="20" r="2"/>
             </svg>
           </div>
           <h3 class="text-white font-semibold text-lg">Logistics</h3>
@@ -127,6 +138,17 @@ const appUrl = "https://app.racenode.com";
           </li>
         </ul>
 
+        <!-- Included modules -->
+        <div class="mb-6 pt-4 border-t border-gray-800">
+          <p class="text-gray-500 text-xs uppercase mb-3">Includes access to</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2 py-1 bg-cyan-900/20 text-cyan-400 rounded text-xs border border-cyan-500/20">Personal</span>
+            <span class="px-2 py-1 bg-green-900/20 text-green-400 rounded text-xs border border-green-500/20">Staff</span>
+            <span class="px-2 py-1 bg-yellow-900/20 text-yellow-400 rounded text-xs border border-yellow-500/20">Fleet</span>
+            <span class="px-2 py-1 bg-blue-900/20 text-blue-400 rounded text-xs border border-blue-500/20">Events</span>
+          </div>
+        </div>
+
         <a
           href={`${appUrl}/signup`}
           class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-center"
@@ -136,12 +158,12 @@ const appUrl = "https://app.racenode.com";
       </div>
 
       <!-- Personal Module -->
-      <div class="bg-gray-900 border border-emerald-500/30 rounded-xl p-6 md:p-8 flex flex-col">
+      <div class="bg-gray-900 border border-cyan-500/30 rounded-xl p-6 md:p-8 flex flex-col">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 bg-emerald-900/20 rounded-lg flex items-center justify-center border border-emerald-500/30">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
-              <path d="M12 18h.01"/>
+          <div class="w-10 h-10 bg-cyan-900/20 rounded-lg flex items-center justify-center border border-cyan-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
             </svg>
           </div>
           <h3 class="text-white font-semibold text-lg">Personal</h3>
@@ -151,44 +173,44 @@ const appUrl = "https://app.racenode.com";
           <div class="flex items-baseline gap-2">
             <span class="text-4xl font-bold text-white">Free</span>
           </div>
-          <span class="text-emerald-400 text-sm">Included for every team member</span>
+          <span class="text-cyan-400 text-sm">Included for every team member</span>
         </div>
 
         <ul class="space-y-3 mb-8 flex-grow">
           <li class="flex items-start gap-2 text-gray-300 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
             View personal event assignments
           </li>
           <li class="flex items-start gap-2 text-gray-300 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
             Travel details & documents
           </li>
           <li class="flex items-start gap-2 text-gray-300 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
             Team role & car assignments
           </li>
           <li class="flex items-start gap-2 text-gray-300 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
             Meal schedule
           </li>
           <li class="flex items-start gap-2 text-gray-300 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
             Mobile-first interface
           </li>
         </ul>
 
-        <div class="bg-emerald-900/20 border border-emerald-500/20 rounded-lg p-4 text-center">
-          <p class="text-emerald-300 text-sm">
+        <div class="bg-cyan-900/20 border border-cyan-500/20 rounded-lg p-4 text-center">
+          <p class="text-cyan-300 text-sm">
             Automatically included when your team subscribes to any module.
           </p>
         </div>

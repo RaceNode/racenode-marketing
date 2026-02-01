@@ -1,0 +1,49 @@
+---
+const appUrl = "https://app.racenode.com";
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/50">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+      Structure your next event.
+    </h2>
+    <p class="text-lg text-gray-400 mb-4">
+      Start with a 14-day free trial. No credit card required.
+    </p>
+
+    <!-- Early adopter pricing highlight -->
+    <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-900/30 border border-green-700/50 rounded-full text-sm mb-8">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v4"/>
+        <path d="m16.24 7.76-2.83 2.83"/>
+        <path d="M21 12h-4"/>
+        <path d="m16.24 16.24-2.83-2.83"/>
+        <path d="M12 18v4"/>
+        <path d="m7.76 16.24 2.83-2.83"/>
+        <path d="M3 12h4"/>
+        <path d="m7.76 7.76 2.83 2.83"/>
+      </svg>
+      <span class="text-green-300">Early adopter pricing: <span class="font-semibold text-white">99.99&euro;/mo</span> per module</span>
+    </div>
+
+    <!-- CTA Button -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        href={`${appUrl}/signup`}
+        class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors w-full sm:w-auto text-center"
+      >
+        Start free trial
+      </a>
+      <a
+        href="/pricing"
+        class="text-gray-300 hover:text-white transition-colors flex items-center gap-2"
+      >
+        View full pricing
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/>
+          <path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
