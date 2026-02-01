@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ManagementHero from '../components/management/ManagementHero.astro';
+import ManagementPainPoints from '../components/management/ManagementPainPoints.astro';
+import ManagementFeatures from '../components/management/ManagementFeatures.astro';
+import ManagementSync from '../components/management/ManagementSync.astro';
+import ManagementRoadmap from '../components/management/ManagementRoadmap.astro';
+import ManagementCTA from '../components/management/ManagementCTA.astro';
+
+const title = "Management Module — Staff, Racecars, Teams & Meals per Event | RaceNode";
+const description = "Structure your racing team's event management. Assign staff, racecars, build crew compositions, and plan meals — all centralized per event. Free trial, no credit card required.";
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <ManagementHero />
+      <ManagementPainPoints />
+      <ManagementFeatures />
+      <ManagementSync />
+      <ManagementRoadmap />
+      <ManagementCTA />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
