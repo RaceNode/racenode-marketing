@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PricingHero from '../components/pricing/PricingHero.astro';
+import PricingExplainer from '../components/pricing/PricingExplainer.astro';
+import PricingCards from '../components/pricing/PricingCards.astro';
+import PricingEarlyAdopter from '../components/pricing/PricingEarlyAdopter.astro';
+import PricingFAQ from '../components/pricing/PricingFAQ.astro';
+import PricingCTA from '../components/pricing/PricingCTA.astro';
+
+const title = "Pricing — Modular Plans for Racing Teams | RaceNode";
+const description = "Simple modular pricing for racing team management. Per team, not per user. Free trial, no credit card required. Early adopter pricing locked for life.";
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <PricingHero />
+      <PricingExplainer />
+      <PricingCards />
+      <PricingEarlyAdopter />
+      <PricingFAQ />
+      <PricingCTA />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

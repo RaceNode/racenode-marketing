@@ -1,0 +1,199 @@
+---
+const appUrl = "https://app.racenode.com";
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Management Module -->
+      <div class="bg-gray-900 border border-orange-500/30 rounded-xl p-6 md:p-8 flex flex-col">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-orange-900/20 rounded-lg flex items-center justify-center border border-orange-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg">Management</h3>
+        </div>
+
+        <div class="mb-6">
+          <span class="text-gray-500 line-through text-lg">€149.99/mo</span>
+          <div class="flex items-baseline gap-2">
+            <span class="text-4xl font-bold text-white">€99.99</span>
+            <span class="text-gray-400">/mo</span>
+          </div>
+          <span class="text-orange-400 text-sm">Early access pricing</span>
+        </div>
+
+        <ul class="space-y-3 mb-8 flex-grow">
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-orange-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Event staff assignment & roles
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-orange-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Racecar assignment per event
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-orange-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Team composition & crew structure
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-orange-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Meal planning per event day
+          </li>
+          <li class="flex items-start gap-2 text-gray-400 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            <span class="italic">Coming soon: Event timetable</span>
+          </li>
+        </ul>
+
+        <a
+          href={`${appUrl}/signup`}
+          class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-center"
+        >
+          Start free trial
+        </a>
+      </div>
+
+      <!-- Logistics Module -->
+      <div class="bg-gray-900 border border-purple-500/30 rounded-xl p-6 md:p-8 flex flex-col">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-purple-900/20 rounded-lg flex items-center justify-center border border-purple-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 17h4V5H2v12h3"/>
+              <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/>
+              <circle cx="7.5" cy="17.5" r="2.5"/>
+              <circle cx="17.5" cy="17.5" r="2.5"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg">Logistics</h3>
+        </div>
+
+        <div class="mb-6">
+          <span class="text-gray-500 line-through text-lg">€149.99/mo</span>
+          <div class="flex items-baseline gap-2">
+            <span class="text-4xl font-bold text-white">€99.99</span>
+            <span class="text-gray-400">/mo</span>
+          </div>
+          <span class="text-purple-400 text-sm">Early access pricing</span>
+        </div>
+
+        <ul class="space-y-3 mb-8 flex-grow">
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-purple-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Logistics overview & status tracking
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-purple-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Event staff logistics management
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-purple-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Accommodation & rooming lists
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-purple-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Travel planning (multi-segment)
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-purple-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Event vehicle management
+          </li>
+        </ul>
+
+        <a
+          href={`${appUrl}/signup`}
+          class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-center"
+        >
+          Start free trial
+        </a>
+      </div>
+
+      <!-- Personal Module -->
+      <div class="bg-gray-900 border border-emerald-500/30 rounded-xl p-6 md:p-8 flex flex-col">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-emerald-900/20 rounded-lg flex items-center justify-center border border-emerald-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+              <path d="M12 18h.01"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg">Personal</h3>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex items-baseline gap-2">
+            <span class="text-4xl font-bold text-white">Free</span>
+          </div>
+          <span class="text-emerald-400 text-sm">Included for every team member</span>
+        </div>
+
+        <ul class="space-y-3 mb-8 flex-grow">
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            View personal event assignments
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Travel details & documents
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Team role & car assignments
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Meal schedule
+          </li>
+          <li class="flex items-start gap-2 text-gray-300 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            Mobile-first interface
+          </li>
+        </ul>
+
+        <div class="bg-emerald-900/20 border border-emerald-500/20 rounded-lg p-4 text-center">
+          <p class="text-emerald-300 text-sm">
+            Automatically included when your team subscribes to any module.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
