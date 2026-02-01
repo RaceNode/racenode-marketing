@@ -1,0 +1,236 @@
+---
+interface Feature {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  bg900: string;
+  coming?: boolean;
+}
+
+const features: Feature[] = [
+  {
+    id: 'personal',
+    name: 'Personal',
+    description: 'Personal dashboard and assignments',
+    icon: 'user',
+    color: 'text-blue-400',
+    bg900: 'bg-blue-900/20',
+  },
+  {
+    id: 'staff',
+    name: 'Staff',
+    description: 'Manage team members and personnel',
+    icon: 'users',
+    color: 'text-green-400',
+    bg900: 'bg-green-900/20',
+  },
+  {
+    id: 'fleet',
+    name: 'Fleet',
+    description: 'Manage vehicles and logistics',
+    icon: 'van',
+    color: 'text-yellow-400',
+    bg900: 'bg-yellow-900/20',
+  },
+  {
+    id: 'racecar',
+    name: 'Racecars',
+    description: 'Manage competition vehicles',
+    icon: 'car',
+    color: 'text-red-400',
+    bg900: 'bg-red-900/20',
+  },
+  {
+    id: 'events',
+    name: 'Events',
+    description: 'Plan and manage racing events',
+    icon: 'trophy',
+    color: 'text-blue-400',
+    bg900: 'bg-blue-900/20',
+  },
+  {
+    id: 'management',
+    name: 'Management',
+    description: 'Advanced event coordination',
+    icon: 'clipboard-check',
+    color: 'text-orange-400',
+    bg900: 'bg-orange-900/20',
+  },
+  {
+    id: 'logistics',
+    name: 'Logistics',
+    description: 'Travel, accommodation and transport',
+    icon: 'luggage',
+    color: 'text-purple-400',
+    bg900: 'bg-purple-900/20',
+  },
+  {
+    id: 'ai',
+    name: 'AI',
+    description: 'Smart insights and predictions',
+    icon: 'sparkles',
+    color: 'text-cyan-400',
+    bg900: 'bg-cyan-900/20',
+    coming: true,
+  },
+  {
+    id: 'planning',
+    name: 'Planning',
+    description: 'Team calendar and scheduling',
+    icon: 'calendar',
+    color: 'text-green-400',
+    bg900: 'bg-green-900/20',
+    coming: true,
+  },
+  {
+    id: 'joblist',
+    name: 'JobList',
+    description: 'Task management and tracking',
+    icon: 'list-todo',
+    color: 'text-orange-400',
+    bg900: 'bg-orange-900/20',
+    coming: true,
+  },
+  {
+    id: 'tyres',
+    name: 'Tyres',
+    description: 'Tyre and rim inventory management',
+    icon: 'circle-dot',
+    color: 'text-red-400',
+    bg900: 'bg-red-900/20',
+    coming: true,
+  },
+  {
+    id: 'finance',
+    name: 'Finance',
+    description: 'Budget and expense tracking',
+    icon: 'dollar-sign',
+    color: 'text-yellow-400',
+    bg900: 'bg-yellow-900/20',
+    coming: true,
+  },
+  {
+    id: 'mechanics',
+    name: 'Mechanics',
+    description: 'Workshop and maintenance tools',
+    icon: 'wrench',
+    color: 'text-purple-400',
+    bg900: 'bg-purple-900/20',
+    coming: true,
+  },
+  {
+    id: 'setup',
+    name: 'Setup',
+    description: 'Car setup sheets and configurations',
+    icon: 'settings',
+    color: 'text-orange-400',
+    bg900: 'bg-orange-900/20',
+    coming: true,
+  },
+  {
+    id: 'run',
+    name: 'Run',
+    description: 'Session timing and run planning',
+    icon: 'play',
+    color: 'text-green-400',
+    bg900: 'bg-green-900/20',
+    coming: true,
+  },
+  {
+    id: 'data',
+    name: 'Data',
+    description: 'Telemetry and performance analytics',
+    icon: 'database',
+    color: 'text-blue-400',
+    bg900: 'bg-blue-900/20',
+    coming: true,
+  },
+];
+
+const icons: Record<string, string> = {
+  user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  van: '<path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/>',
+  car: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
+  trophy: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+  'clipboard-check': '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
+  luggage: '<path d="M6 20h0a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h0"/><path d="M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14"/><path d="M10 20h4"/><circle cx="16" cy="20" r="2"/><circle cx="8" cy="20" r="2"/>',
+  sparkles: '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>',
+  calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+  'list-todo': '<rect x="3" y="5" width="6" height="6" rx="1"/><path d="m3 17 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+  'circle-dot': '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/>',
+  'dollar-sign': '<line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  wrench: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+  settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+  play: '<polygon points="6 3 20 12 6 21 6 3"/>',
+  database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
+};
+---
+
+<section id="features" class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/50">
+  <div class="max-w-7xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-12 md:mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Manage and Connect Your Team
+      </h2>
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+        Everything you need to manage your racing operations in one comprehensive platform
+      </p>
+    </div>
+
+    <!-- Modules Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+      {features.map((feature) => (
+        <div
+          class={`bg-gray-900 rounded-xl p-4 md:p-6 border border-gray-800 hover:border-gray-700 transition-colors flex flex-col items-center text-center relative ${feature.coming ? 'opacity-75' : ''}`}
+        >
+          {/* Coming Soon Badge */}
+          {feature.coming && (
+            <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] md:text-xs font-medium px-2 py-0.5 rounded-full">
+              Coming
+            </span>
+          )}
+
+          {/* Icon */}
+          <div class={`${feature.bg900} w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center mb-3`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class={`h-6 w-6 md:h-7 md:w-7 ${feature.color}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              set:html={icons[feature.icon]}
+            />
+          </div>
+
+          {/* Content */}
+          <h3 class="text-sm md:text-base font-semibold text-white mb-1">
+            {feature.name}
+          </h3>
+          <p class="text-xs md:text-sm text-gray-400 line-clamp-2">
+            {feature.description}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Custom Development Notice -->
+    <div class="mt-12 text-center">
+      <h3 class="text-xl md:text-2xl font-bold text-white mb-4">
+        Built on Your Feedback
+      </h3>
+      <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+        We actively develop new features and modules based on your feedback.
+        <span class="text-gray-300">
+          Have a specific need? Let us know — we're ready to build the tools your team requires.
+        </span>
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,17 +1,22 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import HeroSection from '../components/HeroSection.astro';
+import FeaturesSection from '../components/FeaturesSection.astro';
+import PricingSection from '../components/PricingSection.astro';
+import CTASection from '../components/CTASection.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="RaceNode - Manage Your Racing Team Faster & Smarter">
+  <div class="min-h-screen bg-gray-950 flex flex-col">
+    <Header />
+    <main class="flex-1">
+      <HeroSection />
+      <FeaturesSection />
+      <PricingSection />
+      <CTASection />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

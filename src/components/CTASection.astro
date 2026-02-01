@@ -1,0 +1,31 @@
+---
+const appUrl = "https://app.racenode.com";
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
+  <div class="max-w-4xl mx-auto text-center">
+    <!-- Headline -->
+    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+      Ready to Get Started?
+    </h2>
+    <p class="text-lg md:text-xl text-gray-400 mb-10">
+      Join racing teams around the world who trust RaceNode to manage their operations
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        href={`${appUrl}/signup`}
+        class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors w-full sm:w-auto text-center"
+      >
+        Start Free Trial
+      </a>
+      <a
+        href={`${appUrl}/login`}
+        class="bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors w-full sm:w-auto text-center"
+      >
+        Log In
+      </a>
+    </div>
+  </div>
+</section>

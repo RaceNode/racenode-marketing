@@ -1,0 +1,37 @@
+---
+const appUrl = "https://app.racenode.com";
+---
+
+<header class="bg-gray-900 border-b border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+          <img src="/logo_horizontal.svg" alt="RaceNode" class="h-8 w-auto" />
+        </a>
+      </div>
+
+      <!-- Navigation - Ready for future expansion -->
+      <nav class="hidden md:flex items-center space-x-4">
+        <!-- Future navigation links can be added here -->
+      </nav>
+
+      <!-- CTA Buttons -->
+      <div class="flex items-center space-x-3">
+        <a
+          href={`${appUrl}/login`}
+          class="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+        >
+          Login
+        </a>
+        <a
+          href={`${appUrl}/signup`}
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Sign Up
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
