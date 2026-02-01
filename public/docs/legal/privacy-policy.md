@@ -61,7 +61,7 @@ We do not sell or rent your personal data.
 - **Billing records**: 10 years (French legal requirement)
 - **Technical logs**: 90 days
 
-After account deletion, data is deleted within 30 days (except billing records retained for legal compliance).
+After cancellation, modules remain accessible in read-only mode for 6 months, then data is deleted (except billing records retained for legal compliance).
 
 ---
 

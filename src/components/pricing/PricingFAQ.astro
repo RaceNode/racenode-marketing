@@ -1,7 +1,4 @@
 ---
-// FAQ Section - Hidden for now, will be activated later after content validation
-// To show: remove the "hidden" class from the section element
-
 const faqs = [
   {
     question: "Is there a commitment period?",
@@ -9,15 +6,15 @@ const faqs = [
   },
   {
     question: "What happens when I cancel?",
-    answer: "Your data remains accessible until the end of your billing period. After that, your account is deactivated but data is retained for 30 days."
+    answer: "Your data remains accessible until the end of your billing period. After that, your modules switch to read-only mode for 6 months, allowing you to export your data."
   },
   {
     question: "Will the price increase?",
-    answer: "Early adopter pricing is locked for life. Future price increases only apply to new customers."
+    answer: "Early adopter pricing is locked for life as long as you maintain an active subscription. Future price increases only apply to new customers."
   },
   {
     question: "How does the free trial work?",
-    answer: "Full access to the selected module for 14 days. No credit card required. Your data is preserved if you subscribe after the trial."
+    answer: "Full access to the entire platform and all modules for one event. No credit card required. Your data is preserved if you subscribe after the trial."
   },
   {
     question: "How do team members access Personal?",
@@ -33,7 +30,7 @@ const faqs = [
   },
   {
     question: "What payment methods do you accept?",
-    answer: "Credit card via Stripe. Invoicing available for annual plans (contact us)."
+    answer: "Credit card via Stripe. Invoicing for annual plans will be available after the launch period."
   }
 ];
 
@@ -55,8 +52,8 @@ const faqSchema = {
 <!-- FAQ Schema - Always rendered for SEO even when section is hidden -->
 <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-<!-- FAQ Section - HIDDEN - Remove "hidden" class to show -->
-<section class="hidden px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+<!-- FAQ Section -->
+<section class="px-4 sm:px-6 lg:px-8 py-12 md:py-16">
   <div class="max-w-3xl mx-auto">
     <h2 class="text-3xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
 

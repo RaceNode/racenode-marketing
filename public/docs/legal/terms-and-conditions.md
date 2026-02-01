@@ -114,9 +114,9 @@ Provider reserves the right to suspend access in case of:
 
 ### 7.4 Data Retention and Portability
 - Active Data is retained for the duration of subscription
-- Upon cancellation, Data is retained for 30 days then permanently deleted
+- Upon cancellation, modules switch to read-only mode for 6 months, then Data is permanently deleted
 - Client may export Data at any time through Service features
-- Data export requests upon cancellation must be made within the 30-day retention period
+- Data export requests upon cancellation must be made within the 6-month retention period
 
 ### 7.5 User Rights
 Users may exercise GDPR rights (access, rectification, deletion, portability) by contacting: contact@racenode.com
@@ -164,7 +164,7 @@ Users may exercise GDPR rights (access, rectification, deletion, portability) by
 
 ### 10.2 Termination by Client
 - Client may terminate at any time by cancelling subscription
-- Data export must be requested within 30 days
+- Data export must be requested within 6 months
 
 ### 10.3 Termination by Provider
 - Provider may terminate for cause (breach of Terms) with 15 days written notice
