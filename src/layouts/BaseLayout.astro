@@ -98,14 +98,17 @@ const softwareSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
 
-    <!-- Unregister old Service Workers from previous React app -->
+    <!-- Kill old Service Workers from previous React app -->
     <script is:inline>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          for (let registration of registrations) {
-            registration.unregister();
-          }
+        navigator.serviceWorker.register('/sw.js').then(function(reg) {
+          reg.update();
         });
+        if ('caches' in window) {
+          caches.keys().then(function(keys) {
+            keys.forEach(function(key) { caches.delete(key); });
+          });
+        }
       }
     </script>
   </head>
