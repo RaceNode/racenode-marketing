@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import screenshotOverview from '../../assets/screenshots/management-overview.png';
+
 const appUrl = "https://app.racenode.com";
 ---
 
@@ -32,101 +35,14 @@ const appUrl = "https://app.racenode.com";
       </div>
     </div>
 
-    <!-- Wireframe placeholder for future screenshot -->
-    <div
-      data-screenshot="management-hero"
-      class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden max-w-5xl mx-auto"
-    >
-      <!-- Navigation tabs -->
-      <div class="bg-gray-900 border-b border-gray-700 px-4 py-3 flex items-center gap-1 overflow-x-auto">
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-orange-600/20 text-orange-300 rounded-md text-sm font-medium border border-orange-500/30">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          Overview
-        </div>
-        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm whitespace-nowrap">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <polyline points="16 11 18 13 22 9"/>
-          </svg>
-          Event Staff
-        </div>
-        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-            <circle cx="7" cy="17" r="2"/>
-            <path d="M9 17h6"/>
-            <circle cx="17" cy="17" r="2"/>
-          </svg>
-          Racecars
-        </div>
-        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="15" r="3"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M10 15H6a4 4 0 0 0-4 4v2"/>
-            <path d="m21.7 16.4-.9-.3"/>
-            <path d="m15.2 13.9-.9-.3"/>
-            <path d="m16.6 18.7.3-.9"/>
-            <path d="m19.1 12.2.3-.9"/>
-            <path d="m19.6 18.7-.4-1"/>
-            <path d="m16.8 12.3-.4-1"/>
-            <path d="m14.3 16.6 1-.4"/>
-            <path d="m20.7 13.8 1-.4"/>
-          </svg>
-          Team
-        </div>
-        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
-            <path d="M7 2v20"/>
-            <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
-          </svg>
-          Meals
-        </div>
-      </div>
-
-      <!-- Content area with placeholder blocks -->
-      <div class="p-6 space-y-4" style="aspect-ratio: 16/9;">
-        <!-- Event details header -->
-        <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4 flex flex-wrap items-center gap-4">
-          <div>
-            <div class="text-gray-500 text-xs uppercase mb-1">Event</div>
-            <div class="text-white font-medium">Monza 6H</div>
-          </div>
-          <div>
-            <div class="text-gray-500 text-xs uppercase mb-1">Championship</div>
-            <div class="text-white font-medium">GT Series</div>
-          </div>
-          <div>
-            <div class="text-gray-500 text-xs uppercase mb-1">Dates</div>
-            <div class="text-white font-medium">Sep 12-15, 2025</div>
-          </div>
-        </div>
-
-        <!-- Stats row -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-            <div class="text-gray-500 text-xs uppercase mb-1">Staff Assigned</div>
-            <div class="text-2xl font-bold text-white">23</div>
-          </div>
-          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-            <div class="text-gray-500 text-xs uppercase mb-1">Racecars</div>
-            <div class="text-2xl font-bold text-white">2</div>
-          </div>
-          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-            <div class="text-gray-500 text-xs uppercase mb-1">Teams</div>
-            <div class="text-2xl font-bold text-white">1</div>
-          </div>
-          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-            <div class="text-gray-500 text-xs uppercase mb-1">Meals</div>
-            <div class="text-2xl font-bold text-white">18</div>
-          </div>
-        </div>
-      </div>
+    <!-- Screenshot -->
+    <div class="max-w-5xl mx-auto rounded-xl overflow-hidden shadow-2xl shadow-orange-500/10">
+      <Image
+        src={screenshotOverview}
+        alt="RaceNode Management Overview - Event dashboard with staff, racecars, teams and meals"
+        class="w-full h-auto"
+        quality={85}
+      />
     </div>
   </div>
 </section>

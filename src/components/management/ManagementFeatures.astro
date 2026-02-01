@@ -1,4 +1,19 @@
 ---
+import { Image } from 'astro:assets';
+import screenshotOverview from '../../assets/screenshots/management-overview.png';
+import screenshotStaff from '../../assets/screenshots/management-event-staff.png';
+import screenshotRacecars from '../../assets/screenshots/management-racecars.png';
+import screenshotTeam from '../../assets/screenshots/management-team.png';
+import screenshotMeals from '../../assets/screenshots/management-meals.png';
+
+const screenshots = {
+  overview: screenshotOverview,
+  staff: screenshotStaff,
+  racecars: screenshotRacecars,
+  team: screenshotTeam,
+  meals: screenshotMeals,
+};
+
 const features = [
   {
     id: "overview",
@@ -81,205 +96,16 @@ const icons: Record<string, string> = {
             </p>
           </div>
 
-          <!-- Screenshot placeholder -->
+          <!-- Screenshot -->
           <div class="lg:w-1/2">
-            <div
-              data-screenshot={`management-${feature.id}`}
-              class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden"
-            >
-              {feature.id === "overview" && (
-                <div class="p-6" style="aspect-ratio: 4/3;">
-                  <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4 mb-4">
-                    <div class="flex flex-wrap gap-6">
-                      <div>
-                        <div class="text-gray-500 text-xs uppercase mb-1">Event</div>
-                        <div class="text-white font-medium text-sm">Monza 6H</div>
-                      </div>
-                      <div>
-                        <div class="text-gray-500 text-xs uppercase mb-1">Dates</div>
-                        <div class="text-white font-medium text-sm">Sep 12-15, 2025</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-                      <div class="text-gray-500 text-xs uppercase mb-1">Staff Assigned</div>
-                      <div class="text-2xl font-bold text-orange-400">23</div>
-                    </div>
-                    <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-                      <div class="text-gray-500 text-xs uppercase mb-1">Racecars</div>
-                      <div class="text-2xl font-bold text-orange-400">2</div>
-                    </div>
-                    <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-                      <div class="text-gray-500 text-xs uppercase mb-1">Teams</div>
-                      <div class="text-2xl font-bold text-orange-400">1</div>
-                    </div>
-                    <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
-                      <div class="text-gray-500 text-xs uppercase mb-1">Meals</div>
-                      <div class="text-2xl font-bold text-orange-400">18</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {feature.id === "staff" && (
-                <div class="p-4" style="aspect-ratio: 4/3;">
-                  <div class="bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
-                    <div class="grid grid-cols-4 gap-4 px-4 py-2 border-b border-gray-700 text-xs text-gray-500 uppercase">
-                      <div>Staff Member</div>
-                      <div>Event Roles</div>
-                      <div>Meals</div>
-                      <div>Actions</div>
-                    </div>
-                    <div class="grid grid-cols-4 gap-4 px-4 py-3 border-b border-gray-800">
-                      <div class="text-white text-sm">A. Durant</div>
-                      <div class="text-orange-400 text-xs">3rd Mechanics #42</div>
-                      <div class="text-green-400 text-xs">3/3</div>
-                      <div class="text-gray-400 text-xs">Edit</div>
-                    </div>
-                    <div class="grid grid-cols-4 gap-4 px-4 py-3 border-b border-gray-800">
-                      <div class="text-white text-sm">T. Bernard</div>
-                      <div class="text-orange-400 text-xs">Performance Engineer #77</div>
-                      <div class="text-green-400 text-xs">3/3</div>
-                      <div class="text-gray-400 text-xs">Edit</div>
-                    </div>
-                    <div class="grid grid-cols-4 gap-4 px-4 py-3 border-b border-gray-800">
-                      <div class="text-white text-sm">L. Moreau</div>
-                      <div class="text-orange-400 text-xs">Car Chief #42</div>
-                      <div class="text-yellow-400 text-xs">2/3</div>
-                      <div class="text-gray-400 text-xs">Edit</div>
-                    </div>
-                    <div class="grid grid-cols-4 gap-4 px-4 py-3">
-                      <div class="text-white text-sm">S. Petit</div>
-                      <div class="text-orange-400 text-xs">Race Engineer #77</div>
-                      <div class="text-green-400 text-xs">3/3</div>
-                      <div class="text-gray-400 text-xs">Edit</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {feature.id === "racecars" && (
-                <div class="p-4" style="aspect-ratio: 4/3;">
-                  <div class="space-y-3">
-                    <div class="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                      <div class="flex items-start justify-between mb-2">
-                        <div>
-                          <div class="text-white font-medium">RN-001</div>
-                          <div class="text-gray-500 text-sm">GT3 Evo</div>
-                        </div>
-                        <div class="text-orange-400 text-sm font-bold">#42</div>
-                      </div>
-                      <div class="flex gap-2 mt-3">
-                        <span class="px-2 py-1 bg-gray-800 rounded text-xs text-gray-400">2025</span>
-                        <span class="px-2 py-1 bg-green-900/30 text-green-400 rounded text-xs">Assigned</span>
-                      </div>
-                    </div>
-                    <div class="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                      <div class="flex items-start justify-between mb-2">
-                        <div>
-                          <div class="text-white font-medium">RN-002</div>
-                          <div class="text-gray-500 text-sm">GT3 Evo</div>
-                        </div>
-                        <div class="text-orange-400 text-sm font-bold">#77</div>
-                      </div>
-                      <div class="flex gap-2 mt-3">
-                        <span class="px-2 py-1 bg-gray-800 rounded text-xs text-gray-400">2025</span>
-                        <span class="px-2 py-1 bg-green-900/30 text-green-400 rounded text-xs">Assigned</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {feature.id === "team" && (
-                <div class="p-4" style="aspect-ratio: 4/3;">
-                  <div class="space-y-4">
-                    <div class="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                      <div class="text-white font-medium mb-3">GT3 Crew</div>
-                      <div class="space-y-2 mb-4">
-                        <div class="flex items-center justify-between text-sm">
-                          <span class="text-gray-400">Technical Director</span>
-                          <span class="text-white">M. Lefevre</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                          <span class="text-gray-400">Team Manager</span>
-                          <span class="text-white">C. Dubois</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                          <span class="text-gray-400">Sportive Director</span>
-                          <span class="text-white">N. Laurent</span>
-                        </div>
-                      </div>
-                      <div class="border-t border-gray-700 pt-3">
-                        <div class="flex items-center gap-2 mb-2">
-                          <span class="text-orange-400 text-xs font-medium">#42</span>
-                          <span class="text-gray-500 text-xs">RN-001</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
-                          <div class="bg-gray-800 rounded px-2 py-1 flex justify-between">
-                            <span class="text-gray-400">Race Eng.</span>
-                            <span class="text-white">L. Moreau</span>
-                          </div>
-                          <div class="bg-gray-800 rounded px-2 py-1 flex justify-between">
-                            <span class="text-gray-400">Car Chief</span>
-                            <span class="text-white">A. Durant</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {feature.id === "meals" && (
-                <div class="p-4" style="aspect-ratio: 4/3;">
-                  <div class="space-y-3">
-                    <div class="text-gray-400 text-xs uppercase mb-2">Wed Apr 8</div>
-                    <div class="grid grid-cols-3 gap-2">
-                      <div class="bg-gray-900 border border-gray-700 rounded-lg p-3">
-                        <div class="text-gray-500 text-xs mb-1">Breakfast</div>
-                        <div class="text-white text-sm font-medium">Hotel</div>
-                        <div class="text-gray-400 text-xs">08:00 - 09:00</div>
-                        <div class="text-orange-400 text-xs mt-1">18 staff</div>
-                      </div>
-                      <div class="bg-gray-900 border border-gray-700 rounded-lg p-3">
-                        <div class="text-gray-500 text-xs mb-1">Lunch</div>
-                        <div class="text-white text-sm font-medium">Paddock</div>
-                        <div class="text-gray-400 text-xs">12:00 - 13:00</div>
-                        <div class="text-orange-400 text-xs mt-1">23 staff</div>
-                      </div>
-                      <div class="bg-gray-900 border border-gray-700 rounded-lg p-3">
-                        <div class="text-gray-500 text-xs mb-1">Dinner</div>
-                        <div class="text-white text-sm font-medium">Hotel</div>
-                        <div class="text-gray-400 text-xs">19:00 - 20:00</div>
-                        <div class="text-orange-400 text-xs mt-1">18 staff</div>
-                      </div>
-                    </div>
-                    <div class="text-gray-400 text-xs uppercase mb-2 mt-4">Thu Apr 9</div>
-                    <div class="grid grid-cols-3 gap-2">
-                      <div class="bg-gray-900 border border-gray-700 rounded-lg p-3">
-                        <div class="text-gray-500 text-xs mb-1">Breakfast</div>
-                        <div class="text-white text-sm font-medium">Hotel</div>
-                        <div class="text-gray-400 text-xs">07:00 - 08:00</div>
-                        <div class="text-orange-400 text-xs mt-1">18 staff</div>
-                      </div>
-                      <div class="bg-gray-900 border border-gray-700 rounded-lg p-3">
-                        <div class="text-gray-500 text-xs mb-1">Lunch</div>
-                        <div class="text-white text-sm font-medium">Paddock</div>
-                        <div class="text-gray-400 text-xs">12:00 - 13:00</div>
-                        <div class="text-orange-400 text-xs mt-1">23 staff</div>
-                      </div>
-                      <div class="bg-gray-900 border border-gray-700 rounded-lg p-3">
-                        <div class="text-gray-500 text-xs mb-1">Dinner</div>
-                        <div class="text-white text-sm font-medium">Restaurant</div>
-                        <div class="text-gray-400 text-xs">20:00 - 21:30</div>
-                        <div class="text-orange-400 text-xs mt-1">23 staff</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+            <div class="rounded-xl overflow-hidden shadow-2xl shadow-orange-500/10">
+              <Image
+                src={screenshots[feature.id as keyof typeof screenshots]}
+                alt={`RaceNode ${feature.badge} - ${feature.title}`}
+                class="w-full h-auto"
+                loading="lazy"
+                quality={85}
+              />
             </div>
           </div>
         </div>
