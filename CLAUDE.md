@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 ## Project Overview
 
 RaceNode Marketing is the public-facing marketing website for RaceNode, a multi-tenant ERP platform for racing teams. This site is separate from the main app (`app.racenode.com`) for SEO and performance optimization.
@@ -44,6 +46,7 @@ Dark theme matching the app:
 
 - **App**: `C:\script\RaceNode` - Main React app at `app.racenode.com`
 - **Links**: Header links point to `https://app.racenode.com/login` and `/signup`
+- **Site URL**: `https://www.racenode.com` (configured in astro.config.mjs)
 
 ## Content Notes
 
