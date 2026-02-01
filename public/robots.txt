@@ -1,0 +1,6 @@
+# RaceNode Marketing Site
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.racenode.com/sitemap-index.xml
