@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     question: "What happens when I cancel?",
-    answer: "Your data remains accessible until the end of your billing period. After that, your account is deactivated but data is retained for [X] months."
+    answer: "Your data remains accessible until the end of your billing period. After that, your account is deactivated but data is retained for 30 days."
   },
   {
     question: "Will the price increase?",
@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     question: "How does the free trial work?",
-    answer: "Full access to the selected module for [X] days. No credit card required. Your data is preserved if you subscribe after the trial."
+    answer: "Full access to the selected module for 14 days. No credit card required. Your data is preserved if you subscribe after the trial."
   },
   {
     question: "How do team members access Personal?",
@@ -36,7 +36,24 @@ const faqs = [
     answer: "Credit card via Stripe. Invoicing available for annual plans (contact us)."
   }
 ];
+
+// JSON-LD FAQPage schema for SEO
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+};
 ---
+
+<!-- FAQ Schema - Always rendered for SEO even when section is hidden -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
 <!-- FAQ Section - HIDDEN - Remove "hidden" class to show -->
 <section class="hidden px-4 sm:px-6 lg:px-8 py-12 md:py-16">

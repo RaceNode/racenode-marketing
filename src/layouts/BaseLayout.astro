@@ -26,7 +26,13 @@ const organizationSchema = {
   "url": "https://www.racenode.com",
   "logo": "https://www.racenode.com/logo_horizontal.svg",
   "description": "All-in-one ERP platform for racing teams",
-  "sameAs": ["https://www.linkedin.com/company/racenode"]
+  "sameAs": ["https://www.linkedin.com/company/racenode"],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Support",
+    "email": "contact@racenode.com",
+    "url": "https://www.racenode.com"
+  }
 };
 
 // JSON-LD Schema for SoftwareApplication
@@ -43,11 +49,6 @@ const softwareSchema = {
     "price": "0",
     "priceCurrency": "USD",
     "description": "Free tier available"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5",
-    "ratingCount": "1"
   }
 };
 ---

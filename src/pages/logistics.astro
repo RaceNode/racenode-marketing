@@ -12,9 +12,30 @@ import LogisticsCTA from '../components/logistics/LogisticsCTA.astro';
 
 const title = "Logistics Module — Racing Team Logistics Management | RaceNode";
 const description = "Centralize accommodation, travel, and vehicle management for your racing team. Coordinate logistics for 20+ people across a full season with RaceNode.";
+
+// JSON-LD BreadcrumbList schema for SEO
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.racenode.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Logistics Module",
+      "item": "https://www.racenode.com/logistics"
+    }
+  ]
+};
 ---
 
 <BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   <div class="min-h-screen bg-gray-950">
     <Header />
     <main>

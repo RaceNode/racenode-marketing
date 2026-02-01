@@ -39,7 +39,121 @@ import Footer from '../components/Footer.astro';
             prose-strong:text-white prose-strong:font-semibold
             prose-a:text-red-500 hover:prose-a:text-red-400 prose-a:underline
             prose-hr:border-gray-700 prose-hr:my-6">
-            <div id="content"></div>
+
+            <p><strong>Effective Date:</strong> January 25, 2026</p>
+            <p><strong>Last Updated:</strong> January 25, 2026</p>
+
+            <p>This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service"), in accordance with the General Data Protection Regulation (GDPR).</p>
+
+            <hr />
+
+            <h2>1. Data Controller</h2>
+            <p><strong>WBLT Engineering</strong><br />
+            SASU - French registered company<br />
+            SIREN: 993 956 028<br />
+            Email: contact@racenode.com<br />
+            Website: https://www.racenode.com</p>
+
+            <hr />
+
+            <h2>2. Data We Collect and Purpose</h2>
+
+            <h3>2.1 Account and Organization Data</h3>
+            <ul>
+              <li><strong>What we collect</strong>: Organization name, user name, email address, password (encrypted)</li>
+              <li><strong>Purpose</strong>: Account creation and authentication</li>
+              <li><strong>Legal basis</strong>: Contract performance (GDPR Art. 6(1)(b))</li>
+            </ul>
+
+            <h3>2.2 Billing Data</h3>
+            <ul>
+              <li><strong>What we collect</strong>: Billing information processed by Stripe (payment provider)</li>
+              <li><strong>Purpose</strong>: Payment processing and invoicing</li>
+              <li><strong>Legal basis</strong>: Contract performance (GDPR Art. 6(1)(b)) and legal obligation (GDPR Art. 6(1)(c))</li>
+            </ul>
+
+            <h3>2.3 Service Usage Data</h3>
+            <ul>
+              <li><strong>What we collect</strong>: Team member data, events, vehicles, logistics information you enter into the Service</li>
+              <li><strong>Purpose</strong>: Provide the Service functionalities</li>
+              <li><strong>Legal basis</strong>: Contract performance (GDPR Art. 6(1)(b))</li>
+            </ul>
+
+            <h3>2.4 Technical Data</h3>
+            <ul>
+              <li><strong>What we collect</strong>: IP address, browser type, login timestamps</li>
+              <li><strong>Purpose</strong>: Security, fraud prevention, service improvement</li>
+              <li><strong>Legal basis</strong>: Legitimate interests (GDPR Art. 6(1)(f))</li>
+            </ul>
+
+            <hr />
+
+            <h2>3. Data Sharing and International Transfers</h2>
+            <p>We share data with the following service providers:</p>
+            <ul>
+              <li><strong>Supabase Inc.</strong> (USA): Database hosting and authentication</li>
+              <li><strong>Stripe</strong> (USA): Payment processing</li>
+              <li><strong>Cloudflare</strong> (USA): Security and CDN services</li>
+            </ul>
+            <p>All transfers outside the European Economic Area (EEA) are protected by Standard Contractual Clauses (SCCs) approved by the European Commission.</p>
+            <p>We do not sell or rent your personal data.</p>
+
+            <hr />
+
+            <h2>4. Data Retention</h2>
+            <ul>
+              <li><strong>Active account data</strong>: Duration of subscription</li>
+              <li><strong>Billing records</strong>: 10 years (French legal requirement)</li>
+              <li><strong>Technical logs</strong>: 90 days</li>
+            </ul>
+            <p>After account deletion, data is deleted within 30 days (except billing records retained for legal compliance).</p>
+
+            <hr />
+
+            <h2>5. Data Security</h2>
+            <p>We implement appropriate security measures including:</p>
+            <ul>
+              <li>Encryption in transit (TLS/SSL) and at rest (AES-256)</li>
+              <li>Role-based access controls</li>
+              <li>Daily encrypted backups</li>
+              <li>Data breach notification within 72 hours as required by GDPR</li>
+            </ul>
+
+            <hr />
+
+            <h2>6. Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+              <li><strong>Access</strong>: Request a copy of your personal data (Art. 15)</li>
+              <li><strong>Rectification</strong>: Correct inaccurate data (Art. 16)</li>
+              <li><strong>Erasure</strong>: Request deletion of your data (Art. 17, subject to legal obligations)</li>
+              <li><strong>Restriction</strong>: Limit processing in certain circumstances (Art. 18)</li>
+              <li><strong>Data portability</strong>: Receive your data in structured format (Art. 20)</li>
+              <li><strong>Object</strong>: Object to processing based on legitimate interests (Art. 21)</li>
+              <li><strong>Lodge a complaint</strong>: File a complaint with the CNIL (French data protection authority)</li>
+            </ul>
+
+            <p><strong>CNIL Contact</strong>:<br />
+            Website: <a href="https://www.cnil.fr" target="_blank" rel="noopener">https://www.cnil.fr</a><br />
+            Address: 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France</p>
+
+            <hr />
+
+            <h2>7. How to Exercise Your Rights</h2>
+            <p>To exercise your rights, contact us at:<br />
+            Email: contact@racenode.com<br />
+            Subject: "GDPR Request - [Your Request]"</p>
+            <p>We will respond within 30 days.</p>
+
+            <hr />
+
+            <h2>8. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy. Material changes will be notified via email to registered account holders.</p>
+
+            <hr />
+
+            <p><strong>By using RaceNode, you acknowledge that you have read and understood this Privacy Policy.</strong></p>
+
           </div>
         </div>
 
@@ -57,40 +171,3 @@ import Footer from '../components/Footer.astro';
     <Footer />
   </div>
 </BaseLayout>
-
-<script>
-  async function loadContent() {
-    try {
-      const response = await fetch('/docs/legal/privacy-policy.md');
-      if (!response.ok) throw new Error('Failed to load document');
-      const markdown = await response.text();
-
-      // Simple markdown to HTML conversion
-      const html = markdown
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        .replace(/^\*\*(.+?)\*\*$/gim, '<p><strong>$1</strong></p>')
-        .replace(/\*\*(.+?)\*\*/gim, '<strong>$1</strong>')
-        .replace(/^- (.+)$/gim, '<li>$1</li>')
-        .replace(/(<li>.*<\/li>\n?)+/gim, '<ul>$&</ul>')
-        .replace(/^---$/gim, '<hr>')
-        .replace(/\[(.+?)\]\((.+?)\)/gim, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-        .replace(/^(?!<[huplo]|<li|<hr)(.+)$/gim, '<p>$1</p>')
-        .replace(/<p><\/p>/g, '')
-        .replace(/\n\n+/g, '\n');
-
-      const contentDiv = document.getElementById('content');
-      if (contentDiv) {
-        contentDiv.innerHTML = html;
-      }
-    } catch (error) {
-      const contentDiv = document.getElementById('content');
-      if (contentDiv) {
-        contentDiv.innerHTML = '<p class="text-red-500">Failed to load privacy policy.</p>';
-      }
-    }
-  }
-
-  loadContent();
-</script>
