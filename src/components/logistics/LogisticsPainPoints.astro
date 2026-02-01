@@ -1,0 +1,57 @@
+---
+const painPoints = [
+  {
+    title: "Multiple sources of truth",
+    description: "Staff lists, hotel bookings, travel details, vehicle assignments — updated across different files, different channels, different people.",
+    icon: "files"
+  },
+  {
+    title: "Information changes constantly",
+    description: "A flight gets rescheduled, a room swap is needed, a rental car is added last minute. Every change must reach the right people, every time.",
+    icon: "refresh"
+  },
+  {
+    title: "Coordination across roles",
+    description: "The logistics coordinator plans. The team manager approves. The mechanics, engineers, and drivers need to know where to go. Keeping everyone aligned takes real effort.",
+    icon: "users"
+  }
+];
+
+const icons: Record<string, string> = {
+  files: `<path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"/>`,
+  refresh: `<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>`,
+  users: `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`
+};
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/30">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 md:mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Managing event logistics at scale is a coordination challenge.
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+      {painPoints.map((point) => (
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-colors">
+          <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 text-gray-400"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              set:html={icons[point.icon]}
+            />
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2">{point.title}</h3>
+          <p class="text-gray-400">{point.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,144 @@
+---
+const appUrl = "https://app.racenode.com";
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 md:mb-16">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+        Event logistics, centralized.
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-8">
+        Coordinate accommodation, travel, and vehicles for 20+ people across a full racing season. One workspace for your logistics team.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href={`${appUrl}/signup`}
+          class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
+        >
+          Sign Up
+        </a>
+        <a
+          href="/pricing"
+          class="text-gray-300 hover:text-white transition-colors flex items-center gap-2"
+        >
+          View Pricing
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/>
+            <path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Wireframe placeholder for future screenshot -->
+    <div
+      data-screenshot="logistics-hero"
+      class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden max-w-5xl mx-auto"
+    >
+      <!-- Navigation tabs -->
+      <div class="bg-gray-900 border-b border-gray-700 px-4 py-3 flex items-center gap-1">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-purple-600/20 text-purple-300 rounded-md text-sm font-medium border border-purple-500/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
+          </svg>
+          Overview
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Staff
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+            <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+            <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+            <path d="M10 6h4"/>
+            <path d="M10 10h4"/>
+            <path d="M10 14h4"/>
+            <path d="M10 18h4"/>
+          </svg>
+          Accommodation
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+          Travel
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 text-gray-400 hover:text-gray-300 rounded-md text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 17h4V5H2v12h3"/>
+            <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/>
+            <circle cx="7.5" cy="17.5" r="2.5"/>
+            <circle cx="17.5" cy="17.5" r="2.5"/>
+          </svg>
+          Vehicles
+        </div>
+      </div>
+
+      <!-- Content area with placeholder blocks -->
+      <div class="p-6 space-y-4" style="aspect-ratio: 16/9;">
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
+            <div class="text-gray-500 text-xs uppercase mb-1">Staff</div>
+            <div class="text-2xl font-bold text-white">24</div>
+          </div>
+          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
+            <div class="text-gray-500 text-xs uppercase mb-1">Hotels</div>
+            <div class="text-2xl font-bold text-white">3</div>
+          </div>
+          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
+            <div class="text-gray-500 text-xs uppercase mb-1">Flights</div>
+            <div class="text-2xl font-bold text-white">18</div>
+          </div>
+          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
+            <div class="text-gray-500 text-xs uppercase mb-1">Vehicles</div>
+            <div class="text-2xl font-bold text-white">6</div>
+          </div>
+        </div>
+
+        <!-- Progress bars -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-gray-400 text-sm">Accommodation</span>
+              <span class="text-purple-400 text-sm font-medium">92%</span>
+            </div>
+            <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div class="h-full bg-purple-600 rounded-full" style="width: 92%"></div>
+            </div>
+          </div>
+          <div class="bg-gray-900/80 border border-gray-700 rounded-lg p-4">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-gray-400 text-sm">Travel</span>
+              <span class="text-purple-400 text-sm font-medium">78%</span>
+            </div>
+            <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div class="h-full bg-purple-600 rounded-full" style="width: 78%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert placeholder -->
+        <div class="bg-yellow-900/20 border border-yellow-700/50 rounded-lg p-4 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+            <path d="M12 9v4"/>
+            <path d="M12 17h.01"/>
+          </svg>
+          <span class="text-yellow-200 text-sm">3 staff members still need a return flight assignment</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

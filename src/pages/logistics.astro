@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LogisticsHero from '../components/logistics/LogisticsHero.astro';
+import LogisticsPainPoints from '../components/logistics/LogisticsPainPoints.astro';
+import LogisticsFeatures from '../components/logistics/LogisticsFeatures.astro';
+import LogisticsSync from '../components/logistics/LogisticsSync.astro';
+import LogisticsDocuments from '../components/logistics/LogisticsDocuments.astro';
+import LogisticsRoadmap from '../components/logistics/LogisticsRoadmap.astro';
+import LogisticsCTA from '../components/logistics/LogisticsCTA.astro';
+
+const title = "Logistics Module — Racing Team Logistics Management | RaceNode";
+const description = "Centralize accommodation, travel, and vehicle management for your racing team. Coordinate logistics for 20+ people across a full season with RaceNode.";
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <LogisticsHero />
+      <LogisticsPainPoints />
+      <LogisticsFeatures />
+      <LogisticsSync />
+      <LogisticsDocuments />
+      <LogisticsRoadmap />
+      <LogisticsCTA />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

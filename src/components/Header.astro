@@ -1,5 +1,11 @@
 ---
 const appUrl = "https://app.racenode.com";
+
+const navLinks = [
+  { href: "/", label: "Management" },
+  { href: "/logistics", label: "Logistics" },
+  { href: "/pricing", label: "Pricing" },
+];
 ---
 
 <header class="bg-gray-900 border-b border-gray-800">
@@ -12,13 +18,20 @@ const appUrl = "https://app.racenode.com";
         </a>
       </div>
 
-      <!-- Navigation - Ready for future expansion -->
-      <nav class="hidden md:flex items-center space-x-4">
-        <!-- Future navigation links can be added here -->
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-6">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+          >
+            {link.label}
+          </a>
+        ))}
       </nav>
 
-      <!-- CTA Buttons -->
-      <div class="flex items-center space-x-3">
+      <!-- CTA Buttons (Desktop) -->
+      <div class="hidden md:flex items-center space-x-3">
         <a
           href={`${appUrl}/login`}
           class="px-4 py-2 text-gray-300 hover:text-white transition-colors"
@@ -32,6 +45,94 @@ const appUrl = "https://app.racenode.com";
           Sign Up
         </a>
       </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        type="button"
+        id="mobile-menu-button"
+        class="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open navigation menu"
+      >
+        <svg
+          id="menu-icon-open"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+        <svg
+          id="menu-icon-close"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6 hidden"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-800">
+    <div class="px-4 py-4 space-y-3">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="block text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="pt-3 border-t border-gray-800 space-y-3">
+        <a
+          href={`${appUrl}/login`}
+          class="block text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors"
+        >
+          Login
+        </a>
+        <a
+          href={`${appUrl}/signup`}
+          class="block bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors text-center"
+        >
+          Sign Up
+        </a>
+      </div>
     </div>
   </div>
 </header>
+
+<script>
+  const menuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+
+  if (menuButton && mobileMenu && iconOpen && iconClose) {
+    menuButton.addEventListener('click', () => {
+      const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+
+      menuButton.setAttribute('aria-expanded', String(!isExpanded));
+      mobileMenu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+
+      menuButton.setAttribute('aria-label', isExpanded ? 'Open navigation menu' : 'Close navigation menu');
+    });
+  }
+</script>

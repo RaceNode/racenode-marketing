@@ -1,44 +1,105 @@
 ---
 const currentYear = new Date().getFullYear();
 const email = "contact@racenode.com";
+
+const footerLinks = {
+  product: [
+    { href: "/", label: "Management" },
+    { href: "/logistics", label: "Logistics" },
+    { href: "/pricing", label: "Pricing" },
+  ],
+  company: [
+    { href: "/about", label: "About" },
+    { href: `mailto:${email}`, label: "Contact" },
+  ],
+  legal: [
+    { href: "/terms", label: "Terms" },
+    { href: "/privacy", label: "Privacy" },
+    { href: "/legal", label: "Legal Notice" },
+  ],
+};
 ---
 
 <footer class="bg-gray-900 border-t border-gray-800">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-      <!-- Copyright -->
-      <div class="text-gray-400 text-sm">
-        &copy; {currentYear} RaceNode. All rights reserved.
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <!-- Logo & Info -->
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="inline-block mb-4">
+          <img src="/logo_horizontal.svg" alt="RaceNode" class="h-8 w-auto" />
+        </a>
+        <p class="text-gray-500 text-sm mb-4">
+          The all-in-one platform for racing teams.
+        </p>
+        <a
+          href={`mailto:${email}`}
+          class="flex items-center gap-2 text-gray-400 hover:text-green-500 transition-colors text-sm group"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          <span>{email}</span>
+        </a>
+      </div>
+
+      <!-- Product Links -->
+      <div>
+        <h3 class="text-white font-semibold text-sm mb-4">Product</h3>
+        <ul class="space-y-3">
+          {footerLinks.product.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-gray-400 hover:text-green-500 transition-colors text-sm"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Company Links -->
+      <div>
+        <h3 class="text-white font-semibold text-sm mb-4">Company</h3>
+        <ul class="space-y-3">
+          {footerLinks.company.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-gray-400 hover:text-green-500 transition-colors text-sm"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <!-- Legal Links -->
-      <div class="flex items-center gap-4 text-sm">
-        <a
-          href="/terms"
-          class="text-gray-400 hover:text-green-500 transition-colors"
-        >
-          Terms & Conditions
-        </a>
-        <span class="text-gray-700">|</span>
-        <a
-          href="/privacy"
-          class="text-gray-400 hover:text-green-500 transition-colors"
-        >
-          Privacy Policy
-        </a>
+      <div>
+        <h3 class="text-white font-semibold text-sm mb-4">Legal</h3>
+        <ul class="space-y-3">
+          {footerLinks.legal.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-gray-400 hover:text-green-500 transition-colors text-sm"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
+    </div>
 
-      <!-- Contact Email -->
-      <a
-        href={`mailto:${email}?subject=Contact from RaceNode website`}
-        class="flex items-center gap-2 text-gray-400 hover:text-green-500 transition-colors text-sm group"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="20" height="16" x="2" y="4" rx="2"/>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-        </svg>
-        <span>{email}</span>
-      </a>
+    <!-- Copyright -->
+    <div class="mt-12 pt-8 border-t border-gray-800">
+      <p class="text-gray-500 text-sm text-center">
+        &copy; {currentYear} RaceNode. All rights reserved.
+      </p>
     </div>
   </div>
 </footer>
