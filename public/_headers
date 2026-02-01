@@ -1,0 +1,20 @@
+# Force revalidation for HTML pages (prevents stale cache issues)
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Assets can be cached longer (they have hashed filenames)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images and static files
+/logo_*.svg
+  Cache-Control: public, max-age=86400
+
+/screenshots/*
+  Cache-Control: public, max-age=86400
+
+/*.png
+  Cache-Control: public, max-age=86400
+
+# Prevent old React chunks from being served as HTML
+# Return proper 404 for missing JS files

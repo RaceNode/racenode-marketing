@@ -20,18 +20,28 @@ npm run build    # Build to ./dist/
 npm run preview  # Preview production build
 ```
 
-## Project Structure
+## Architecture
+
+Pages compose section components from feature-specific subdirectories:
+- `src/pages/index.astro` → uses `src/components/landing/*.astro`
+- `src/pages/logistics.astro` → uses `src/components/logistics/*.astro`
+- `src/pages/management.astro` → uses `src/components/management/*.astro`
+- `src/pages/pricing.astro` → uses `src/components/pricing/*.astro`
+
+All pages wrap content in `BaseLayout.astro` (SEO meta, JSON-LD schemas) with shared `Header` and `Footer`.
+
+## Key Directories
 
 ```
 src/
-├── components/     # Astro components (Header, Footer, sections)
-├── layouts/        # BaseLayout.astro
-├── pages/          # index, terms, privacy
-└── styles/         # global.css (Tailwind import)
+├── assets/screenshots/  # Product screenshots (imported via Astro Image)
+├── components/          # Shared (Header, Footer) + feature subdirs
+├── layouts/             # BaseLayout.astro (SEO, structured data)
+├── pages/               # index, logistics, management, pricing, terms, privacy
+└── styles/              # global.css (Tailwind import)
 public/
-├── docs/legal/     # Markdown legal documents
-├── logo_*.svg      # Logo variants
-└── pwa-*.png       # PWA/favicon icons
+├── docs/legal/          # Markdown legal documents
+└── *.svg, *.png         # Logos, favicons, PWA icons
 ```
 
 ## Design System
@@ -47,6 +57,12 @@ Dark theme matching the app:
 - **App**: `C:\script\RaceNode` - Main React app at `app.racenode.com`
 - **Links**: Header links point to `https://app.racenode.com/login` and `/signup`
 - **Site URL**: `https://www.racenode.com` (configured in astro.config.mjs)
+
+## SEO Features
+
+- Sitemap auto-generated via `@astrojs/sitemap`
+- JSON-LD schemas (Organization, SoftwareApplication) in BaseLayout
+- Open Graph and Twitter meta tags on all pages
 
 ## Content Notes
 
