@@ -2,11 +2,11 @@
 const appUrl = "https://app.racenode.com";
 
 const freeModules = [
-  { id: 'personal', name: 'Personal', icon: 'user', color: 'text-cyan-400', bg: 'bg-cyan-900/20', includedText: 'Included free', includedColor: 'text-green-400' },
-  { id: 'staff', name: 'Staff', icon: 'users', color: 'text-green-400', bg: 'bg-green-900/20', includedText: 'Included free', includedColor: 'text-green-400' },
-  { id: 'events', name: 'Events', icon: 'trophy', color: 'text-blue-400', bg: 'bg-blue-900/20', includedText: 'Included with Management & Logistics', includedColor: 'text-gray-400' },
-  { id: 'fleet', name: 'Fleet', icon: 'van', color: 'text-yellow-400', bg: 'bg-yellow-900/20', includedText: 'Included with Logistics', includedColor: 'text-gray-400' },
-  { id: 'racecars', name: 'Racecars', icon: 'car', color: 'text-red-400', bg: 'bg-red-900/20', includedText: 'Included with Management', includedColor: 'text-gray-400' },
+  { id: 'personal', name: 'Personal', icon: 'user', color: 'text-cyan-400', bg: 'bg-cyan-900/20' },
+  { id: 'staff', name: 'Staff', icon: 'users', color: 'text-green-400', bg: 'bg-green-900/20' },
+  { id: 'events', name: 'Events', icon: 'trophy', color: 'text-blue-400', bg: 'bg-blue-900/20' },
+  { id: 'fleet', name: 'Fleet', icon: 'van', color: 'text-yellow-400', bg: 'bg-yellow-900/20' },
+  { id: 'racecars', name: 'Racecars', icon: 'car', color: 'text-red-400', bg: 'bg-red-900/20' },
 ];
 
 const paidModules = [
@@ -103,7 +103,6 @@ const colorClasses = {
             </div>
             <div class="min-w-0">
               <div class="text-white font-medium">{module.name}</div>
-              <div class={`${module.includedColor} text-xs leading-tight`}>{module.includedText}</div>
             </div>
           </div>
         ))}
