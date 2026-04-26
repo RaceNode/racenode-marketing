@@ -98,20 +98,6 @@ const softwareSchema = {
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
-
-    <!-- Kill old Service Workers from previous React app -->
-    <script is:inline>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').then(function(reg) {
-          reg.update();
-        });
-        if ('caches' in window) {
-          caches.keys().then(function(keys) {
-            keys.forEach(function(key) { caches.delete(key); });
-          });
-        }
-      }
-    </script>
   </head>
   <body class="min-h-screen bg-gray-950 text-white">
     <slot />
