@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const appUrl = "https://app.racenode.com";
+
+const title = "Rally Team Management Software — Crew, Roadbook & Service Park | RaceNode";
+const description = "Rally team management software for crews running multi-stage events. Coordinate service park staff, recce schedules, transport, and accommodation across the rally championship calendar.";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
+    { "@type": "ListItem", "position": 2, "name": "Rally Teams", "item": "https://www.racenode.com/for-rally-teams" }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <section class="px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-full text-sm mb-6 border border-gray-700">
+            For rally teams
+          </div>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Rally team management software, built around the service park.
+          </h1>
+          <p class="text-xl md:text-2xl text-gray-400 mb-10">
+            RaceNode helps rally teams coordinate crew, recce schedules, service park logistics, and championship travel. One platform for every event from shakedown to power stage.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href={`${appUrl}/signup`} class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors">Get started</a>
+            <span class="text-gray-500 text-sm">Free for the 2026 season</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-gray-900/50">
+        <div class="max-w-5xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-10 text-center">Why rally teams choose RaceNode</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">Service park crews, organized per stage</h3>
+              <p class="text-gray-400">Assign mechanics, engineers, and tyre staff to each service window. Every crew member sees their own role, vehicle, and schedule for the rally weekend.</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">Recce and rally logistics in one place</h3>
+              <p class="text-gray-400">Plan recce travel, accommodation near the parc fermé, and service park vehicles. Every rally event has its own workspace — no more scattered spreadsheets between rounds.</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">Championship calendar, end to end</h3>
+              <p class="text-gray-400">From WRC to ERC to national championships, manage your full rally season in one tool. Compare crew rosters across events, track driver and co-driver assignments, plan transport between rounds.</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">Built for the way rally crews actually work</h3>
+              <p class="text-gray-400">Rally is event-driven, paperwork-heavy, and changes constantly. RaceNode treats each rally as its own structured event with its crew, fleet, hotels, and travel — all updated in real time for everyone.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div class="max-w-5xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Two modules, one rally workspace</h2>
+          <p class="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">RaceNode is modular. Pick what your rally team needs.</p>
+          <div class="grid md:grid-cols-2 gap-6 text-left">
+            <a href="/management" class="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-orange-500/50 transition-colors">
+              <h3 class="text-xl font-bold text-white mb-3">Race Team Management</h3>
+              <p class="text-gray-400">Crew composition, racecar assignments, meal planning per rally stage.</p>
+            </a>
+            <a href="/logistics" class="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
+              <h3 class="text-xl font-bold text-white mb-3">Motorsport Logistics</h3>
+              <p class="text-gray-400">Accommodation, travel, service park vehicles for every rally round.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-gray-900/50">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Run your rally team from one platform</h2>
+          <p class="text-lg text-gray-400 mb-8">Free for the entire 2026 rally season.</p>
+          <a href={`${appUrl}/signup`} class="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors">Start using RaceNode</a>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

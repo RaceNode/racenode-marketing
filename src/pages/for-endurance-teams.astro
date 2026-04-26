@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const appUrl = "https://app.racenode.com";
+
+const title = "Endurance Racing Team Software — Le Mans, 24h, WEC | RaceNode";
+const description = "Endurance racing team software for 24h and WEC crews. Coordinate driver rotations, mechanic shifts, pit crew logistics, and team accommodation across long-form events.";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
+    { "@type": "ListItem", "position": 2, "name": "Endurance Teams", "item": "https://www.racenode.com/for-endurance-teams" }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <section class="px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-full text-sm mb-6 border border-gray-700">
+            For endurance racing teams
+          </div>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Endurance racing team software, built for long stints.
+          </h1>
+          <p class="text-xl md:text-2xl text-gray-400 mb-10">
+            From the 24 Hours of Le Mans to WEC and ELMS rounds, RaceNode helps endurance racing teams coordinate driver rotations, mechanic shifts, pit crew logistics, and accommodation around the clock.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href={`${appUrl}/signup`} class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors">Get started</a>
+            <span class="text-gray-500 text-sm">Free for the 2026 season</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-gray-900/50">
+        <div class="max-w-5xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-10 text-center">Why endurance teams choose RaceNode</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">Crews that work in shifts</h3>
+              <p class="text-gray-400">A 24-hour race means three or four mechanic shifts, multiple driver pairings, and engineers rotating through the night. RaceNode lets you build crew compositions per stint and per role, with everyone seeing their own schedule.</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">Accommodation for 30+ people</h3>
+              <p class="text-gray-400">Endurance team rosters are big. RaceNode tracks hotel bookings, room sharing, check-in dates, and travel for every team member — all in one rooming list per round.</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">Multi-car teams, structured</h3>
+              <p class="text-gray-400">Running two LMP2 cars or three GT3 entries? Each car gets its own crew, its own assignments, its own meal plan — managed in one workspace per event without spreadsheets.</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-white mb-3">From test days to the race</h3>
+              <p class="text-gray-400">Endurance season includes prologues, test days, the main event, and the championship rounds. RaceNode treats each as its own structured event so nothing gets confused between meetings.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div class="max-w-5xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Two modules, one endurance racing workspace</h2>
+          <p class="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">RaceNode is modular. Use what fits your endurance team.</p>
+          <div class="grid md:grid-cols-2 gap-6 text-left">
+            <a href="/management" class="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-orange-500/50 transition-colors">
+              <h3 class="text-xl font-bold text-white mb-3">Race Team Management</h3>
+              <p class="text-gray-400">Driver rotations, mechanic shifts, multi-car crew compositions, meals around the clock.</p>
+            </a>
+            <a href="/logistics" class="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
+              <h3 class="text-xl font-bold text-white mb-3">Motorsport Logistics</h3>
+              <p class="text-gray-400">Accommodation, transport, and team vehicles for every round of the endurance championship.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-gray-900/50">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Run your endurance team without the spreadsheets</h2>
+          <p class="text-lg text-gray-400 mb-8">Free for the entire 2026 endurance season.</p>
+          <a href={`${appUrl}/signup`} class="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors">Start using RaceNode</a>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

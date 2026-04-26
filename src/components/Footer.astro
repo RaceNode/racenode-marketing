@@ -7,6 +7,11 @@ const footerLinks = {
     { href: "/management", label: "Management" },
     { href: "/logistics", label: "Logistics" },
   ],
+  solutions: [
+    { href: "/for-rally-teams", label: "Rally teams" },
+    { href: "/for-endurance-teams", label: "Endurance teams" },
+    { href: "/for-gt-teams", label: "GT teams" },
+  ],
   company: [
     // { href: "/about", label: "About" },  // TODO: Create About page
     { href: `mailto:${email}`, label: "Contact" },
@@ -21,7 +26,7 @@ const footerLinks = {
 
 <footer class="bg-gray-900 border-t border-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
       <!-- Logo & Info -->
       <div class="col-span-2 md:col-span-1">
         <a href="/" class="inline-block mb-4">
@@ -47,6 +52,23 @@ const footerLinks = {
         <h3 class="text-white font-semibold text-sm mb-4">Product</h3>
         <ul class="space-y-3">
           {footerLinks.product.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-gray-400 hover:text-green-500 transition-colors text-sm"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Solutions Links -->
+      <div>
+        <h3 class="text-white font-semibold text-sm mb-4">Solutions</h3>
+        <ul class="space-y-3">
+          {footerLinks.solutions.map((link) => (
             <li>
               <a
                 href={link.href}
