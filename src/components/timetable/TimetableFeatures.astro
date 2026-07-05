@@ -1,0 +1,115 @@
+---
+import { Image } from 'astro:assets';
+import screenshotSchedule from '../../assets/screenshots/timetable-schedule.png';
+import screenshotItems from '../../assets/screenshots/timetable-items.png';
+import screenshotRules from '../../assets/screenshots/timetable-rules.png';
+import screenshotOfficial from '../../assets/screenshots/timetable-official.png';
+import screenshotShare from '../../assets/screenshots/timetable-share.png';
+
+const screenshots = {
+  schedule: screenshotSchedule,
+  items: screenshotItems,
+  rules: screenshotRules,
+  official: screenshotOfficial,
+  share: screenshotShare,
+};
+
+const features = [
+  {
+    id: "schedule",
+    badge: "Team Timetable",
+    title: "Your schedule, next to the official one.",
+    description: "Lay out your team's plan alongside the organizer's sessions. Read it as a clean, PDF-style table with collapsible days, or flip to a calendar view to drag and resize items. Every entry is color-coded by type, with a live indicator on the current time. Export to Excel or CSV in one click.",
+    icon: "calendar"
+  },
+  {
+    id: "items",
+    badge: "Item Templates",
+    title: "Build once, reuse every weekend.",
+    description: "Save your recurring entries — track walk, engineering briefing, pit setup, departure to circuit — as org-level templates with a type, location, and duration. Start typing on the schedule and it autocompletes, pre-fills the details, and computes the end time for you.",
+    icon: "layers"
+  },
+  {
+    id: "rules",
+    badge: "Automation Rules",
+    title: "Anchor to the sessions. Let the rest follow.",
+    description: "Define a rule once — \"engineering briefing, 45 minutes before every practice\" — and generate the derived items across the weekend. Preview the exact times before you run it, re-run safely without duplicates, and see a badge on every synced item. Change the official session and your plan keeps up.",
+    icon: "wand"
+  },
+  {
+    id: "official",
+    badge: "Official Timetable",
+    title: "The organizer's schedule, always in view.",
+    description: "The official sessions from the Events module sit right beside your team plan — same data, no re-entry. Your internal schedule articulates around the real timetable instead of drifting away from it.",
+    icon: "flag"
+  },
+  {
+    id: "share",
+    badge: "Share Links",
+    title: "One link for the whole paddock.",
+    description: "Publish a tokenized public link per event — an iCal feed staff subscribe to, or a big-screen display page with a live countdown to every session. Revoke it anytime. Countdowns run on the circuit's timezone, so a TV in the box and a phone in another country both show the right time.",
+    icon: "share"
+  }
+];
+
+const icons: Record<string, string> = {
+  "calendar": `<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>`,
+  "layers": `<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>`,
+  "wand": `<path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8 19 13"/><path d="M15 9h.01"/><path d="M17.8 6.2 19 5"/><path d="m3 21 9-9"/><path d="M12.2 6.2 11 5"/>`,
+  "flag": `<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>`,
+  "share": `<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/>`
+};
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Five tools, one schedule.
+      </h2>
+    </div>
+
+    <div class="space-y-20 md:space-y-28">
+      {features.map((feature, index) => (
+        <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}>
+          <!-- Content -->
+          <div class="lg:w-1/2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-900/20 text-amber-400 rounded-full text-sm font-medium mb-4 border border-amber-500/30">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                set:html={icons[feature.icon]}
+              />
+              {feature.badge}
+            </div>
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+              {feature.title}
+            </h3>
+            <p class="text-gray-400 text-lg leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+
+          <!-- Screenshot -->
+          <div class="lg:w-1/2">
+            <div class="rounded-xl overflow-hidden shadow-2xl shadow-amber-500/10">
+              <Image
+                src={screenshots[feature.id as keyof typeof screenshots]}
+                alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`}
+                class="w-full h-auto"
+                loading="lazy"
+                quality={85}
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import TimetableHero from '../components/timetable/TimetableHero.astro';
+import TimetablePainPoints from '../components/timetable/TimetablePainPoints.astro';
+import TimetableFeatures from '../components/timetable/TimetableFeatures.astro';
+import TimetableSync from '../components/timetable/TimetableSync.astro';
+import TimetableShare from '../components/timetable/TimetableShare.astro';
+import TimetableRoadmap from '../components/timetable/TimetableRoadmap.astro';
+import TimetableCTA from '../components/timetable/TimetableCTA.astro';
+
+const title = "Motorsport Timetable Software for Racing Teams | RaceNode";
+const description = "Timetable software for racing teams. Build your team's schedule around the official sessions, automate briefings, and share a live countdown display for the whole weekend.";
+
+// JSON-LD BreadcrumbList schema for SEO
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.racenode.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Motorsport Timetable",
+      "item": "https://www.racenode.com/timetable"
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <TimetableHero />
+      <TimetablePainPoints />
+      <TimetableFeatures />
+      <TimetableSync />
+      <TimetableShare />
+      <TimetableRoadmap />
+      <TimetableCTA />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

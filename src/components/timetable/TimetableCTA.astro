@@ -1,0 +1,32 @@
+---
+const appUrl = "https://app.racenode.com";
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
+  <div class="max-w-4xl mx-auto">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-8 md:p-12 text-center">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-amber-900/20 rounded-lg flex items-center justify-center border border-amber-500/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">
+        Plan your next weekend, minute by minute.
+      </h2>
+      <p class="text-gray-400 mb-8 max-w-xl mx-auto">
+        Free for the 2026 racing season. Set up your team's schedule in minutes.
+      </p>
+
+      <a
+        href={`${appUrl}/signup`}
+        class="inline-block bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
+      >
+        Get started
+      </a>
+    </div>
+  </div>
+</section>

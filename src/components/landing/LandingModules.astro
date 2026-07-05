@@ -15,6 +15,7 @@ const paidModules = [
     name: 'Management',
     tagline: 'Event management, structured.',
     color: 'orange',
+    icon: 'clipboard-check',
     features: [
       'Staff assignments with role definitions',
       'Racecar entries per event',
@@ -28,6 +29,7 @@ const paidModules = [
     name: 'Logistics',
     tagline: 'Event logistics, centralized.',
     color: 'purple',
+    icon: 'luggage',
     features: [
       'Multi-segment travel arrangements',
       'Accommodation with room management',
@@ -35,6 +37,20 @@ const paidModules = [
       'Document attachments for tickets and confirmations'
     ],
     href: '/logistics'
+  },
+  {
+    id: 'timetable',
+    name: 'Timetable',
+    tagline: 'Event schedule, in real time.',
+    color: 'amber',
+    icon: 'clock',
+    features: [
+      'Team schedule alongside official sessions',
+      'Reusable item templates and autocomplete',
+      'Automation rules anchored to sessions',
+      'Public iCal feed and live countdown display'
+    ],
+    href: '/timetable'
   }
 ];
 
@@ -46,6 +62,7 @@ const icons: Record<string, string> = {
   car: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
   'clipboard-check': '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
   luggage: '<path d="M6 20h0a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h0"/><path d="M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14"/><path d="M10 20h4"/><circle cx="16" cy="20" r="2"/><circle cx="8" cy="20" r="2"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
   check: '<path d="M20 6 9 17l-5-5"/>'
 };
 
@@ -67,6 +84,15 @@ const colorClasses = {
     badgeBg: 'bg-purple-900/20',
     badgeText: 'text-purple-400',
     badgeBorder: 'border-purple-500/30'
+  },
+  amber: {
+    bg: 'bg-amber-900/30',
+    border: 'border-amber-700/50',
+    iconBg: 'bg-amber-900/50',
+    iconColor: 'text-amber-400',
+    badgeBg: 'bg-amber-900/20',
+    badgeText: 'text-amber-400',
+    badgeBorder: 'border-amber-500/30'
   }
 };
 ---
@@ -110,7 +136,7 @@ const colorClasses = {
     </div>
 
     <!-- Paid modules -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
       {paidModules.map((module) => {
         const colors = colorClasses[module.color as keyof typeof colorClasses];
         return (
@@ -127,7 +153,7 @@ const colorClasses = {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  set:html={icons[module.color === 'orange' ? 'clipboard-check' : 'luggage']}
+                  set:html={icons[module.icon]}
                 />
               </div>
               <div>

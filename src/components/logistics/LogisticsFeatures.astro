@@ -5,6 +5,7 @@ import screenshotStaff from '../../assets/screenshots/logistics-staff.png';
 import screenshotAccommodation from '../../assets/screenshots/logistics-accommodation.png';
 import screenshotTravel from '../../assets/screenshots/logistics-travel.png';
 import screenshotVehicles from '../../assets/screenshots/logistics-vehicles.png';
+import screenshotInfo from '../../assets/screenshots/logistics-info.png';
 
 const screenshots = {
   overview: screenshotOverview,
@@ -12,6 +13,7 @@ const screenshots = {
   accommodation: screenshotAccommodation,
   travel: screenshotTravel,
   vehicles: screenshotVehicles,
+  info: screenshotInfo,
 };
 
 const features = [
@@ -19,14 +21,14 @@ const features = [
     id: "overview",
     badge: "Overview",
     title: "See what's missing before it's a problem.",
-    description: "A real-time dashboard showing preparation status for each event. Instantly see how many staff members still need a departure flight, a return flight, or a hotel room. Track completion percentages for travel and accommodation, and get alerts for anything unresolved before you leave for the circuit.",
+    description: "A real-time dashboard showing preparation status for each event. Instantly see how many staff members still need a departure flight, a return flight, a hotel room, or an on-site vehicle. Track completion for travel, accommodation and on-site transfers, and get alerts for anything unresolved — dismiss the ones that don't apply so the dashboard reflects reality.",
     icon: "eye",
   },
   {
     id: "staff",
     badge: "Event Staff",
     title: "Your full crew, their complete logistics, one view.",
-    description: "See every staff member assigned to the event alongside their travel and accommodation status. Each row shows departure, hotel assignment, and return at a glance. Alert icons flag anyone missing a booking, so nothing slips through.",
+    description: "See every staff member assigned to the event alongside their travel and accommodation status. Each row shows departure, hotel, return, and on-site vehicle at a glance. Alert icons flag anyone missing a booking — ignore the ones that don't apply. Select several people at once to create a shared trip or hotel in a single action.",
     icon: "user-check",
   },
   {
@@ -47,8 +49,15 @@ const features = [
     id: "vehicles",
     badge: "Event Vehicles",
     title: "Fleet vehicles and rentals, ready for the road.",
-    description: "Pull vehicles from your permanent fleet or create event-specific entries for rentals and loaners. All vehicles are available in the Travel section for assignment, giving you a complete view of how your team gets to the circuit.",
+    description: "Pull vehicles from your permanent fleet or add event-specific entries for rentals and loaners. Use them for travel, and assign staff as on-site riders for daily transfers at the circuit — each person rides in one vehicle, sorted in a couple of clicks.",
     icon: "truck",
+  },
+  {
+    id: "info",
+    badge: "Info Board",
+    title: "The briefing board, shared with everyone.",
+    description: "Pin the notes and documents your crew needs — hotel lists, meeting points, schedules, procedures — with the files attached. Everyone assigned to the event sees them read-only in their Personal app, always up to date.",
+    icon: "info-board",
   }
 ];
 
@@ -57,7 +66,8 @@ const icons: Record<string, string> = {
   "user-check": `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>`,
   "bed": `<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>`,
   "plane": `<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>`,
-  "truck": `<path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>`
+  "truck": `<path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>`,
+  "info-board": `<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>`
 };
 ---
 
@@ -65,7 +75,7 @@ const icons: Record<string, string> = {
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-16">
       <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-        Five tools, one workspace.
+        Six tools, one workspace.
       </h2>
     </div>
 
