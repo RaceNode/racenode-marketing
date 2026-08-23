@@ -103,7 +103,7 @@ Provider reserves the right to suspend access in case of:
 ### 7.2 Data Processing
 - Provider processes Data as a data controller under GDPR
 - Processing is necessary for Service performance and legitimate business interests
-- Detailed privacy policy available at https://www.racenode.com/privacy
+- Detailed privacy policy available at https://www.racenode.com/privacy/
 
 ### 7.3 Data Security
 - Industry-standard security measures are implemented (encryption, access controls, backups)
@@ -168,7 +168,7 @@ Users may exercise GDPR rights (access, rectification, deletion, portability) by
 - Users may delete their personal account at any time, on a self-service basis, directly in the app (Profile → Delete account)
 - A User who owns an organization must first transfer ownership of that organization to another member (or delete the organization) before deleting their account
 - After account deletion, organizations retain their event records, including the former member's first and last name, on the basis of their legitimate interest in maintaining accurate team records
-- Complete erasure of the former member's name may be requested as described in the Privacy Policy (https://www.racenode.com/privacy) and at https://www.racenode.com/account-deletion
+- Complete erasure of the former member's name may be requested as described in the Privacy Policy (https://www.racenode.com/privacy/) and at https://www.racenode.com/account-deletion/
 
 ### 10.4 Termination by Provider
 - Provider may terminate for cause (breach of Terms) with 15 days written notice

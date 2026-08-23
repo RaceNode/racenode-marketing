@@ -50,4 +50,4 @@ Please send the request from the email address associated with your account so w
 
 ---
 
-For full details on how we process your personal data, see our [Privacy Policy](/privacy).
+For full details on how we process your personal data, see our [Privacy Policy](/privacy/).

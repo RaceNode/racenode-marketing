@@ -121,7 +121,7 @@ Subject: "Account Deletion - Name Erasure"
 
 These requests are processed manually. We will respond within 30 days.
 
-More details: https://www.racenode.com/account-deletion
+More details: https://www.racenode.com/account-deletion/
 
 ---
 
