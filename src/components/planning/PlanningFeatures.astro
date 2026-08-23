@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets';
+import screenshotGrid from '../../assets/screenshots/planning-grid.png';
+import screenshotDays from '../../assets/screenshots/planning-days.png';
+import screenshotAttendance from '../../assets/screenshots/planning-attendance.png';
+
+const screenshots = {
+  grid: screenshotGrid,
+  days: screenshotDays,
+  attendance: screenshotAttendance,
+};
+
+const features = [
+  {
+    id: "grid",
+    badge: "Season Grid",
+    title: "The whole season, one screen.",
+    description: "Days across, resources down — the roster grouped by role, championships on top, racecars and fleet vehicles below. Zoom from a free-scrolling season to week, month, quarter, or year, with a Today button to snap back. A per-row counter tallies the days worked in view, split by type on hover.",
+    icon: "grid"
+  },
+  {
+    id: "days",
+    badge: "Day Codes",
+    title: "Paint days, not cells.",
+    description: "Five codes — On track, Travelling, Workshop, Remote, Unavailable. Drag an empty stretch to paint it, drag a bar to move it, grab an edge to resize. There is no Save button anywhere: every change applies instantly, and every change can be undone from its toast.",
+    icon: "brush"
+  },
+  {
+    id: "attendance",
+    badge: "Partial Attendance",
+    title: "The truck loads early. The engineer stays late.",
+    description: "Resize a track bar to set that person's — or that truck's — own presence inside an event, without touching the event itself. Each end of the bar either follows the event's dates or pins to its own, so a date change on the event moves everyone who didn't need an exception.",
+    icon: "expand"
+  }
+];
+
+const icons: Record<string, string> = {
+  "grid": `<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/>`,
+  "brush": `<path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>`,
+  "expand": `<path d="M21 21H3"/><path d="m8 13-5-5 5-5"/><path d="m16 13 5-5-5-5"/><path d="M3 8h18"/>`
+};
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        One grid, the whole operation.
+      </h2>
+    </div>
+
+    <div class="space-y-20 md:space-y-28">
+      {features.map((feature, index) => (
+        <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}>
+          <!-- Content -->
+          <div class="lg:w-1/2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium mb-4 border border-gray-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                set:html={icons[feature.icon]}
+              />
+              {feature.badge}
+            </div>
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+              {feature.title}
+            </h3>
+            <p class="text-gray-400 text-lg leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+
+          <!-- Screenshot -->
+          <div class="lg:w-1/2">
+            <div class="rounded-lg overflow-hidden shadow-2xl">
+              <Image
+                src={screenshots[feature.id as keyof typeof screenshots]}
+                alt={`RaceNode Planning ${feature.badge} - ${feature.title}`}
+                class="w-full h-auto"
+                loading="lazy"
+                quality={85}
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Boundary with Timetable: Planning is between events, Timetable inside one -->
+    <div class="mt-16 max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 text-center">
+      <p class="text-gray-400">
+        Planning covers the season <span class="text-white font-medium">between events</span> — availability, and who works which race.
+        Inside the race weekend, minute by minute, that's the
+        <a href="/timetable/" class="text-white underline hover:text-gray-300">Timetable module</a>.
+      </p>
+    </div>
+  </div>
+</section>

@@ -2,11 +2,11 @@
 const appUrl = "https://app.racenode.com";
 
 const freeModules = [
-  { id: 'personal', name: 'Personal', icon: 'user', color: 'text-cyan-400', bg: 'bg-cyan-900/20' },
-  { id: 'staff', name: 'Staff', icon: 'users', color: 'text-green-400', bg: 'bg-green-900/20' },
-  { id: 'events', name: 'Events', icon: 'trophy', color: 'text-blue-400', bg: 'bg-blue-900/20' },
-  { id: 'fleet', name: 'Fleet', icon: 'van', color: 'text-yellow-400', bg: 'bg-yellow-900/20' },
-  { id: 'racecars', name: 'Racecars', icon: 'car', color: 'text-red-400', bg: 'bg-red-900/20' },
+  { id: 'personal', name: 'Personal', icon: 'user', color: 'text-gray-300', bg: 'bg-gray-800' },
+  { id: 'staff', name: 'Staff', icon: 'users', color: 'text-gray-300', bg: 'bg-gray-800' },
+  { id: 'events', name: 'Events', icon: 'trophy', color: 'text-gray-300', bg: 'bg-gray-800' },
+  { id: 'fleet', name: 'Fleet', icon: 'van', color: 'text-gray-300', bg: 'bg-gray-800' },
+  { id: 'racecars', name: 'Racecars', icon: 'car', color: 'text-gray-300', bg: 'bg-gray-800' },
 ];
 
 const paidModules = [
@@ -14,7 +14,6 @@ const paidModules = [
     id: 'management',
     name: 'Management',
     tagline: 'Event management, structured.',
-    color: 'orange',
     icon: 'clipboard-check',
     features: [
       'Staff assignments with role definitions',
@@ -28,7 +27,6 @@ const paidModules = [
     id: 'logistics',
     name: 'Logistics',
     tagline: 'Event logistics, centralized.',
-    color: 'purple',
     icon: 'luggage',
     features: [
       'Multi-segment travel arrangements',
@@ -42,7 +40,6 @@ const paidModules = [
     id: 'timetable',
     name: 'Timetable',
     tagline: 'Event schedule, in real time.',
-    color: 'amber',
     icon: 'clock',
     features: [
       'Team schedule alongside official sessions',
@@ -51,6 +48,19 @@ const paidModules = [
       'Public iCal feed and live countdown display'
     ],
     href: '/timetable/'
+  },
+  {
+    id: 'planning',
+    name: 'Planning',
+    tagline: 'The whole season, one grid.',
+    icon: 'calendar-range',
+    features: [
+      'Staff, racecars, and trucks on one season grid',
+      'Five day codes, painted by drag',
+      'Partial attendance per person and per truck',
+      'Availability posted by your own crew'
+    ],
+    href: '/crew-planning/'
   }
 ];
 
@@ -63,37 +73,18 @@ const icons: Record<string, string> = {
   'clipboard-check': '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
   luggage: '<path d="M6 20h0a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h0"/><path d="M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14"/><path d="M10 20h4"/><circle cx="16" cy="20" r="2"/><circle cx="8" cy="20" r="2"/>',
   clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  'calendar-range': '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="M17 14h-6"/><path d="M13 18H7"/><path d="M7 14h.01"/><path d="M17 18h.01"/>',
   check: '<path d="M20 6 9 17l-5-5"/>'
 };
 
-const colorClasses = {
-  orange: {
-    bg: 'bg-orange-900/30',
-    border: 'border-orange-700/50',
-    iconBg: 'bg-orange-900/50',
-    iconColor: 'text-orange-400',
-    badgeBg: 'bg-orange-900/20',
-    badgeText: 'text-orange-400',
-    badgeBorder: 'border-orange-500/30'
-  },
-  purple: {
-    bg: 'bg-purple-900/30',
-    border: 'border-purple-700/50',
-    iconBg: 'bg-purple-900/50',
-    iconColor: 'text-purple-400',
-    badgeBg: 'bg-purple-900/20',
-    badgeText: 'text-purple-400',
-    badgeBorder: 'border-purple-500/30'
-  },
-  amber: {
-    bg: 'bg-amber-900/30',
-    border: 'border-amber-700/50',
-    iconBg: 'bg-amber-900/50',
-    iconColor: 'text-amber-400',
-    badgeBg: 'bg-amber-900/20',
-    badgeText: 'text-amber-400',
-    badgeBorder: 'border-amber-500/30'
-  }
+const neutralClasses = {
+  bg: 'bg-gray-900',
+  border: 'border-gray-700',
+  iconBg: 'bg-gray-800',
+  iconColor: 'text-gray-300',
+  badgeBg: 'bg-gray-800',
+  badgeText: 'text-gray-400',
+  badgeBorder: 'border-gray-700'
 };
 ---
 
@@ -113,7 +104,7 @@ const colorClasses = {
       <h3 class="text-center text-gray-400 text-sm uppercase tracking-wider mb-6">Base modules</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
         {freeModules.map((module) => (
-          <div class="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 flex items-center gap-3">
+          <div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 flex items-center gap-3">
             <div class={`${module.bg} w-10 h-10 rounded-lg flex items-center justify-center border border-gray-700 shrink-0`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -138,12 +129,12 @@ const colorClasses = {
     <!-- Paid modules -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
       {paidModules.map((module) => {
-        const colors = colorClasses[module.color as keyof typeof colorClasses];
+        const colors = neutralClasses;
         return (
-          <div class={`${colors.bg} rounded-2xl p-6 md:p-8 border ${colors.border}`}>
+          <div class={`${colors.bg} rounded-lg p-6 md:p-8 border ${colors.border} hover:border-gray-600 transition-colors`}>
             {/* Header */}
             <div class="flex items-center gap-4 mb-4">
-              <div class={`${colors.iconBg} w-14 h-14 rounded-xl flex items-center justify-center border ${colors.badgeBorder}`}>
+              <div class={`${colors.iconBg} w-14 h-14 rounded-lg flex items-center justify-center border ${colors.badgeBorder}`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class={`h-7 w-7 ${colors.iconColor}`}
@@ -168,7 +159,7 @@ const colorClasses = {
                 <li class="flex items-start gap-2 text-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5"
+                    class="h-4 w-4 text-ok flex-shrink-0 mt-0.5"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -185,7 +176,7 @@ const colorClasses = {
             {/* Link */}
             <a
               href={module.href}
-              class={`inline-flex items-center gap-2 ${colors.badgeText} hover:underline text-sm font-medium`}
+              class="inline-flex items-center gap-2 text-gray-300 hover:text-white text-sm font-medium"
             >
               Learn more
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

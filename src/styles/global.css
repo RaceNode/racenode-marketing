@@ -1,2 +1,30 @@
 @import "tailwindcss";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
 @plugin "@tailwindcss/typography";
+
+/*
+ * Design tokens — mirror of the app's design system (dark values).
+ * Source of truth: C:\script\RaceNode\src\index.css + docs/architecture/design-system.md
+ * Rule: color signals a state, never a category. One indigo accent for actions,
+ * three state hues, neutrals for everything else. No gradients.
+ */
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Accent — the action color (app dark theme values) */
+  --color-accent: #5b5bd6;
+  --color-accent-hover: #6a6ae0;
+  --color-accent-fg: #ffffff;
+
+  /* States (dark theme values: emerald-400 / amber-400 / red-400) */
+  --color-ok: #34d399;
+  --color-watch: #fbbf24;
+  --color-blocking: #f87171;
+}

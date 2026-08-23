@@ -3,13 +3,14 @@ const appUrl = "https://app.racenode.com";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/crew-planning/", label: "Planning" },
   { href: "/management/", label: "Management" },
   { href: "/timetable/", label: "Timetable" },
   { href: "/logistics/", label: "Logistics" },
 ];
 ---
 
-<header class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
+<header class="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
@@ -41,7 +42,7 @@ const navLinks = [
         </a>
         <a
           href={`${appUrl}/signup`}
-          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+          class="bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-lg transition-colors"
         >
           Sign Up
         </a>
@@ -109,7 +110,7 @@ const navLinks = [
         </a>
         <a
           href={`${appUrl}/signup`}
-          class="block bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors text-center"
+          class="block bg-accent hover:bg-accent-hover text-white px-3 py-2 rounded-lg transition-colors text-center"
         >
           Sign Up
         </a>

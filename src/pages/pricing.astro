@@ -1,5 +1,179 @@
 ---
-// Pricing page — redirects to homepage for 2026 season (free access)
-// Components preserved in src/components/pricing/ for future reuse
-return Astro.redirect("/", 302);
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const appUrl = "https://app.racenode.com";
+const title = "Pricing — Free for the 2026 Season | RaceNode";
+const description = "RaceNode is free for all racing teams for the entire 2026 season — every module, every team member. Paid per-module plans arrive in 2027; early adopters keep their entry price for life.";
+
+const points = [
+  {
+    title: "Free for the whole 2026 season",
+    description: "Every module, every team, no payment details required. Sign up and run your season.",
+    icon: "flag"
+  },
+  {
+    title: "Paid plans from 2027",
+    description: "Per-module pricing — pick the modules that fit your workflow, whatever your team size. No per-user pricing, no forced packages.",
+    icon: "modules"
+  },
+  {
+    title: "Early adopters keep their price for life",
+    description: "Teams that subscribe at the entry price keep that rate for as long as they stay subscribed, even when prices rise for new customers.",
+    icon: "lock"
+  },
+  {
+    title: "Personal is free for every team member, always",
+    description: "The Personal app — each crew member's own schedule, travel, and assignments — is included free with any subscription, for the whole team.",
+    icon: "user"
+  }
+];
+
+const icons: Record<string, string> = {
+  flag: `<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>`,
+  modules: `<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>`,
+  lock: `<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+  user: `<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>`
+};
+
+const faq = [
+  {
+    q: "Is RaceNode free?",
+    a: "Yes — RaceNode is free for all racing teams for the entire 2026 season, with every module included and no payment details required."
+  },
+  {
+    q: "What happens after 2026?",
+    a: "Paid per-module plans arrive in 2027. Pricing is per module regardless of team size, and teams that subscribe at the entry price keep it for as long as they stay subscribed."
+  },
+  {
+    q: "Does my crew have to pay for the app?",
+    a: "No. The Personal app is free for every team member, always — it is included with any RaceNode subscription."
+  }
+];
+
+// JSON-LD BreadcrumbList schema for SEO
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.racenode.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Pricing",
+      "item": "https://www.racenode.com/pricing/"
+    }
+  ]
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map((item) => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": { "@type": "Answer", "text": item.a }
+  }))
+};
 ---
+
+<BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <!-- Hero -->
+      <section class="px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div class="max-w-7xl mx-auto text-center">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Free for the 2026 season.
+          </h1>
+          <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-8">
+            Every module, every team, the whole season. RaceNode is in its first racing season — teams that join now shape the product and keep their entry price for life when paid plans arrive.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href={`${appUrl}/signup`}
+              class="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
+            >
+              Get started
+            </a>
+            <span class="text-gray-500 text-sm">No payment details required</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- The deal -->
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-gray-900/30">
+        <div class="max-w-5xl mx-auto">
+          <div class="grid md:grid-cols-2 gap-6">
+            {points.map((point) => (
+              <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
+                <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-4 border border-gray-700">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-gray-300"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    set:html={icons[point.icon]}
+                  />
+                </div>
+                <h2 class="text-lg font-semibold text-white mb-2">{point.title}</h2>
+                <p class="text-gray-400">{point.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
+            Frequently asked questions
+          </h2>
+          <div class="space-y-4">
+            {faq.map((item) => (
+              <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
+                <h3 class="text-white font-semibold mb-2">{item.q}</h3>
+                <p class="text-gray-400">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="px-4 sm:px-6 lg:px-8 pb-20 md:pb-24">
+        <div class="max-w-4xl mx-auto">
+          <div class="bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">
+              Run your 2026 season on RaceNode.
+            </h2>
+            <p class="text-gray-400 mb-8 max-w-xl mx-auto">
+              Set up your team in minutes. Free for the whole season.
+            </p>
+            <a
+              href={`${appUrl}/signup`}
+              class="inline-block bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
+            >
+              Get started
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

@@ -74,7 +74,7 @@ const icons: Record<string, string> = {
         <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}>
           <!-- Content -->
           <div class="lg:w-1/2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-900/20 text-amber-400 rounded-full text-sm font-medium mb-4 border border-amber-500/30">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium mb-4 border border-gray-700">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-4 h-4"
@@ -98,7 +98,7 @@ const icons: Record<string, string> = {
 
           <!-- Screenshot -->
           <div class="lg:w-1/2">
-            <div class="rounded-xl overflow-hidden shadow-2xl shadow-amber-500/10">
+            <div class="rounded-lg overflow-hidden shadow-2xl">
               <Image
                 src={screenshots[feature.id as keyof typeof screenshots]}
                 alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`}
@@ -110,6 +110,15 @@ const icons: Record<string, string> = {
           </div>
         </div>
       ))}
+    </div>
+
+    <!-- Boundary with Planning: Timetable is inside an event, Planning between events -->
+    <div class="mt-16 max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 text-center">
+      <p class="text-gray-400">
+        The Timetable covers the race weekend <span class="text-white font-medium">inside an event</span>, minute by minute, anchored to the official sessions.
+        Across the season — availability, and who works which race — that's the
+        <a href="/crew-planning/" class="text-white underline hover:text-gray-300">Planning module</a>.
+      </p>
     </div>
   </div>
 </section>

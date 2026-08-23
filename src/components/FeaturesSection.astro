@@ -15,82 +15,81 @@ const features: Feature[] = [
     name: 'Personal',
     description: 'Personal dashboard and assignments',
     icon: 'user',
-    color: 'text-cyan-400',
-    bg900: 'bg-cyan-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'staff',
     name: 'Staff',
     description: 'Manage team members and personnel',
     icon: 'users',
-    color: 'text-green-400',
-    bg900: 'bg-green-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'fleet',
     name: 'Fleet',
     description: 'Manage vehicles and logistics',
     icon: 'van',
-    color: 'text-yellow-400',
-    bg900: 'bg-yellow-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'racecar',
     name: 'Racecars',
     description: 'Manage competition vehicles',
     icon: 'car',
-    color: 'text-red-400',
-    bg900: 'bg-red-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'events',
     name: 'Events',
     description: 'Plan and manage racing events',
     icon: 'trophy',
-    color: 'text-blue-400',
-    bg900: 'bg-blue-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'management',
     name: 'Management',
     description: 'Advanced event coordination',
     icon: 'clipboard-check',
-    color: 'text-orange-400',
-    bg900: 'bg-orange-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'logistics',
     name: 'Logistics',
     description: 'Travel, accommodation and transport',
     icon: 'luggage',
-    color: 'text-purple-400',
-    bg900: 'bg-purple-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'ai',
     name: 'AI',
     description: 'Smart insights and predictions',
     icon: 'sparkles',
-    color: 'text-cyan-400',
-    bg900: 'bg-cyan-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
   {
     id: 'planning',
     name: 'Planning',
-    description: 'Team calendar and scheduling',
+    description: 'Team and fleet planning across events',
     icon: 'calendar',
-    color: 'text-green-400',
-    bg900: 'bg-green-900/20',
-    coming: true,
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
   },
   {
     id: 'joblist',
     name: 'JobList',
     description: 'Task management and tracking',
     icon: 'list-todo',
-    color: 'text-orange-400',
-    bg900: 'bg-orange-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
   {
@@ -98,8 +97,8 @@ const features: Feature[] = [
     name: 'Tyres',
     description: 'Tyre and rim inventory management',
     icon: 'circle-dot',
-    color: 'text-red-400',
-    bg900: 'bg-red-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
   {
@@ -107,8 +106,8 @@ const features: Feature[] = [
     name: 'Finance',
     description: 'Budget and expense tracking',
     icon: 'dollar-sign',
-    color: 'text-yellow-400',
-    bg900: 'bg-yellow-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
   {
@@ -116,8 +115,8 @@ const features: Feature[] = [
     name: 'Mechanics',
     description: 'Workshop and maintenance tools',
     icon: 'wrench',
-    color: 'text-purple-400',
-    bg900: 'bg-purple-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
   {
@@ -125,8 +124,8 @@ const features: Feature[] = [
     name: 'Setup',
     description: 'Car setup sheets and configurations',
     icon: 'settings',
-    color: 'text-orange-400',
-    bg900: 'bg-orange-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
   {
@@ -134,8 +133,8 @@ const features: Feature[] = [
     name: 'Run',
     description: 'Session timing and run planning',
     icon: 'play',
-    color: 'text-green-400',
-    bg900: 'bg-green-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
   {
@@ -143,8 +142,8 @@ const features: Feature[] = [
     name: 'Data',
     description: 'Telemetry and performance analytics',
     icon: 'database',
-    color: 'text-blue-400',
-    bg900: 'bg-blue-900/20',
+    color: 'text-gray-300',
+    bg900: 'bg-gray-800',
     coming: true,
   },
 ];
@@ -185,11 +184,11 @@ const icons: Record<string, string> = {
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
       {features.map((feature) => (
         <div
-          class={`bg-gray-900 rounded-xl p-4 md:p-6 border border-gray-800 hover:border-gray-700 transition-colors flex flex-col items-center text-center relative ${feature.coming ? 'opacity-75' : ''}`}
+          class={`bg-gray-900 rounded-lg p-4 md:p-6 border border-gray-800 hover:border-gray-700 transition-colors flex flex-col items-center text-center relative ${feature.coming ? 'opacity-75' : ''}`}
         >
           {/* Coming Soon Badge */}
           {feature.coming && (
-            <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] md:text-xs font-medium px-2 py-0.5 rounded-full">
+            <span class="absolute -top-2 -right-2 bg-gray-700 text-gray-300 text-[10px] md:text-xs font-medium px-2 py-0.5 rounded-full">
               Coming
             </span>
           )}

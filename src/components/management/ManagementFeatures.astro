@@ -84,7 +84,7 @@ const icons: Record<string, string> = {
         <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}>
           <!-- Content -->
           <div class="lg:w-1/2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-orange-900/20 text-orange-400 rounded-full text-sm font-medium mb-4 border border-orange-500/30">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium mb-4 border border-gray-700">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-4 h-4"
@@ -108,7 +108,7 @@ const icons: Record<string, string> = {
 
           <!-- Screenshot -->
           <div class="lg:w-1/2">
-            <div class="rounded-xl overflow-hidden shadow-2xl shadow-orange-500/10">
+            <div class="rounded-lg overflow-hidden shadow-2xl">
               <Image
                 src={screenshots[feature.id as keyof typeof screenshots]}
                 alt={`RaceNode ${feature.badge} - ${feature.title}`}

@@ -32,7 +32,7 @@ const { title, description, heading } = Astro.props;
         </div>
 
         <!-- Document content -->
-        <div class="bg-gray-900 border border-gray-800 rounded-xl p-8">
+        <div class="bg-gray-900 border border-gray-800 rounded-lg p-8">
           <div class="prose prose-invert prose-sm max-w-none
             prose-headings:text-white prose-headings:font-bold
             prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3
@@ -41,7 +41,7 @@ const { title, description, heading } = Astro.props;
             prose-ul:text-gray-300 prose-ol:text-gray-300
             prose-li:text-gray-300
             prose-strong:text-white prose-strong:font-semibold
-            prose-a:text-red-500 hover:prose-a:text-red-400 prose-a:underline
+            prose-a:text-white hover:prose-a:text-gray-300 prose-a:underline
             prose-hr:border-gray-700 prose-hr:my-6">
             <slot />
           </div>
