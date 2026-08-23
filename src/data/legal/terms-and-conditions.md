@@ -1,7 +1,5 @@
-# Terms and Conditions - RaceNode
-
-**Effective Date:** January 25, 2026
-**Last Updated:** January 25, 2026
+**Effective Date:** January 25, 2026\
+**Last Updated:** August 23, 2026
 
 These General Terms and Conditions ("Terms") govern the provision and use of the RaceNode SaaS platform ("Service") operated by WBLT Engineering ("Provider", "we", "us").
 
@@ -19,12 +17,12 @@ These General Terms and Conditions ("Terms") govern the provision and use of the
 
 ## 2. Service Provider Information
 
-**WBLT Engineering**
-SASU - French registered company
-SIREN: 993 956 028
-Registered Address: 3 IMPASSE DE LA BOURGEOTTE 77120 CHAILLY-EN-BRIE
-Email: contact@racenode.com
-Website: https://www.racenode.com
+**WBLT Engineering**\
+SASU - French registered company\
+SIREN: 993 956 028\
+Registered Address: 3 IMPASSE DE LA BOURGEOTTE 77120 CHAILLY-EN-BRIE\
+Email: contact@racenode.com\
+Website: https://www.racenode.com\
 Hosting: Supabase Inc. (ISO 27001, SOC 2 certified infrastructure)
 
 ---
@@ -166,7 +164,13 @@ Users may exercise GDPR rights (access, rectification, deletion, portability) by
 - Client may terminate at any time by cancelling subscription
 - Data export must be requested within 6 months
 
-### 10.3 Termination by Provider
+### 10.3 Account Deletion by Users
+- Users may delete their personal account at any time, on a self-service basis, directly in the app (Profile → Delete account)
+- A User who owns an organization must first transfer ownership of that organization to another member (or delete the organization) before deleting their account
+- After account deletion, organizations retain their event records, including the former member's first and last name, on the basis of their legitimate interest in maintaining accurate team records
+- Complete erasure of the former member's name may be requested as described in the Privacy Policy (https://www.racenode.com/privacy) and at https://www.racenode.com/account-deletion
+
+### 10.4 Termination by Provider
 - Provider may terminate for cause (breach of Terms) with 15 days written notice
 - Provider may discontinue Service with 90 days notice to all Clients
 

@@ -1,7 +1,5 @@
-# Privacy Policy - RaceNode
-
-**Effective Date:** January 25, 2026
-**Last Updated:** January 25, 2026
+**Effective Date:** January 25, 2026\
+**Last Updated:** August 23, 2026
 
 This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service"), in accordance with the General Data Protection Regulation (GDPR).
 
@@ -9,10 +7,10 @@ This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, 
 
 ## 1. Data Controller
 
-**WBLT Engineering**
-SASU - French registered company
-SIREN: 993 956 028
-Email: contact@racenode.com
+**WBLT Engineering**\
+SASU - French registered company\
+SIREN: 993 956 028\
+Email: contact@racenode.com\
 Website: https://www.racenode.com
 
 ---
@@ -87,23 +85,57 @@ You have the right to:
 - **Object**: Object to processing based on legitimate interests (Art. 21)
 - **Lodge a complaint**: File a complaint with the CNIL (French data protection authority)
 
-**CNIL Contact**:
-Website: https://www.cnil.fr
+**CNIL Contact**:\
+Website: https://www.cnil.fr\
 Address: 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France
 
 ---
 
-## 7. How to Exercise Your Rights
+## 7. Account Deletion
 
-To exercise your rights, contact us at:
-Email: contact@racenode.com
+You can delete your account at any time, directly in the RaceNode app: **Profile → Delete account**.
+
+### 7.1 Data Deleted Upon Account Deletion
+
+When you delete your account, the following personal data is permanently erased:
+
+- Email address
+- Phone number
+- Postal address
+- Emergency contact
+- Profile photo
+- Personal preferences and settings
+- Personal schedule
+- Login credentials
+
+### 7.2 Data Retained After Account Deletion
+
+- **First and last name on organization event history**: Your first and last name remain attached to the event records of the organizations you were a member of. This retention is based on the legitimate interest of those organizations in maintaining accurate team and event records (GDPR Art. 6(1)(f)).
+- **Billing records**: Retained for 10 years as required by French law (see Section 4).
+
+### 7.3 Requesting Complete Name Erasure
+
+To request the complete removal of your first and last name from organization event histories, contact us at:\
+Email: contact@racenode.com\
+Subject: "Account Deletion - Name Erasure"
+
+These requests are processed manually. We will respond within 30 days.
+
+More details: https://www.racenode.com/account-deletion
+
+---
+
+## 8. How to Exercise Your Rights
+
+To exercise your rights, contact us at:\
+Email: contact@racenode.com\
 Subject: "GDPR Request - [Your Request]"
 
 We will respond within 30 days.
 
 ---
 
-## 8. Changes to This Policy
+## 9. Changes to This Policy
 
 We may update this Privacy Policy. Material changes will be notified via email to registered account holders.
 

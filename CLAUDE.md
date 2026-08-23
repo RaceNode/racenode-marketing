@@ -36,11 +36,11 @@ All pages wrap content in `BaseLayout.astro` (SEO meta, JSON-LD schemas) with sh
 src/
 ├── assets/screenshots/  # Product screenshots (imported via Astro Image)
 ├── components/          # Shared (Header, Footer) + feature subdirs
-├── layouts/             # BaseLayout.astro (SEO, structured data)
-├── pages/               # index, logistics, management, pricing, terms, privacy
-└── styles/              # global.css (Tailwind import)
+├── data/legal/          # Markdown legal documents (rendered by legal pages)
+├── layouts/             # BaseLayout.astro (SEO, structured data), LegalLayout.astro
+├── pages/               # index, logistics, management, pricing, terms, privacy, account-deletion
+└── styles/              # global.css (Tailwind entry + typography plugin, imported by BaseLayout)
 public/
-├── docs/legal/          # Markdown legal documents
 └── *.svg, *.png         # Logos, favicons, PWA icons
 ```
 
@@ -66,6 +66,7 @@ Dark theme matching the app:
 
 ## Content Notes
 
-- Legal docs (terms, privacy) are in `/public/docs/legal/` as markdown
+- Legal docs (terms, privacy, account-deletion) are markdown in `src/data/legal/`, rendered by their pages via `LegalLayout.astro` — edit the `.md` files, not the pages
+- `/account-deletion` is declared in Google Play Console (Data Safety form) — keep the URL stable
 - Pricing and features are hardcoded in components (update manually if changed)
 - Module list in FeaturesSection.astro matches app modules

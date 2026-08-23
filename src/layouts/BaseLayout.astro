@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title: string;
   description?: string;
@@ -103,7 +105,3 @@ const softwareSchema = {
     <slot />
   </body>
 </html>
-
-<style is:global>
-  @import "tailwindcss";
-</style>
