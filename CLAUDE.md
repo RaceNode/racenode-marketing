@@ -46,11 +46,10 @@ public/
 
 ## Design System
 
-Dark theme matching the app:
-- **Background**: `bg-gray-950` (main), `bg-gray-900` (cards)
+Dark theme mirroring the app's design system. Tokens are defined in `src/styles/global.css` (mirror of the app's `src/index.css`; source of truth: `docs/architecture/design-system.md` in the app repo). **Color signals a state, never a category** — no module colors, no gradients.
+- **Background**: `bg-gray-950` (main), `bg-gray-900` (cards), `border-gray-800`
 - **Text**: `text-white` (primary), `text-gray-400` (secondary)
-- **Borders**: `border-gray-800`
-- **Accent**: `green-600` (CTAs), module colors for features
+- **Accent**: indigo, via tokens only — `bg-accent hover:bg-accent-hover` for CTAs; never a literal color class
 
 ## Related Project
 
