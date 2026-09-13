@@ -1,0 +1,6 @@
+# Short links to the mobile app store listings (QR codes, social posts, printed material).
+# Keep in sync with src/data/stores.ts
+/ios          https://apps.apple.com/app/id6804234080                          302
+/ios/         https://apps.apple.com/app/id6804234080                          302
+/android      https://play.google.com/store/apps/details?id=com.racenode.app   302
+/android/     https://play.google.com/store/apps/details?id=com.racenode.app   302

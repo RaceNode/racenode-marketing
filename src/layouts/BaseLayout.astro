@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { APP_STORE_ID, APP_STORE_URL, PLAY_STORE_URL } from '../data/stores';
 
 interface Props {
   title: string;
@@ -43,9 +44,10 @@ const softwareSchema = {
   "@type": "SoftwareApplication",
   "name": "RaceNode",
   "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web",
+  "operatingSystem": "Web, iOS, Android",
   "description": description,
   "url": "https://www.racenode.com",
+  "installUrl": [APP_STORE_URL, PLAY_STORE_URL],
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -91,6 +93,9 @@ const softwareSchema = {
     <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
+
+    <!-- iOS Smart App Banner (Safari shows a native "Open in App Store" banner) -->
+    <meta name="apple-itunes-app" content={`app-id=${APP_STORE_ID}`} />
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#030712" />

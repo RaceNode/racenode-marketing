@@ -10,6 +10,9 @@
 /logo_*.svg
   Cache-Control: public, max-age=86400
 
+/badge-*.svg
+  Cache-Control: public, max-age=86400
+
 /screenshots/*
   Cache-Control: public, max-age=86400
 

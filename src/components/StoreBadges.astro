@@ -1,0 +1,54 @@
+---
+/**
+ * Official App Store / Google Play badges linking to the RaceNode listings.
+ * Badge artwork is the unmodified official asset from each platform
+ * (Apple Marketing Guidelines / Google Play Brand Guidelines) — never restyle it.
+ */
+import { APP_STORE_URL, PLAY_STORE_URL } from "../data/stores";
+
+interface Props {
+  size?: "sm" | "md";
+  align?: "start" | "center";
+  class?: string;
+}
+
+const { size = "md", align = "center", class: className = "" } = Astro.props;
+
+const heightClass = size === "sm" ? "h-9" : "h-10";
+const alignClass = align === "center" ? "justify-center" : "justify-start";
+---
+
+<div class:list={["flex flex-wrap items-center gap-3", alignClass, className]}>
+  <a
+    href={APP_STORE_URL}
+    target="_blank"
+    rel="noopener"
+    class="inline-flex hover:opacity-80 transition-opacity"
+    aria-label="Download RaceNode on the App Store"
+  >
+    <img
+      src="/badge-app-store.svg"
+      alt="Download on the App Store"
+      width="120"
+      height="40"
+      class={`${heightClass} w-auto`}
+      loading="lazy"
+    />
+  </a>
+  <a
+    href={PLAY_STORE_URL}
+    target="_blank"
+    rel="noopener"
+    class="inline-flex hover:opacity-80 transition-opacity"
+    aria-label="Get RaceNode on Google Play"
+  >
+    <img
+      src="/badge-google-play.svg"
+      alt="Get it on Google Play"
+      width="135"
+      height="40"
+      class={`${heightClass} w-auto`}
+      loading="lazy"
+    />
+  </a>
+</div>

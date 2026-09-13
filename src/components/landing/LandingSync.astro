@@ -1,5 +1,5 @@
 ---
-
+import StoreBadges from "../StoreBadges.astro";
 ---
 
 <section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
@@ -54,7 +54,7 @@
             </svg>
           </div>
           <h3 class="text-white font-semibold mb-2">Staff Member</h3>
-          <p class="text-gray-400 text-sm">Sees their assignments in the Personal app</p>
+          <p class="text-gray-400 text-sm">Sees their assignments in the RaceNode app, on iPhone or Android</p>
         </div>
       </div>
 
@@ -116,11 +116,12 @@
         </div>
       </div>
 
-      <!-- Note about Personal module -->
-      <div class="mt-8 text-center">
-        <p class="text-gray-300 text-sm font-medium">
-          The Personal module is included free with any subscription.
+      <!-- Note about Personal module + app download -->
+      <div class="mt-10 text-center">
+        <p class="text-gray-300 text-sm font-medium mb-5">
+          The Personal module is included free with any subscription. Get the app:
         </p>
+        <StoreBadges />
       </div>
     </div>
   </div>

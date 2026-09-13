@@ -1,5 +1,5 @@
 ---
-
+import StoreBadges from "../StoreBadges.astro";
 ---
 
 <section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/30">
@@ -103,14 +103,15 @@
         </div>
       </div>
 
-      <!-- Note about Personal module -->
-      <div class="mt-8 text-center">
+      <!-- Note about Personal module + app download -->
+      <div class="mt-10 text-center">
         <p class="text-gray-500 text-sm">
           No schedule PDFs to send, no messages to forward, no session missed.
         </p>
-        <p class="text-gray-300 text-sm mt-2 font-medium">
-          The Personal module is included free with any subscription.
+        <p class="text-gray-300 text-sm mt-2 mb-5 font-medium">
+          The Personal module is included free with any subscription. Get the app:
         </p>
+        <StoreBadges />
       </div>
     </div>
   </div>

@@ -1,4 +1,6 @@
 ---
+import StoreBadges from "./StoreBadges.astro";
+
 const currentYear = new Date().getFullYear();
 const email = "contact@racenode.com";
 
@@ -44,6 +46,9 @@ const footerLinks = {
           </svg>
           <span>{email}</span>
         </a>
+
+        <h3 class="text-white font-semibold text-sm mt-8 mb-3">Get the app</h3>
+        <StoreBadges size="sm" align="start" />
       </div>
 
       <!-- Product Links -->
