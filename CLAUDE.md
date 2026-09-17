@@ -41,8 +41,15 @@ src/
 ├── pages/               # index, logistics, management, pricing, terms, privacy, account-deletion
 └── styles/              # global.css (Tailwind entry + typography plugin, imported by BaseLayout)
 public/
-└── *.svg, *.png         # Logos, favicons, PWA icons
+└── *.svg, *.png         # Logos, favicons, PWA icons (generated, see below)
+scripts/brand/
+├── logo.mjs             # Builds the logo lockups (public/logo_*.svg, public/email/logo-*.png) from favicon.svg + IBM Plex
+└── generate.mjs         # Social media kit (brand/social/) + public/og-image.png; post copy in posts.json
 ```
+
+## Brand
+
+The logo is the store icon mark (the R node, `public/favicon.svg`) plus "RaceNode" in IBM Plex Sans 600. The old italic wordmark with the red streak is retired. Never edit `public/logo_*.svg`, `public/email/logo-*.png` or `public/og-image.png` by hand: run `node scripts/brand/logo.mjs` then `node scripts/brand/generate.mjs`.
 
 ## Design System
 

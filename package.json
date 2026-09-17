@@ -19,6 +19,8 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "opentype.js": "^2.0.0",
+    "playwright-core": "^1.62.1",
     "sharp": "^0.35.3"
   }
 }
