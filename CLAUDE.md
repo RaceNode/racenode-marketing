@@ -60,7 +60,7 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 
 ## Related Project
 
-- **App**: `C:\script\RaceNode` - Main React app at `app.racenode.com`
+- **App**: `C:\script\RaceNode\racenode` - Main React app at `app.racenode.com`
 - **Links**: Header links point to `https://app.racenode.com/login` and `/signup`
 - **Site URL**: `https://www.racenode.com` (configured in astro.config.mjs)
 
