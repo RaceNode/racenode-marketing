@@ -34,7 +34,7 @@ RaceNode is **sober B2B, professional, insider-credible**. Not a disruptive star
 **Always:**
 - Position as **the missing complementary tool**, not a replacement for how teams work.
 - Lead with paddock credibility: built by a Program Manager who has been tyre-man, mechanic, engineer and team manager, running a live GT3 programme.
-- Early-adopter framing: "entry price kept for life", not "act now".
+- Season framing: "the price you join at holds until 31 December", not "act now". Never promise a price for life.
 
 ---
 
@@ -243,11 +243,11 @@ This page has two jobs: convince the team manager ("my crew will finally have it
 
 ### 7.1 `/pricing/` — highest priority of the three
 Queries `racenode pricing`, `racing team software cost`, `free racing team management software` are bottom-of-funnel, and pricing is the first thing an LLM looks for before recommending a product. Even while free, the page must exist:
-- Free for the whole 2026 season, all teams, all modules
-- Paid plans from 2027
-- Early adopters keep their entry price for life
-- Personal module free for every team member, always
-- Per-module pricing regardless of team size
+- Free until 31 December 2026, all teams, all modules; nothing charged before January 2027
+- Paid plans from 2027: monthly subscription, with an annual payment option
+- The price you subscribe at is guaranteed until 31 December of that year, whenever you join
+- Personal module free for every team member
+- Do not publish the module split, package structure or prices until they are decided
 
 **Title:** `Pricing — Free for the 2026 Season | RaceNode`
 

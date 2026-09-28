@@ -30,9 +30,9 @@ Management: crew assignments, racecars and trucks, team structure and meals for 
 Planning: who works which race across the season, with availability and rotas connected to every event.
 Logistics: crew travel, flights, hotels and room allocation. People logistics, not freight.
 Timetable: your team's schedule built around the official timetable, shared live with the whole crew.
-Personal: every crew member sees their own role, travel, hotel and next session on their phone. Free for every team member, always. Now on iOS and Android.
+Personal: every crew member sees their own role, travel, hotel and next session on their phone. Free for every team member. Now on iOS and Android.
 
-Free for all racing teams for the entire 2026 season, every module included. Early adopters keep their entry price for life.
+Free for all racing teams until 31 December 2026, every module included.
 
 Made in Europe, GDPR-compliant, data hosted in the EU.
 
