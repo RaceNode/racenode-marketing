@@ -38,9 +38,9 @@ Website: https://www.racenode.com
 - **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f))
 
 ### 2.5 Product Analytics
-- **What we collect**: Screens viewed and clicks in the app (clicked text masked), platform and browser type, linked to your account identifier and your organization (identifier and name). No email address, name or session recording.
+- **What we collect**: Screens viewed and clicks in the app (clicked text masked), platform and browser type, linked to your account identifier and your organization (identifier and name). No email address, name or session recording. No cookies or storage on your device.
 - **Purpose**: Understand how the Service is used in order to improve it
-- **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f))
+- **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f)). You can object at any time at contact@racenode.com.
 
 ---
 
