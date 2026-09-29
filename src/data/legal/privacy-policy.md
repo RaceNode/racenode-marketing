@@ -1,5 +1,5 @@
 **Effective Date:** January 25, 2026\
-**Last Updated:** August 23, 2026
+**Last Updated:** September 29, 2026
 
 This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service"), in accordance with the General Data Protection Regulation (GDPR).
 
@@ -37,6 +37,11 @@ Website: https://www.racenode.com
 - **Purpose**: Security, fraud prevention, service improvement
 - **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f))
 
+### 2.5 Product Analytics
+- **What we collect**: Screens viewed and clicks in the app (clicked text masked), platform and browser type, linked to your account identifier and your organization (identifier and name). No email address, name or session recording.
+- **Purpose**: Understand how the Service is used in order to improve it
+- **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f))
+
 ---
 
 ## 3. Data Sharing and International Transfers
@@ -46,6 +51,7 @@ We share data with the following service providers:
 - **Supabase Inc.** (USA): Database hosting and authentication
 - **Stripe** (USA): Payment processing
 - **Cloudflare** (USA): Security and CDN services
+- **PostHog Inc.** (USA, data hosted in the EU): Product analytics
 
 All transfers outside the European Economic Area (EEA) are protected by Standard Contractual Clauses (SCCs) approved by the European Commission.
 
@@ -58,6 +64,7 @@ We do not sell or rent your personal data.
 - **Active account data**: Duration of subscription
 - **Billing records**: 10 years (French legal requirement)
 - **Technical logs**: 90 days
+- **Product analytics data**: PostHog's default retention period; erased when you delete your account (see Section 7) or on request (see Section 8)
 
 After cancellation, modules remain accessible in read-only mode for 6 months, then data is deleted (except billing records retained for legal compliance).
 
@@ -107,6 +114,7 @@ When you delete your account, the following personal data is permanently erased:
 - Personal preferences and settings
 - Personal schedule
 - Login credentials
+- Product analytics data (erased within about a week)
 
 ### 7.2 Data Retained After Account Deletion
 
