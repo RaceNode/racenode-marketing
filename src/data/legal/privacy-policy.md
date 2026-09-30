@@ -1,5 +1,5 @@
 **Effective Date:** January 25, 2026\
-**Last Updated:** August 23, 2026
+**Last Updated:** September 30, 2026
 
 This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service"), in accordance with the General Data Protection Regulation (GDPR).
 
@@ -12,6 +12,8 @@ SASU - French registered company\
 SIREN: 993 956 028\
 Email: contact@racenode.com\
 Website: https://www.racenode.com
+
+**Our role.** WBLT Engineering is the controller of the data it needs to run RaceNode: your account, billing and technical data and product analytics (Sections 2.1, 2.2, 2.4 and 2.5). The data an organization enters into the Service about its members and operations (Sections 2.3 and 2.6) is processed on that organization's behalf: the organization is the controller and we act as its processor, under the data processing terms of our Terms and Conditions (Section 7). For that data, contact the organization first; we forward any request we receive to it.
 
 ---
 
@@ -28,24 +30,41 @@ Website: https://www.racenode.com
 - **Legal basis**: Contract performance (GDPR Art. 6(1)(b)) and legal obligation (GDPR Art. 6(1)(c))
 
 ### 2.3 Service Usage Data
-- **What we collect**: Team member data, events, vehicles, logistics information you enter into the Service
+- **What we process**: Team member data, events, vehicles, logistics information entered into the Service by an organization and its users
 - **Purpose**: Provide the Service functionalities
-- **Legal basis**: Contract performance (GDPR Art. 6(1)(b))
+- **Our role**: Processor on behalf of the organization, which determines the legal basis
 
 ### 2.4 Technical Data
 - **What we collect**: IP address, browser type, login timestamps
 - **Purpose**: Security, fraud prevention, service improvement
 - **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f))
 
+### 2.5 Product Analytics
+- **What we collect**: Screens viewed and clicks in the app (clicked text masked), platform and browser type, linked to your account identifier and your organization (identifier and name). No email address, name or session recording. No cookies or storage on your device.
+- **Purpose**: Understand how the Service is used in order to improve it
+- **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f)). You can object at any time at contact@racenode.com.
+
+### 2.6 AI Features
+- **What we process**: The content you submit to a feature that uses AI (for example, a document to import), which may include personal data it contains
+- **How**: AI processing is performed by Mistral AI, only for the content needed by the feature you use
+- **Purpose**: Provide the AI-assisted features of the Service
+- **Our role**: Processor on behalf of the organization, as for Section 2.3
+- Your data is not used to train AI models.
+
 ---
 
 ## 3. Data Sharing and International Transfers
 
-We share data with the following service providers:
+We share data with the following service providers (our subprocessors). Organizations are informed by email before a subprocessor is added or replaced:
 
-- **Supabase Inc.** (USA): Database hosting and authentication
+- **Supabase Inc.** (USA, data hosted in Paris, France): Database hosting and authentication
 - **Stripe** (USA): Payment processing
-- **Cloudflare** (USA): Security and CDN services
+- **Cloudflare** (USA): Application hosting, security and CDN services
+- **Resend** (USA): Sending of service emails (sign-in, invitations, notifications)
+- **Sentry** (USA, data hosted in Frankfurt, Germany): Error monitoring, linked to a user identifier
+- **Google** (USA): Address and place search (Google Places)
+- **PostHog Inc.** (USA, data hosted in the EU): Product analytics
+- **Mistral AI** (France, EU hosting): AI features (see Section 2.6)
 
 All transfers outside the European Economic Area (EEA) are protected by Standard Contractual Clauses (SCCs) approved by the European Commission.
 
@@ -58,6 +77,7 @@ We do not sell or rent your personal data.
 - **Active account data**: Duration of subscription
 - **Billing records**: 10 years (French legal requirement)
 - **Technical logs**: 90 days
+- **Product analytics data**: PostHog's default retention period; erased when you delete your account (see Section 7) or on request (see Section 8)
 
 After cancellation, modules remain accessible in read-only mode for 6 months, then data is deleted (except billing records retained for legal compliance).
 
@@ -107,6 +127,7 @@ When you delete your account, the following personal data is permanently erased:
 - Personal preferences and settings
 - Personal schedule
 - Login credentials
+- Product analytics data (erased within about a week)
 
 ### 7.2 Data Retained After Account Deletion
 

@@ -1,5 +1,5 @@
 **Effective Date:** January 25, 2026\
-**Last Updated:** August 23, 2026
+**Last Updated:** September 30, 2026
 
 These General Terms and Conditions ("Terms") govern the provision and use of the RaceNode SaaS platform ("Service") operated by WBLT Engineering ("Provider", "we", "us").
 
@@ -36,6 +36,12 @@ RaceNode provides a modular operational management platform for racing teams, in
 - Technical modules (as available)
 
 Service features, modules, and specifications are described on the official website and may evolve over time.
+
+### 3.1 AI Features
+- Some Service features use artificial intelligence; this processing is performed by Mistral AI (France, EU hosting) on Provider's behalf
+- Client Data is not used to train AI models
+- AI-generated results may contain errors: Client remains responsible for checking them before relying on them
+- Use of AI features may be limited to a volume per organization
 
 ---
 
@@ -100,24 +106,39 @@ Provider reserves the right to suspend access in case of:
 - Client retains full ownership of all Data submitted to the Service
 - Provider does not claim any rights over Client Data
 
-### 7.2 Data Processing
-- Provider processes Data as a data controller under GDPR
-- Processing is necessary for Service performance and legitimate business interests
-- Detailed privacy policy available at https://www.racenode.com/privacy/
+### 7.2 Roles Under GDPR
+- **Provider as controller**: for account, billing and technical data (User accounts, invoicing, security logs), as described in the privacy policy (https://www.racenode.com/privacy/)
+- **Provider as processor**: for the personal data Client and its Users enter into the Service (staff, drivers, events, travel, accommodation and other operational Data). Client is the controller of this Data and responsible for having a legal basis to process it and for informing the persons concerned
+- This Section 7 constitutes the data processing agreement required by Article 28 GDPR and is accepted together with these Terms
 
-### 7.3 Data Security
+### 7.3 Processing on Client's Behalf
+When acting as processor, Provider:
+- Processes personal data only to provide the Service and on Client's documented instructions, which are these Terms and Client's use of the Service; Provider informs Client if an instruction appears to infringe GDPR
+- Ensures that persons authorized to access the data are bound by confidentiality
+- Implements the security measures described in Section 7.4
+- Assists Client, as far as possible, in responding to requests from data subjects and in meeting its obligations on security, breach notification and impact assessments
+- Makes available the information necessary to demonstrate compliance, and allows audits by Client or an auditor it mandates, on 30 days written notice, at Client's cost and no more than once a year unless a breach has occurred
+- Deletes or returns the data at the end of the Service as described in Section 7.5
+
+### 7.4 Data Security
 - Industry-standard security measures are implemented (encryption, access controls, backups)
 - Client is responsible for Data accuracy and User access management
-- Data breach notifications will be provided within 72 hours as required by GDPR
+- Provider notifies Client of any personal data breach affecting Client Data without undue delay, and within 72 hours of becoming aware of it
 
-### 7.4 Data Retention and Portability
+### 7.5 Data Retention and Portability
 - Active Data is retained for the duration of subscription
 - Upon cancellation, modules switch to read-only mode for 6 months, then Data is permanently deleted
 - Client may export Data at any time through Service features
 - Data export requests upon cancellation must be made within the 6-month retention period
 
-### 7.5 User Rights
-Users may exercise GDPR rights (access, rectification, deletion, portability) by contacting: contact@racenode.com
+### 7.6 Subprocessors
+- Client authorizes Provider to use the subprocessors listed in the privacy policy (hosting, payment, security, AI features)
+- Provider imposes on each subprocessor data protection obligations equivalent to those of this Section 7 and remains liable for their performance
+- Provider informs Client by email before adding or replacing a subprocessor; Client may object within 15 days, and if no solution is found, terminate its subscription without penalty
+- Transfers outside the European Economic Area are covered by the European Commission's Standard Contractual Clauses
+
+### 7.7 User Rights
+Users may exercise GDPR rights (access, rectification, deletion, portability) by contacting: contact@racenode.com. Requests concerning Data entered by an organization are forwarded to that organization, as controller, and Provider assists it in responding.
 
 ---
 
@@ -179,7 +200,7 @@ Users may exercise GDPR rights (access, rectification, deletion, portability) by
 ## 11. Modifications to Terms
 
 - Provider reserves the right to modify these Terms at any time
-- Material changes will be notified by email 30 days in advance
+- Material changes will be notified by email 15 days in advance
 - Continued use of Service after changes constitutes acceptance
 - Clients may cancel subscription if they do not accept modifications
 

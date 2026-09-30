@@ -27,6 +27,7 @@ The following personal data is permanently erased when you delete your account:
 - Personal preferences and settings
 - Personal schedule
 - Login credentials
+- Product analytics data (erased within about a week)
 
 ---
 
