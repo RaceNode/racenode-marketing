@@ -8,6 +8,7 @@
 //   { "type": "cover", "kicker", "title", "body" }
 //   { "type": "shot",  "kicker", "title", "body", "shot": "logistics-travel",
 //     "crop": { "x": 0.04, "y": 0.27, "w": 0.48, "h": 0.55 } }   // fractions of the screenshot
+//   ("shot" with a "/" is an image path relative to the JSON file)
 //   { "type": "end",   "title", "body", "badges": true }
 // The copy files live outside this public repo; only the renderer is here.
 
@@ -71,7 +72,10 @@ const CSS = `
   .page{position:absolute;right:${PAD}px;top:${PAD + 14}px;font-size:24px;color:${T.faint}}
 `;
 
-const shotUrl = (name) => "file://" + path.join(SHOTS, `${name}.png`);
+// A bare name is a screenshot of src/assets/screenshots; a path (with a "/")
+// is resolved from the JSON file, for images that live outside the repo.
+const shotUrl = (name) =>
+  "file://" + (name.includes("/") ? path.resolve(path.dirname(specPath), name) : path.join(SHOTS, `${name}.png`));
 
 // The crop box is scaled to fill the frame's width; the frame takes the crop's
 // height, capped by the room the slide leaves, and is centred in that room.
