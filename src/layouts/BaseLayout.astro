@@ -27,15 +27,23 @@ const organizationSchema = {
   "@type": "Organization",
   "name": "RaceNode",
   "url": "https://www.racenode.com",
-  "logo": "https://www.racenode.com/logo_horizontal.svg",
+  "logo": "https://www.racenode.com/pwa-512x512.png",
   "description": "All-in-one ERP platform for racing teams",
-  "sameAs": ["https://www.linkedin.com/company/racenode"],
+  "sameAs": ["https://www.linkedin.com/company/racenode", APP_STORE_URL, PLAY_STORE_URL],
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "Customer Support",
     "email": "contact@racenode.com",
     "url": "https://www.racenode.com"
   }
+};
+
+// JSON-LD Schema for WebSite (gives search engines the site name)
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "RaceNode",
+  "url": "https://www.racenode.com/"
 };
 
 // JSON-LD Schema for SoftwareApplication
@@ -52,8 +60,10 @@ const softwareSchema = {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD",
-    "description": "Free for the 2026 racing season"
-  }
+    "description": "Free for the 2026 racing season",
+    "validThrough": "2026-12-31"
+  },
+  "publisher": { "@type": "Organization", "name": "RaceNode", "url": "https://www.racenode.com" }
 };
 ---
 
@@ -90,7 +100,7 @@ const softwareSchema = {
 
     <!-- Favicons & PWA -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
@@ -104,6 +114,7 @@ const softwareSchema = {
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
   </head>
   <body class="min-h-screen bg-gray-950 text-white">

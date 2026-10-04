@@ -11,6 +11,8 @@
 //   logo_vertical_black.svg    same, dark ink
 //   email/logo-white.png       horizontal, 2x of the 134x32 signature slot
 //   email/logo-vertical.png    vertical, 3x of the 120x97 transactional email slot
+//   favicon.ico                48x48 store icon, for crawlers and browsers that
+//                              still ask for /favicon.ico (tabs use favicon.svg)
 //
 // The app repo keeps its own copies (src/assets/logos, public/): copy these over.
 
@@ -134,3 +136,15 @@ const png = async (name, s, width) => {
 };
 await png("logo-white.png", out["logo_horizontal.svg"].svg, 268);   // signature slot 134x32 @2x
 await png("logo-vertical.png", out["logo_vertical.svg"].svg, 360);  // email slot 120x97 @3x
+
+// ---------- favicon.ico ----------
+// An ICO holding a single PNG (allowed since Vista): 6-byte header, one 16-byte
+// directory entry, then the PNG. Drawn from the store icon, background included.
+const icoPng = await sharp(path.join(PUB, "pwa-512x512.png")).resize(48, 48).png().toBuffer();
+const ico = Buffer.alloc(22);
+ico.writeUInt16LE(0, 0); ico.writeUInt16LE(1, 2); ico.writeUInt16LE(1, 4);
+ico.writeUInt8(48, 6); ico.writeUInt8(48, 7); ico.writeUInt8(0, 8); ico.writeUInt8(0, 9);
+ico.writeUInt16LE(1, 10); ico.writeUInt16LE(32, 12);
+ico.writeUInt32LE(icoPng.length, 14); ico.writeUInt32LE(22, 18);
+writeFileSync(path.join(PUB, "favicon.ico"), Buffer.concat([ico, icoPng]));
+console.log("wrote public/favicon.ico 48x48");

@@ -45,7 +45,9 @@ public/
 scripts/brand/
 ├── logo.mjs             # Builds the logo lockups (public/logo_*.svg, public/email/logo-*.png) from favicon.svg + IBM Plex
 ├── generate.mjs         # Social media kit (brand/social/) + public/og-image.png; post copy in posts.json
-└── carousel.mjs         # LinkedIn/Instagram carousels (PNG slides + PDF) from a JSON kept outside this public repo
+├── carousel.mjs         # LinkedIn/Instagram carousels (PNG slides + PDF) from a JSON kept outside this public repo
+scripts/seo/
+└── indexnow.mjs         # Pings IndexNow (Bing…) with the live sitemap after a deploy; key file = public/<key>.txt
 ```
 
 ## Brand
@@ -67,7 +69,8 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 
 ## SEO Features
 
-- Sitemap auto-generated via `@astrojs/sitemap`
+- Sitemap auto-generated via `@astrojs/sitemap`; `src/pages/404.astro` makes unknown URLs return a real 404 (Pages would otherwise serve the home page with a 200)
+- `public/llms.txt`: plain summary of the product for AI assistants; keep it in line with the pages when modules or pricing change
 - JSON-LD schemas (Organization, SoftwareApplication) in BaseLayout
 - Open Graph and Twitter meta tags on all pages
 

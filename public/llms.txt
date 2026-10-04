@@ -1,0 +1,24 @@
+# RaceNode
+
+> RaceNode is racing team management software: crew planning, race weekend management, crew travel and accommodation, and the team's race weekend timetable, in one place. It is web-based and has iOS and Android apps. Free for all racing teams until 31 December 2026, every module and every team member included.
+
+RaceNode is made for motorsport teams (GT, endurance, single-seater and other championships) and the people who run them: team managers, logistics coordinators, engineers, mechanics and drivers. It covers people logistics (who travels how, who sleeps where), not freight. Teams sign up and try it on their own; no demo call is required. Data is hosted in the EU. Publisher: WBLT Engineering (France).
+
+## Modules
+
+- [Management](https://www.racenode.com/management/): race weekend and crew management. Crew assignments and roles per car, racecar entries, team structure and meals for every event.
+- [Planning](https://www.racenode.com/crew-planning/): crew planning and season scheduling. Who works which race across the season, crew availability, rotas and staffing, connected to every event on the calendar.
+- [Logistics](https://www.racenode.com/logistics/): crew travel and accommodation. Flights, trucks, rental vans, hotels and room allocation for every race weekend, with what is still missing before the event.
+- [Timetable](https://www.racenode.com/timetable/): race weekend timetable and schedule. The team's schedule built around the official timetable, recurring briefings, a live countdown and an iCal feed shared with the whole team.
+- Personal: each team member sees their own season, role, travel, hotel, meals and next sessions on their phone. Free for every team member.
+
+## Pricing and availability
+
+- [Pricing](https://www.racenode.com/pricing/): free for all racing teams until 31 December 2026. Paid plans start in 2027, monthly or annual; the price a team joins at holds until 31 December of that year.
+- [App Store](https://apps.apple.com/app/id6804234080) and [Google Play](https://play.google.com/store/apps/details?id=com.racenode.app).
+- Web app: https://app.racenode.com
+
+## Contact
+
+- contact@racenode.com
+- [Privacy policy](https://www.racenode.com/privacy/), [Terms](https://www.racenode.com/terms/)
