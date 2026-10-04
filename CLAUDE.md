@@ -44,7 +44,8 @@ public/
 └── *.svg, *.png         # Logos, favicons, PWA icons (generated, see below)
 scripts/brand/
 ├── logo.mjs             # Builds the logo lockups (public/logo_*.svg, public/email/logo-*.png) from favicon.svg + IBM Plex
-└── generate.mjs         # Social media kit (brand/social/) + public/og-image.png; post copy in posts.json
+├── generate.mjs         # Social media kit (brand/social/) + public/og-image.png; post copy in posts.json
+└── carousel.mjs         # LinkedIn/Instagram carousels (PNG slides + PDF) from a JSON kept outside this public repo
 ```
 
 ## Brand
