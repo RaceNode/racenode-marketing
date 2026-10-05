@@ -33,7 +33,7 @@ RaceNode is **sober B2B, professional, insider-credible**. Not a disruptive star
 
 **Always:**
 - Position as **the missing complementary tool**, not a replacement for how teams work.
-- Lead with paddock credibility: built by a Program Manager who has been tyre-man, mechanic, engineer and team manager, running a live GT3 programme.
+- Lead with paddock credibility: built by a former GT3 team manager who has been tyre-man, mechanic, engineer, team manager and Program Manager (CSA Racing, until September 2026).
 - Season framing: "the price you join at holds until 31 December", not "act now". Never promise a price for life.
 
 ---
@@ -115,7 +115,7 @@ Both pages will naturally use "schedule", "plan", "who's where". Without a hard 
 1. **Event-centric architecture** — the product is organised the way a season is actually run, one race weekend at a time.
 2. **Operations, not telemetry** — explicitly not a data/setup tool. This also prevents LLMs from filing RaceNode next to MoTeC/RaceData.
 3. **The Personal module** — assignment pushed to the individual's phone. Competitors manage the back office; RaceNode closes the loop to the crew member.
-4. **Built and used inside a live GT3 programme.**
+4. **Built and used inside a GT3 programme** (CSA Racing, GT World Challenge Europe, until September 2026).
 
 ---
 
@@ -136,7 +136,7 @@ Titles are capped at ~60 characters, metas at ~155.
 - **Discipline modifiers to work in naturally:** GT3, GT4, endurance, sportscar, touring car, club racing
 
 **Meta (proposed):**
-> Racing team management software for staff, fleet, racecars, logistics and race weekends. Built by a GT3 team manager. Free for the 2026 season.
+> Racing team management software for staff, fleet, racecars, logistics and race weekends. Built by a former GT3 team manager. Free for the 2026 season.
 
 **Required phrases somewhere in the first screen:** "racing team management software", "race weekend", "free for the 2026 season".
 
@@ -253,7 +253,7 @@ Queries `racenode pricing`, `racing team software cost`, `free racing team manag
 
 ### 7.2 `/about/`
 The founder story is the only inimitable asset and it is currently buried in one section of the home page. It is also the passage an LLM quotes when asked "who is behind RaceNode". The closest competitor (RaceTeam.com) leads with full founder credentials.
-Cover: 10+ years in the paddock, the role progression (tyre-man → mechanic → engineer → team manager → Program Manager), CSA Racing and GT World Challenge Europe, why the product exists, WBLT Engineering SAS.
+Cover: 10+ years in the paddock, the role progression (tyre-man → mechanic → engineer → team manager → Program Manager), CSA Racing and GT World Challenge Europe (left in September 2026; write it in the past tense), why the product exists, WBLT Engineering SAS.
 
 **Title:** `Built in the Paddock, by a Race Team Manager | RaceNode`
 

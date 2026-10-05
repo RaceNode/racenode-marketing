@@ -44,7 +44,7 @@ www.racenode.com
 | Field | Put |
 |---|---|
 | Background photo | `linkedin-banner-profile-3168x792.png` (the block sits right of your photo) |
-| Headline | `Founder, RaceNode · Program Manager, GT3 · Racing team management software` (adjust the middle to your actual role) |
+| Headline | `Founder, RaceNode · Former GT3 team manager · Racing team management software` |
 | About | a short first-person version of the page About: what you run in the paddock, why RaceNode exists, link to racenode.com |
 | Featured | the launch post once published, and `https://www.racenode.com` |
 

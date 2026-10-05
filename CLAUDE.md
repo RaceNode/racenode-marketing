@@ -26,7 +26,7 @@ Pages compose section components from feature-specific subdirectories:
 - `src/pages/index.astro` → uses `src/components/landing/*.astro`
 - `src/pages/logistics.astro` → uses `src/components/logistics/*.astro`
 - `src/pages/management.astro` → uses `src/components/management/*.astro`
-- `src/pages/pricing.astro` → uses `src/components/pricing/*.astro`
+- `src/pages/pricing.astro` → self-contained (no section components)
 
 All pages wrap content in `BaseLayout.astro` (SEO meta, JSON-LD schemas) with shared `Header` and `Footer`.
 
