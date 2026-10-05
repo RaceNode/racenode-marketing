@@ -3,19 +3,13 @@
 const blocks = [
   {
     title: "Up next",
-    text: "The next sessions of the weekend, from the official timetable and the team's own schedule. One tap shows the whole timetable, filtered to what concerns them.",
+    text: "The next sessions, from the official timetable and the team's own schedule. One tap shows the whole timetable, filtered to what concerns them.",
     from: "Timetable",
     href: "/timetable/",
   },
   {
     title: "My role",
     text: "Their role and their car for this event: Race Engineer, #27, Car 27 Crew.",
-    from: "Management",
-    href: "/management/",
-  },
-  {
-    title: "Next meal",
-    text: "Today or tomorrow, the time and the place.",
     from: "Management",
     href: "/management/",
   },
@@ -31,12 +25,6 @@ const blocks = [
     from: "Logistics",
     href: "/logistics/",
   },
-  {
-    title: "Team info",
-    text: "The notes you post for everyone: radio channels, sponsor guests on Sunday, new race suits.",
-    from: "Management and Logistics",
-    href: "/management/",
-  },
 ];
 ---
 
@@ -47,11 +35,11 @@ const blocks = [
         Their race weekend, on one screen.
       </h2>
       <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-        You plan the event once, in the modules you already use. Each crew member opens the event and finds their part of it first.
+        You plan the event once, in the modules you already use. Each crew member opens the event and finds their part of it first: meals and team notes included.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
       {blocks.map((block) => (
         <div class="bg-gray-900 border border-gray-800 rounded-lg p-5">
           <h3 class="text-white font-semibold mb-1">{block.title}</h3>
@@ -65,8 +53,8 @@ const blocks = [
 
     <div class="mt-12 max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 text-center">
       <p class="text-gray-400">
-        When something changes, a flight time, a room, a timetable item for their role, the bell in their app says so.{" "}
-        They read the plan, they don't edit it: <span class="text-white font-medium">it stays yours</span>.
+        When a flight, a room or their timetable changes, the bell in their app says so.{" "}
+        They read the plan: <span class="text-white font-medium">it stays yours</span>.
       </p>
     </div>
   </div>

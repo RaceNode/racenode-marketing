@@ -4,6 +4,9 @@ import StoreBadges from '../StoreBadges.astro';
 import screenshotWeekend from '../../assets/screenshots/personal-race-weekend.png';
 
 const appUrl = "https://app.racenode.com";
+
+// The situation, never the tools: what a team manager answers all weekend long.
+const questions = ["What time is my flight?", "Which hotel?", "Where's lunch?", "What's first tomorrow?"];
 ---
 
 <section class="px-4 sm:px-6 lg:px-8 py-16 md:py-24">
@@ -19,8 +22,13 @@ const appUrl = "https://app.racenode.com";
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
         The race weekend app for your crew.
       </h1>
+      <ul class="flex flex-wrap justify-center lg:justify-start gap-2 mb-6" aria-label="Questions your crew asks every race weekend">
+        {questions.map((q) => (
+          <li class="px-3 py-1 bg-gray-900 border border-gray-800 rounded-full text-sm text-gray-300">“{q}”</li>
+        ))}
+      </ul>
       <p class="text-xl md:text-2xl text-gray-400 mb-8">
-        Their role, flight, hotel, meals and next session, on their own phone. Taken from what you already entered in RaceNode, so the questions stop coming to you.
+        Every race weekend, the same questions. Now each crew member finds their role, flight, hotel, meals and next session on their own phone, taken from what you already entered in RaceNode.
       </p>
       <div class="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-4 mb-8">
         <a
