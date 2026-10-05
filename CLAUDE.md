@@ -48,6 +48,10 @@ scripts/brand/
 ├── carousel.mjs         # LinkedIn/Instagram carousels (PNG slides + PDF) from a JSON kept outside this public repo
 scripts/seo/
 └── indexnow.mjs         # Pings IndexNow (Bing…) with the live sitemap after a deploy; key file = public/<key>.txt
+scripts/store/
+└── check.mjs            # Checks store/listing.json against App Store / Play limits (also runs in npm run build)
+store/
+└── listing.json         # App Store + Play listing copy per locale; the app repo's mobile release workflow publishes it
 ```
 
 ## Brand

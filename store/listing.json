@@ -1,0 +1,22 @@
+{
+  "$comment": "Store listing copy, source of truth for App Store Connect and Play Console. description: paragraphs, joined with a blank line (\\n\\n). keywords: joined with commas, no spaces. Plain text only: the stores do not render Markdown, section leads are in capitals. Check: node scripts/store/check.mjs",
+  "locales": {
+    "en-US": {
+      "name": "RaceNode",
+      "subtitle": "Your race season, organized",
+      "shortDescription": "Your race season in your pocket — events, schedule and travel, even offline.",
+      "description": [
+        "RaceNode keeps your racing season in your pocket. Freelance engineer, mechanic, driver coach — every race weekend you work, in one app, with your own days planned around them. Free for individuals.",
+        "YOUR SEASON AT A GLANCE. Every event you're part of, with dates, venues and countdowns — across every team you work for, from one account.",
+        "YOUR RACE WEEKEND, MINUTE BY MINUTE. The timetable and your team's schedule, where you need to be and when, the hotel, the meals — the answers everyone asks on a race weekend.",
+        "YOUR OWN PLANNING. Workshop days, travel, time off: your personal schedule lives next to your race calendar — and the teams you work for see only the dates, never the reasons.",
+        "WORKS AT THE TRACK. Paddocks have bad network; RaceNode doesn't care. The app starts instantly and shows your data even offline — it syncs the moment you're back online.",
+        "WHEN YOUR TEAM RUNS RACENODE, everything connects: crew assignments, racecars and trucks, travel and accommodation, timetables and season planning — one workspace for the whole team. Ask your team manager, or visit racenode.com.",
+        "Built in the paddock by a former GT3 team manager. Made in Europe, GDPR-compliant, data hosted in the EU."
+      ],
+      "keywords": ["racing", "motorsport", "freelance", "mechanic", "engineer", "schedule", "planning", "paddock", "GT3", "timetable", "crew", "team"],
+      "supportUrl": "https://www.racenode.com",
+      "privacyPolicyUrl": "https://www.racenode.com/privacy"
+    }
+  }
+}

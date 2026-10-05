@@ -1,5 +1,5 @@
 # Store Listing (App Store & Play Store)
-_Last updated: 2026-08-22_
+_Last updated: 2026-10-05_
 
 ## Overview
 
@@ -39,44 +39,22 @@ the freelance engineer or mechanic managing their own season (the Personal
 module, which works without any organization); the team side appears last,
 as the upgrade path. Screenshots follow the same order.
 
-| Field | Limit | Value |
-|---|---|---|
-| Name | 30 | `RaceNode` |
-| Apple subtitle | 30 | `Your race season, organized` |
-| Play short description | 80 | `Your race season in your pocket — events, schedule and travel, even offline.` |
-| Apple keywords | 100 | `racing,motorsport,freelance,mechanic,engineer,schedule,planning,paddock,GT3,timetable,crew,team` |
-| Category | — | Sports (primary), Business (secondary) |
-| Support URL | — | `https://www.racenode.com` |
-| Privacy policy URL | — | `https://www.racenode.com/privacy` |
+The texts themselves live in [`store/listing.json`](../store/listing.json),
+which the app repo's mobile release workflow reads to publish them on both
+stores — edit them there, not here. One entry per locale (`en-US` today):
+name, Apple subtitle, Play short description, the shared long description
+(one array entry per paragraph, joined with a blank line), Apple keywords
+(joined with commas), support and privacy policy URLs.
 
-**Long description** (both stores):
+The stores show the text exactly as typed: no Markdown, section leads are
+written in capitals. `node scripts/store/check.mjs` checks every locale
+against the store limits (name and subtitle 30, short description 80, long
+description 4000 characters, keywords 100 bytes) and rejects Markdown; it
+also runs before every site build, so a listing over the limits fails the
+Cloudflare check.
 
-> RaceNode keeps your racing season in your pocket. Freelance engineer,
-> mechanic, driver coach — every race weekend you work, in one app, with
-> your own days planned around them. Free for individuals.
->
-> **Your season at a glance.** Every event you're part of, with dates, venues
-> and countdowns — across every team you work for, from one account.
->
-> **Your race weekend, minute by minute.** The timetable and your team's
-> schedule, where you need to be and when, the hotel, the meals — the
-> answers everyone asks on a race weekend.
->
-> **Your own planning.** Workshop days, travel, time off: your personal
-> schedule lives next to your race calendar — and the teams you work for
-> see only the dates, never the reasons.
->
-> **Works at the track.** Paddocks have bad network; RaceNode doesn't care.
-> The app starts instantly and shows your data even offline — it syncs the
-> moment you're back online.
->
-> **When your team runs RaceNode**, everything connects: crew assignments,
-> racecars and trucks, travel and accommodation, timetables and season
-> planning — one workspace for the whole team. The app stays free for every
-> crew member. Ask your team manager, or visit racenode.com.
->
-> Built in the paddock by a working GT3 team manager. Made in Europe,
-> GDPR-compliant, data hosted in the EU.
+Set by hand in the consoles, not in the file: category — Sports (primary),
+Business (secondary).
 
 ## Privacy questionnaires
 
