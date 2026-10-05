@@ -1,0 +1,31 @@
+---
+// The situation, never the tools: what a team manager answers all weekend long.
+const questions = [
+  { q: "“What time is my flight?”", a: "Asked again on Thursday, though it was in the briefing sent last week." },
+  { q: "“Which hotel? Who am I sharing with?”", a: "The rooming list changed twice since it went out." },
+  { q: "“Where's lunch, and when?”", a: "Every day, by a different person." },
+  { q: "“What's first tomorrow morning?”", a: "The official timetable moved, and the team's own plan with it." },
+];
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-gray-900/30">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Every race weekend, the same questions.
+      </h2>
+      <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+        The answers exist: in a briefing PDF, a group chat, a spreadsheet on your laptop. Each crew member just needs their own part of it, on the day, without having to ask.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4 md:gap-6">
+      {questions.map((item) => (
+        <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <p class="text-lg font-semibold text-white mb-2">{item.q}</p>
+          <p class="text-gray-400">{item.a}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

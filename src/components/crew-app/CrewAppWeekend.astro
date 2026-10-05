@@ -1,0 +1,73 @@
+---
+// Each block names the module it comes from: nothing here is typed twice.
+const blocks = [
+  {
+    title: "Up next",
+    text: "The next sessions of the weekend, from the official timetable and the team's own schedule. One tap shows the whole timetable, filtered to what concerns them.",
+    from: "Timetable",
+    href: "/timetable/",
+  },
+  {
+    title: "My role",
+    text: "Their role and their car for this event: Race Engineer, #27, Car 27 Crew.",
+    from: "Management",
+    href: "/management/",
+  },
+  {
+    title: "Next meal",
+    text: "Today or tomorrow, the time and the place.",
+    from: "Management",
+    href: "/management/",
+  },
+  {
+    title: "My accommodation",
+    text: "The hotel, who they share the room with, and a link that opens it in maps.",
+    from: "Logistics",
+    href: "/logistics/",
+  },
+  {
+    title: "Departure and return",
+    text: "Flight, train or car, with the tickets and travel documents you attached, ready to open at the gate.",
+    from: "Logistics",
+    href: "/logistics/",
+  },
+  {
+    title: "Team info",
+    text: "The notes you post for everyone: radio channels, sponsor guests on Sunday, new race suits.",
+    from: "Management and Logistics",
+    href: "/management/",
+  },
+];
+---
+
+<section class="px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Their race weekend, on one screen.
+      </h2>
+      <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+        You plan the event once, in the modules you already use. Each crew member opens the event and finds their part of it first.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+      {blocks.map((block) => (
+        <div class="bg-gray-900 border border-gray-800 rounded-lg p-5">
+          <h3 class="text-white font-semibold mb-1">{block.title}</h3>
+          <p class="text-gray-400 text-sm mb-3">{block.text}</p>
+          <p class="text-xs text-gray-500">
+            From <a href={block.href} class="text-gray-300 underline hover:text-white">{block.from}</a>
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 text-center">
+      <p class="text-gray-400">
+        When something changes, a flight time, a room, a timetable item for their role, the bell in their app says so.{" "}
+        They read the plan, they don't edit it: <span class="text-white font-medium">it stays yours</span>.
+      </p>
+    </div>
+  </div>
+</section>
