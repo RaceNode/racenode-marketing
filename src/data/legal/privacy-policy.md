@@ -1,7 +1,7 @@
 **Effective Date:** January 25, 2026\
 **Last Updated:** September 30, 2026
 
-This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service"), in accordance with the General Data Protection Regulation (GDPR).
+This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service") or visit our website (www.racenode.com), in accordance with the General Data Protection Regulation (GDPR).
 
 ---
 
@@ -13,7 +13,7 @@ SIREN: 993 956 028\
 Email: contact@racenode.com\
 Website: https://www.racenode.com
 
-**Our role.** WBLT Engineering is the controller of the data it needs to run RaceNode: your account, billing and technical data and product analytics (Sections 2.1, 2.2, 2.4 and 2.5). The data an organization enters into the Service about its members and operations (Sections 2.3 and 2.6) is processed on that organization's behalf: the organization is the controller and we act as its processor, under the data processing terms of our Terms and Conditions (Section 7). For that data, contact the organization first; we forward any request we receive to it.
+**Our role.** WBLT Engineering is the controller of the data it needs to run RaceNode: your account, billing and technical data, product analytics and website visit statistics (Sections 2.1, 2.2, 2.4, 2.5 and 2.7). The data an organization enters into the Service about its members and operations (Sections 2.3 and 2.6) is processed on that organization's behalf: the organization is the controller and we act as its processor, under the data processing terms of our Terms and Conditions (Section 7). For that data, contact the organization first; we forward any request we receive to it.
 
 ---
 
@@ -51,6 +51,12 @@ Website: https://www.racenode.com
 - **Our role**: Processor on behalf of the organization, as for Section 2.3
 - Your data is not used to train AI models.
 
+### 2.7 Website Visit Statistics
+- **What we collect**: When you visit our website (www.racenode.com), Cloudflare Web Analytics counts page views and visits and measures page load performance: page visited (without the query string), referring site, country, browser, operating system and device type. These statistics are aggregated: we see totals, never an individual visitor.
+- **What we do not do**: No cookies or storage on your device. Cloudflare does not fingerprint visitors via their IP address, browser or any other data, and does not track them across websites. These statistics are not linked to your RaceNode account.
+- **Purpose**: Know how many people visit the website and which pages they read, and keep the pages fast
+- **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f))
+
 ---
 
 ## 3. Data Sharing and International Transfers
@@ -59,7 +65,7 @@ We share data with the following service providers (our subprocessors). Organiza
 
 - **Supabase Inc.** (USA, data hosted in Paris, France): Database hosting and authentication
 - **Stripe** (USA): Payment processing
-- **Cloudflare** (USA): Application hosting, security and CDN services
+- **Cloudflare** (USA): Application and website hosting, security and CDN services, website visit statistics (Web Analytics)
 - **Resend** (USA): Sending of service emails (sign-in, invitations, notifications)
 - **Sentry** (USA, data hosted in Frankfurt, Germany): Error monitoring, linked to a user identifier
 - **Google** (USA): Address and place search (Google Places)
@@ -78,6 +84,7 @@ We do not sell or rent your personal data.
 - **Billing records**: 10 years (French legal requirement)
 - **Technical logs**: 90 days
 - **Product analytics data**: PostHog's default retention period; erased when you delete your account (see Section 7) or on request (see Section 8)
+- **Website visit statistics**: Detailed data for 7 days, then reduced to aggregated statistics; available to us for 6 months
 
 After cancellation, modules remain accessible in read-only mode for 6 months, then data is deleted (except billing records retained for legal compliance).
 
