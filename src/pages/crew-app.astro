@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CrewAppHero from '../components/crew-app/CrewAppHero.astro';
+import CrewAppWeekend from '../components/crew-app/CrewAppWeekend.astro';
+import CrewAppSeason from '../components/crew-app/CrewAppSeason.astro';
+import CrewAppWho from '../components/crew-app/CrewAppWho.astro';
+import CrewAppFAQ from '../components/crew-app/CrewAppFAQ.astro';
+import CrewAppCTA from '../components/crew-app/CrewAppCTA.astro';
+import { crewAppFaq } from '../components/crew-app/faq';
+
+const title = "The Race Weekend App for Your Crew | RaceNode";
+const description = "Every crew member and driver sees their own role, flight, hotel, meals and next session on their phone. The crew app is free for every team member.";
+
+// JSON-LD BreadcrumbList schema for SEO
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.racenode.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Crew App",
+      "item": "https://www.racenode.com/crew-app/"
+    }
+  ]
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": crewAppFaq.map((item) => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": { "@type": "Answer", "text": item.a },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main>
+      <CrewAppHero />
+      <CrewAppWeekend />
+      <CrewAppSeason />
+      <CrewAppWho />
+      <CrewAppFAQ />
+      <CrewAppCTA />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
