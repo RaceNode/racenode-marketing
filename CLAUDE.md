@@ -44,7 +44,7 @@ public/
 └── *.svg, *.png         # Logos, favicons, PWA icons (generated, see below)
 scripts/brand/
 ├── logo.mjs             # Builds the logo lockups (public/logo_*.svg, public/email/logo-*.png) from favicon.svg + IBM Plex
-├── generate.mjs         # Social media kit (brand/social/) + public/og-image.png; post copy in posts.json
+├── generate.mjs         # Brand kit (brand/social/: avatars, LinkedIn banners) + public/og-image.png
 ├── carousel.mjs         # LinkedIn/Instagram carousels (PNG slides + PDF) from a JSON kept outside this public repo
 scripts/seo/
 └── indexnow.mjs         # Pings IndexNow (Bing…) with the live sitemap after a deploy; key file = public/<key>.txt

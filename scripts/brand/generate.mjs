@@ -1,13 +1,12 @@
-// Social media assets for RaceNode: avatars, LinkedIn banners, post visuals, OG image.
+// Social media assets for RaceNode: avatars, LinkedIn banners, OG image.
 // Everything is rendered from the logo lockups produced by logo.mjs (public/
 // logo_horizontal.svg, favicon.svg) with the site's design tokens and IBM Plex,
 // in headless Chromium (playwright-core; the browser binary is the one already
 // installed for the app's e2e suite).
 //
 //   node scripts/brand/generate.mjs          # all assets -> brand/social/ (+ public/og-image.png)
-//   node scripts/brand/generate.mjs posts    # only the posts from posts.json
 //
-// Post copy lives in posts.json (one entry = one square + one portrait visual).
+// Post visuals live in the private marketing repo (RaceNode/marketing-prive).
 
 import { chromium } from "playwright-core";
 import { readFileSync, mkdirSync, copyFileSync } from "node:fs";
@@ -31,8 +30,6 @@ const inlineSvg = (svg) =>
 const MARK = inlineSvg(readPublic("favicon.svg"));          // the R node alone
 const LOGO = inlineSvg(readPublic("logo_horizontal.svg"));  // mark + wordmark (logo.mjs)
 const LOGO_RATIO = "417.49/100";
-const BADGE_APPLE = inlineSvg(readPublic("badge-app-store.svg"));
-const BADGE_PLAY = inlineSvg(readPublic("badge-google-play.svg"));
 
 const fontFace = (family, dir, weight) => {
   const file = path.join(ROOT, "node_modules/@fontsource", dir, "files", `${dir}-latin-${weight}-normal.woff2`);
@@ -56,7 +53,6 @@ const BASE_CSS = `
   .logo{aspect-ratio:${LOGO_RATIO}}
   .muted{color:${T.muted}}
   .mono{font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:0.08em;text-transform:uppercase}
-  .badge svg{display:block;height:100%;width:auto}
 `;
 
 const page = (css, body) =>
@@ -90,33 +86,6 @@ const banner = ({ shift = "0", right = "0", align = "center", logoPx, tagPx, gap
      </div>`,
   );
 
-// Post visual (square or portrait). Header = logo, middle = message, footer = badges + site.
-const post = ({ kicker, title, body, badges }, { W }) => {
-  const pad = Math.round(W * 0.09);
-  return page(
-    `body{padding:${pad}px;display:flex;flex-direction:column;justify-content:space-between}
-     .head .logo{height:${W * 0.09}px}
-     .kicker{display:flex;align-items:center;gap:${W * 0.02}px;font-size:${W * 0.024}px;color:${T.muted}}
-     .kicker::before{content:"";display:block;width:${W * 0.006}px;height:${W * 0.036}px;background:${T.accent};border-radius:2px}
-     h1{font-size:${W * 0.088}px;font-weight:600;line-height:1.08;letter-spacing:-0.025em;margin:${W * 0.03}px 0 ${W * 0.035}px;max-width:${W * 0.86}px}
-     p{font-size:${W * 0.036}px;line-height:1.45;color:${T.muted};max-width:${W * 0.8}px}
-     .foot{display:flex;align-items:flex-end;justify-content:space-between}
-     .badges{display:flex;gap:${W * 0.02}px}
-     .badge{height:${W * 0.075}px}
-     .site{font-size:${W * 0.024}px;color:${T.faint}}`,
-    `<div class="head"><div class="logo">${LOGO}</div></div>
-     <div>
-       <div class="kicker mono">${kicker}</div>
-       <h1>${title}</h1>
-       <p>${body}</p>
-     </div>
-     <div class="foot">
-       <div class="badges">${badges ? `<div class="badge">${BADGE_APPLE}</div><div class="badge">${BADGE_PLAY}</div>` : ""}</div>
-       <div class="site mono">racenode.com</div>
-     </div>`,
-  );
-};
-
 // Open Graph image for the site.
 const og = () =>
   page(
@@ -143,16 +112,8 @@ const JOBS = {
   "og-image-1200x630": { W: 1200, H: 630, scale: 2, html: og(), copyTo: path.join(ROOT, "public/og-image.png") },
 };
 
-const posts = JSON.parse(readFileSync(path.join(ROOT, "scripts/brand/posts.json"), "utf8"));
-for (const p of posts) {
-  JOBS[`post-${p.slug}-square-1080`] = { W: 1080, H: 1080, scale: 2, html: post(p, { W: 1080 }) };
-  JOBS[`post-${p.slug}-portrait-1080x1350`] = { W: 1080, H: 1350, scale: 2, html: post(p, { W: 1080 }) };
-}
-
-const only = process.argv[2];
 const browser = await chromium.launch();
 for (const [name, job] of Object.entries(JOBS)) {
-  if (only === "posts" && !name.startsWith("post-")) continue;
   const ctx = await browser.newContext({ viewport: { width: job.W, height: job.H }, deviceScaleFactor: job.scale });
   const pg = await ctx.newPage();
   await pg.setContent(job.html, { waitUntil: "load" });
