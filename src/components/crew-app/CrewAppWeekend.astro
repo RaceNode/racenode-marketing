@@ -28,34 +28,32 @@ const blocks = [
 ];
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+<section class="band">
+  <div class="page">
+    <div class="head">
+      <h2 class="title">
         Their race weekend, on one screen.
       </h2>
-      <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+      <p class="lede">
         You plan the event once, in the modules you already use. Each crew member opens the event and finds their part of it first: meals and team notes included.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+    <ul class="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
       {blocks.map((block) => (
-        <div class="bg-gray-900 border border-gray-800 rounded-lg p-5">
-          <h3 class="text-white font-semibold mb-1">{block.title}</h3>
-          <p class="text-gray-400 text-sm mb-3">{block.text}</p>
-          <p class="text-xs text-gray-500">
-            From <a href={block.href} class="text-gray-300 underline hover:text-white">{block.from}</a>
+        <li class="ruled flex flex-col">
+          <h3 class="subtitle">{block.title}</h3>
+          <p class="muted mt-3 leading-relaxed">{block.text}</p>
+          <p class="mt-4 text-sm text-graphite">
+            From <a href={block.href} class="link">{block.from}</a>
           </p>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
 
-    <div class="mt-12 max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 text-center">
-      <p class="text-gray-400">
-        When a flight, a room or their timetable changes, the bell in their app says so.{" "}
-        They read the plan: <span class="text-white font-medium">it stays yours</span>.
-      </p>
-    </div>
+    <p class="hair mt-14 max-w-3xl pt-6 text-lg leading-relaxed text-graphite">
+      When a flight, a room or their timetable changes, the bell in their app says so.{" "}
+      They read the plan: <span class="font-semibold text-ink">it stays yours</span>.
+    </p>
   </div>
 </section>

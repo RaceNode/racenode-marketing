@@ -5,42 +5,43 @@ import screenshotOverview from '../../assets/screenshots/planning-overview.png';
 const appUrl = "https://app.racenode.com";
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-12 md:mb-16">
-      <!-- Badge -->
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-full text-sm mb-6 border border-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
-        </svg>
-        Built by a racing Team Manager
-      </div>
+<!-- Opening: the promise, then the season grid rising from the track edge. -->
+<section class="band-dark overflow-hidden">
+  <div class="page pt-14 md:pt-20">
+    <div class="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
+      <div class="lg:col-span-7">
+        <p class="font-display text-lg font-medium text-smoke">
+          Built by a racing Team Manager
+        </p>
 
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-        The whole season. Who is where, day by day.
-      </h1>
-      <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-8">
-        Crew planning software for racing teams. Who works which race, across the whole season — staff, racecars, and trucks on one editable grid, with availability posted by your own crew.
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a
-          href={`${appUrl}/signup`}
-          class="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
-        >
-          Get started
-        </a>
-        <span class="text-gray-500 text-sm">Free for the 2026 season</span>
+        <h1 class="display mt-5">
+          The whole season. Who is where, day by day.
+        </h1>
+      </div>
+      <div class="lg:col-span-5">
+        <p class="lede">
+          Crew planning software for racing teams. Who works which race, across the whole season — staff, racecars, and trucks on one editable grid, with availability posted by your own crew.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+            Get started
+          </a>
+          <span class="text-sm text-smoke">Free for the 2026 season</span>
+        </div>
       </div>
     </div>
 
-    <!-- Screenshot -->
-    <div class="max-w-5xl mx-auto rounded-lg overflow-hidden shadow-2xl">
+    <!-- The whole grid is the point: shown uncropped, cut only by the band edge. -->
+    <div class="screen -mb-16 mt-14 md:-mb-32 md:mt-20">
       <Image
         src={screenshotOverview}
         alt="RaceNode planning software showing a racing team's whole season on one grid"
-        class="w-full h-auto"
+        widths={[900, 1400, 2000]}
+        sizes="(min-width: 1248px) 1200px, 100vw"
+        loading="eager"
         quality={85}
       />
     </div>
   </div>
 </section>
+<div class="kerb" aria-hidden="true"></div>

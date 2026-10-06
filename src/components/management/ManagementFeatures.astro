@@ -21,101 +21,77 @@ const features = [
     id: "overview",
     badge: "Overview",
     title: "Your event at a glance.",
-    description: "See instantly how many staff are assigned, which racecars are entered, how teams are composed, and how many meals are planned — with completion bars for required roles, team assignments and meals, and alerts that flag exactly what's still missing before the weekend.",
-    icon: "eye"
+    description: "See instantly how many staff are assigned, which racecars are entered, how teams are composed, and how many meals are planned — with completion bars for required roles, team assignments and meals, and alerts that flag exactly what's still missing before the weekend."
   },
   {
     id: "staff",
     badge: "Event Staff",
     title: "Your full crew, roles and meals included.",
-    description: "See every team member assigned to the event with their role and meal status. Staff assignments sync with Logistics: assign once, visible everywhere. No duplicate entries across modules.",
-    icon: "user-check"
+    description: "See every team member assigned to the event with their role and meal status. Staff assignments sync with Logistics: assign once, visible everywhere. No duplicate entries across modules."
   },
   {
     id: "racecars",
     badge: "Racecars",
     title: "Assign your cars to each event.",
-    description: "Assign racecars from your central fleet to each event. Car data comes from the Racecar module (chassis, model, race number), no need to re-enter anything. See at a glance which cars are entered for each weekend.",
-    icon: "car"
+    description: "Assign racecars from your central fleet to each event. Car data comes from the Racecar module (chassis, model, race number), no need to re-enter anything. See at a glance which cars are entered for each weekend."
   },
   {
     id: "team",
     badge: "Team",
     title: "Build your crew structure, event by event.",
-    description: "Define your team structure once (team-level roles, car-level roles), then populate it per event. Assign Race Engineers, Car Chiefs, Performance Engineers to specific cars with a dropdown. When your crew changes between events, just reassign. The structure stays, the people adapt.",
-    icon: "user-cog"
+    description: "Define your team structure once (team-level roles, car-level roles), then populate it per event. Assign Race Engineers, Car Chiefs, Performance Engineers to specific cars with a dropdown. When your crew changes between events, just reassign. The structure stays, the people adapt."
   },
   {
     id: "meals",
     badge: "Meals",
     title: "Plan every meal across the event.",
-    description: "Plan breakfast, lunch, and dinner for every day of the event. Set locations, time windows, and assign staff to each meal. Your team knows where to eat and when, every day, without asking.",
-    icon: "utensils"
+    description: "Plan breakfast, lunch, and dinner for every day of the event. Set locations, time windows, and assign staff to each meal. Your team knows where to eat and when, every day, without asking."
   },
   {
     id: "info",
     badge: "Info Board",
     title: "The intel your crew needs, in their pocket.",
-    description: "Pin the notes and documents that matter for the event — pit allocations, procedures, track maps, key contacts — and attach the files right to them. Everyone assigned sees them read-only in their Personal app, always the latest version. No more forwarding PDFs.",
-    icon: "info-board"
+    description: "Pin the notes and documents that matter for the event — pit allocations, procedures, track maps, key contacts — and attach the files right to them. Everyone assigned sees them read-only in their Personal app, always the latest version. No more forwarding PDFs."
   }
 ];
-
-const icons: Record<string, string> = {
-  "eye": `<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>`,
-  "user-check": `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>`,
-  "car": `<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>`,
-  "user-cog": `<circle cx="18" cy="15" r="3"/><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><path d="m21.7 16.4-.9-.3"/><path d="m15.2 13.9-.9-.3"/><path d="m16.6 18.7.3-.9"/><path d="m19.1 12.2.3-.9"/><path d="m19.6 18.7-.4-1"/><path d="m16.8 12.3-.4-1"/><path d="m14.3 16.6 1-.4"/><path d="m20.7 13.8 1-.4"/>`,
-  "utensils": `<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>`,
-  "info-board": `<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>`
-};
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+<section class="band band-paper">
+  <div class="page">
+    <div class="head">
+      <h2 class="title">
         Six tools, one workspace.
       </h2>
     </div>
 
+    <!-- One row per tool: the words beside a screen big enough to read, sides alternating. -->
     <div class="space-y-20 md:space-y-28">
       {features.map((feature, index) => (
-        <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}>
-          <!-- Content -->
-          <div class="lg:w-1/2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium mb-4 border border-gray-700">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                set:html={icons[feature.icon]}
-              />
+        <div class="ruled grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+          <div class:list={["lg:col-span-4", index % 2 === 1 && "lg:order-2 lg:col-start-9"]}>
+            <p class="font-display text-lg font-medium text-graphite">
               {feature.badge}
-            </div>
-            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+            </p>
+            <h3 class="subtitle mt-2 md:text-3xl">
               {feature.title}
             </h3>
-            <p class="text-gray-400 text-lg leading-relaxed">
+            <p class="muted mt-4 text-lg leading-relaxed">
               {feature.description}
             </p>
           </div>
 
-          <!-- Screenshot -->
-          <div class="lg:w-1/2">
-            <div class="rounded-lg overflow-hidden shadow-2xl">
-              <Image
-                src={screenshots[feature.id as keyof typeof screenshots]}
-                alt={`RaceNode ${feature.badge} - ${feature.title}`}
-                class="w-full h-auto"
-                loading="lazy"
-                quality={85}
-              />
+          <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
+            <div class="screen">
+              <div class="screen-crop">
+                <Image
+                  src={screenshots[feature.id as keyof typeof screenshots]}
+                  alt={`RaceNode ${feature.badge} - ${feature.title}`}
+                  widths={[800, 1200, 1800]}
+                  sizes="(min-width: 1024px) 1200px, 150vw"
+                  loading="lazy"
+                  quality={85}
+                />
+              </div>
             </div>
           </div>
         </div>

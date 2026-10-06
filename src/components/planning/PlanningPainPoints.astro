@@ -3,61 +3,37 @@ const painPoints = [
   {
     title: "One spreadsheet, one owner",
     description: "The season rota is an Excel file on the team manager's laptop. Nobody else can edit it, and nobody ever has the latest version.",
-    icon: "table"
   },
   {
     title: "Everything typed twice",
     description: "Assign someone to an event, then retype the same days in the planning. Forget one of the two and they quietly drift apart.",
-    icon: "copy"
   },
   {
     title: "Availability chased by message",
     description: "Who's off in August? Who can do the test day? The answers live in forty chat threads, and they change after you've planned.",
-    icon: "alert"
   },
   {
     title: "\"Is the truck free that week?\"",
     description: "Racecars and trucks have a season too. The spreadsheet only ever tracked the people.",
-    icon: "van"
   }
 ];
-
-const icons: Record<string, string> = {
-  table: `<path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/>`,
-  copy: `<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>`,
-  alert: `<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>`,
-  van: `<path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5"/><path d="M14 17h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>`
-};
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/30">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-12 md:mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+<section class="band">
+  <div class="page">
+    <div class="head">
+      <h2 class="title">
         The season is planned. In a file only one person can touch.
       </h2>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+    <ul class="grid gap-x-12 gap-y-12 md:grid-cols-2">
       {painPoints.map((point) => (
-        <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-gray-700 transition-colors">
-          <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 text-gray-400"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              set:html={icons[point.icon]}
-            />
-          </div>
-          <h3 class="text-lg font-semibold text-white mb-2">{point.title}</h3>
-          <p class="text-gray-400">{point.description}</p>
-        </div>
+        <li class="ruled">
+          <h3 class="subtitle">{point.title}</h3>
+          <p class="muted mt-3 max-w-xl text-lg leading-relaxed">{point.description}</p>
+        </li>
       ))}
-    </div>
+    </ul>
   </div>
 </section>
