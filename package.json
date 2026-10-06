@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/store/check.mjs && astro build",
+    "build": "node scripts/store/check.mjs && node scripts/guardrails.mjs && astro build",
+    "guardrails": "node scripts/guardrails.mjs",
+    "test:guardrails": "node --test scripts/guardrails.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

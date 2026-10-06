@@ -22,4 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
-.claude/
+.claude/*
+!.claude/settings.json
+!.claude/guardrails-hook.mjs
