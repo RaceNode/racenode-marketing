@@ -49,6 +49,14 @@ const RULES = [
   },
 ];
 
+// URLs declared or linked outside this repo: removing or renaming one breaks something we do not control.
+// /account-deletion is declared in Google Play Console (Data Safety); /privacy and /terms in both stores and
+// the app; the module pages and /crew-app are linked from the app, the store listings and search results.
+// Willi, 2026-10-06 (taken from the WBLT site template).
+export const STABLE_URLS = ['/account-deletion', '/privacy', '/terms', '/crew-planning', '/logistics', '/management', '/timetable', '/crew-app'];
+
+const PAGE_EXTS = ['.astro', '.md', '.mdx'];
+
 const EXTS = ['.astro', '.ts', '.js', '.mjs', '.md', '.mdx', '.css', '.txt', '.json'];
 
 /** The text without its comments: the rule is about what the page shows, not what a comment says. */
@@ -82,6 +90,12 @@ export function check(root) {
     }
     for (const t of tolerated.filter((t) => !found.some((f) => f.rel === t)))
       out.push(`${t} no longer breaks "${rule.name}": remove it from TOLERATED in scripts/guardrails.mjs`);
+  }
+
+  for (const url of STABLE_URLS) {
+    const page = join(root, 'src/pages', url);
+    if (!PAGE_EXTS.some((x) => fs.existsSync(page + x) || fs.existsSync(join(page, 'index' + x))))
+      out.push(`${url} has no page in src/pages any more: it is a stable URL (declared at Google Play or linked from the app and stores), put the page back`);
   }
 
   // Wiring: the triggers still exist.

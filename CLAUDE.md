@@ -38,7 +38,7 @@ src/
 ├── components/          # Shared (Header, Footer) + feature subdirs
 ├── data/legal/          # Markdown legal documents (rendered by legal pages)
 ├── layouts/             # BaseLayout.astro (SEO, structured data), LegalLayout.astro
-├── pages/               # index, logistics, management, pricing, terms, privacy, account-deletion
+├── pages/               # index, module pages, crew-app, pricing, terms, privacy, account-deletion, legal-notice
 └── styles/              # global.css (Tailwind entry + typography plugin, imported by BaseLayout)
 public/
 └── *.svg, *.png         # Logos, favicons, PWA icons (generated, see below)
@@ -80,7 +80,7 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 
 ## Content Notes
 
-- Legal docs (terms, privacy, account-deletion) are markdown in `src/data/legal/`, rendered by their pages via `LegalLayout.astro` — edit the `.md` files, not the pages
-- `/account-deletion` is declared in Google Play Console (Data Safety form) — keep the URL stable
+- Legal docs (terms, privacy, account-deletion, legal-notice) are markdown in `src/data/legal/`, rendered by their pages via `LegalLayout.astro` — edit the `.md` files, not the pages
+- `/account-deletion` is declared in Google Play Console (Data Safety form) — keep the URL stable; it and the other stable URLs (`STABLE_URLS` in `scripts/guardrails.mjs`) fail the build if their page disappears
 - Pricing and features are hardcoded in components (update manually if changed)
 - Guardrails: `scripts/guardrails.mjs` (`npm run guardrails`, its test `npm run test:guardrails`; also run by `npm run build`, so a violation blocks the Cloudflare deploy) holds the rules that already drifted (literal colors, pricing promises, banned SEO words, conflict detection). If it fails, fix the copy; a rule only changes with Willi's agreement.

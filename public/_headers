@@ -1,6 +1,12 @@
 # Force revalidation for HTML pages (prevents stale cache issues)
+# Security headers (from the WBLT site template). No Content-Security-Policy on purpose: Cloudflare injects
+# the Web Analytics beacon (static.cloudflareinsights.com) at deploy time, a CSP would have to allow it.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
 
 # Assets can be cached longer (they have hashed filenames)
 /_astro/*
