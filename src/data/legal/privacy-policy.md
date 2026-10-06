@@ -1,5 +1,5 @@
 **Effective Date:** January 25, 2026\
-**Last Updated:** September 30, 2026
+**Last Updated:** October 6, 2026
 
 This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service") or visit our website (www.racenode.com), in accordance with the General Data Protection Regulation (GDPR).
 
