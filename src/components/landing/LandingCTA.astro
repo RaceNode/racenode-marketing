@@ -2,21 +2,21 @@
 const appUrl = "https://app.racenode.com";
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/50">
-  <div class="max-w-4xl mx-auto text-center">
-    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-      Use RaceNode for free this season.
-    </h2>
-    <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-      For 2026, the platform is free for all teams, until 31 December. Your feedback shapes the product.
-    </p>
-
-    <!-- CTA Button -->
-    <a
-      href={`${appUrl}/signup`}
-      class="inline-block bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors"
-    >
-      Create your account
-    </a>
+<div class="kerb" aria-hidden="true"></div>
+<section class="band band-dark">
+  <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
+    <div class="lg:col-span-8">
+      <h2 class="title">
+        Use RaceNode for free this season.
+      </h2>
+      <p class="lede mt-5 max-w-2xl">
+        For 2026, the platform is free for all teams, until 31 December. Your feedback shapes the product.
+      </p>
+    </div>
+    <div class="lg:col-span-4 lg:text-right">
+      <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+        Create your account
+      </a>
+    </div>
   </div>
 </section>

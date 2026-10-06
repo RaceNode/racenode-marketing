@@ -1,73 +1,39 @@
 ---
 const upcomingModules = [
   {
-    id: 'finance',
     name: 'Finance',
     description: 'Championship costing and cash-flow planning — know what the season costs before it starts, and where the money goes as it runs.',
-    icon: 'wallet',
-    color: 'text-gray-300',
-    bg: 'bg-gray-800',
-    border: 'border-gray-700'
   },
   {
-    id: 'ai',
     name: 'AI',
     description: 'Smart insights and predictions to help you prepare faster and catch issues before they happen.',
-    icon: 'sparkles',
-    color: 'text-gray-300',
-    bg: 'bg-gray-800',
-    border: 'border-gray-700'
   }
 ];
-
-const icons: Record<string, string> = {
-  wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
-  sparkles:'<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>'
-};
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24 bg-gray-900/50">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+<section class="band">
+  <div class="page">
+    <div class="head">
+      <h2 class="title">
         We're building more.
       </h2>
-      <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+      <p class="lede">
         RaceNode is designed to grow into a full operational platform, one module at a time.
       </p>
     </div>
 
-    <!-- Upcoming modules -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-10">
+    <ul class="grid gap-x-12 gap-y-10 md:grid-cols-2">
       {upcomingModules.map((module) => (
-        <div class={`bg-gray-900 border border-gray-800 rounded-lg p-6 relative overflow-hidden`}>
-          <span class="absolute top-4 right-4 bg-gray-800 border border-gray-700 text-gray-300 text-xs font-medium px-2 py-0.5 rounded-full">
-            Coming soon
-          </span>
-          <div class={`${module.bg} w-12 h-12 rounded-lg flex items-center justify-center mb-4 border ${module.border}`}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class={`w-6 h-6 ${module.color}`}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              set:html={icons[module.icon]}
-            />
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">{module.name}</h3>
-          <p class="text-gray-400 text-sm">{module.description}</p>
-        </div>
+        <li class="hair pt-5">
+          <span class="font-display text-sm font-medium text-graphite">Coming soon</span>
+          <h3 class="subtitle mt-1">{module.name}</h3>
+          <p class="muted mt-3 max-w-xl leading-relaxed">{module.description}</p>
+        </li>
       ))}
-    </div>
+    </ul>
 
-    <!-- Future vision -->
-    <div class="text-center">
-      <p class="text-gray-500 text-sm max-w-2xl mx-auto">
-        These are just the next steps. JobList, Tyres, Mechanics, Setup, Run, Data... we have a roadmap that covers the full racing operation. Built by racers, for racers.
-      </p>
-    </div>
+    <p class="muted mt-12 max-w-2xl text-sm">
+      These are just the next steps. JobList, Tyres, Mechanics, Setup, Run, Data... we have a roadmap that covers the full racing operation. Built by racers, for racers.
+    </p>
   </div>
 </section>

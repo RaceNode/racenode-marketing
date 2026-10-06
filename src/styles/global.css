@@ -3,28 +3,193 @@
 @import "@fontsource/ibm-plex-sans/500.css";
 @import "@fontsource/ibm-plex-sans/600.css";
 @import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource/ibm-plex-sans-condensed/500.css";
+@import "@fontsource/ibm-plex-sans-condensed/600.css";
+@import "@fontsource/ibm-plex-sans-condensed/700.css";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
-@import "@fontsource/ibm-plex-mono/600.css";
 @plugin "@tailwindcss/typography";
 
 /*
- * Design tokens — mirror of the app's design system (dark values).
- * Source of truth: C:\script\RaceNode\racenode\src\index.css + docs/architecture/design-system.md
- * Rule: color signals a state, never a category. One indigo accent for actions,
- * three state hues, neutrals for everything else. No gradients.
+ * Site design: "paddock". Concrete-grey pages, asphalt bands for the moments
+ * that matter (opening, sync, call to action, footer), the product shown big.
+ * Headings in IBM Plex Sans Condensed: same family as the logo, narrower and
+ * heavier, the way numbers and names are lettered on a car or a pit board.
+ *
+ * Rule kept from the app: color signals a state, never a category. Indigo is
+ * the action (buttons, links, focus), never a module. No gradients.
+ * Contrast (checked): ink on concrete 15.6:1, graphite on concrete 6.2:1,
+ * white on accent 6.9:1, smoke on asphalt 9.4:1, accent-soft on asphalt 5.0:1.
  */
 @theme {
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Accent — the action color (app dark theme values) */
-  --color-accent: #5b5bd6;
-  --color-accent-hover: #6a6ae0;
-  --color-accent-fg: #ffffff;
+  /* Light surfaces: pit-lane concrete and the paper of a run sheet */
+  --color-concrete: #e7e7e3;
+  --color-paper: #f5f5f2;
+  --color-ink: #17181b;
+  --color-graphite: #4f525a;
+  --color-line: #c8c8c2;
 
-  /* States (dark theme values: emerald-400 / amber-400 / red-400) */
-  --color-ok: #34d399;
-  --color-watch: #fbbf24;
-  --color-blocking: #f87171;
+  /* Dark bands: asphalt, the garage at night */
+  --color-asphalt: #1d1f23;
+  --color-asphalt-raised: #2a2d32;
+  --color-asphalt-line: #3b3f46;
+  --color-smoke: #c4c7cd;
+
+  /* Accent — the action color */
+  --color-accent: #4c4cc4;
+  --color-accent-hover: #3d3daa;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: #9d9df0;
+
+  /* States: dark-on-light values for the light pages, light values on asphalt */
+  --color-ok: #047857;
+  --color-watch: #b45309;
+  --color-blocking: #b91c1c;
+  --color-ok-on-dark: #34d399;
+  --color-watch-on-dark: #fbbf24;
+  --color-blocking-on-dark: #f87171;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-concrete font-sans text-ink antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-balance;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+  ::selection {
+    @apply bg-accent text-accent-fg;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* The few recipes every page shares. Extend here when a pattern appears twice. */
+@layer components {
+  .page {
+    @apply mx-auto w-full max-w-[78rem] px-4 sm:px-6 lg:px-10;
+  }
+  .band {
+    @apply py-20 md:py-28;
+  }
+  .band-dark {
+    @apply bg-asphalt text-white;
+  }
+  .band-paper {
+    @apply bg-paper;
+  }
+
+  /* Opening title: condensed, heavy, set tight, the one loud thing on a page. */
+  .display {
+    @apply font-display text-[2.9rem] leading-[0.95] font-bold tracking-[-0.02em] sm:text-6xl lg:text-[4.75rem];
+  }
+  /* Section title: condensed, sentence case, large. */
+  .title {
+    @apply font-display text-[2rem] leading-[1.02] font-semibold tracking-[-0.01em] md:text-5xl;
+  }
+  .subtitle {
+    @apply font-display text-2xl leading-tight font-semibold md:text-[1.75rem];
+  }
+  .lede {
+    @apply text-lg leading-relaxed text-graphite md:text-xl;
+  }
+  .band-dark .lede {
+    @apply text-smoke;
+  }
+  .muted {
+    @apply text-graphite;
+  }
+  .band-dark .muted {
+    @apply text-smoke;
+  }
+
+  /* Section head: title on the left, intro beside it on wide screens. */
+  .head {
+    @apply mb-12 grid gap-5 md:mb-16 lg:grid-cols-12 lg:items-end lg:gap-10;
+  }
+  .head > :first-child {
+    @apply lg:col-span-7;
+  }
+  .head > :not(:first-child) {
+    @apply lg:col-span-5;
+  }
+
+  /* A heavy ink rule opening an item, like the top edge of a timing sheet. */
+  .ruled {
+    @apply border-t-[3px] border-ink pt-5;
+  }
+  .band-dark .ruled {
+    @apply border-white;
+  }
+  .hair {
+    @apply border-t border-line;
+  }
+  .band-dark .hair {
+    @apply border-asphalt-line;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-ghost {
+    @apply inline-flex min-h-12 items-center justify-center rounded-[3px] px-6 text-base font-semibold transition-colors;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-fg hover:bg-accent-hover;
+  }
+  .btn-ghost {
+    @apply border border-ink/30 text-ink hover:border-ink;
+  }
+  .band-dark .btn-ghost {
+    @apply border-white/35 text-white hover:border-white;
+  }
+  .link {
+    @apply font-semibold text-accent underline decoration-2 underline-offset-4 hover:text-accent-hover;
+  }
+  .band-dark .link {
+    @apply text-accent-soft hover:text-white;
+  }
+
+  /* Product screenshot, shown as a screen: asphalt bezel, no shadow. */
+  .screen {
+    @apply overflow-hidden rounded-[4px] bg-asphalt p-1.5 ring-1 ring-ink/10 sm:p-2;
+  }
+  .screen img {
+    @apply block h-auto w-full rounded-[2px];
+  }
+  /* Crop to the part of a 4K screenshot that matters, at a readable size. */
+  .screen-crop {
+    @apply relative aspect-[16/10] overflow-hidden rounded-[2px];
+  }
+  .screen-crop img {
+    @apply absolute top-0 left-0 h-auto w-[150%] max-w-none rounded-none;
+  }
+  /* Kerb: a chequered strip, the edge of the track, in the site's two neutrals. Marks where an
+     asphalt band begins or ends; used sparingly, never as a background. */
+  .kerb {
+    @apply h-4 w-full;
+    background-color: var(--color-paper);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='8' height='8' fill='%2317181b'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%2317181b'/%3E%3C/svg%3E");
+    background-size: 16px 16px;
+  }
+  .phone {
+    @apply overflow-hidden rounded-[2rem] border-[6px] border-ink bg-ink;
+  }
+  .phone img {
+    @apply block h-auto w-full rounded-[1.6rem];
+  }
 }
