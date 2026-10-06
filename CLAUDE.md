@@ -8,7 +8,7 @@ RaceNode Marketing is the public-facing marketing website for RaceNode, a multi-
 
 ## Tech Stack
 
-- **Framework**: Astro 5 (static site generation)
+- **Framework**: Astro 7 (static site generation)
 - **Styling**: Tailwind CSS 4
 - **Content**: MDX support for markdown pages
 
