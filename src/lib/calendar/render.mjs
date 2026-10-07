@@ -5,7 +5,7 @@
 // featured year and the day the lists start from are the build's, `ctx.year` and `ctx.today`); the same data gives
 // the same string in Node and in any browser.
 import { DISCIPLINES, MONTHS, dateRange, longDate, monthOf, roundLabel, roundName } from './format.mjs';
-import { buildCalendar, circuitSlug, circuits, displayName, notPublished, upcomingRounds } from './model.mjs';
+import { buildCalendar, circuits, displayName, notPublished, upcomingRounds } from './model.mjs';
 
 const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ESC[c]);
@@ -33,18 +33,18 @@ export const calendarOf = (data, ctx) => buildCalendar(data, { today: new Date(D
 // --- All championships (/calendar/) ---------------------------------------------------------------------------
 
 /** "/calendar/circuits/<slug>/" when the round's circuit has its own page, else null. */
-const circuitHref = (r, pages) => {
-  if (!r.venue_slug) return null;
-  const slug = circuitSlug(r);
-  return pages.has(slug) ? `/calendar/circuits/${slug}/` : null;
-};
+const circuitHref = (r, pages) => (pages.has(r.venue_slug) ? `/calendar/circuits/${pages.get(r.venue_slug)}/` : null);
 
 /**
- * Slugs of the circuits that have their own page, decided by the build (`ctx.circuitPages`): a championship's page
- * reads only its own rounds in the browser, so it could not tell, and a circuit page only exists from the next build.
+ * The circuits that have their own page, catalog `venue_slug` → URL slug, decided by the build
+ * (`ctx.circuitPages`): a championship's page reads only its own rounds in the browser, so it could neither tell
+ * which circuit has a page nor which names collide, and a circuit page only exists from the next build.
  */
-export const circuitPageSlugs = (cal) => new Set(circuits(cal).filter((c) => c.page).map((c) => c.slug));
-const pagesOf = (ctx) => new Set(ctx.circuitPages ?? []);
+export const circuitPageSlugs = (cal) => Object.fromEntries(circuits(cal).filter((c) => c.page).map((c) => [c.venue_slug, c.slug]));
+const pagesOf = (ctx) => new Map(Object.entries(ctx.circuitPages ?? {}));
+
+/** What the circuit filter matches a round on: its page's slug, or the catalog's for a circuit without a page. */
+export const circuitKey = (venueSlug, pages) => pages.get(venueSlug) ?? venueSlug ?? '';
 
 /** "Circuit de Spa-Francorchamps, Belgium", linked to the circuit's page when it has one. */
 function placeOf(r, ctx, pages) {
@@ -56,12 +56,12 @@ function placeOf(r, ctx, pages) {
 // Styles: .calendar-row in src/styles/global.css (d = dates, c = championship, p = place): hundreds of rows, so
 // their classes live there once. The data-* attributes are what CalendarFilters reads (end: hides a round the
 // visitor's clock says is over, when the morning build is late).
-export function roundRow(r, ctx, pages = new Set(), { place = true } = {}) {
+export function roundRow(r, ctx, pages = new Map(), { place = true } = {}) {
   const c = r.championship;
   const sub = [roundLabel(r), DISCIPLINES[c.discipline]].filter(Boolean).join(' · ');
   const name = roundName(r);
   return (
-    `<li class="calendar-row" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}" data-circuit="${r.venue_slug ? esc(circuitSlug(r)) : ''}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
+    `<li class="calendar-row" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
     `<div class="d">${esc(dateRange(r.start_date, r.end_date))}${r.status === 'cancelled' ? '<span>Cancelled</span>' : ''}</div>` +
     `<div class="c"><a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span></div>` +
     (place ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>` : name ? `<div class="p"><span>${esc(name)}</span></div>` : '') +
@@ -186,10 +186,12 @@ export function championshipBody(cal, slug, ctx) {
  * season and have not published the featured one; the rounds already run there. Empty if the circuit is unknown.
  */
 export function circuitBody(cal, slug, ctx) {
-  const c = circuits(cal).find((x) => x.slug === slug);
+  // The venue behind the URL as the build named it (ctx.circuitPages), whatever names the catalog has since.
+  const pages = pagesOf(ctx);
+  const venue = [...pages].find(([, s]) => s === slug)?.[0];
+  const c = circuits(cal).find((x) => x.venue_slug === venue);
   if (!c) return '';
   const today = ctx.today ?? '';
-  const pages = pagesOf(ctx);
   const upcoming = c.rounds.filter((r) => r.end_date >= today);
   const past = c.rounds.filter((r) => r.end_date < today).reverse();
   const n = new Set(upcoming.map((r) => r.championship.slug)).size;
@@ -199,7 +201,7 @@ export function circuitBody(cal, slug, ctx) {
     : `<div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 mb-8" role="note"><p class="text-white font-medium mb-1">No round scheduled at ${esc(c.name)} in the calendars published so far.</p>` +
       '<p class="text-sm text-gray-400">Below, the rounds already run here.</p></div>';
 
-  const late = notPublished(cal).filter((x) => x.shown.rounds.some((r) => r.venue_slug && circuitSlug(r) === slug));
+  const late = notPublished(cal).filter((x) => x.shown.rounds.some((r) => r.venue_slug === venue));
   if (late.length > 0)
     html +=
       '<section class="mt-12 mb-4">' +

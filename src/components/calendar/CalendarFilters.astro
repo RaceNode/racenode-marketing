@@ -8,7 +8,7 @@ interface Props {
   disciplines: string[];
   regions: string[];
   /** circuits() of model.mjs that have an upcoming round */
-  circuits: { slug: string; name: string; page: boolean }[];
+  circuits: { slug: string; venue_slug: string; name: string; page: boolean }[];
   months: { value: string; label: string }[];
 }
 const { disciplines, regions, circuits, months } = Astro.props;
@@ -34,7 +34,7 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
     Circuit
     <select name="circuit" class={select}>
       <option value="">All circuits</option>
-      {circuits.map((c) => <option value={c.slug} data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}>{c.name}</option>)}
+      {circuits.map((c) => <option value={c.page ? c.slug : c.venue_slug} data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}>{c.name}</option>)}
     </select>
   </label>
   <label class="text-xs text-gray-500">

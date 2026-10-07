@@ -41,7 +41,7 @@ export const catalog = () =>
     const now = new Date();
     const ctx = { year: featuredYear(now), today: now.toISOString().slice(0, 10), countries: countriesOf(data) };
     const cal = calendarOf(data, ctx);
-    ctx.circuitPages = [...circuitPageSlugs(cal)].sort();
+    ctx.circuitPages = circuitPageSlugs(cal);
     // /calendar/circuits/ is the circuits' index: a championship with that slug would take its URL.
     if (cal.championships.some((c) => c.slug === 'circuits')) throw new Error('calendar: a series has the slug "circuits", reserved for /calendar/circuits/');
     return { data, ctx, cal };

@@ -55,12 +55,14 @@ export function allRounds(calendar) {
  */
 export const upcomingRounds = (calendar, today) => allRounds(calendar).filter((r) => r.end_date >= today);
 
-/**
- * A venue's slug in our URLs: the catalog's, with its country when the catalog did not know it ("zandvoort-xx"
- * becomes "zandvoort-nl"), so the URL stays the same when the catalog fills it in.
- */
-export const circuitSlug = (r) =>
-  r.venue_slug.replace(/-xx$/, r.venue_country_code ? `-${r.venue_country_code.toLowerCase()}` : '-xx');
+/** "Circuit de Spa-Francorchamps" → "circuit-de-spa-francorchamps", "Autódromo" → "autodromo". */
+export const slugify = (name) =>
+  String(name ?? '')
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 
 /**
  * Race or test rounds a circuit needs in the catalog (every season) to get its own page: below, a page would be
@@ -68,22 +70,34 @@ export const circuitSlug = (r) =>
  */
 export const CIRCUIT_PAGE_MIN_ROUNDS = 3;
 
-/** Every venue with its rounds (all seasons, by date), by name; `page` when it has its own page. */
+/**
+ * Every venue (keyed by the catalog's `venue_slug`) with its rounds (all seasons, by date), by name; `page` when it
+ * has its own page. `slug`, its URL at /calendar/circuits/<slug>/, comes from its name, not from the catalog's slug
+ * (which carries references such as "le-mans-fr-q174090" and may be cleaned up): the country is added only when two
+ * venues share a name, and the catalog's slug only if they share the country too.
+ */
 export function circuits(calendar) {
   const out = new Map();
   for (const r of allRounds(calendar)) {
     if (!r.venue_slug) continue;
-    const slug = circuitSlug(r);
-    if (!out.has(slug)) out.set(slug, { slug, rounds: [] });
-    const c = out.get(slug);
+    if (!out.has(r.venue_slug)) out.set(r.venue_slug, { venue_slug: r.venue_slug, rounds: [] });
+    const c = out.get(r.venue_slug);
     c.rounds.push(r);
     // The latest name and country the catalog gives.
-    c.name = r.venue_name ?? c.name ?? slug;
+    c.name = r.venue_name ?? c.name ?? r.venue_slug;
     c.country_code = r.venue_country_code ?? c.country_code ?? null;
   }
-  return [...out.values()]
-    .map((c) => ({ ...c, page: c.rounds.filter((r) => r.kind !== 'other').length >= CIRCUIT_PAGE_MIN_ROUNDS }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const list = [...out.values()].sort((a, b) => a.name.localeCompare(b.name) || a.venue_slug.localeCompare(b.venue_slug));
+  const named = (c) => slugify(c.name) || slugify(c.venue_slug);
+  const country = (c) => (c.country_code ? `${named(c)}-${c.country_code.toLowerCase()}` : null);
+  const tally = (key) => list.reduce((m, c) => m.set(key(c), (m.get(key(c)) ?? 0) + 1), new Map());
+  const byName = tally(named);
+  const byCountry = tally(country);
+  return list.map((c) => ({
+    ...c,
+    slug: byName.get(named(c)) === 1 ? named(c) : country(c) && byCountry.get(country(c)) === 1 ? country(c) : `${named(c)}-${slugify(c.venue_slug)}`,
+    page: c.rounds.filter((r) => r.kind !== 'other').length >= CIRCUIT_PAGE_MIN_ROUNDS,
+  }));
 }
 
 /** Championships with no season for the featured year yet, with the latest season they do have. */
