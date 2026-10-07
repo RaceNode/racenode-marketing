@@ -8,6 +8,7 @@ const navLinks = [
   { href: "/logistics/", label: "Logistics" },
   { href: "/timetable/", label: "Timetable" },
   { href: "/crew-planning/", label: "Planning" },
+  { href: "/pricing/", label: "Pricing" },
 ];
 
 const path = Astro.url.pathname;
@@ -25,7 +26,7 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWi
       </div>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center gap-6 h-full">
+      <nav class="hidden lg:flex items-center gap-6 h-full">
         {navLinks.map((link) => (
           <a
             href={link.href}
@@ -38,7 +39,7 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWi
       </nav>
 
       <!-- CTA Buttons (Desktop) -->
-      <div class="hidden md:flex items-center space-x-3">
+      <div class="hidden lg:flex items-center space-x-3">
         <a
           href={`${appUrl}/login`}
           class="px-3 py-2 text-smoke hover:text-white transition-colors font-medium"
@@ -57,7 +58,7 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWi
       <button
         type="button"
         id="mobile-menu-button"
-        class="md:hidden p-2 rounded-[3px] text-smoke hover:text-white hover:bg-asphalt-raised transition-colors"
+        class="lg:hidden p-2 rounded-[3px] text-smoke hover:text-white hover:bg-asphalt-raised transition-colors"
         aria-expanded="false"
         aria-controls="mobile-menu"
         aria-label="Open navigation menu"
@@ -96,7 +97,7 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWi
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-asphalt-line">
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-asphalt-line">
     <div class="px-4 py-4 space-y-3">
       {navLinks.map((link) => (
         <a

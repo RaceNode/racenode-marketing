@@ -14,11 +14,6 @@ const painPoints: { title: string; description: string; icon: IconName }[] = [
     icon: "message",
   },
   {
-    title: "Out of sync with the official schedule",
-    description: "Your internal plan lives apart from the organizer's timetable, so a session change never propagates to your team.",
-    icon: "unlink",
-  },
-  {
     title: "\"When's my session again?\"",
     description: "Everyone asking the same questions all weekend because there's no single, live view of the plan.",
     icon: "help",
@@ -34,6 +29,6 @@ const painPoints: { title: string; description: string; icon: IconName }[] = [
       </h2>
     </div>
 
-    <PainList points={painPoints} columns={2} />
+    <PainList points={painPoints} columns={3} />
   </div>
 </section>

@@ -1,6 +1,7 @@
 ---
 // What a crew member sees: the event screen of the RaceNode app on a chief mechanic's phone (demo team),
 // then, right after it, what is on it. The screen does the explaining; the list only names the parts.
+// A module page shows only its own blocks (`crop`): the whole screen already opens the home and Personal pages.
 import { Image } from 'astro:assets';
 import top from '../assets/screenshots/crew-app-race-weekend.png';
 import more from '../assets/screenshots/crew-app-race-weekend-more.png';
@@ -9,17 +10,24 @@ interface Props {
   /** `top`: up next, role, meal. `more`: accommodation, departure, transfers, return. */
   screen: 'top' | 'more';
   items: { label: string; text: string }[];
+  /** Part of the screen to keep, as fractions of its height: [from, to]. */
+  crop?: [number, number];
 }
 
-const { screen, items } = Astro.props;
+const { screen, items, crop } = Astro.props;
+const image = screen === 'top' ? top : more;
 const alt = screen === 'top'
   ? "RaceNode app on a phone: a chief mechanic's race weekend — up next, his role, his next meal"
   : "RaceNode app on a phone: a chief mechanic's race weekend — his hotel, his departure, the daily transfer, his return";
+// Margins in % refer to the frame's width: the image is width × height/width tall.
+const ratio = image.height / image.width;
+const frame = crop ? `aspect-ratio: ${image.width} / ${Math.round(image.height * (crop[1] - crop[0]))}` : undefined;
+const shift = crop ? `margin-top: -${(crop[0] * ratio * 100).toFixed(2)}%` : undefined;
 ---
 
 <div class="grid items-center gap-10 md:grid-cols-12 md:gap-10">
-  <div class="phone mx-auto w-full max-w-[19rem] md:col-span-5 lg:col-span-4">
-    <Image src={screen === 'top' ? top : more} alt={alt} widths={[400, 800, 1170]} sizes="19rem" loading="lazy" quality={85} />
+  <div class="phone mx-auto w-full max-w-[19rem] md:col-span-5 lg:col-span-4" style={frame}>
+    <Image src={image} alt={alt} widths={[400, 800, 1170]} sizes="19rem" loading="lazy" quality={85} style={shift} />
   </div>
   <dl class="md:col-span-7 lg:col-span-7 lg:col-start-6">
     {items.map(({ label, text }) => (

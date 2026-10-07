@@ -31,7 +31,7 @@ const features = [
     phone: travelPhone,
     badge: "Travel",
     title: "Every journey planned, every seat assigned.",
-    description: "Departure and return by plane, car or truck, split into legs, each with its people and its tickets.",
+    description: "Departure and return by plane, train, bus or team vehicle, split into legs, each with its people and its tickets.",
   },
   {
     desktop: vehicles,
@@ -44,7 +44,8 @@ const features = [
     desktop: info,
     badge: "Info Board",
     title: "The briefing board, shared with everyone.",
-    description: "Notes and files for the crew — hotel list, meeting points, procedures — read-only in their app, always the latest.",
+    description: "Where the trucks park, where the passes are, what to do if you arrive after 22:00: notes the crew reads in the app.",
+    hideOnPhone: true,
   }
 ];
 ---
@@ -74,7 +75,7 @@ const features = [
           </div>
 
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode ${feature.badge} - ${feature.title}`} crop />
+            <Shot desktop={feature.desktop} phone={feature.phone} hideOnPhone={feature.hideOnPhone} alt={`RaceNode ${feature.badge} - ${feature.title}`} crop />
           </div>
         </div>
       ))}

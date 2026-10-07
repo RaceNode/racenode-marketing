@@ -21,13 +21,13 @@ const features = [
     id: "days",
     badge: "Day Codes",
     title: "Paint days, not cells.",
-    description: "Five codes — On track, Travelling, Workshop, Remote, Unavailable. Drag an empty stretch to paint it, drag a bar to move it, grab an edge to resize. There is no Save button anywhere: every change applies instantly, and every change can be undone from its toast."
+    description: "Paint the days: on track, travelling, workshop, remote, unavailable. Every change saves itself and can be undone."
   },
   {
     id: "attendance",
     badge: "Partial Attendance",
     title: "The truck loads early. The engineer stays late.",
-    description: "Resize a track bar to set that person's — or that truck's — own presence inside an event, without touching the event itself. Each end of the bar either follows the event's dates or pins to its own, so a date change on the event moves everyone who didn't need an exception."
+    description: "Resize a bar to set when that person, car or truck is really there. The event's dates stay as they are."
   }
 ];
 ---
@@ -58,19 +58,10 @@ const features = [
 
           <!-- Screenshot -->
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={screenshots[feature.id as keyof typeof screenshots]} alt={`RaceNode Planning ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
+            <Shot desktop={screenshots[feature.id as keyof typeof screenshots]} hideOnPhone alt={`RaceNode Planning ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
           </div>
         </div>
       ))}
-    </div>
-
-    <!-- Boundary with Timetable: Planning is between events, Timetable inside one -->
-    <div class="hair mt-20 pt-6 md:mt-28">
-      <p class="max-w-3xl text-lg leading-relaxed text-graphite">
-        Planning covers the season <span class="font-semibold text-ink">between events</span> — availability, and who works which race.
-        Inside the race weekend, minute by minute, that's the{" "}
-        <a href="/timetable/" class="link">Timetable module</a>.
-      </p>
     </div>
   </div>
 </section>

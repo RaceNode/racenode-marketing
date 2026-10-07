@@ -1,6 +1,7 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
 import { Image } from 'astro:assets';
+import { CREW_DAYS_IN_PLANNING } from '../../data/crew-days';
 import screenshotAgenda from '../../assets/screenshots/crew-app-agenda.png';
 import screenshotMonth from '../../assets/screenshots/crew-app-month.png';
 ---
@@ -9,26 +10,37 @@ import screenshotMonth from '../../assets/screenshots/crew-app-month.png';
 <section class="band band-dark">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        Availability flows both ways.
-      </h2>
-      <p class="lede">
-        The grid isn't only written by the manager. Every team member posts their own days from the free Personal app — and what they post lands in your planning.
-      </p>
+      {CREW_DAYS_IN_PLANNING ? (
+        <>
+          <h2 class="title">Availability flows both ways.</h2>
+          <p class="lede">
+            The grid isn't only written by the manager. Every team member posts their own days from the Personal app, and what they post lands in your planning.
+          </p>
+        </>
+      ) : (
+        <>
+          <h2 class="title">Your plan, on their phone.</h2>
+          <p class="lede">
+            The days you plan for each person show up in their own season, in the RaceNode app.
+          </p>
+        </>
+      )}
     </div>
 
-    <ul class="mt-6 grid gap-3 md:grid-cols-3">
-      <li class="app-card p-5 md:p-6">
-        <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>Their days reach you</h4>
-        <p class="mt-2 text-smoke">A member posts a week away and it lands in your grid as unavailable — dates only, their reasons stay their own.</p>
-      </li>
+    <ul class:list={["mt-6 grid gap-3", CREW_DAYS_IN_PLANNING ? "md:grid-cols-3" : "md:grid-cols-2"]}>
+      {CREW_DAYS_IN_PLANNING && (
+        <li class="app-card p-5 md:p-6">
+          <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>Their days reach you</h4>
+          <p class="mt-2 text-smoke">A member posts a week away and it lands in your grid as unavailable: dates only, their reasons stay their own.</p>
+        </li>
+      )}
       <li class="app-card p-5 md:p-6">
         <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>Your days reach them</h4>
-        <p class="mt-2 text-smoke">The days you plan for someone show up in their own season view, with your note — no forwarded screenshots of a spreadsheet.</p>
+        <p class="mt-2 text-smoke">The days you plan for someone show up in their own season view, with your note. No forwarded screenshots of a spreadsheet.</p>
       </li>
       <li class="app-card p-5 md:p-6">
         <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>Nothing typed twice</h4>
-        <p class="mt-2 text-smoke">Assigning someone to an event in <a href="/management/" class="link">Management</a> is the planning entry — track days derive from it, and follow when the event's dates move.</p>
+        <p class="mt-2 text-smoke">Assigning someone to an event is the planning entry: track days derive from it, and follow when the event's dates move.</p>
       </li>
     </ul>
 
@@ -68,11 +80,13 @@ import screenshotMonth from '../../assets/screenshots/crew-app-month.png';
 
     <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
       <div class="max-w-md">
-        <p class="text-sm text-smoke">
-          No availability emails to chase, no spreadsheet versions to reconcile.
-        </p>
-        <p class="mt-2 font-medium text-smoke">
-          The Personal module is included free with any subscription. Get the app:
+        {CREW_DAYS_IN_PLANNING && (
+          <p class="mb-2 text-sm text-smoke">
+            No availability emails to chase, no spreadsheet versions to reconcile.
+          </p>
+        )}
+        <p class="font-medium text-smoke">
+          Your crew gets the app on iPhone and Android:
         </p>
       </div>
       <StoreBadges align="start" />

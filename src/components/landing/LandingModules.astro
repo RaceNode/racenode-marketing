@@ -1,15 +1,14 @@
 ---
-const freeModules = ['Personal', 'Staff', 'Events', 'Fleet', 'Racecars'];
+import { CREW_DAYS_IN_PLANNING } from '../../data/crew-days';
 
-const paidModules = [
+const modules = [
   {
     name: 'Management',
     tagline: 'Event management, structured.',
     features: [
-      'Staff assignments with role definitions',
+      'Roles per car and per crew, for every event',
       'Racecar entries per event',
-      'Team structure and crew composition',
-      'Meal planning and allocation'
+      'Meals: where, when, who eats there'
     ],
     href: '/management/'
   },
@@ -17,10 +16,8 @@ const paidModules = [
     name: 'Logistics',
     tagline: 'Event logistics, centralized.',
     features: [
-      'Multi-segment travel arrangements',
-      'Accommodation with room management',
-      'Smart alerts for missing bookings',
-      'Document attachments for tickets and confirmations',
+      'Flights, trains, team vehicles and hotels, room by room',
+      'Flags anyone missing a flight, a hotel or a ride',
       'Bookings filled in from the confirmation you drop'
     ],
     href: '/logistics/'
@@ -29,11 +26,9 @@ const paidModules = [
     name: 'Timetable',
     tagline: 'Event schedule, in real time.',
     features: [
-      'Team schedule alongside official sessions',
-      'Reusable item templates and autocomplete',
-      'Automation rules anchored to sessions',
-      'Public iCal feed and live countdown display',
-      "Sessions filled in from the organizer's PDF you drop"
+      'Team schedule alongside the official sessions',
+      'Briefings set once, anchored to the sessions',
+      'Live countdown on the screen in your box'
     ],
     href: '/timetable/'
   },
@@ -41,17 +36,16 @@ const paidModules = [
     name: 'Planning',
     tagline: 'The whole season, one grid.',
     features: [
-      'Staff, racecars, and trucks on one season grid',
+      'Staff, racecars and trucks on one season grid',
       'Five day codes, painted by drag',
-      'Partial attendance per person and per truck',
-      'Availability posted by your own crew'
+      CREW_DAYS_IN_PLANNING ? 'Availability posted by your own crew' : 'Partial attendance per person and per truck'
     ],
     href: '/crew-planning/'
   }
 ];
 ---
 
-<!-- A ledger, not a card grid: the base everyone gets on one line, then one row per module. -->
+<!-- A ledger, not a card grid: one row per module. -->
 <section class="band">
   <div class="page">
     <div class="head">
@@ -59,30 +53,19 @@ const paidModules = [
         Modules that work together.
       </h2>
       <p class="lede">
-        Start with the basics, add what you need. All modules share the same data.
+        Staff, fleet, racecars and events are shared by every module: entered once, used everywhere.
       </p>
     </div>
 
-    <div class="ruled grid gap-4 pb-10 lg:grid-cols-12 lg:gap-10">
-      <h3 class="font-display text-lg font-medium text-graphite lg:col-span-4">Base modules</h3>
-      <ul class="flex flex-wrap gap-x-4 gap-y-1 lg:col-span-8">
-        {freeModules.map((name) => (
-          <li class="font-display text-2xl font-semibold md:text-4xl [&:not(:last-child)]:after:ml-4 [&:not(:last-child)]:after:text-line [&:not(:last-child)]:after:content-['/']">
-            {name}
-          </li>
-        ))}
-      </ul>
-    </div>
-
     <ul>
-      {paidModules.map((module) => (
+      {modules.map((module) => (
         <li class="ruled grid gap-6 pb-12 lg:grid-cols-12 lg:gap-10">
           <div class="lg:col-span-4">
             <h3 class="font-display text-5xl font-bold tracking-[-0.02em] md:text-6xl">{module.name}</h3>
             <p class="muted mt-2 text-lg">{module.tagline}</p>
           </div>
 
-          <ul class="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:col-span-6 lg:pt-3">
+          <ul class="grid gap-x-8 gap-y-3 sm:grid-cols-3 lg:col-span-6 lg:pt-3">
             {module.features.map((feature) => (
               <li class="hair pt-3 leading-snug">{feature}</li>
             ))}

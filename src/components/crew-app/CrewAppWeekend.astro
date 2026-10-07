@@ -3,7 +3,6 @@
 // of the matching tiles in the app's event screen.
 import { Image } from "astro:assets";
 import Icon from "../Icon.astro";
-import top from "../../assets/screenshots/crew-app-race-weekend.png";
 import more from "../../assets/screenshots/crew-app-race-weekend-more.png";
 import type { IconName } from "../icons";
 
@@ -50,11 +49,8 @@ const blocks: { title: string; text: string; from: string; href: string; icon: I
       </p>
     </div>
 
-    <!-- The screen itself, top and scrolled, before the words about it. -->
-    <div class="mb-16 grid gap-10 sm:grid-cols-2 lg:mx-auto lg:max-w-3xl">
-      <div class="phone mx-auto w-full max-w-[19rem]">
-        <Image src={top} alt="RaceNode app: a chief mechanic's race weekend — up next, his roles, his next meal" widths={[400, 800, 1170]} sizes="19rem" loading="lazy" quality={85} />
-      </div>
+    <!-- The screen scrolled, before the words about it: its top half is the hero's phone. -->
+    <div class="mb-16">
       <div class="phone mx-auto w-full max-w-[19rem]">
         <Image src={more} alt="RaceNode app: the same race weekend, scrolled — his hotel, his departure, the daily transfer, his return" widths={[400, 800, 1170]} sizes="19rem" loading="lazy" quality={85} />
       </div>

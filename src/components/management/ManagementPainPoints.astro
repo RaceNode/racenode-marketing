@@ -4,25 +4,15 @@ import type { IconName } from "../icons";
 
 const painPoints: { title: string; description: string; icon: IconName }[] = [
   {
-    title: "Staff assignments rebuilt each event",
-    description: "Staff assignments that change from one event to the next, tracked separately each time.",
-    icon: "users",
-  },
-  {
-    title: "Team compositions done manually",
-    description: "Team compositions and car crew roles rebuilt manually for every race weekend.",
+    title: "Rebuilt from the last one",
+    description: "Every weekend, the crew sheet is copied from the last event and fixed by hand: who's on which car, in which role.",
     icon: "refresh",
   },
   {
-    title: "No unified view of assignments",
-    description: "No single view of who is assigned where, in which role, on which car.",
-    icon: "layout",
+    title: "Four files, none up to date",
+    description: "The crew list, the car roles, the pit stop crew, the meals: each in its own file, and none of them the latest.",
+    icon: "files",
   },
-  {
-    title: "Meals handled separately",
-    description: "Meal planning handled outside of the event workflow, disconnected from the staff list.",
-    icon: "utensils",
-  }
 ];
 ---
 
@@ -30,10 +20,10 @@ const painPoints: { title: string; description: string; icon: IconName }[] = [
   <div class="page">
     <div class="head">
       <h2 class="title">
-        Racing team operations: each event has its own crew, cars, and structure.
+        Every weekend, a new crew sheet.
       </h2>
     </div>
 
-    <PainList points={painPoints} columns={4} />
+    <PainList points={painPoints} columns={2} />
   </div>
 </section>

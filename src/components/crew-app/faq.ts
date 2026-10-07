@@ -6,7 +6,7 @@ export const crewAppFaq = [
   },
   {
     q: "Does each crew member need a subscription?",
-    a: "No. The crew app is free for every team member, drivers included. The whole platform is free for the 2026 season.",
+    a: "No. The crew app is free for every team member, drivers included. RaceNode is free until 31 December 2026.",
   },
   {
     q: "Can my crew change the plan?",
@@ -14,6 +14,6 @@ export const crewAppFaq = [
   },
   {
     q: "Which phones does it run on?",
-    a: "iPhone (App Store) and Android (Google Play), or any browser at app.racenode.com. On the phone apps, the last data loaded opens without a connection.",
+    a: "iPhone (App Store) and Android (Google Play), or any browser at app.racenode.com. On the phone apps, what they last opened stays readable without a connection.",
   },
 ];

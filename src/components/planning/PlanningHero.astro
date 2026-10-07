@@ -1,5 +1,6 @@
 ---
 import Shot from '../Shot.astro';
+import { CREW_DAYS_IN_PLANNING } from '../../data/crew-days';
 import planningPhone from '../../assets/screenshots/planning-phone.png';
 import screenshotOverview from '../../assets/screenshots/planning-overview.png';
 
@@ -12,7 +13,7 @@ const appUrl = "https://app.racenode.com";
     <div class="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
       <div class="lg:col-span-7">
         <p class="font-display text-lg font-medium text-smoke">
-          Built by a racing Team Manager
+          Planning
         </p>
 
         <h1 class="display mt-5">
@@ -21,13 +22,13 @@ const appUrl = "https://app.racenode.com";
       </div>
       <div class="lg:col-span-5">
         <p class="lede">
-          Crew planning software for racing teams. Who works which race, across the whole season — staff, racecars, and trucks on one editable grid, with availability posted by your own crew.
+          Who works which race, across the whole season: staff, racecars and trucks on one editable grid{CREW_DAYS_IN_PLANNING && ', with availability posted by your own crew'}.
         </p>
         <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
           <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-            Get started
+            Start free
           </a>
-          <span class="text-sm text-smoke">Free for the 2026 season</span>
+          <span class="text-sm text-smoke">Free until 31 December 2026</span>
         </div>
       </div>
     </div>

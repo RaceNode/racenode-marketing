@@ -8,7 +8,6 @@ import rules from '../../assets/screenshots/timetable-rules.png';
 import rulesPhone from '../../assets/screenshots/timetable-rules-phone.png';
 import importScreen from '../../assets/screenshots/timetable-import.png';
 import importPhone from '../../assets/screenshots/timetable-import-phone.png';
-import share from '../../assets/screenshots/timetable-share.png';
 
 // The screen shows; the words only say what to look at.
 const features = [
@@ -17,7 +16,8 @@ const features = [
     phone: schedulePhone,
     badge: "Team Timetable",
     title: "Your schedule, next to the official one.",
-    description: "The organizer's sessions and your team's items in one table, day by day, colored by type, with a countdown to each. Flip to a calendar to drag and resize; export to Excel or CSV."
+    description: "The organizer's sessions and your team's items in one table, day by day, with a countdown to each. Aim an item at the roles, groups or people it concerns: everyone gets their own slice. Flip to a calendar to drag and resize; export to Excel or CSV.",
+    hideOnPhone: true
   },
   {
     desktop: items,
@@ -31,7 +31,7 @@ const features = [
     phone: rulesPhone,
     badge: "Automation Rules",
     title: "Anchor to the sessions. Let the rest follow.",
-    description: "\"Car by car briefing, 60 minutes before each session\": one rule creates the items across the weekend. Re-run it safely, without duplicates, when a session moves."
+    description: "\"Car by car briefing, 60 minutes before each session\": one rule creates the items across the weekend. When a session moves, its items move with it, without duplicates."
   },
   {
     desktop: importScreen,
@@ -39,13 +39,7 @@ const features = [
     badge: "Import",
     title: "Drop the organizer's PDF. Check it. It's filled in.",
     description: "Drop the official timetable on the event: its sessions come out as rows to check, then fill the event's programme. Nothing is saved before you confirm.",
-    small: "PDF, Excel, CSV, .ics, HTML, text, a picture or a screenshot, a mail file (.eml) with its attachments — up to 10 MB and 30 pages."
-  },
-  {
-    desktop: share,
-    badge: "Share Links",
-    title: "One link for the whole paddock.",
-    description: "Per event, a private link to an iCal feed or to a big-screen display with a live countdown, on the circuit's time. Revoke it anytime."
+    small: "PDF, Excel, .ics, a picture or a screenshot… up to 10 MB."
   }
 ];
 ---
@@ -54,7 +48,7 @@ const features = [
   <div class="page">
     <div class="head">
       <h2 class="title">
-        Five tools, one schedule.
+        One schedule, built around the official one.
       </h2>
     </div>
 
@@ -77,19 +71,10 @@ const features = [
 
           <!-- Screenshot -->
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
+            <Shot desktop={feature.desktop} phone={feature.phone} hideOnPhone={feature.hideOnPhone} alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
           </div>
         </div>
       ))}
-    </div>
-
-    <!-- Boundary with Planning: Timetable is inside an event, Planning between events -->
-    <div class="hair mt-20 pt-6 md:mt-28">
-      <p class="max-w-3xl text-lg leading-relaxed text-graphite">
-        The Timetable covers the race weekend <span class="font-semibold text-ink">inside an event</span>, minute by minute, anchored to the official sessions.
-        Across the season — availability, and who works which race — that's the{" "}
-        <a href="/crew-planning/" class="link">Planning module</a>.
-      </p>
     </div>
   </div>
 </section>
