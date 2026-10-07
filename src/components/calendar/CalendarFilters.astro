@@ -12,32 +12,32 @@ interface Props {
   months: { value: string; label: string }[];
 }
 const { disciplines, regions, circuits, months } = Astro.props;
-const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-accent';
+const select = 'cal-select';
 ---
 
 <form id="calendar-filters" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" aria-label="Filter the calendar">
-  <label class="text-xs text-gray-500">
+  <label class="text-xs font-medium text-graphite">
     Discipline
     <select name="discipline" class={select}>
       <option value="">All disciplines</option>
       {disciplines.map((d) => <option value={d}>{DISCIPLINES[d] ?? d}</option>)}
     </select>
   </label>
-  <label class="text-xs text-gray-500">
+  <label class="text-xs font-medium text-graphite">
     Region
     <select name="region" class={select}>
       <option value="">All regions</option>
       {regions.map((r) => <option value={r}>{REGIONS[r] ?? r}</option>)}
     </select>
   </label>
-  <label class="text-xs text-gray-500">
+  <label class="text-xs font-medium text-graphite">
     Circuit
     <select name="circuit" class={select}>
       <option value="">All circuits</option>
       {circuits.map((c) => <option value={c.page ? c.slug : c.venue_slug} data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}>{c.name}</option>)}
     </select>
   </label>
-  <label class="text-xs text-gray-500">
+  <label class="text-xs font-medium text-graphite">
     Month
     <select name="month" class={select}>
       <option value="">All months</option>
@@ -45,7 +45,7 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
     </select>
   </label>
 </form>
-<p id="calendar-count" class="text-sm text-gray-500 min-h-5 mb-6" aria-live="polite"></p>
+<p id="calendar-count" class="muted text-sm min-h-5 mb-6" aria-live="polite"></p>
 
 <script>
   const form = document.getElementById('calendar-filters') as HTMLFormElement | null;
@@ -90,7 +90,7 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
       if (circuit?.dataset.page) {
         const a = document.createElement('a');
         a.href = circuit.dataset.page;
-        a.className = 'underline hover:text-white';
+        a.className = 'link';
         a.textContent = `${circuit.textContent} calendar`;
         count.append(' · ', a);
       }

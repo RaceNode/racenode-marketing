@@ -8,17 +8,19 @@ const { title = "Plan your team's season in RaceNode." } = Astro.props;
 const appUrl = "https://app.racenode.com";
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-  <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 text-center">
-    <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">{title}</h2>
-    <p class="text-gray-400 mb-8 max-w-xl mx-auto">
-      Events, crew, travel, hotels and the race weekend timetable in one place. Free for every racing team until 31 December 2026.
-    </p>
-    <a
-      href={`${appUrl}/signup`}
-      class="inline-block bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
-    >
-      Sign up free
-    </a>
+<div class="kerb" aria-hidden="true"></div>
+<section class="band band-dark">
+  <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
+    <div class="lg:col-span-8">
+      <h2 class="title">{title}</h2>
+      <p class="lede mt-5 max-w-2xl">
+        Events, crew, travel, hotels and the race weekend timetable in one place. Free for every racing team until 31 December 2026.
+      </p>
+    </div>
+    <div class="lg:col-span-4 lg:text-right">
+      <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+        Sign up free
+      </a>
+    </div>
   </div>
 </section>
