@@ -1,9 +1,8 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
-import SyncLine from "../SyncLine.astro";
 import { Image } from 'astro:assets';
-import screenshotAgenda from '../../assets/screenshots/personal-agenda.png';
-import screenshotMonth from '../../assets/screenshots/personal-month.png';
+import screenshotAgenda from '../../assets/screenshots/crew-app-agenda.png';
+import screenshotMonth from '../../assets/screenshots/crew-app-month.png';
 ---
 
 <div class="kerb" aria-hidden="true"></div>
@@ -17,12 +16,6 @@ import screenshotMonth from '../../assets/screenshots/personal-month.png';
         The grid isn't only written by the manager. Every team member posts their own days from the free Personal app — and what they post lands in your planning.
       </p>
     </div>
-
-    <SyncLine
-      from={{ role: "Team Manager", text: "Assigns events and paints the season in Planning" }}
-      to={{ role: "Staff Member", text: "Posts their own days in the free Personal app" }}
-      both
-    />
 
     <ul class="mt-6 grid gap-3 md:grid-cols-3">
       <li class="app-card p-5 md:p-6">

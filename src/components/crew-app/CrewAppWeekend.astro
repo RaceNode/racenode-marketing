@@ -1,7 +1,10 @@
 ---
 // Each block names the module it comes from: nothing here is typed twice. The icons are the ones
 // of the matching tiles in the app's event screen.
+import { Image } from "astro:assets";
 import Icon from "../Icon.astro";
+import top from "../../assets/screenshots/crew-app-race-weekend.png";
+import more from "../../assets/screenshots/crew-app-race-weekend-more.png";
 import type { IconName } from "../icons";
 
 const blocks: { title: string; text: string; from: string; href: string; icon: IconName }[] = [
@@ -15,7 +18,7 @@ const blocks: { title: string; text: string; from: string; href: string; icon: I
   {
     title: "My role",
     icon: "user",
-    text: "Their role and their car for this event: Race Engineer, #27, Car 27 Crew.",
+    text: "Their roles and their car for this event: Car Chief on #23, Dead Man in the pit stop crew.",
     from: "Management",
     href: "/management/",
   },
@@ -45,6 +48,16 @@ const blocks: { title: string; text: string; from: string; href: string; icon: I
       <p class="lede">
         You plan the event once, in the modules you already use. Each crew member opens the event and finds their part of it first: meals and team notes included.
       </p>
+    </div>
+
+    <!-- The screen itself, top and scrolled, before the words about it. -->
+    <div class="mb-16 grid gap-10 sm:grid-cols-2 lg:mx-auto lg:max-w-3xl">
+      <div class="phone mx-auto w-full max-w-[19rem]">
+        <Image src={top} alt="RaceNode app: a chief mechanic's race weekend — up next, his roles, his next meal" widths={[400, 800, 1170]} sizes="19rem" loading="lazy" quality={85} />
+      </div>
+      <div class="phone mx-auto w-full max-w-[19rem]">
+        <Image src={more} alt="RaceNode app: the same race weekend, scrolled — his hotel, his departure, the daily transfer, his return" widths={[400, 800, 1170]} sizes="19rem" loading="lazy" quality={85} />
+      </div>
     </div>
 
     <ul class="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">

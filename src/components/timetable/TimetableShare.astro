@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Shot from '../Shot.astro';
 import screenshotBox from '../../assets/screenshots/timetable-box.png';
 
 const points = [
@@ -26,20 +26,9 @@ const points = [
       </ul>
     </div>
 
-    <!-- Screenshot: the wall screen, shown big. On a phone, the clock and the sessions. -->
+    <!-- Screenshot: the wall screen, shown big; whole on a phone too. -->
     <div class="lg:col-span-7">
-      <div class="screen">
-        <div class="screen-zoom" style="--zoom: 170%; --zoom-x: 0.02; --zoom-y: 0; --zoom-aspect: 4 / 3">
-          <Image
-            src={screenshotBox}
-            alt="RaceNode public timetable display with live countdowns to each session"
-            widths={[800, 1200, 1600]}
-            sizes="(min-width: 1024px) 720px, (min-width: 640px) 100vw, 170vw"
-            loading="lazy"
-            quality={85}
-          />
-        </div>
-      </div>
+      <Shot desktop={screenshotBox} alt="RaceNode public timetable display with live countdowns to each session" sizes="(min-width: 1024px) 720px, 100vw" />
     </div>
   </div>
 </section>

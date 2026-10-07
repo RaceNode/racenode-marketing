@@ -1,0 +1,103 @@
+<!doctype html>
+<!--
+  A travel agency's confirmation, made up for the Logistics import screenshot. Like the mails of airlines,
+  hotels and booking sites, it carries its bookings as schema.org markup, which RaceNode reads on the device.
+  The words a person sees are drawn by CSS on purpose: the document then has no text for the reading
+  service, so the screenshot calls no server (the demo stays untouched). Don't move them into the HTML.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "LodgingReservation",
+    "reservationNumber": "PTA-48213",
+    "underName": [
+      { "@type": "Person", "name": "Hugo Garnier" },
+      { "@type": "Person", "name": "Thierry Morand" },
+      { "@type": "Person", "name": "Olivier Duret" },
+      { "@type": "Person", "name": "Callum Reid" }
+    ],
+    "reservationFor": {
+      "@type": "LodgingBusiness",
+      "name": "Hotel Ciutat de Granollers",
+      "address": { "@type": "PostalAddress", "streetAddress": "Carrer de Girona 51", "addressLocality": "Granollers", "postalCode": "08402", "addressCountry": "ES" },
+      "telephone": "+34 938 79 51 00"
+    },
+    "checkinTime": "2026-11-18T15:00:00+01:00",
+    "checkoutTime": "2026-11-22T11:00:00+01:00",
+    "lodgingUnitDescription": "Twin",
+    "numRooms": 2
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FlightReservation",
+    "reservationNumber": "PTA-48214",
+    "underName": [
+      { "@type": "Person", "name": "Hugo Garnier" },
+      { "@type": "Person", "name": "Thierry Morand" },
+      { "@type": "Person", "name": "Olivier Duret" },
+      { "@type": "Person", "name": "Callum Reid" }
+    ],
+    "reservationFor": {
+      "@type": "Flight",
+      "flightNumber": "1653",
+      "airline": { "@type": "Airline", "name": "Vueling", "iataCode": "VY" },
+      "departureAirport": { "@type": "Airport", "name": "Lyon Saint-Exupéry", "iataCode": "LYS" },
+      "arrivalAirport": { "@type": "Airport", "name": "Barcelona El Prat", "iataCode": "BCN" },
+      "departureTime": "2026-11-18T09:35:00+01:00",
+      "arrivalTime": "2026-11-18T10:50:00+01:00"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FlightReservation",
+    "reservationNumber": "PTA-48215",
+    "underName": [
+      { "@type": "Person", "name": "Hugo Garnier" },
+      { "@type": "Person", "name": "Thierry Morand" },
+      { "@type": "Person", "name": "Olivier Duret" },
+      { "@type": "Person", "name": "Callum Reid" }
+    ],
+    "reservationFor": {
+      "@type": "Flight",
+      "flightNumber": "1652",
+      "airline": { "@type": "Airline", "name": "Vueling", "iataCode": "VY" },
+      "departureAirport": { "@type": "Airport", "name": "Barcelona El Prat", "iataCode": "BCN" },
+      "arrivalAirport": { "@type": "Airport", "name": "Lyon Saint-Exupéry", "iataCode": "LYS" },
+      "departureTime": "2026-11-22T19:20:00+01:00",
+      "arrivalTime": "2026-11-22T20:40:00+01:00"
+    }
+  }
+]
+</script>
+<style>
+  body { margin: 0; padding: 28px 32px; font: 14px/1.5 Helvetica, Arial, sans-serif; color: #1a1a1a; background: #fff; }
+  i { display: block; font-style: normal; }
+  .brand::before { content: "Paddock Travel Agency"; font-weight: 700; font-size: 18px; }
+  .sub::before { content: "Booking confirmation · EGTEC R08 Barcelona · Valmorel Motorsport"; color: #555; }
+  hr { border: 0; border-top: 2px solid #1a1a1a; margin: 16px 0; }
+  .h::before { font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 12px; color: #555; }
+  .h1::before { content: "Hotel · ref PTA-48213"; }
+  .h2::before { content: "Flights · ref PTA-48214 / PTA-48215"; }
+  .h3::before { content: "Travellers"; }
+  .h { margin-top: 18px; }
+  .a::before { content: "Hotel Ciutat de Granollers, Carrer de Girona 51, 08402 Granollers"; font-weight: 600; }
+  .b::before { content: "Check-in Wed 18 Nov from 15:00 · Check-out Sun 22 Nov by 11:00 · 2 × Twin"; }
+  .c::before { content: "VY1653  Wed 18 Nov  LYS 09:35 → BCN 10:50"; font-family: Menlo, monospace; }
+  .d::before { content: "VY1652  Sun 22 Nov  BCN 19:20 → LYS 20:40"; font-family: Menlo, monospace; }
+  .e::before { content: "Hugo Garnier · Thierry Morand · Olivier Duret · Callum Reid"; }
+  .f::before { content: "Please present a valid ID at check-in and boarding."; color: #777; font-size: 12px; }
+  .f { margin-top: 24px; }
+</style>
+</head>
+<body>
+<i class="brand"></i><i class="sub"></i><hr>
+<i class="h h1"></i><i class="a"></i><i class="b"></i>
+<i class="h h2"></i><i class="c"></i><i class="d"></i>
+<i class="h h3"></i><i class="e"></i>
+<i class="f"></i>
+</body>
+</html>

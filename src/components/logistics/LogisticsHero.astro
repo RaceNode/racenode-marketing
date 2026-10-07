@@ -1,5 +1,6 @@
 ---
-import { Image } from 'astro:assets';
+import Shot from '../Shot.astro';
+import overviewPhone from '../../assets/screenshots/logistics-overview-phone.png';
 import screenshotOverview from '../../assets/screenshots/logistics-overview.png';
 
 const appUrl = "https://app.racenode.com";
@@ -31,19 +32,18 @@ const appUrl = "https://app.racenode.com";
       </div>
     </div>
 
-    <!-- The screen sits on the bottom edge of the band and is cut by it. -->
-    <div class="screen -mx-4 mt-14 -mb-2 rounded-b-none sm:mx-0 md:mt-16">
-      <div class="screen-crop screen-zoom sm:aspect-[16/7]" style="--zoom-aspect: 1">
-        <Image
-          src={screenshotOverview}
-          alt="RaceNode race team travel and accommodation software showing race weekend preparation status"
-          widths={[900, 1400, 2000, 2800]}
-          sizes="(min-width: 1248px) 1800px, (min-width: 640px) 150vw, 350vw"
-          loading="eager"
-          quality={85}
-        />
-      </div>
-    </div>
+    <!-- The screen sits on the bottom edge of the band and is cut by it; on a phone, the app's phone screen. -->
+    <Shot
+      desktop={screenshotOverview}
+      phone={overviewPhone}
+      alt="RaceNode race team travel and accommodation software showing race weekend preparation status"
+      crop
+      screenClass="-mx-4 mt-14 -mb-2 rounded-b-none sm:mx-0 md:mt-16"
+      cropClass="sm:aspect-[16/7]"
+      phoneClass="mt-12 -mb-40"
+      sizes="(min-width: 1248px) 1800px, 150vw"
+      loading="eager"
+    />
   </div>
 </section>
 <div class="kerb" aria-hidden="true"></div>

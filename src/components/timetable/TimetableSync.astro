@@ -1,11 +1,11 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
-import SyncLine from "../SyncLine.astro";
+import CrewScreen from "../CrewScreen.astro";
 
-const examples = [
-  { title: 'Up next', text: 'Each member sees the next sessions of the day, rolling over automatically as the weekend runs.' },
-  { title: 'Always current', text: 'A schedule change reaches everyone instantly. No new PDF to resend, no "which version is this?".' },
-  { title: 'No more questions', text: 'The mechanic knows the setup window, the engineer knows the briefing time. Nobody has to ask.' },
+const items = [
+  { label: 'Up next', text: 'The next items of the day with a countdown, rolling over on its own as the weekend runs.' },
+  { label: 'View all', text: 'One tap opens the whole timetable.' },
+  { label: 'Always current', text: 'Change the schedule once: the phones show the new time, no new PDF to send.' },
 ];
 ---
 
@@ -17,33 +17,16 @@ const examples = [
         Everyone sees what's next, in real time.
       </h2>
       <p class="lede">
-        Update the schedule once, and every team member sees it. The Timetable isn't a back-office planner — it's a live plan each person carries in their own app.
+        The timetable you build is the one each person carries in the RaceNode app. Here, a chief mechanic's race weekend.
       </p>
     </div>
 
-    <SyncLine
-      from={{ role: "Team Manager", text: "Builds the schedule in RaceNode" }}
-      to={{ role: "Staff Member", text: 'Sees the "Up next" plan in the Personal app' }}
-    />
+    <CrewScreen screen="top" items={items} />
 
-    <ul class="mt-6 grid gap-3 md:grid-cols-3">
-      {examples.map(({ title, text }) => (
-        <li class="app-card p-5 md:p-6">
-          <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>{title}</h4>
-          <p class="mt-2 text-smoke">{text}</p>
-        </li>
-      ))}
-    </ul>
-
-    <div class="mt-12 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <div class="max-w-md">
-        <p class="text-sm text-smoke">
-          No schedule PDFs to send, no messages to forward, no session missed.
-        </p>
-        <p class="mt-2 font-medium text-smoke">
-          The Personal module is included free with any subscription. Get the app:
-        </p>
-      </div>
+    <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <p class="max-w-md font-medium text-smoke">
+        The Personal module is included free with any subscription. Get the app:
+      </p>
       <StoreBadges align="start" />
     </div>
   </div>

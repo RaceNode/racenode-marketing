@@ -1,64 +1,61 @@
 ---
-import { Image } from 'astro:assets';
-import screenshotOverview from '../../assets/screenshots/management-overview.png';
-import screenshotStaff from '../../assets/screenshots/management-event-staff.png';
-import screenshotRacecars from '../../assets/screenshots/management-racecars.png';
-import screenshotTeam from '../../assets/screenshots/management-team.png';
-import screenshotMeals from '../../assets/screenshots/management-meals.png';
-import screenshotInfo from '../../assets/screenshots/management-info.png';
+import Shot from '../Shot.astro';
+import overview from '../../assets/screenshots/management-overview.png';
+import overviewPhone from '../../assets/screenshots/management-overview-phone.png';
+import staff from '../../assets/screenshots/management-event-staff.png';
+import staffPhone from '../../assets/screenshots/management-event-staff-phone.png';
+import racecars from '../../assets/screenshots/management-racecars.png';
+import racecarsPhone from '../../assets/screenshots/management-racecars-phone.png';
+import team from '../../assets/screenshots/management-team.png';
+import teamPhone from '../../assets/screenshots/management-team-phone.png';
+import meals from '../../assets/screenshots/management-meals.png';
+import mealsPhone from '../../assets/screenshots/management-meals-phone.png';
+import info from '../../assets/screenshots/management-info.png';
+import infoPhone from '../../assets/screenshots/management-info-phone.png';
 
-const screenshots = {
-  overview: screenshotOverview,
-  staff: screenshotStaff,
-  racecars: screenshotRacecars,
-  team: screenshotTeam,
-  meals: screenshotMeals,
-  info: screenshotInfo,
-};
-
-// crop: the part of the screenshot a phone shows, the one the text describes (see .screen-zoom).
+// The screen shows; the words only say what to look at.
 const features = [
   {
-    id: "overview",
-    crop: "--zoom-y: 0.21; --zoom-aspect: 16 / 10",
+    desktop: overview,
+    phone: overviewPhone,
     badge: "Overview",
     title: "Your event at a glance.",
-    description: "See instantly how many staff are assigned, which racecars are entered, how teams are composed, and how many meals are planned — with completion bars for required roles, team assignments and meals, and alerts that flag exactly what's still missing before the weekend."
+    description: "Roles filled, staff with a role and a meal, teams staffed — and exactly what is still missing before the weekend."
   },
   {
-    id: "staff",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 3",
+    desktop: staff,
+    phone: staffPhone,
     badge: "Event Staff",
     title: "Your full crew, roles and meals included.",
-    description: "See every team member assigned to the event with their role and meal status. Staff assignments sync with Logistics: assign once, visible everywhere. No duplicate entries across modules."
+    description: "Everyone on the event with their roles and meals. The same list as in Logistics: assign once, visible everywhere."
   },
   {
-    id: "racecars",
-    crop: "--zoom-y: 0.085; --zoom-aspect: 16 / 9",
+    desktop: racecars,
+    phone: racecarsPhone,
     badge: "Racecars",
     title: "Assign your cars to each event.",
-    description: "Assign racecars from your central fleet to each event. Car data comes from the Racecar module (chassis, model, race number), no need to re-enter anything. See at a glance which cars are entered for each weekend."
+    description: "Pick the cars from your fleet: chassis, model and race number come with them, nothing to type again."
   },
   {
-    id: "team",
-    crop: "--zoom: 320%; --zoom-y: 0.23; --zoom-aspect: 4 / 3",
+    desktop: team,
+    phone: teamPhone,
     badge: "Team",
     title: "Build your crew structure, event by event.",
-    description: "Define your team structure once (team-level roles, car-level roles), then populate it per event. Assign Race Engineers, Car Chiefs, Performance Engineers to specific cars with a dropdown. When your crew changes between events, just reassign. The structure stays, the people adapt."
+    description: "Team roles and car roles defined once, filled per event. When the crew changes, reassign: the structure stays."
   },
   {
-    id: "meals",
-    crop: "--zoom-x: 0.39; --zoom-y: 0.23; --zoom-aspect: 4 / 3",
+    desktop: meals,
+    phone: mealsPhone,
     badge: "Meals",
     title: "Plan every meal across the event.",
-    description: "Plan breakfast, lunch, and dinner for every day of the event. Set locations, time windows, and assign staff to each meal. Your team knows where to eat and when, every day, without asking."
+    description: "Breakfast, lunch and dinner for every day, with the place, the time and who eats there."
   },
   {
-    id: "info",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
+    desktop: info,
+    phone: infoPhone,
     badge: "Info Board",
     title: "The intel your crew needs, in their pocket.",
-    description: "Pin the notes and documents that matter for the event — pit allocations, procedures, track maps, key contacts — and attach the files right to them. Everyone assigned sees them read-only in their Personal app, always the latest version. No more forwarding PDFs."
+    description: "Radio channels, garage plans, the latest timetable: notes and files the crew reads in their app, always the latest version."
   }
 ];
 ---
@@ -88,18 +85,7 @@ const features = [
           </div>
 
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <div class="screen">
-              <div class="screen-crop screen-zoom" style={feature.crop}>
-                <Image
-                  src={screenshots[feature.id as keyof typeof screenshots]}
-                  alt={`RaceNode ${feature.badge} - ${feature.title}`}
-                  widths={[800, 1200, 1800, 2800]}
-                  sizes="(min-width: 1024px) 1200px, (min-width: 640px) 150vw, 350vw"
-                  loading="lazy"
-                  quality={85}
-                />
-              </div>
-            </div>
+            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode ${feature.badge} - ${feature.title}`} crop />
           </div>
         </div>
       ))}

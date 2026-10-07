@@ -8,8 +8,8 @@ RaceNode is made for motorsport teams (GT, endurance, single-seater and other ch
 
 - [Management](https://www.racenode.com/management/): race weekend and crew management. Crew assignments and roles per car, racecar entries, team structure and meals for every event.
 - [Planning](https://www.racenode.com/crew-planning/): crew planning and season scheduling. Who works which race across the season, crew availability, rotas and staffing, connected to every event on the calendar.
-- [Logistics](https://www.racenode.com/logistics/): crew travel and accommodation. Flights, trucks, rental vans, hotels and room allocation for every race weekend, with what is still missing before the event.
-- [Timetable](https://www.racenode.com/timetable/): race weekend timetable and schedule. The team's schedule built around the official timetable, recurring briefings, a live countdown and an iCal feed shared with the whole team.
+- [Logistics](https://www.racenode.com/logistics/): crew travel and accommodation. Flights, trucks, rental vans, hotels and room allocation for every race weekend, with what is still missing before the event. Bookings can be created from a confirmation document (PDF, mail file, picture, spreadsheet), checked in a preview before anything is saved.
+- [Timetable](https://www.racenode.com/timetable/): race weekend timetable and schedule. The team's schedule built around the official timetable, recurring briefings, a live countdown and an iCal feed shared with the whole team. The official sessions can be filled in from the organizer's timetable (PDF, spreadsheet, calendar file), checked in a preview before anything is saved.
 - Personal: each team member sees their own season, role, travel, hotel, meals and next sessions on their phone. Free for every team member.
 
 ## Pricing and availability

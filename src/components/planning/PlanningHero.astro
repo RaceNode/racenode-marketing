@@ -1,5 +1,6 @@
 ---
-import { Image } from 'astro:assets';
+import Shot from '../Shot.astro';
+import planningPhone from '../../assets/screenshots/planning-phone.png';
 import screenshotOverview from '../../assets/screenshots/planning-overview.png';
 
 const appUrl = "https://app.racenode.com";
@@ -32,19 +33,16 @@ const appUrl = "https://app.racenode.com";
     </div>
 
     <!-- The whole grid is the point: shown uncropped, cut only by the band edge.
-         On a phone, zoomed on the weeks around a race weekend instead. -->
-    <div class="screen -mb-16 mt-14 md:-mb-32 md:mt-20">
-      <div class="screen-zoom" style="--zoom-x: 0.53; --zoom-y: 0.185; --zoom-aspect: 4 / 5">
-        <Image
-          src={screenshotOverview}
-          alt="RaceNode planning software showing a racing team's whole season on one grid"
-          widths={[900, 1400, 2000, 2800]}
-          sizes="(min-width: 1248px) 1200px, (min-width: 640px) 100vw, 350vw"
-          loading="eager"
-          quality={85}
-        />
-      </div>
-    </div>
+         On a phone, the app's own phone grid on a race week. -->
+    <Shot
+      desktop={screenshotOverview}
+      phone={planningPhone}
+      alt="RaceNode planning software showing a racing team's whole season on one grid"
+      screenClass="-mb-16 mt-14 md:-mb-32 md:mt-20"
+      phoneClass="mt-12 -mb-40"
+      sizes="(min-width: 1248px) 1200px, 100vw"
+      loading="eager"
+    />
   </div>
 </section>
 <div class="kerb" aria-hidden="true"></div>

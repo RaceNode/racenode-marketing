@@ -1,64 +1,59 @@
 ---
-import { Image } from 'astro:assets';
-import screenshotOverview from '../../assets/screenshots/logistics-overview.png';
-import screenshotStaff from '../../assets/screenshots/logistics-staff.png';
-import screenshotAccommodation from '../../assets/screenshots/logistics-accommodation.png';
-import screenshotTravel from '../../assets/screenshots/logistics-travel.png';
-import screenshotVehicles from '../../assets/screenshots/logistics-vehicles.png';
-import screenshotInfo from '../../assets/screenshots/logistics-info.png';
+import Shot from '../Shot.astro';
+import overview from '../../assets/screenshots/logistics-overview.png';
+import overviewPhone from '../../assets/screenshots/logistics-overview-phone.png';
+import staff from '../../assets/screenshots/logistics-staff.png';
+import staffPhone from '../../assets/screenshots/logistics-staff-phone.png';
+import accommodation from '../../assets/screenshots/logistics-accommodation.png';
+import accommodationPhone from '../../assets/screenshots/logistics-accommodation-phone.png';
+import travel from '../../assets/screenshots/logistics-travel.png';
+import travelPhone from '../../assets/screenshots/logistics-travel-phone.png';
+import vehicles from '../../assets/screenshots/logistics-vehicles.png';
+import vehiclesPhone from '../../assets/screenshots/logistics-vehicles-phone.png';
+import info from '../../assets/screenshots/logistics-info.png';
 
-const screenshots = {
-  overview: screenshotOverview,
-  staff: screenshotStaff,
-  accommodation: screenshotAccommodation,
-  travel: screenshotTravel,
-  vehicles: screenshotVehicles,
-  info: screenshotInfo,
-};
-
-// crop: the part of the screenshot a phone shows, the one the text describes (see .screen-zoom).
+// The screen shows; the words only say what to look at.
 const features = [
   {
-    id: "overview",
-    crop: "--zoom-y: 0.21; --zoom-aspect: 4 / 3",
+    desktop: overview,
+    phone: overviewPhone,
     badge: "Overview",
     title: "See what's missing before it's a problem.",
-    description: "A real-time dashboard showing preparation status for each event. Instantly see how many staff members still need a departure flight, a return flight, a hotel room, or an on-site vehicle. Track completion for travel, accommodation and on-site transfers, and get alerts for anything unresolved — dismiss the ones that don't apply so the dashboard reflects reality.",
+    description: "Who still needs a departure, a return, a room or an on-site vehicle, event by event. Dismiss the alerts that don't apply.",
   },
   {
-    id: "staff",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 3",
+    desktop: staff,
+    phone: staffPhone,
     badge: "Event Staff",
     title: "Your full crew, their complete logistics, one view.",
-    description: "See every staff member assigned to the event alongside their travel and accommodation status. Each row shows departure, hotel, return, and on-site vehicle at a glance. Alert icons flag anyone missing a booking — ignore the ones that don't apply. Select several people at once to create a shared trip or hotel in a single action.",
+    description: "Departure, hotel, return and on-site vehicle, one row per person. Select several people to book a shared trip or hotel at once.",
   },
   {
-    id: "accommodation",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 5 / 4",
+    desktop: accommodation,
+    phone: accommodationPhone,
     badge: "Accommodation",
     title: "Hotels, rooms, and rooming lists. Handled.",
-    description: "Add hotels with address auto-complete, then assign staff to rooms in a few clicks. Manage rooming lists per hotel, track room types and capacity, set check-in and check-out details. Attach booking confirmations so your team can download them directly.",
+    description: "Hotels, rooms and who sleeps where, with check-in and check-out. Attach the confirmation: the crew downloads it from their app.",
   },
   {
-    id: "travel",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
+    desktop: travel,
+    phone: travelPhone,
     badge: "Travel",
     title: "Every journey planned, every seat assigned.",
-    description: "Create departure and return trips for any travel type: flights, cars, trucks, or mixed. Break complex journeys into segments and assign staff to each leg. Attach tickets and documents so every team member has what they need in their pocket.",
+    description: "Departure and return by plane, car or truck, split into legs, each with its people and its tickets.",
   },
   {
-    id: "vehicles",
-    crop: "--zoom-y: 0.2; --zoom-aspect: 16 / 9",
+    desktop: vehicles,
+    phone: vehiclesPhone,
     badge: "Event Vehicles",
     title: "Fleet vehicles and rentals, ready for the road.",
-    description: "Pull vehicles from your permanent fleet or add event-specific entries for rentals and loaners. Use them for travel, and assign staff as on-site riders for daily transfers at the circuit — each person rides in one vehicle, sorted in a couple of clicks.",
+    description: "Your own fleet and this weekend's rentals, used for travel and for the daily transfers at the circuit.",
   },
   {
-    id: "info",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
+    desktop: info,
     badge: "Info Board",
     title: "The briefing board, shared with everyone.",
-    description: "Pin the notes and documents your crew needs — hotel lists, meeting points, schedules, procedures — with the files attached. Everyone assigned to the event sees them read-only in their Personal app, always up to date.",
+    description: "Notes and files for the crew — hotel list, meeting points, procedures — read-only in their app, always the latest.",
   }
 ];
 ---
@@ -88,18 +83,7 @@ const features = [
           </div>
 
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <div class="screen">
-              <div class="screen-crop screen-zoom" style={feature.crop}>
-                <Image
-                  src={screenshots[feature.id as keyof typeof screenshots]}
-                  alt={`RaceNode ${feature.badge} - ${feature.title}`}
-                  widths={[800, 1200, 1800, 2800]}
-                  sizes="(min-width: 1024px) 1200px, (min-width: 640px) 150vw, 350vw"
-                  loading="lazy"
-                  quality={85}
-                />
-              </div>
-            </div>
+            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode ${feature.badge} - ${feature.title}`} crop />
           </div>
         </div>
       ))}

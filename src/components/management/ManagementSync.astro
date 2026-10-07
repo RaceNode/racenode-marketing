@@ -1,11 +1,11 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
-import SyncLine from "../SyncLine.astro";
+import CrewScreen from "../CrewScreen.astro";
 
-const examples = [
-  { title: 'Car assignment', text: "The mechanic opens their app and sees which car they're working on." },
-  { title: 'Role assigned', text: 'The engineer knows their role: Race Engineer on #111 this weekend.' },
-  { title: 'Meals visible', text: 'Everyone knows where to eat and when. No need to ask or check emails.' },
+const items = [
+  { label: 'My role', text: 'Their roles and their car this weekend: Car Chief on #23, Dead Man in the pit stop crew.' },
+  { label: 'Next meal', text: 'Where and when they eat next.' },
+  { label: 'Up next', text: "The next item of the event's timetable, with a countdown." },
 ];
 ---
 
@@ -17,33 +17,16 @@ const examples = [
         Your team sees their assignments instantly.
       </h2>
       <p class="lede">
-        Assign once, everyone knows. Management is not a back-office planner. It's a connected system where every team member sees their own assignments in real-time.
+        Every role, car and meal you assign shows up on that person's phone, in the RaceNode app. Here, a chief mechanic's race weekend.
       </p>
     </div>
 
-    <SyncLine
-      from={{ role: "Team Manager", text: "Assigns roles, cars, and meals in RaceNode" }}
-      to={{ role: "Staff Member", text: "Sees their assignments in the Personal app" }}
-    />
+    <CrewScreen screen="top" items={items} />
 
-    <ul class="mt-6 grid gap-3 md:grid-cols-3">
-      {examples.map(({ title, text }) => (
-        <li class="app-card p-5 md:p-6">
-          <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>{title}</h4>
-          <p class="mt-2 text-smoke">{text}</p>
-        </li>
-      ))}
-    </ul>
-
-    <div class="mt-12 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <div class="max-w-md">
-        <p class="text-smoke">
-          No briefing emails to send, no messages to forward, no information lost in transit.
-        </p>
-        <p class="mt-2 font-medium text-smoke">
-          The Personal module is included free with any subscription. Get the app:
-        </p>
-      </div>
+    <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <p class="max-w-md font-medium text-smoke">
+        The Personal module is included free with any subscription. Get the app:
+      </p>
       <StoreBadges align="start" />
     </div>
   </div>

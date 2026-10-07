@@ -1,10 +1,11 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
-import SyncLine from "../SyncLine.astro";
+import CrewScreen from "../CrewScreen.astro";
 
-const examples = [
-  { title: 'Hotel assigned', text: 'The logistics coordinator assigns a hotel room. The mechanic sees it on their phone.' },
-  { title: 'Travel updated', text: 'A travel group is updated. The engineer gets the new details instantly.' },
+const items = [
+  { label: 'My accommodation', text: 'The hotel, a link to open it in maps, and who shares the room.' },
+  { label: 'Departure and return', text: 'The route, the vehicle or the flight, and who travels with them.' },
+  { label: 'Daily transfer', text: 'The vehicle that takes them to the circuit, and who rides along.' },
 ];
 ---
 
@@ -16,33 +17,16 @@ const examples = [
         Assign once. Everyone knows.
       </h2>
       <p class="lede">
-        This is where Logistics stops being a back-office tool and becomes a connected system. Every accommodation and travel assignment is instantly visible to each staff member through their Personal app.
+        Every hotel room and every trip you assign shows up on that person's phone, in the RaceNode app. Here, a chief mechanic's race weekend.
       </p>
     </div>
 
-    <SyncLine
-      from={{ role: "Logistics Coordinator", text: "Assigns accommodation and travel in RaceNode" }}
-      to={{ role: "Staff Member", text: "Sees assignments in their Personal app" }}
-    />
+    <CrewScreen screen="more" items={items} />
 
-    <ul class="mt-6 grid gap-3 md:grid-cols-2">
-      {examples.map(({ title, text }) => (
-        <li class="app-card p-5 md:p-6">
-          <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>{title}</h4>
-          <p class="mt-2 text-smoke">{text}</p>
-        </li>
-      ))}
-    </ul>
-
-    <div class="mt-12 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <div class="max-w-md">
-        <p class="text-smoke">
-          No PDFs to send, no messages to forward, no information lost in transit.
-        </p>
-        <p class="mt-2 font-medium text-smoke">
-          The Personal module is included free with any subscription. Get the app:
-        </p>
-      </div>
+    <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <p class="max-w-md font-medium text-smoke">
+        The Personal module is included free with any subscription. Get the app:
+      </p>
       <StoreBadges align="start" />
     </div>
   </div>

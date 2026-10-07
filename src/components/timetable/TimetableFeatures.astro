@@ -1,55 +1,51 @@
 ---
-import { Image } from 'astro:assets';
-import screenshotSchedule from '../../assets/screenshots/timetable-schedule.png';
-import screenshotItems from '../../assets/screenshots/timetable-items.png';
-import screenshotRules from '../../assets/screenshots/timetable-rules.png';
-import screenshotOfficial from '../../assets/screenshots/timetable-official.png';
-import screenshotShare from '../../assets/screenshots/timetable-share.png';
+import Shot from '../Shot.astro';
+import schedule from '../../assets/screenshots/timetable-schedule.png';
+import schedulePhone from '../../assets/screenshots/timetable-schedule-phone.png';
+import items from '../../assets/screenshots/timetable-items.png';
+import itemsPhone from '../../assets/screenshots/timetable-items-phone.png';
+import rules from '../../assets/screenshots/timetable-rules.png';
+import rulesPhone from '../../assets/screenshots/timetable-rules-phone.png';
+import importScreen from '../../assets/screenshots/timetable-import.png';
+import importPhone from '../../assets/screenshots/timetable-import-phone.png';
+import share from '../../assets/screenshots/timetable-share.png';
 
-const screenshots = {
-  schedule: screenshotSchedule,
-  items: screenshotItems,
-  rules: screenshotRules,
-  official: screenshotOfficial,
-  share: screenshotShare,
-};
-
-// crop: the part of the screenshot a phone shows, the one the text describes (see .screen-zoom).
+// The screen shows; the words only say what to look at.
 const features = [
   {
-    id: "schedule",
-    crop: "--zoom-y: 0.27; --zoom-aspect: 4 / 5",
+    desktop: schedule,
+    phone: schedulePhone,
     badge: "Team Timetable",
     title: "Your schedule, next to the official one.",
-    description: "Lay out your team's plan alongside the organizer's sessions. Read it as a clean, PDF-style table with collapsible days, or flip to a calendar view to drag and resize items. Every entry is color-coded by type, with a live indicator on the current time. Export to Excel or CSV in one click."
+    description: "The organizer's sessions and your team's items in one table, day by day, colored by type, with a countdown to each. Flip to a calendar to drag and resize; export to Excel or CSV."
   },
   {
-    id: "items",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
+    desktop: items,
+    phone: itemsPhone,
     badge: "Item Templates",
     title: "Build once, reuse every weekend.",
-    description: "Save your recurring entries — track walk, engineering briefing, pit setup, departure to circuit — as org-level templates with a type, location, and duration. Start typing on the schedule and it autocompletes, pre-fills the details, and computes the end time for you."
+    description: "Track walk, briefings, pit setup: saved once with their type, place and duration. Start typing on the schedule and they fill themselves in."
   },
   {
-    id: "rules",
-    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
+    desktop: rules,
+    phone: rulesPhone,
     badge: "Automation Rules",
     title: "Anchor to the sessions. Let the rest follow.",
-    description: "Define a rule once — \"engineering briefing, 45 minutes before every practice\" — and generate the derived items across the weekend. Preview the exact times before you run it, re-run safely without duplicates, and see a badge on every synced item. Change the official session and your plan keeps up."
+    description: "\"Car by car briefing, 60 minutes before each session\": one rule creates the items across the weekend. Re-run it safely, without duplicates, when a session moves."
   },
   {
-    id: "official",
-    crop: "--zoom-y: 0.27; --zoom-aspect: 5 / 4",
-    badge: "Official Timetable",
-    title: "The organizer's schedule, always in view.",
-    description: "The official sessions from the Events module sit right beside your team plan — same data, no re-entry. Your internal schedule articulates around the real timetable instead of drifting away from it."
+    desktop: importScreen,
+    phone: importPhone,
+    badge: "Import",
+    title: "Drop the organizer's PDF. Check it. It's filled in.",
+    description: "Drop the official timetable on the event: its sessions come out as rows to check, then fill the event's programme. Nothing is saved before you confirm.",
+    small: "PDF, Excel, CSV, .ics, HTML, text, a picture or a screenshot, a mail file (.eml) with its attachments — up to 10 MB and 30 pages."
   },
   {
-    id: "share",
-    crop: "--zoom-y: 0.22; --zoom-aspect: 5 / 2",
+    desktop: share,
     badge: "Share Links",
     title: "One link for the whole paddock.",
-    description: "Publish a tokenized public link per event — an iCal feed staff subscribe to, or a big-screen display page with a live countdown to every session. Revoke it anytime. Countdowns run on the circuit's timezone, so a TV in the box and a phone in another country both show the right time."
+    description: "Per event, a private link to an iCal feed or to a big-screen display with a live countdown, on the circuit's time. Revoke it anytime."
   }
 ];
 ---
@@ -76,22 +72,12 @@ const features = [
             <p class="muted mt-4 text-lg leading-relaxed">
               {feature.description}
             </p>
+            {feature.small && <p class="muted mt-4 text-sm leading-relaxed">{feature.small}</p>}
           </div>
 
           <!-- Screenshot -->
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <div class="screen">
-              <div class="screen-zoom" style={feature.crop}>
-                <Image
-                  src={screenshots[feature.id as keyof typeof screenshots]}
-                  alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`}
-                  widths={[800, 1200, 1600, 2800]}
-                  sizes="(min-width: 1024px) 820px, (min-width: 640px) 100vw, 350vw"
-                  loading="lazy"
-                  quality={85}
-                />
-              </div>
-            </div>
+            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
           </div>
         </div>
       ))}

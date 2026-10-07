@@ -1,14 +1,13 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
-import SyncLine from "../SyncLine.astro";
-import Icon from "../Icon.astro";
-import type { IconName } from "../icons";
+import CrewScreen from "../CrewScreen.astro";
 
-const examples: { label: string; value: string; icon: IconName }[] = [
-  { label: 'Role', value: 'Race Engineer on #42', icon: 'user' },
-  { label: 'Flight', value: 'LHR to MXP, Sep 12', icon: 'plane' },
-  { label: 'Hotel', value: 'Grand Hotel, Room 204', icon: 'bed' },
-  { label: 'Meals', value: 'Paddock, 12:00-13:00', icon: 'utensils' },
+// The lower half of the screen in the hero: the same race weekend, scrolled.
+const items = [
+  { label: 'My accommodation', text: 'The hotel and who shares the room, from Logistics.' },
+  { label: 'Departure and return', text: 'The route, the vehicle or the flight, and who travels with them.' },
+  { label: 'Daily transfer', text: 'The vehicle that takes them to the circuit.' },
+  { label: 'Above it', text: 'Up next from the Timetable, their role and their next meal from Management.' },
 ];
 ---
 
@@ -24,25 +23,9 @@ const examples: { label: string; value: string; icon: IconName }[] = [
       </p>
     </div>
 
-    <SyncLine
-      from={{ role: "Team Manager", text: "Assigns roles, logistics, and meals in RaceNode" }}
-      to={{ role: "Staff Member", text: "Sees their assignments in the RaceNode app, on iPhone or Android" }}
-    />
+    <CrewScreen screen="more" items={items} />
 
-    <!-- What lands on the phone, as the tiles of the app's event screen. -->
-    <dl class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      {examples.map(({ label, value, icon }) => (
-        <div class="app-card flex items-center gap-3.5 p-4">
-          <span class="app-icon"><Icon name={icon} /></span>
-          <div class="flex min-w-0 flex-col gap-1">
-            <dt class="app-label">{label}</dt>
-            <dd class="font-mono text-[0.95rem] text-white">{value}</dd>
-          </div>
-        </div>
-      ))}
-    </dl>
-
-    <div class="mt-12 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+    <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
       <p class="max-w-md font-medium text-smoke">
         The Personal module is included free with any subscription. Get the app:
       </p>

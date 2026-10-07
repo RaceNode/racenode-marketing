@@ -1,10 +1,11 @@
 ---
-import { Image } from 'astro:assets';
+import Shot from '../Shot.astro';
+import screenshotModulesPhone from '../../assets/screenshots/landing-modules-phone.png';
 import screenshotModules from '../../assets/screenshots/landing-modules.png';
 ---
 
 <!-- The product: the season home, cropped to the part with data. Every module column stays in
-     the frame on wide screens; on a phone, zoomed on the first two so they can be read. -->
+     the frame on wide screens; on a phone, the app's own phone home. -->
 <section class="band band-paper">
   <div class="page">
     <div class="head">
@@ -16,16 +17,14 @@ import screenshotModules from '../../assets/screenshots/landing-modules.png';
       </p>
     </div>
 
-    <div class="screen -mx-4 sm:mx-0">
-      <div class="screen-crop screen-zoom sm:aspect-[15/4] sm:[&_img]:w-full" style="--zoom-aspect: 5 / 4">
-        <Image
-          src={screenshotModules}
-          alt="RaceNode - Choose your module: Personal, Staff, Fleet, Racecars, Events, Management, Logistics"
-          widths={[900, 1400, 2000, 2800]}
-          sizes="(min-width: 1248px) 1200px, (min-width: 640px) 100vw, 350vw"
-          quality={85}
-        />
-      </div>
-    </div>
+    <Shot
+      desktop={screenshotModules}
+      phone={screenshotModulesPhone}
+      alt="RaceNode season home: each upcoming race weekend with its Management, Timetable and Logistics progress"
+      crop
+      screenClass="-mx-4 sm:mx-0"
+      cropClass="sm:aspect-[15/4] sm:[&_img]:w-full"
+      sizes="(min-width: 1248px) 1200px, 100vw"
+    />
   </div>
 </section>
