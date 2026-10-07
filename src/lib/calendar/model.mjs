@@ -36,8 +36,7 @@ export function buildCalendar(data, { today = new Date() } = {}) {
   }
   championships.sort((a, b) => displayName(a).localeCompare(displayName(b)));
 
-  const checked = data.seasons.map((x) => x.last_checked_at).filter(Boolean).sort();
-  return { year, championships, lastCheckedAt: checked.at(-1) ?? null };
+  return { year, championships };
 }
 
 export const displayName = (s) => s.short_name || s.name;

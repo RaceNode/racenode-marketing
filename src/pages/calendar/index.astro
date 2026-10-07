@@ -8,7 +8,7 @@ import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
 import { catalog } from '../../lib/calendar/contract.mjs';
 import { buildCalendar, displayName, notPublished, roundsOfYear, years } from '../../lib/calendar/model.mjs';
-import { DISCIPLINES, MONTHS, REGIONS, longDate, monthOf } from '../../lib/calendar/format.mjs';
+import { DISCIPLINES, MONTHS, REGIONS, monthOf } from '../../lib/calendar/format.mjs';
 
 const data = await catalog();
 const cal = buildCalendar(data);
@@ -57,7 +57,7 @@ const breadcrumbSchema = {
         </p>
         <p class="text-sm text-gray-500 mb-8">
           {published} of {cal.championships.length} championships have published their {cal.year} calendar.
-          {cal.lastCheckedAt && <> Checked against the official calendars on {longDate(cal.lastCheckedAt)}.</>}
+          Each championship's page says when its calendar was last checked against the official one.
         </p>
 
         <CalendarFilters years={allYears} year={year} disciplines={disciplines} regions={regions} />
