@@ -7,7 +7,7 @@
 // OUT=<dir> writes elsewhere than src/assets/screenshots (to compare before replacing).
 //
 // Read-only, by construction: the demo is shared and must not change. Every request that could write is
-// dropped before it leaves the browser (only GET, the login and read RPCs go through), and so is analytics.
+// dropped before it leaves the browser (only GET, the login, read RPCs and file URL signing go through), and so is analytics.
 // What got dropped is listed at the end. The import shots read a file on the device and stop at the
 // preview: nothing is imported, and the modal is never closed (closing it logs the reading).
 //
@@ -26,6 +26,7 @@ const R07 = 'ba1e0000-0000-4000-8000-000000000410'; // Nürburgring: the event w
 const R08 = 'ba1e0000-0000-4000-8000-000000000408'; // Barcelona: no timetable, no bookings yet (import previews)
 const DESKTOP = { width: 1920, height: 1080, scale: 2 };
 const PHONE = { width: 390, height: 844, scale: 3 };
+const AGENDA_DAY = '2026-10-06T10:00:00+02:00'; // Tuesday before R07, first day of a workshop block
 const FILES = join(import.meta.dirname, 'files');
 
 // Each shot: one page, as one account, at one size. `then` acts on the page (read-only: tabs, scroll, import preview).
@@ -40,6 +41,7 @@ const SHOTS = [
       { name: `${name}-phone`, who: 'claire', size: PHONE, url: `/logistics/${tab}/${R07}` },
     ];
   }),
+  { name: 'logistics-info', who: 'claire', size: DESKTOP, url: `/logistics/info/${R07}` },
   { name: 'logistics-import', who: 'claire', size: DESKTOP, url: `/logistics/overview/${R08}`, then: importPreview('booking-confirmation.html') },
   { name: 'logistics-import-phone', who: 'claire', size: PHONE, url: `/logistics/overview/${R08}`, then: importPreview('booking-confirmation.html') },
 
@@ -58,10 +60,14 @@ const SHOTS = [
   { name: 'timetable-items-phone', who: 'claire', size: PHONE, url: `/timetable/items/${R07}` },
   { name: 'timetable-rules', who: 'claire', size: DESKTOP, url: `/timetable/rules/${R07}` },
   { name: 'timetable-rules-phone', who: 'claire', size: PHONE, url: `/timetable/rules/${R07}` },
+  { name: 'timetable-share', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}`, then: click('role=button[name=/^Share/]') },
+  // `now` sets the device's clock for that shot. The paddock display, as on race morning (its clock and countdowns).
+  { name: 'timetable-box', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}`, now: '2026-10-16T10:12:00+02:00', then: async (page) => { await click('role=button[name=/^Share/]')(page); await openLink('a[href*="/box/"]')(page); } },
   { name: 'timetable-import', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R08}`, then: importPreview('official-timetable.pdf') },
   { name: 'timetable-import-phone', who: 'claire', size: PHONE, url: `/timetable/timetable/${R08}`, then: importPreview('official-timetable.pdf') },
 
-  { name: 'planning-overview', who: 'claire', size: DESKTOP, url: '/planning/grid' },
+  // Free view spans a window around today: a day where neither R06 nor R08 is cut at an edge.
+  { name: 'planning-overview', who: 'claire', size: DESKTOP, url: '/planning/grid', now: '2026-10-10T10:00:00+02:00' },
   { name: 'planning-grid', who: 'claire', size: DESKTOP, url: '/planning/grid', then: click('role=button[name="Quarter"]') },
   { name: 'planning-days', who: 'claire', size: DESKTOP, url: '/planning/grid', then: async (page) => { await click('role=button[name="Week"]')(page); await click('button[aria-label^="Next"]')(page); } },
   { name: 'planning-attendance', who: 'claire', size: DESKTOP, url: '/planning/grid', then: click('role=button[name="Month"]') },
@@ -70,14 +76,23 @@ const SHOTS = [
   // The crew app: what a chief mechanic sees on his phone.
   { name: 'crew-app-race-weekend', who: 'hugo', size: PHONE, url: `/personal/${R07}` },
   { name: 'crew-app-race-weekend-more', who: 'hugo', size: PHONE, url: `/personal/${R07}`, then: scrollTo('text=/My accommodation/i') },
-  { name: 'crew-app-agenda', who: 'hugo', size: PHONE, url: '/personal/planning' },
-  { name: 'crew-app-month', who: 'hugo', size: PHONE, url: '/personal/planning', then: click('role=button[name="Month"]') },
+  // The agenda starts today: a day that begins a block, else the block's title sits above the first row.
+  { name: 'crew-app-agenda', who: 'hugo', size: PHONE, url: '/personal/planning', now: AGENDA_DAY },
+  { name: 'crew-app-month', who: 'hugo', size: PHONE, url: '/personal/planning', now: AGENDA_DAY, then: click('role=button[name="Month"]') },
 ];
 
 function scrollTo(selector) {
   return async (page) => {
     await page.locator(selector).first().evaluate((el) => el.scrollIntoView({ block: 'start' }));
     await page.waitForTimeout(800);
+  };
+}
+
+/** Follows a link of the page (a share link: its public page). */
+function openLink(selector) {
+  return async (page) => {
+    await page.goto(await page.locator(selector).first().getAttribute('href'), { waitUntil: 'networkidle' }).catch(() => {});
+    await page.waitForTimeout(2500);
   };
 }
 
@@ -139,7 +154,8 @@ async function context(who, size) {
     const url = r.url().split('?')[0];
     if (/posthog|sentry\.io/.test(url)) return route.abort();
     if (['GET', 'HEAD', 'OPTIONS'].includes(r.method())) return route.continue();
-    if (/\/auth\/v1\/token$/.test(url) || /\/rest\/v1\/rpc\/(get|has|is|can)_[a-z_]+$/.test(url)) return route.continue();
+    if (/\/auth\/v1\/token$/.test(url) || /\/rest\/v1\/rpc\/(get|has|is|can|resolve)_[a-z_]+$/.test(url)) return route.continue();
+    if (/\/storage\/v1\/object\/sign\//.test(url)) return route.continue(); // signs a read URL (profile photos, files)
     dropped.push(`${r.method()} ${url.replace(/^https:\/\/[^/]+/, '')}`);
     return route.abort();
   });
@@ -160,9 +176,13 @@ async function context(who, size) {
 for (const shot of shots) {
   const ctx = await context(shot.who, shot.size);
   const page = await ctx.newPage();
+  if (shot.now) await page.clock.setFixedTime(new Date(shot.now));
   await page.goto(APP + shot.url, { waitUntil: 'networkidle' }).catch(() => {});
   await page.waitForTimeout(2500);
   if (shot.then) await shot.then(page);
+  // Profile photos load late (each one signs its URL first): wait until every image is in.
+  await page.waitForFunction(() => [...document.images].every((i) => i.complete), null, { timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(500);
   // Toasts and focus rings are not part of the product shot.
   await page.mouse.move(0, shot.size.height - 1);
   const file = join(out, `${shot.name}.png`);
