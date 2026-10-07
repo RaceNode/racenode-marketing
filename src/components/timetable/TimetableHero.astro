@@ -33,12 +33,12 @@ const appUrl = "https://app.racenode.com";
 
     <!-- The screen sits on the bottom edge of the band and is cut by it. -->
     <div class="screen -mb-24 mt-14 md:-mb-40 md:mt-20">
-      <div class="screen-crop">
+      <div class="screen-crop screen-zoom" style="--zoom-aspect: 4 / 5">
         <Image
           src={screenshotOverview}
           alt="RaceNode timetable software showing a racing team's schedule alongside the official sessions"
-          widths={[900, 1400, 2000]}
-          sizes="(min-width: 1248px) 1800px, 150vw"
+          widths={[900, 1400, 2000, 2800]}
+          sizes="(min-width: 1248px) 1800px, (min-width: 640px) 150vw, 350vw"
           loading="eager"
           quality={85}
         />

@@ -33,12 +33,12 @@ const appUrl = "https://app.racenode.com";
 
     <!-- The screen sits on the bottom edge of the band and is cut by it. -->
     <div class="screen -mx-4 mt-14 -mb-2 rounded-b-none sm:mx-0 md:mt-16">
-      <div class="screen-crop aspect-[16/9] sm:aspect-[16/7]">
+      <div class="screen-crop screen-zoom sm:aspect-[16/7]" style="--zoom-aspect: 1">
         <Image
           src={screenshotOverview}
           alt="RaceNode race team management software dashboard with staff, racecars, teams and meals per event"
-          widths={[900, 1400, 2000]}
-          sizes="(min-width: 1248px) 1800px, 150vw"
+          widths={[900, 1400, 2000, 2800]}
+          sizes="(min-width: 1248px) 1800px, (min-width: 640px) 150vw, 350vw"
           loading="eager"
           quality={85}
         />
