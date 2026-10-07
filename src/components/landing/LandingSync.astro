@@ -1,11 +1,14 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
+import SyncLine from "../SyncLine.astro";
+import Icon from "../Icon.astro";
+import type { IconName } from "../icons";
 
-const examples = [
-  { label: 'Role', value: 'Race Engineer on #42' },
-  { label: 'Flight', value: 'LHR to MXP, Sep 12' },
-  { label: 'Hotel', value: 'Grand Hotel, Room 204' },
-  { label: 'Meals', value: 'Paddock, 12:00-13:00' },
+const examples: { label: string; value: string; icon: IconName }[] = [
+  { label: 'Role', value: 'Race Engineer on #42', icon: 'user' },
+  { label: 'Flight', value: 'LHR to MXP, Sep 12', icon: 'plane' },
+  { label: 'Hotel', value: 'Grand Hotel, Room 204', icon: 'bed' },
+  { label: 'Meals', value: 'Paddock, 12:00-13:00', icon: 'utensils' },
 ];
 ---
 
@@ -21,30 +24,20 @@ const examples = [
       </p>
     </div>
 
-    <!-- Two ends of one line: what the manager sets is what the crew sees. -->
-    <div class="grid items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
-      <div class="ruled">
-        <h3 class="subtitle">Team Manager</h3>
-        <p class="mt-2 text-smoke">Assigns roles, logistics, and meals in RaceNode</p>
-      </div>
+    <SyncLine
+      from={{ role: "Team Manager", text: "Assigns roles, logistics, and meals in RaceNode" }}
+      to={{ role: "Staff Member", text: "Sees their assignments in the RaceNode app, on iPhone or Android" }}
+    />
 
-      <div class="flex items-center gap-3 md:min-w-56 md:flex-col md:gap-2">
-        <span class="h-8 w-px bg-accent-soft md:h-px md:w-full" aria-hidden="true"></span>
-        <span class="font-display text-base font-medium whitespace-nowrap text-accent-soft">Instant sync</span>
-      </div>
-
-      <div class="ruled">
-        <h3 class="subtitle">Staff Member</h3>
-        <p class="mt-2 text-smoke">Sees their assignments in the RaceNode app, on iPhone or Android</p>
-      </div>
-    </div>
-
-    <!-- What lands on the phone, set like a line of a timing screen. -->
-    <dl class="mt-14 grid border-y border-asphalt-line sm:grid-cols-2 lg:grid-cols-4">
-      {examples.map(({ label, value }, i) => (
-        <div class:list={["flex flex-col gap-1 py-5 sm:px-5", i > 0 && "border-t border-asphalt-line sm:border-t-0", i % 2 === 1 && "sm:border-l", i >= 2 && "sm:border-t lg:border-t-0", i > 0 && "lg:border-l"]}>
-          <dt class="font-display text-sm text-smoke">{label}</dt>
-          <dd class="font-mono text-[0.95rem] text-white">{value}</dd>
+    <!-- What lands on the phone, as the tiles of the app's event screen. -->
+    <dl class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {examples.map(({ label, value, icon }) => (
+        <div class="app-card flex items-center gap-3.5 p-4">
+          <span class="app-icon"><Icon name={icon} /></span>
+          <div class="flex min-w-0 flex-col gap-1">
+            <dt class="app-label">{label}</dt>
+            <dd class="font-mono text-[0.95rem] text-white">{value}</dd>
+          </div>
         </div>
       ))}
     </dl>

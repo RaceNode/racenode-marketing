@@ -1,15 +1,21 @@
 ---
-const groups = [
+import Icon from "../Icon.astro";
+import type { IconName } from "../icons";
+
+const groups: { title: string; text: string; icon: IconName }[] = [
   {
     title: "Your crew",
+    icon: "users",
     text: "Mechanics, engineers, truckies, hospitality. Invite them from Staff by email or with your team code.",
   },
   {
     title: "Your drivers",
+    icon: "car",
     text: "Add them to Staff with the Driver role: same weekend, same app, no separate list.",
   },
   {
     title: "Freelancers",
+    icon: "user",
     text: "One account across teams: both teams' events land in the same season, each marked with its team. Without a team yet, they can start on their own and join when invited.",
   },
 ];
@@ -29,7 +35,8 @@ const groups = [
     <ul class="grid gap-x-12 gap-y-12 md:grid-cols-3">
       {groups.map((group) => (
         <li class="ruled">
-          <h3 class="subtitle">{group.title}</h3>
+          <span class="tile"><Icon name={group.icon} /></span>
+          <h3 class="flag-title mt-5">{group.title}</h3>
           <p class="muted mt-3 text-lg leading-relaxed">{group.text}</p>
         </li>
       ))}

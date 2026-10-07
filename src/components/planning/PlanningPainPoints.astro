@@ -1,20 +1,27 @@
 ---
-const painPoints = [
+import PainList from "../PainList.astro";
+import type { IconName } from "../icons";
+
+const painPoints: { title: string; description: string; icon: IconName }[] = [
   {
     title: "One spreadsheet, one owner",
     description: "The season rota is an Excel file on the team manager's laptop. Nobody else can edit it, and nobody ever has the latest version.",
+    icon: "table",
   },
   {
     title: "Everything typed twice",
     description: "Assign someone to an event, then retype the same days in the planning. Forget one of the two and they quietly drift apart.",
+    icon: "copy",
   },
   {
     title: "Availability chased by message",
     description: "Who's off in August? Who can do the test day? The answers live in forty chat threads, and they change after you've planned.",
+    icon: "alert",
   },
   {
     title: "\"Is the truck free that week?\"",
     description: "Racecars and trucks have a season too. The spreadsheet only ever tracked the people.",
+    icon: "van",
   }
 ];
 ---
@@ -27,13 +34,6 @@ const painPoints = [
       </h2>
     </div>
 
-    <ul class="grid gap-x-12 gap-y-12 md:grid-cols-2">
-      {painPoints.map((point) => (
-        <li class="ruled">
-          <h3 class="subtitle">{point.title}</h3>
-          <p class="muted mt-3 max-w-xl text-lg leading-relaxed">{point.description}</p>
-        </li>
-      ))}
-    </ul>
+    <PainList points={painPoints} columns={2} />
   </div>
 </section>

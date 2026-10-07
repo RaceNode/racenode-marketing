@@ -19,7 +19,13 @@
  * Rule kept from the app: color signals a state, never a category. Indigo is
  * the action (buttons, links, focus), never a module. No gradients.
  * Contrast (checked): ink on concrete 15.6:1, graphite on concrete 6.2:1,
- * white on accent 6.9:1, smoke on asphalt 9.4:1, accent-soft on asphalt 5.0:1.
+ * white on accent 6.9:1, smoke on asphalt 7.9:1 (7.0:1 on a card), accent-soft on asphalt 8.2:1,
+ * white on the dark accent 5.4:1, white on blocking 6.5:1, white on ok 5.5:1.
+ *
+ * The dark bands are the app itself: asphalt, asphalt-raised, asphalt-line and smoke are the
+ * app's dark-theme neutrals (gray-950 page, gray-900 card, gray-800 border, gray-400 secondary
+ * text; app repo src/index.css), and inside them the accent takes the app's dark-theme values.
+ * Clicking "Get started" should feel like walking into the garage, not into another brand.
  */
 @theme {
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
@@ -33,11 +39,13 @@
   --color-graphite: #4f525a;
   --color-line: #c8c8c2;
 
-  /* Dark bands: asphalt, the garage at night */
-  --color-asphalt: #1d1f23;
-  --color-asphalt-raised: #2a2d32;
-  --color-asphalt-line: #3b3f46;
-  --color-smoke: #c4c7cd;
+  /* Dark bands: the app's dark theme, value for value */
+  --color-asphalt: #030712; /* app gray-950, page background */
+  --color-asphalt-raised: #111827; /* app gray-900, card surface */
+  --color-asphalt-line: #1f2937; /* app gray-800, raised surface and hairline */
+  --color-asphalt-edge: #374151; /* app gray-700, card border */
+  --color-smoke: #9ca3af; /* app gray-400, secondary text */
+  --color-fog: #d1d5db; /* app gray-300, label text */
 
   /* Accent — the action color */
   --color-accent: #4c4cc4;
@@ -89,6 +97,9 @@
   }
   .band-dark {
     @apply bg-asphalt text-white;
+    /* The app's dark-theme accent: lighter, and lightens on hover. */
+    --color-accent: #5b5bd6;
+    --color-accent-hover: #6a6ae0;
   }
   .band-paper {
     @apply bg-paper;
@@ -199,9 +210,68 @@
   .kerb {
     @apply h-4 w-full;
     background-color: var(--color-paper);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='8' height='8' fill='%2317181b'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%2317181b'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='8' height='8' fill='%23030712'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%23030712'/%3E%3C/svg%3E");
     background-size: 16px 16px;
   }
+  /* A problem, said in the one color that means "problem": the blocking red of the app's states.
+     A heavy red rule and a red plate with the icon, like a red flag on the timing sheet. */
+  .pain {
+    @apply border-t-4 border-blocking pt-6;
+  }
+  .pain-mark {
+    @apply flex size-12 shrink-0 items-center justify-center rounded-[3px] bg-blocking text-white;
+  }
+  .pain-mark svg {
+    @apply size-6;
+  }
+  .flag-title {
+    @apply font-display text-[1.75rem] leading-[1.05] font-bold tracking-[-0.01em] text-balance md:text-[2rem];
+  }
+
+  /* The mirror: a commitment that holds, in the ok green ("confirmed" in the app). Pricing only. */
+  .promise {
+    @apply border-t-4 border-ok pt-6;
+  }
+  .promise-mark {
+    @apply flex size-12 shrink-0 items-center justify-center rounded-[3px] bg-ok text-white;
+  }
+  .promise-mark svg {
+    @apply size-6;
+  }
+
+  /* Not there yet: a dashed rule, the way the app draws a day that is claimed but not on site. */
+  .soon {
+    @apply border-t-2 border-dashed border-graphite/50 pt-6;
+  }
+  .tag {
+    @apply inline-flex items-center rounded-[3px] border border-current px-2 py-0.5 font-mono text-xs font-medium tracking-wider uppercase;
+  }
+
+  /* Inside the dark bands, the app's own furniture: its card, its icon tile, its small caps label. */
+  .app-card {
+    @apply rounded-lg border border-asphalt-edge bg-asphalt-raised;
+  }
+  .app-icon {
+    @apply flex size-11 shrink-0 items-center justify-center rounded-md border border-asphalt-edge bg-asphalt-line text-fog;
+  }
+  .app-icon svg {
+    @apply size-5;
+  }
+  .app-label {
+    @apply text-xs font-medium tracking-wider text-smoke uppercase;
+  }
+  /* The same icon tile on a light page: a piece of the app's screen, set into the concrete. */
+  .tile {
+    @apply flex size-12 shrink-0 items-center justify-center rounded-lg bg-asphalt text-fog;
+  }
+  .tile svg {
+    @apply size-6;
+  }
+  /* The ok dot: confirmed, delivered. A state, as in the app. */
+  .ok-dot {
+    @apply inline-block size-2 shrink-0 rounded-full bg-ok-on-dark;
+  }
+
   .phone {
     @apply overflow-hidden rounded-[2rem] border-[6px] border-ink bg-ink;
   }

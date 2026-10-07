@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StoreBadges from '../components/StoreBadges.astro';
+import Icon from '../components/Icon.astro';
 
 const appUrl = "https://app.racenode.com";
 const title = "Pricing — Free for the 2026 Season | RaceNode";
@@ -102,11 +103,12 @@ const faqSchema = {
       <!-- The deal -->
       <section class="band">
         <div class="page">
-          <ul class="grid gap-x-12 gap-y-12 md:grid-cols-2">
+          <ul class="grid gap-x-12 gap-y-14 md:grid-cols-2">
             {points.map((point) => (
-              <li class="ruled">
-                <h2 class="subtitle">{point.title}</h2>
-                <p class="muted mt-3 max-w-xl text-lg leading-relaxed">{point.description}</p>
+              <li class="promise">
+                <span class="promise-mark"><Icon name="check" /></span>
+                <h2 class="flag-title mt-6">{point.title}</h2>
+                <p class="muted mt-4 max-w-xl text-lg leading-relaxed">{point.description}</p>
                 {point.badges && <StoreBadges size="sm" align="start" class="mt-5" />}
               </li>
             ))}

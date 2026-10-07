@@ -1,5 +1,6 @@
 ---
 import StoreBadges from "../StoreBadges.astro";
+import SyncLine from "../SyncLine.astro";
 import { Image } from 'astro:assets';
 import screenshotAgenda from '../../assets/screenshots/personal-agenda.png';
 import screenshotMonth from '../../assets/screenshots/personal-month.png';
@@ -17,36 +18,23 @@ import screenshotMonth from '../../assets/screenshots/personal-month.png';
       </p>
     </div>
 
-    <!-- Two ends of one line, and this time it runs both ways. -->
-    <div class="grid items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
-      <div class="ruled">
-        <h3 class="subtitle">Team Manager</h3>
-        <p class="mt-2 text-smoke">Assigns events and paints the season in Planning</p>
-      </div>
+    <SyncLine
+      from={{ role: "Team Manager", text: "Assigns events and paints the season in Planning" }}
+      to={{ role: "Staff Member", text: "Posts their own days in the free Personal app" }}
+      both
+    />
 
-      <div class="flex items-center gap-3 md:min-w-56 md:flex-col md:gap-2">
-        <span class="h-8 w-px bg-accent-soft md:h-px md:w-full" aria-hidden="true"></span>
-        <span class="font-display text-base font-medium whitespace-nowrap text-accent-soft">Instant sync</span>
-        <span class="hidden h-px w-full bg-accent-soft md:block" aria-hidden="true"></span>
-      </div>
-
-      <div class="ruled">
-        <h3 class="subtitle">Staff Member</h3>
-        <p class="mt-2 text-smoke">Posts their own days in the free Personal app</p>
-      </div>
-    </div>
-
-    <ul class="mt-14 grid border-y border-asphalt-line md:grid-cols-3">
-      <li class="py-6 md:px-6">
-        <h4 class="font-display text-xl font-semibold">Their days reach you</h4>
+    <ul class="mt-6 grid gap-3 md:grid-cols-3">
+      <li class="app-card p-5 md:p-6">
+        <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>Their days reach you</h4>
         <p class="mt-2 text-smoke">A member posts a week away and it lands in your grid as unavailable — dates only, their reasons stay their own.</p>
       </li>
-      <li class="border-t border-asphalt-line py-6 md:border-t-0 md:border-l md:px-6">
-        <h4 class="font-display text-xl font-semibold">Your days reach them</h4>
+      <li class="app-card p-5 md:p-6">
+        <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>Your days reach them</h4>
         <p class="mt-2 text-smoke">The days you plan for someone show up in their own season view, with your note — no forwarded screenshots of a spreadsheet.</p>
       </li>
-      <li class="border-t border-asphalt-line py-6 md:border-t-0 md:border-l md:px-6">
-        <h4 class="font-display text-xl font-semibold">Nothing typed twice</h4>
+      <li class="app-card p-5 md:p-6">
+        <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold"><span class="ok-dot" aria-hidden="true"></span>Nothing typed twice</h4>
         <p class="mt-2 text-smoke">Assigning someone to an event in <a href="/management/" class="link">Management</a> is the planning entry — track days derive from it, and follow when the event's dates move.</p>
       </li>
     </ul>

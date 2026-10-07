@@ -14,7 +14,7 @@ const path = Astro.url.pathname;
 const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
 ---
 
-<header class="sticky top-0 z-50 bg-asphalt text-white border-b border-asphalt-line">
+<header class="band-dark sticky top-0 z-50 border-b border-asphalt-line">
   <div class="page">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->

@@ -1,0 +1,49 @@
+---
+// Two ends of one line, drawn with the app's own cards: what the office sets in RaceNode is what
+// the crew sees on their phone. `both` when it runs both ways (Planning: the crew posts too).
+import Icon from "./Icon.astro";
+
+interface End {
+  role: string;
+  text: string;
+}
+
+interface Props {
+  from: End;
+  to: End;
+  both?: boolean;
+}
+
+const { from, to, both = false } = Astro.props;
+---
+
+<div class="grid items-stretch gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-0">
+  <div class="app-card flex items-start gap-4 p-5 md:p-6">
+    <span class="app-icon"><Icon name="monitor" /></span>
+    <div>
+      <h3 class="subtitle">{from.role}</h3>
+      <p class="mt-1.5 text-smoke">{from.text}</p>
+    </div>
+  </div>
+
+  <!-- The link: vertical on a phone, horizontal beside the cards on wider screens. -->
+  <div class="flex items-center gap-3 pl-[2.6rem] md:min-w-52 md:flex-col md:justify-center md:gap-2 md:pl-0">
+    <span class="relative h-8 w-0.5 bg-accent md:h-0.5 md:w-full" aria-hidden="true">
+      <span class="absolute -bottom-1 left-1/2 size-2.5 -translate-x-1/2 rotate-45 border-r-2 border-b-2 border-accent md:top-1/2 md:right-0 md:bottom-auto md:left-auto md:-translate-x-0 md:-translate-y-1/2 md:-rotate-45"></span>
+      {both && (
+        <span class="absolute -top-1 left-1/2 size-2.5 -translate-x-1/2 rotate-45 border-t-2 border-l-2 border-accent md:top-1/2 md:left-0 md:-translate-x-0 md:-translate-y-1/2 md:-rotate-45"></span>
+      )}
+    </span>
+    <span class="rounded-full border border-accent/60 bg-accent/15 px-3 py-1 font-display text-sm font-medium whitespace-nowrap text-accent-soft">
+      Instant sync
+    </span>
+  </div>
+
+  <div class="app-card flex items-start gap-4 p-5 md:p-6">
+    <span class="app-icon"><Icon name="smartphone" /></span>
+    <div>
+      <h3 class="subtitle">{to.role}</h3>
+      <p class="mt-1.5 text-smoke">{to.text}</p>
+    </div>
+  </div>
+</div>

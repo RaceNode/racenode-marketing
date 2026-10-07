@@ -1,20 +1,27 @@
 ---
-const painPoints = [
+import PainList from "../PainList.astro";
+import type { IconName } from "../icons";
+
+const painPoints: { title: string; description: string; icon: IconName }[] = [
   {
     title: "Staff assignments rebuilt each event",
     description: "Staff assignments that change from one event to the next, tracked separately each time.",
+    icon: "users",
   },
   {
     title: "Team compositions done manually",
     description: "Team compositions and car crew roles rebuilt manually for every race weekend.",
+    icon: "refresh",
   },
   {
     title: "No unified view of assignments",
     description: "No single view of who is assigned where, in which role, on which car.",
+    icon: "layout",
   },
   {
     title: "Meals handled separately",
     description: "Meal planning handled outside of the event workflow, disconnected from the staff list.",
+    icon: "utensils",
   }
 ];
 ---
@@ -27,13 +34,6 @@ const painPoints = [
       </h2>
     </div>
 
-    <ul class="grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
-      {painPoints.map((point) => (
-        <li class="ruled">
-          <h3 class="subtitle">{point.title}</h3>
-          <p class="muted mt-3 text-lg leading-relaxed">{point.description}</p>
-        </li>
-      ))}
-    </ul>
+    <PainList points={painPoints} columns={4} />
   </div>
 </section>

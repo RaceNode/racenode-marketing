@@ -1,26 +1,34 @@
 ---
-// Each block names the module it comes from: nothing here is typed twice.
-const blocks = [
+// Each block names the module it comes from: nothing here is typed twice. The icons are the ones
+// of the matching tiles in the app's event screen.
+import Icon from "../Icon.astro";
+import type { IconName } from "../icons";
+
+const blocks: { title: string; text: string; from: string; href: string; icon: IconName }[] = [
   {
     title: "Up next",
+    icon: "clock",
     text: "The next sessions, from the official timetable and the team's own schedule. One tap shows the whole timetable, filtered to what concerns them.",
     from: "Timetable",
     href: "/timetable/",
   },
   {
     title: "My role",
+    icon: "user",
     text: "Their role and their car for this event: Race Engineer, #27, Car 27 Crew.",
     from: "Management",
     href: "/management/",
   },
   {
     title: "My accommodation",
+    icon: "bed",
     text: "The hotel, who they share the room with, and a link that opens it in maps.",
     from: "Logistics",
     href: "/logistics/",
   },
   {
     title: "Departure and return",
+    icon: "plane",
     text: "Flight, train or car, with the tickets and travel documents you attached, ready to open at the gate.",
     from: "Logistics",
     href: "/logistics/",
@@ -42,7 +50,8 @@ const blocks = [
     <ul class="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
       {blocks.map((block) => (
         <li class="ruled flex flex-col">
-          <h3 class="subtitle">{block.title}</h3>
+          <span class="tile"><Icon name={block.icon} /></span>
+          <h3 class="flag-title mt-5">{block.title}</h3>
           <p class="muted mt-3 leading-relaxed">{block.text}</p>
           <p class="mt-4 text-sm text-graphite">
             From <a href={block.href} class="link">{block.from}</a>

@@ -1,20 +1,27 @@
 ---
-const painPoints = [
+import PainList from "../PainList.astro";
+import type { IconName } from "../icons";
+
+const painPoints: { title: string; description: string; icon: IconName }[] = [
   {
     title: "Rebuilt in Excel every weekend",
     description: "A new spreadsheet for every event, copied from the last one, out of date the moment the official schedule shifts.",
+    icon: "table",
   },
   {
     title: "Briefings lost in the group chat",
     description: "Setup windows, briefings, and departure times sent by message — then buried under the next fifty notifications.",
+    icon: "message",
   },
   {
     title: "Out of sync with the official schedule",
     description: "Your internal plan lives apart from the organizer's timetable, so a session change never propagates to your team.",
+    icon: "unlink",
   },
   {
     title: "\"When's my session again?\"",
     description: "Everyone asking the same questions all weekend because there's no single, live view of the plan.",
+    icon: "help",
   }
 ];
 ---
@@ -27,13 +34,6 @@ const painPoints = [
       </h2>
     </div>
 
-    <ul class="grid gap-x-12 gap-y-12 md:grid-cols-2">
-      {painPoints.map((point) => (
-        <li class="ruled">
-          <h3 class="subtitle">{point.title}</h3>
-          <p class="muted mt-3 max-w-xl text-lg leading-relaxed">{point.description}</p>
-        </li>
-      ))}
-    </ul>
+    <PainList points={painPoints} columns={2} />
   </div>
 </section>

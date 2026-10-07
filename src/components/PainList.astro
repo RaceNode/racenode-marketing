@@ -1,0 +1,30 @@
+---
+// The pain points of a page, flagged in blocking red: the one section where the site names a
+// problem, so the one place the problem color appears. Not cards: a red rule, a red plate, a big title.
+import Icon from "./Icon.astro";
+import type { IconName } from "./icons";
+
+interface Props {
+  points: { title: string; description: string; icon: IconName }[];
+  columns?: 2 | 3 | 4;
+}
+
+const { points, columns = 2 } = Astro.props;
+const grid = {
+  2: "md:grid-cols-2",
+  3: "md:grid-cols-3",
+  4: "md:grid-cols-2 lg:grid-cols-4",
+}[columns];
+---
+
+<ul class:list={["grid gap-x-10 gap-y-14 md:gap-x-12", grid]}>
+  {points.map((point) => (
+    <li class="pain">
+      <span class="pain-mark">
+        <Icon name={point.icon} />
+      </span>
+      <h3 class="flag-title mt-6">{point.title}</h3>
+      <p class="muted mt-4 max-w-xl text-lg leading-relaxed">{point.description}</p>
+    </li>
+  ))}
+</ul>
