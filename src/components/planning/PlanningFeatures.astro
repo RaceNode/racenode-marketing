@@ -10,21 +10,25 @@ const screenshots = {
   attendance: screenshotAttendance,
 };
 
+// crop: the part of the screenshot a phone shows, the one the text describes (see .screen-zoom).
 const features = [
   {
     id: "grid",
+    crop: "--zoom: 300%; --zoom-y: 0.18; --zoom-aspect: 4 / 5",
     badge: "Season Grid",
     title: "The whole season, one screen.",
     description: "Days across, resources down — the roster grouped by role, championships on top, racecars and fleet vehicles below. Zoom from a free-scrolling season to week, month, quarter, or year, with a Today button to snap back. A per-row counter tallies the days worked in view, split by type on hover."
   },
   {
     id: "days",
+    crop: "--zoom-y: 0.3; --zoom-aspect: 4 / 5",
     badge: "Day Codes",
     title: "Paint days, not cells.",
     description: "Five codes — On track, Travelling, Workshop, Remote, Unavailable. Drag an empty stretch to paint it, drag a bar to move it, grab an edge to resize. There is no Save button anywhere: every change applies instantly, and every change can be undone from its toast."
   },
   {
     id: "attendance",
+    crop: "--zoom-x: 0.62; --zoom-y: 0.27; --zoom-aspect: 4 / 5",
     badge: "Partial Attendance",
     title: "The truck loads early. The engineer stays late.",
     description: "Resize a track bar to set that person's — or that truck's — own presence inside an event, without touching the event itself. Each end of the bar either follows the event's dates or pins to its own, so a date change on the event moves everyone who didn't need an exception."
@@ -59,14 +63,16 @@ const features = [
           <!-- Screenshot -->
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
             <div class="screen">
-              <Image
-                src={screenshots[feature.id as keyof typeof screenshots]}
-                alt={`RaceNode Planning ${feature.badge} - ${feature.title}`}
-                widths={[800, 1200, 1600]}
-                sizes="(min-width: 1024px) 820px, 100vw"
-                loading="lazy"
-                quality={85}
-              />
+              <div class="screen-zoom" style={feature.crop}>
+                <Image
+                  src={screenshots[feature.id as keyof typeof screenshots]}
+                  alt={`RaceNode Planning ${feature.badge} - ${feature.title}`}
+                  widths={[800, 1200, 1600, 2800]}
+                  sizes="(min-width: 1024px) 820px, (min-width: 640px) 100vw, 350vw"
+                  loading="lazy"
+                  quality={85}
+                />
+              </div>
             </div>
           </div>
         </div>

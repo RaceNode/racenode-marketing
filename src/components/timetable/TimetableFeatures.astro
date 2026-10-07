@@ -14,33 +14,39 @@ const screenshots = {
   share: screenshotShare,
 };
 
+// crop: the part of the screenshot a phone shows, the one the text describes (see .screen-zoom).
 const features = [
   {
     id: "schedule",
+    crop: "--zoom-y: 0.27; --zoom-aspect: 4 / 5",
     badge: "Team Timetable",
     title: "Your schedule, next to the official one.",
     description: "Lay out your team's plan alongside the organizer's sessions. Read it as a clean, PDF-style table with collapsible days, or flip to a calendar view to drag and resize items. Every entry is color-coded by type, with a live indicator on the current time. Export to Excel or CSV in one click."
   },
   {
     id: "items",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
     badge: "Item Templates",
     title: "Build once, reuse every weekend.",
     description: "Save your recurring entries — track walk, engineering briefing, pit setup, departure to circuit — as org-level templates with a type, location, and duration. Start typing on the schedule and it autocompletes, pre-fills the details, and computes the end time for you."
   },
   {
     id: "rules",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
     badge: "Automation Rules",
     title: "Anchor to the sessions. Let the rest follow.",
     description: "Define a rule once — \"engineering briefing, 45 minutes before every practice\" — and generate the derived items across the weekend. Preview the exact times before you run it, re-run safely without duplicates, and see a badge on every synced item. Change the official session and your plan keeps up."
   },
   {
     id: "official",
+    crop: "--zoom-y: 0.27; --zoom-aspect: 5 / 4",
     badge: "Official Timetable",
     title: "The organizer's schedule, always in view.",
     description: "The official sessions from the Events module sit right beside your team plan — same data, no re-entry. Your internal schedule articulates around the real timetable instead of drifting away from it."
   },
   {
     id: "share",
+    crop: "--zoom-y: 0.22; --zoom-aspect: 5 / 2",
     badge: "Share Links",
     title: "One link for the whole paddock.",
     description: "Publish a tokenized public link per event — an iCal feed staff subscribe to, or a big-screen display page with a live countdown to every session. Revoke it anytime. Countdowns run on the circuit's timezone, so a TV in the box and a phone in another country both show the right time."
@@ -75,14 +81,16 @@ const features = [
           <!-- Screenshot -->
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
             <div class="screen">
-              <Image
-                src={screenshots[feature.id as keyof typeof screenshots]}
-                alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`}
-                widths={[800, 1200, 1600]}
-                sizes="(min-width: 1024px) 820px, 100vw"
-                loading="lazy"
-                quality={85}
-              />
+              <div class="screen-zoom" style={feature.crop}>
+                <Image
+                  src={screenshots[feature.id as keyof typeof screenshots]}
+                  alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`}
+                  widths={[800, 1200, 1600, 2800]}
+                  sizes="(min-width: 1024px) 820px, (min-width: 640px) 100vw, 350vw"
+                  loading="lazy"
+                  quality={85}
+                />
+              </div>
             </div>
           </div>
         </div>

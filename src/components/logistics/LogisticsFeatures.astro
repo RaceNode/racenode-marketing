@@ -16,39 +16,46 @@ const screenshots = {
   info: screenshotInfo,
 };
 
+// crop: the part of the screenshot a phone shows, the one the text describes (see .screen-zoom).
 const features = [
   {
     id: "overview",
+    crop: "--zoom-y: 0.21; --zoom-aspect: 4 / 3",
     badge: "Overview",
     title: "See what's missing before it's a problem.",
     description: "A real-time dashboard showing preparation status for each event. Instantly see how many staff members still need a departure flight, a return flight, a hotel room, or an on-site vehicle. Track completion for travel, accommodation and on-site transfers, and get alerts for anything unresolved — dismiss the ones that don't apply so the dashboard reflects reality.",
   },
   {
     id: "staff",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 3",
     badge: "Event Staff",
     title: "Your full crew, their complete logistics, one view.",
     description: "See every staff member assigned to the event alongside their travel and accommodation status. Each row shows departure, hotel, return, and on-site vehicle at a glance. Alert icons flag anyone missing a booking — ignore the ones that don't apply. Select several people at once to create a shared trip or hotel in a single action.",
   },
   {
     id: "accommodation",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 5 / 4",
     badge: "Accommodation",
     title: "Hotels, rooms, and rooming lists. Handled.",
     description: "Add hotels with address auto-complete, then assign staff to rooms in a few clicks. Manage rooming lists per hotel, track room types and capacity, set check-in and check-out details. Attach booking confirmations so your team can download them directly.",
   },
   {
     id: "travel",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
     badge: "Travel",
     title: "Every journey planned, every seat assigned.",
     description: "Create departure and return trips for any travel type: flights, cars, trucks, or mixed. Break complex journeys into segments and assign staff to each leg. Attach tickets and documents so every team member has what they need in their pocket.",
   },
   {
     id: "vehicles",
+    crop: "--zoom-y: 0.2; --zoom-aspect: 16 / 9",
     badge: "Event Vehicles",
     title: "Fleet vehicles and rentals, ready for the road.",
     description: "Pull vehicles from your permanent fleet or add event-specific entries for rentals and loaners. Use them for travel, and assign staff as on-site riders for daily transfers at the circuit — each person rides in one vehicle, sorted in a couple of clicks.",
   },
   {
     id: "info",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
     badge: "Info Board",
     title: "The briefing board, shared with everyone.",
     description: "Pin the notes and documents your crew needs — hotel lists, meeting points, schedules, procedures — with the files attached. Everyone assigned to the event sees them read-only in their Personal app, always up to date.",
@@ -82,12 +89,12 @@ const features = [
 
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
             <div class="screen">
-              <div class="screen-crop">
+              <div class="screen-crop screen-zoom" style={feature.crop}>
                 <Image
                   src={screenshots[feature.id as keyof typeof screenshots]}
                   alt={`RaceNode ${feature.badge} - ${feature.title}`}
-                  widths={[800, 1200, 1800]}
-                  sizes="(min-width: 1024px) 1200px, 150vw"
+                  widths={[800, 1200, 1800, 2800]}
+                  sizes="(min-width: 1024px) 1200px, (min-width: 640px) 150vw, 350vw"
                   loading="lazy"
                   quality={85}
                 />

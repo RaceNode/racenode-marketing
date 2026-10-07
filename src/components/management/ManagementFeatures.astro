@@ -16,39 +16,46 @@ const screenshots = {
   info: screenshotInfo,
 };
 
+// crop: the part of the screenshot a phone shows, the one the text describes (see .screen-zoom).
 const features = [
   {
     id: "overview",
+    crop: "--zoom-y: 0.21; --zoom-aspect: 16 / 10",
     badge: "Overview",
     title: "Your event at a glance.",
     description: "See instantly how many staff are assigned, which racecars are entered, how teams are composed, and how many meals are planned — with completion bars for required roles, team assignments and meals, and alerts that flag exactly what's still missing before the weekend."
   },
   {
     id: "staff",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 3",
     badge: "Event Staff",
     title: "Your full crew, roles and meals included.",
     description: "See every team member assigned to the event with their role and meal status. Staff assignments sync with Logistics: assign once, visible everywhere. No duplicate entries across modules."
   },
   {
     id: "racecars",
+    crop: "--zoom-y: 0.085; --zoom-aspect: 16 / 9",
     badge: "Racecars",
     title: "Assign your cars to each event.",
     description: "Assign racecars from your central fleet to each event. Car data comes from the Racecar module (chassis, model, race number), no need to re-enter anything. See at a glance which cars are entered for each weekend."
   },
   {
     id: "team",
+    crop: "--zoom: 320%; --zoom-y: 0.23; --zoom-aspect: 4 / 3",
     badge: "Team",
     title: "Build your crew structure, event by event.",
     description: "Define your team structure once (team-level roles, car-level roles), then populate it per event. Assign Race Engineers, Car Chiefs, Performance Engineers to specific cars with a dropdown. When your crew changes between events, just reassign. The structure stays, the people adapt."
   },
   {
     id: "meals",
+    crop: "--zoom-x: 0.39; --zoom-y: 0.23; --zoom-aspect: 4 / 3",
     badge: "Meals",
     title: "Plan every meal across the event.",
     description: "Plan breakfast, lunch, and dinner for every day of the event. Set locations, time windows, and assign staff to each meal. Your team knows where to eat and when, every day, without asking."
   },
   {
     id: "info",
+    crop: "--zoom-y: 0.23; --zoom-aspect: 4 / 5",
     badge: "Info Board",
     title: "The intel your crew needs, in their pocket.",
     description: "Pin the notes and documents that matter for the event — pit allocations, procedures, track maps, key contacts — and attach the files right to them. Everyone assigned sees them read-only in their Personal app, always the latest version. No more forwarding PDFs."
@@ -82,12 +89,12 @@ const features = [
 
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
             <div class="screen">
-              <div class="screen-crop">
+              <div class="screen-crop screen-zoom" style={feature.crop}>
                 <Image
                   src={screenshots[feature.id as keyof typeof screenshots]}
                   alt={`RaceNode ${feature.badge} - ${feature.title}`}
-                  widths={[800, 1200, 1800]}
-                  sizes="(min-width: 1024px) 1200px, 150vw"
+                  widths={[800, 1200, 1800, 2800]}
+                  sizes="(min-width: 1024px) 1200px, (min-width: 640px) 150vw, 350vw"
                   loading="lazy"
                   quality={85}
                 />

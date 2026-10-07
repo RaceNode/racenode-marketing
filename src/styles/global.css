@@ -179,7 +179,8 @@
     @apply absolute top-0 left-0 h-auto w-[150%] max-w-none rounded-none;
   }
   /* On a phone a whole 16:9 screenshot shrinks its text to 3-4 px: zoom on one corner of it
-     instead. --zoom-x / --zoom-y: where the crop starts, as a fraction of the image. */
+     instead. --zoom-x / --zoom-y: where the crop starts, as a fraction of the image; --zoom: the
+     image width against the frame (350% puts the app's body text near 10 px on a 390 px phone). */
   @media (width < 40rem) {
     .screen-zoom {
       @apply relative overflow-hidden rounded-[2px];
@@ -187,10 +188,10 @@
     }
     .screen-zoom img {
       @apply absolute top-0 max-w-none rounded-none;
-      width: 350%;
-      left: calc(var(--zoom-x, 0.045) * -350%);
+      width: var(--zoom, 350%);
+      left: calc(var(--zoom-x, 0.045) * var(--zoom, 350%) * -1);
       /* Margins resolve against the width: 0.5625 = 9 / 16, the screenshots' ratio. */
-      margin-top: calc(var(--zoom-y, 0.085) * -350% * 0.5625);
+      margin-top: calc(var(--zoom-y, 0.085) * var(--zoom, 350%) * -0.5625);
     }
   }
   /* Kerb: a chequered strip, the edge of the track, in the site's two neutrals. Marks where an
