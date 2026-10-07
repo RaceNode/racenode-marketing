@@ -1,32 +1,31 @@
 ---
-// One page per championship, rendered on request, at a stable URL (the catalog's series slug), built for searches such as
+// One page per championship, built each morning at a stable URL (the catalog's series slug), for searches such as
 // "GT World Challenge Europe 2027 calendar". When the organizer has not published the featured season yet,
-// the page says so and shows the last season known, instead of an empty page.
+// the page says so and shows the last season known, instead of an empty page. The visitor's browser then brings
+// the season part up to date (LiveRefresh); the rest (same weekends, related) waits for the next build.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import SeasonTable from '../../components/calendar/SeasonTable.astro';
 import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
-import { derived, liveCatalog } from '../../lib/calendar/live.mjs';
-import { buildCalendar, displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
-import { DISCIPLINES, REGIONS, country, longDate } from '../../lib/calendar/format.mjs';
+import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
+import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
+import { displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
+import { championshipBody, hash } from '../../lib/calendar/render.mjs';
+import { DISCIPLINES, REGIONS, country } from '../../lib/calendar/format.mjs';
 
-export const prerender = false;
+export async function getStaticPaths() {
+  const { cal } = await catalog();
+  return cal.championships.map((c) => ({ params: { slug: c.slug } }));
+}
 
-const live = await liveCatalog(Astro.locals.cfContext);
-const data = live.data;
-const cal = derived(data, 'calendar', () => buildCalendar(data));
-Astro.response.headers.set('cache-control', 'public, max-age=300');
-Astro.response.headers.set('x-calendar-data', `${live.source}; fetched=${new Date(live.fetchedAt).toISOString()}`);
-const found = cal.championships.find((x) => x.slug === Astro.params.slug);
-// A prerendered 404 can't be rewritten to from a rendered page; a bare 404 makes the adapter serve /404.html.
-if (!found) return new Response(null, { status: 404 });
-const c = found;
+const loaded = await catalog();
+const { data, ctx, cal } = loaded;
+const c = cal.championships.find((x) => x.slug === Astro.params.slug)!;
 const shown = c.shown;
 const year = cal.year;
 const organizer = c.organizer_name ?? 'The organizer';
-const previous = c.featured ? c.seasons.find((s: any) => s.year < year) : null;
+const body = championshipBody(cal, c.slug, ctx);
 const shared = sharedWeekends(cal, c).slice(0, 8);
 const related = cal.championships
   .filter((x) => x.slug !== c.slug && x.discipline === c.discipline && shared.every((s) => s.championship.slug !== x.slug))
@@ -99,34 +98,7 @@ const eventsSchema = {
           {c.organizer_name && <> · Organized by {c.organizer_website_url ? <a href={c.organizer_website_url} rel="noopener nofollow" target="_blank" class="underline hover:text-white">{c.organizer_name}</a> : c.organizer_name}</>}
         </p>
 
-        {c.featured ? (
-          <p class="text-sm text-gray-400 mb-8">
-            {shown.rounds.length} rounds published by {organizer}{shown.calendar_status === 'provisional' && ' (provisional calendar)'}.
-            {shown.last_checked_at && <> Checked against the official calendar on {longDate(shown.last_checked_at)}.</>}
-            {shown.source_url && <> <a href={shown.source_url} rel="noopener nofollow" target="_blank" class="underline hover:text-white">Official calendar ↗</a></>}
-          </p>
-        ) : (
-          <div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 mb-8" role="note">
-            <p class="text-white font-medium mb-1">The {year} calendar is not published yet.</p>
-            <p class="text-sm text-gray-400">
-              {organizer} has not released its {year} dates. Below, the {shown.label} season for reference.
-              {shown.last_checked_at && <> Last checked against the official calendar on {longDate(shown.last_checked_at)}.</>}
-              {shown.source_url && <> <a href={shown.source_url} rel="noopener nofollow" target="_blank" class="underline hover:text-white">Official calendar ↗</a></>}
-            </p>
-          </div>
-        )}
-
-        <h2 class="text-xl font-bold text-white mb-3">{shown.label} season</h2>
-        <SeasonTable season={shown} />
-
-        {previous && (
-          <details class="mt-8 group">
-            <summary class="cursor-pointer text-gray-300 hover:text-white font-medium">
-              {previous.label} season · {previous.rounds.length} rounds
-            </summary>
-            <div class="mt-3"><SeasonTable season={previous} /></div>
-          </details>
-        )}
+        <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
 
         {shared.length > 0 && (
           <section class="mt-12">
@@ -167,4 +139,5 @@ const eventsSchema = {
     </main>
     <Footer />
   </div>
+  <LiveRefresh config={liveConfig(loaded, { slug: c.slug })} />
 </BaseLayout>

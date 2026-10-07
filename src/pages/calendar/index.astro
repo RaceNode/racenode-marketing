@@ -1,39 +1,26 @@
 ---
+// Every championship's rounds on one page, built each morning from the catalog; the visitor's browser then brings
+// the summary and the rounds up to date (LiveRefresh). Filters run in the browser too.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CalendarFilters from '../../components/calendar/CalendarFilters.astro';
 import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
-import { derived, liveCatalog } from '../../lib/calendar/live.mjs';
-import { roundRows } from '../../lib/calendar/rows.mjs';
-import { buildCalendar, displayName, notPublished, roundsOfYear, years } from '../../lib/calendar/model.mjs';
-import { DISCIPLINES, MONTHS, REGIONS, monthOf } from '../../lib/calendar/format.mjs';
+import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
+import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
+import { years } from '../../lib/calendar/model.mjs';
+import { hash, indexBody, indexSummary } from '../../lib/calendar/render.mjs';
+import { DISCIPLINES, REGIONS } from '../../lib/calendar/format.mjs';
 
-export const prerender = false;
-
-const live = await liveCatalog(Astro.locals.cfContext);
-const data = live.data;
-const cal = derived(data, 'calendar', () => buildCalendar(data));
-Astro.response.headers.set('cache-control', 'public, max-age=300');
-Astro.response.headers.set('x-calendar-data', `${live.source}; fetched=${new Date(live.fetchedAt).toISOString()}`);
+const loaded = await catalog();
+const { data, ctx, cal } = loaded;
 const allYears = years(cal);
 const year = allYears.includes(cal.year) ? cal.year : allYears[0];
-const ordered = [year, ...allYears.filter((y) => y !== year)];
-const sections = derived(data, 'sections', () => ordered.map((y) => {
-  // By the month a round starts in, with its own year: a winter season (2026-2027) starts in the autumn before.
-  const months = new Map<string, any[]>();
-  for (const r of roundsOfYear(cal, y)) {
-    const m = `${MONTHS[monthOf(r.start_date) - 1]} ${r.start_date.slice(0, 4)}`;
-    if (!months.has(m)) months.set(m, []);
-    months.get(m)!.push(r);
-  }
-  return { year: y, months: [...months.entries()].map(([label, rounds]) => [label, roundRows(rounds)] as const) };
-}));
-const late = notPublished(cal);
-const published = cal.championships.length - late.length;
 const disciplines = Object.keys(DISCIPLINES).filter((d) => cal.championships.some((c) => c.discipline === d));
 const regions = Object.keys(REGIONS).filter((r) => cal.championships.some((c) => c.region === r));
+const summary = indexSummary(cal);
+const body = indexBody(cal, ctx);
 
 const title = `Motorsport Calendar ${cal.year}: Every Championship, Dates & Circuits | RaceNode`;
 const description = `The ${cal.year} race calendars of ${cal.championships.length} championships on one page: GT, endurance, single-seaters, one-make cups. Filter by discipline, region and month to see who races where, and when.`;
@@ -61,48 +48,17 @@ const breadcrumbSchema = {
           Every round of {cal.championships.length} championships on one page: who races where, and when. Dates and circuits as each organizer publishes them, with a link to its official page.
         </p>
         <p class="text-sm text-gray-500 mb-8">
-          {published} of {cal.championships.length} championships have published their {cal.year} calendar.
+          <span data-calendar-live="summary" data-hash={hash(summary)} set:html={summary} />
           Each championship's page says when its calendar was last checked against the official one.
         </p>
 
         <CalendarFilters years={allYears} year={year} disciplines={disciplines} regions={regions} />
 
-        {sections.map((s) => (
-          <section data-year={s.year} aria-label={`${s.year} season`}>
-            {s.months.map(([m, rows]) => (
-              <div class="calendar-month mb-8">
-                <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">{m}</h2>
-                <ul class="bg-gray-900 border border-gray-800 rounded-lg" set:html={rows} />
-              </div>
-            ))}
-          </section>
-        ))}
-
-        <p id="calendar-empty" class="text-gray-400 bg-gray-900 border border-gray-800 rounded-lg px-4 py-6 mb-8" hidden>
-          No round matches these filters.
-        </p>
-
-        {late.length > 0 && (
-          <section id="calendar-not-published" data-year={cal.year} class="mt-12 mb-4">
-            <h2 class="text-xl md:text-2xl font-bold text-white mb-2">{cal.year} not published yet</h2>
-            <p class="text-gray-400 mb-4">
-              These organizers have not released their {cal.year} dates. Each page shows their last season until they do.
-            </p>
-            <ul class="grid sm:grid-cols-2 gap-2">
-              {late.map((c) => (
-                <li class="calendar-late" data-discipline={c.discipline} data-region={c.region ?? ''}>
-                  <a href={`/calendar/${c.slug}/`} class="block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-4 py-3 transition-colors">
-                    <span class="text-white font-medium">{displayName(c)}</span>
-                    <span class="block text-xs text-gray-500">Last season known: {c.shown.label} · {c.shown.rounds.length} rounds</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
       </div>
       <CalendarCTA title="Found your season? Plan it in RaceNode." />
     </main>
     <Footer />
   </div>
+  <LiveRefresh config={liveConfig(loaded)} />
 </BaseLayout>

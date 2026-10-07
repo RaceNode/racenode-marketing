@@ -30,8 +30,8 @@
 }
 
 /*
- * Rows of the all-championships calendar (src/lib/calendar/rows.mjs): ~800 of them, rendered on request, so their
- * classes live here once instead of in every row (half the page's weight, and CPU on the free Workers plan).
+ * Rows of the all-championships calendar (roundRow in src/lib/calendar/render.mjs): ~800 of them, so their classes
+ * live here once instead of in every row (half the page's weight).
  */
 @layer components {
   .calendar-row { @apply grid grid-cols-[5.5rem_1fr] sm:grid-cols-[7rem_14rem_1fr] gap-x-4 gap-y-1 px-4 py-3 border-b border-gray-800 last:border-b-0; }

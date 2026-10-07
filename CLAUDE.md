@@ -81,16 +81,14 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 
 ## Race calendar
 
-- The only pages rendered on request; everything else stays static. `npm run build` ends with `scripts/pages/assemble.mjs`, which turns the Cloudflare adapter's output into what Pages deploys from `dist/`: static files at the root, the server in `dist/_worker.js/`, and a `_routes.json` that sends only `/calendar/*` to it (static requests stay free and off the Workers quota: 100,000 requests/day and 10 ms of CPU per request on the free plan).
-- Data: `src/lib/calendar/contract.mjs` reads three read-only views of the app's catalog (`catalog_public_series`, `catalog_public_seasons`, `catalog_public_events`) with `CATALOG_SUPABASE_URL` + `CATALOG_SUPABASE_KEY` (publishable key, Cloudflare Pages env). Only the contract's fields are kept; removed rounds never reach a page.
-- Caching (`src/lib/calendar/live.mjs`, `src/middleware.ts`): rendered pages 5 min in the data centre's cache; the data 15 min in the isolate's memory and the Cache API, then refreshed in the background while the old copy is served. If the views do not answer, the last copy keeps being served; with no copy at all, a snapshot taken at build time (`scripts/calendar/snapshot.mjs`, not versioned). Headers `x-calendar-data` (memory, cache, live, stale, snapshot + fetch time) and `x-calendar-page` (hit, miss) show it from outside.
-- CPU: the index has ~800 rows; they are one string (`src/lib/calendar/rows.mjs`), computed once per copy of the data (`derived`), not one Astro component each. Keep it that way, the free plan counts CPU.
-- Sample data (`src/data/calendar/sample.json`, a real extract) only where `CALENDAR_SAMPLE=1` (preview env, never production): pages then say "sample data" and are noindex. Production without the views fails rather than show it.
-- Sitemap: `@astrojs/sitemap` lists built pages only; `/calendar/sitemap.xml` lists the championship pages from the live catalog, referenced by the sitemap index.
-- Local: `npm run build`, then `npx wrangler pages dev dist --binding CALENDAR_SAMPLE=1` (or the `CATALOG_*` bindings).
+- Static like the rest of the site (no Worker: Willi, 2026-10-07, no Workers Paid plan). Built from the catalog at every deploy, and every morning by the n8n workflow `racenode-site-rebuild` (06:45 UTC): that is what Google indexes.
+- Data: `src/lib/calendar/contract.mjs` reads three read-only views of the app's catalog (`catalog_public_series`, `catalog_public_seasons`, `catalog_public_events`) with `CATALOG_SUPABASE_URL` + `CATALOG_SUPABASE_KEY` (publishable key, Cloudflare Pages env; it ends up in the pages, that is what it is for). Only the contract's fields are kept; removed rounds never reach a page. Build side: `src/lib/calendar/build.mjs`; a failing read fails the build, so the last good deploy stays online.
+- In the visitor's browser (`src/components/calendar/LiveRefresh.astro`, `src/lib/calendar/refresh.mjs`): the page reads the views again and replaces what changed since the build. The parts it may replace carry `data-calendar-live` and the hash of their build render; the browser renders with the same pure functions (`src/lib/calendar/render.mjs`: no clock, country names shipped by the build) and touches the page only if its hash differs. No JavaScript, or the views down: the morning's version stays, nothing visible. Index: summary + rounds (~50 KB of JSON); a championship page: its season part only (~3 KB). Same weekends and related championships wait for the next build.
+- `render.mjs` is the only place the refreshable parts are written: change their markup there, never in the `.astro` pages. The index rows' classes live in `src/styles/global.css` (`.calendar-row`), not in each of the ~800 rows.
+- Sample data (`src/data/calendar/sample.json`, a real extract) only where `CALENDAR_SAMPLE=1` (preview env, never production) and the views do not answer: pages then say "sample data" and are noindex, and the browser re-reads static copies of the views (`/calendar/sample-api/`) through the same code.
+- Tests: `npm run test:calendar` (contract, model, render, the browser refresh against the sample served as the views).
 - Rules (Willi, 2026-10-07): dates and venues only; no organizer logo or document, link to the official page; never team data, raw scrapes or logs. A season not published yet says so and shows the last one known.
 - The CTA invites to sign up; it does not promise an import until the app can adopt a catalog season.
-- Tests: `npm run test:calendar`.
 
 ## Content Notes
 

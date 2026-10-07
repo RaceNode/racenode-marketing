@@ -1,6 +1,7 @@
-// The public race calendar reads the app's championship catalog on request (live.mjs), through three views the app opens
-// to `anon` (read-only, publishable key): series, seasons, rounds. Only the fields below are ever kept: if a view
-// grows a column (raw scrape, logs, anything about a team), the site drops it before a page can show it.
+// The public race calendar reads the app's championship catalog through three views the app opens to `anon`
+// (read-only, publishable key): series, seasons, rounds. At build time for the pages Google indexes, then in the
+// visitor's browser for what changed since (refresh.mjs). Only the fields below are ever kept: if a view grows a
+// column (raw scrape, logs, anything about a team), the site drops it before a page can show it.
 //
 // Rules (Willi, 2026-10-07): dates and venues are publishable facts; no organizer logo or document, we link to the
 // organizer's own page; never team data, raw scrapes or logs.
@@ -35,11 +36,14 @@ export function sanitize(data) {
 
 const PAGE = 1000;
 
-async function fetchView(url, key, kind, signal) {
+async function fetchView(url, key, kind, { signal, series } = {}) {
+  const only = series ? `&${kind === 'series' ? 'slug' : 'series_slug'}=eq.${encodeURIComponent(series)}` : '';
   const rows = [];
   for (let offset = 0; ; offset += PAGE) {
-    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${FIELDS[kind].join(',')}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
-    const res = await fetch(q, { headers: { apikey: key, Accept: 'application/json' }, signal });
+    // The publishable key in the query, not in an `apikey` header: a header would make every browser request a CORS
+    // preflight first (one round trip more per view).
+    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${FIELDS[kind].join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}&apikey=${encodeURIComponent(key)}`;
+    const res = await fetch(q, { headers: { Accept: 'application/json' }, signal });
     if (!res.ok) throw new Error(`calendar: ${VIEWS[kind]} answered ${res.status} ${await res.text()}`);
     const page = await res.json();
     rows.push(...page);
@@ -48,25 +52,18 @@ async function fetchView(url, key, kind, signal) {
 }
 
 /**
- * The catalog, from the live views when CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY are set; a failure throws
- * (live.mjs then serves its last good copy). `allowSample` (previews only, CALENDAR_SAMPLE=1) falls back to sample
- * data, a real extract kept in the repo, flagged so pages say so and are not indexed: when the variables are missing,
- * or when the views do not answer (before the app's #197 reaches production, they answer PGRST205).
+ * The catalog from the views, at build time and in the visitor's browser. `series` keeps one championship only
+ * (its page needs nothing else); the rows are filtered here too, so a source that ignores the query (the static
+ * sample API of a preview) gives the same result.
  */
-export async function loadCatalog(env, { allowSample = false, signal } = {}) {
-  const url = env.CATALOG_SUPABASE_URL;
-  const key = env.CATALOG_SUPABASE_KEY;
-  if (url && key) {
-    try {
-      const [series, seasons, events] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(url.replace(/\/$/, ''), key, k, signal)));
-      return { sample: false, ...sanitize({ series, seasons, events }) };
-    } catch (e) {
-      if (!allowSample) throw e;
-      console.warn(`${String(e).slice(0, 200)}; sample data instead (preview)`);
-    }
-  } else if (!allowSample) {
-    throw new Error('calendar: CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY are missing; refusing to publish sample data');
-  }
-  const { default: sample } = await import('../../data/calendar/sample.json', { with: { type: 'json' } });
-  return { sample: true, ...sanitize(sample) };
+export async function fetchCatalog(url, key, { signal, series } = {}) {
+  const base = url.replace(/\/$/, '');
+  const [s, se, ev] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series })));
+  const data = sanitize({ series: s, seasons: se, events: ev });
+  if (!series) return data;
+  return {
+    series: data.series.filter((x) => x.slug === series),
+    seasons: data.seasons.filter((x) => x.series_slug === series),
+    events: data.events.filter((x) => x.series_slug === series),
+  };
 }

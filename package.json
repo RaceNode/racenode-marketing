@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/store/check.mjs && node scripts/guardrails.mjs && node scripts/calendar/snapshot.mjs && astro build && node scripts/pages/assemble.mjs",
+    "build": "node scripts/store/check.mjs && node scripts/guardrails.mjs && astro build",
     "guardrails": "node scripts/guardrails.mjs",
     "test:guardrails": "node --test scripts/guardrails.test.mjs",
     "test:calendar": "node --test src/lib/calendar/calendar.test.mjs",
@@ -18,14 +18,12 @@
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.1.18",
-    "astro": "^7.3.6",
+    "astro": "^7.2.4",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@astrojs/cloudflare": "^14.3.4",
     "opentype.js": "^2.0.0",
     "playwright-core": "^1.62.1",
-    "sharp": "^0.35.3",
-    "wrangler": "^4.148.0"
+    "sharp": "^0.35.3"
   }
 }

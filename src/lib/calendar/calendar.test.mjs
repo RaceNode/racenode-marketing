@@ -2,9 +2,11 @@
 // data to production.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { loadCatalog, sanitize } from './contract.mjs';
+import { loadCatalog } from './build.mjs';
+import { VIEWS, sanitize } from './contract.mjs';
 import { dateRange, roundLabel, roundName } from './format.mjs';
-import { roundRow } from './rows.mjs';
+import { refresh } from './refresh.mjs';
+import { calendarOf, championshipBody, countriesOf, hash, indexBody, indexSummary, roundRow } from './render.mjs';
 import { buildCalendar, featuredYear, notPublished, roundsOfYear, sharedWeekends } from './model.mjs';
 
 const series = (slug, extra = {}) => ({ slug, name: slug.toUpperCase(), short_name: null, discipline: 'gt', region: 'europe', ...extra });
@@ -83,13 +85,13 @@ test('championships sharing a weekend at the same venue are found', () => {
   assert.deepEqual(sharedWeekends(cal, gtwc).map((x) => x.championship.slug), ['gt4']);
 });
 
-test('production never shows sample data: without the views it fails, and live.mjs serves its last copy', async () => {
+test('production never publishes sample data: without the views the build fails', async () => {
   await assert.rejects(loadCatalog({}), /refusing to publish sample data/);
   const down = { CATALOG_SUPABASE_URL: 'http://127.0.0.1:9', CATALOG_SUPABASE_KEY: 'k' };
   await assert.rejects(loadCatalog(down));
-  // A preview falls back to the sample, flagged so the pages say so and are not indexed.
+  // A preview (CALENDAR_SAMPLE=1) falls back to the sample, flagged so the pages say so and are not indexed.
   for (const env of [{}, down]) {
-    const preview = await loadCatalog(env, { allowSample: true });
+    const preview = await loadCatalog({ ...env, CALENDAR_SAMPLE: '1' });
     assert.equal(preview.sample, true);
     assert.ok(preview.events.length > 0);
   }
@@ -97,12 +99,91 @@ test('production never shows sample data: without the views it fails, and live.m
 
 test('the rows of the all-championships calendar escape what the catalog says', () => {
   const c = { slug: 'a', name: 'A <b>', short_name: null, discipline: 'gt', region: null };
-  const html = roundRow({ ...round('a', 2027, '2027-04-15'), name: 'Night & "Day"', venue_name: 'Spa', venue_country_code: 'BE', championship: c });
+  const html = roundRow({ ...round('a', 2027, '2027-04-15'), name: 'Night & "Day"', venue_name: 'Spa', venue_country_code: 'BE', championship: c }, { countries: { BE: 'Belgium' } });
   assert.match(html, /data-discipline="gt" data-region="" data-month="4" data-year="2027"/);
   assert.match(html, /A &lt;b&gt;/);
   assert.match(html, /Night &amp; &quot;Day&quot; · /);
   assert.match(html, /Spa, Belgium/);
   assert.doesNotMatch(html, /<b>/);
+});
+
+// --- The browser's refresh (refresh.mjs), against the sample served as the views would serve it ---------------
+
+const sampleData = async () => sanitize((await import('../../data/calendar/sample.json', { with: { type: 'json' } })).default);
+
+/** A page as the build left it: its live parts with their render and hash; a fetch that serves `rows`. */
+function page(parts) {
+  const els = Object.fromEntries(Object.entries(parts).map(([name, html]) => [name, { innerHTML: html, dataset: { hash: hash(html) } }]));
+  const events = [];
+  return {
+    els,
+    events,
+    doc: { querySelector: (sel) => els[/data-calendar-live="(\w+)"/.exec(sel)[1]] ?? null, dispatchEvent: (e) => events.push(e.type) },
+  };
+}
+function serve(data, { status = 200 } = {}) {
+  const calls = [];
+  globalThis.fetch = async (url) => {
+    calls.push(url);
+    const view = /rest\/v1\/(\w+)/.exec(url)[1];
+    const kind = Object.entries(VIEWS).find(([, v]) => v === view)[0];
+    return new Response(status === 200 ? JSON.stringify(data[kind]) : '{}', { status });
+  };
+  return calls;
+}
+
+test('the browser leaves the page alone when nothing changed since the build', async () => {
+  const data = await sampleData();
+  const ctx = { year: 2027, countries: countriesOf(data) };
+  const cal = calendarOf(data, ctx);
+  const p = page({ summary: indexSummary(cal), body: indexBody(cal, ctx) });
+  const before = p.els.body.innerHTML;
+  serve(data);
+  assert.equal(await refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }), 'same');
+  assert.equal(p.els.body.innerHTML, before);
+  assert.deepEqual(p.events, []);
+});
+
+test('the browser updates what changed since the build, and only that', async () => {
+  const data = await sampleData();
+  const ctx = { year: 2027, countries: countriesOf(data) };
+  const cal = calendarOf(data, ctx);
+  const p = page({ summary: indexSummary(cal), body: indexBody(cal, ctx) });
+  const summary = p.els.summary.innerHTML;
+  // During the day an organizer moves a round.
+  const moved = structuredClone(data);
+  const r = moved.events.find((e) => e.season_year === 2027 && e.series_slug === 'british-gt');
+  r.start_date = '2027-04-24';
+  r.end_date = '2027-04-25';
+  serve(moved);
+  assert.equal(await refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }), 'updated');
+  assert.match(p.els.body.innerHTML, /24–25 Apr/);
+  assert.equal(p.els.summary.innerHTML, summary);
+  assert.deepEqual(p.events, ['calendar:updated']);
+});
+
+test("a championship's page asks the views for that championship only", async () => {
+  const data = await sampleData();
+  const ctx = { year: 2027, countries: countriesOf(data) };
+  const cal = calendarOf(data, ctx);
+  const p = page({ body: championshipBody(cal, 'british-gt', ctx) });
+  // The static sample API ignores the query: the browser filters too, and still finds nothing new.
+  const calls = serve(data);
+  assert.equal(await refresh(p.doc, { url: '/calendar/sample-api', key: 'sample', ...ctx, slug: 'british-gt' }), 'same');
+  assert.ok(calls.every((u) => /=eq\.british-gt&/.test(u)));
+});
+
+test('the build version stays when the views fail or answer nothing', async () => {
+  const data = await sampleData();
+  const ctx = { year: 2027, countries: countriesOf(data) };
+  const cal = calendarOf(data, ctx);
+  const p = page({ body: indexBody(cal, ctx) });
+  const before = p.els.body.innerHTML;
+  serve(data, { status: 404 }); // PGRST205 until the app's #197 is in production
+  await assert.rejects(refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }));
+  serve({ series: [], seasons: [], events: [] });
+  assert.equal(await refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }), 'empty');
+  assert.equal(p.els.body.innerHTML, before);
 });
 
 test('dates and labels read the way a team writes them', () => {

@@ -42,7 +42,20 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
     </select>
   </label>
 </form>
-<p id="calendar-count" class="text-sm text-gray-500 mb-6" aria-live="polite"></p>
+<p id="calendar-count" class="text-sm text-gray-500 min-h-5 mb-6" aria-live="polite"></p>
+<script is:inline>
+  // Runs before the rounds are parsed: only the chosen season shows from the first paint, so nothing jumps when the
+  // filters below start (they remove this style once they have hidden the same rows themselves).
+  (function () {
+    var select = document.querySelector('#calendar-filters select[name=year]');
+    if (!select) return;
+    var year = (new URLSearchParams(location.search).get('year') || select.value).replace(/\D/g, '');
+    var style = document.createElement('style');
+    style.id = 'calendar-first-paint';
+    style.textContent = '[data-calendar-live="body"] section[data-year]:not([data-year="' + year + '"]){display:none}';
+    document.head.appendChild(style);
+  })();
+</script>
 
 <script>
   const form = document.getElementById('calendar-filters') as HTMLFormElement | null;
@@ -86,6 +99,7 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
     for (const k of keys) if (f[k] && !(k === 'year' && f[k] === form.dataset.defaultYear)) params.set(k, f[k]);
     const qs = params.toString();
     history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    document.getElementById('calendar-first-paint')?.remove();
   }
 
   if (form) {
@@ -97,6 +111,8 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
       if (v && [...el.options].some((o) => o.value === v)) el.value = v;
     }
     form.addEventListener('change', apply);
+    // The browser brought the rounds up to date (LiveRefresh): the new rows follow the current filters too.
+    document.addEventListener('calendar:updated', apply);
     apply();
   }
 </script>

@@ -25,8 +25,3 @@ pnpm-debug.log*
 .claude/*
 !.claude/settings.json
 !.claude/guardrails-hook.mjs
-
-# calendar worker: build-time copy of the catalog (scripts/calendar/snapshot.mjs), local Wrangler state
-src/data/calendar/snapshot.json
-.wrangler/
-.dev.vars
