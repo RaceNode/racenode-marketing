@@ -1,11 +1,9 @@
-// The public race calendar reads the app's championship catalog at build time, through three views the app opens
+// The public race calendar reads the app's championship catalog on request (live.mjs), through three views the app opens
 // to `anon` (read-only, publishable key): series, seasons, rounds. Only the fields below are ever kept: if a view
 // grows a column (raw scrape, logs, anything about a team), the site drops it before a page can show it.
 //
 // Rules (Willi, 2026-10-07): dates and venues are publishable facts; no organizer logo or document, we link to the
 // organizer's own page; never team data, raw scrapes or logs.
-import fs from 'node:fs';
-import sample from '../../data/calendar/sample.json' with { type: 'json' };
 
 export const VIEWS = {
   series: 'catalog_public_series',
@@ -37,11 +35,11 @@ export function sanitize(data) {
 
 const PAGE = 1000;
 
-async function fetchView(url, key, kind) {
+async function fetchView(url, key, kind, signal) {
   const rows = [];
   for (let offset = 0; ; offset += PAGE) {
     const q = `${url}/rest/v1/${VIEWS[kind]}?select=${FIELDS[kind].join(',')}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
-    const res = await fetch(q, { headers: { apikey: key, Accept: 'application/json' } });
+    const res = await fetch(q, { headers: { apikey: key, Accept: 'application/json' }, signal });
     if (!res.ok) throw new Error(`calendar: ${VIEWS[kind]} answered ${res.status} ${await res.text()}`);
     const page = await res.json();
     rows.push(...page);
@@ -50,25 +48,25 @@ async function fetchView(url, key, kind) {
 }
 
 /**
- * The catalog for this build.
- * - CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY set: the live views. Any failure fails the build, so Cloudflare
- *   keeps the last good deploy online instead of publishing an empty calendar.
- * - Otherwise: sample data (a real extract, kept in the repo), flagged so pages say so and are not indexed.
- *   A production build (Cloudflare Pages, branch main) never falls back to it.
+ * The catalog, from the live views when CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY are set; a failure throws
+ * (live.mjs then serves its last good copy). `allowSample` (previews only, CALENDAR_SAMPLE=1) falls back to sample
+ * data, a real extract kept in the repo, flagged so pages say so and are not indexed: when the variables are missing,
+ * or when the views do not answer (before the app's #197 reaches production, they answer PGRST205).
  */
-export async function loadCatalog(env = process.env) {
+export async function loadCatalog(env, { allowSample = false, signal } = {}) {
   const url = env.CATALOG_SUPABASE_URL;
   const key = env.CATALOG_SUPABASE_KEY;
   if (url && key) {
-    const [series, seasons, events] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(url.replace(/\/$/, ''), key, k)));
-    return { sample: false, ...sanitize({ series, seasons, events }) };
+    try {
+      const [series, seasons, events] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(url.replace(/\/$/, ''), key, k, signal)));
+      return { sample: false, ...sanitize({ series, seasons, events }) };
+    } catch (e) {
+      if (!allowSample) throw e;
+      console.warn(`${String(e).slice(0, 200)}; sample data instead (preview)`);
+    }
+  } else if (!allowSample) {
+    throw new Error('calendar: CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY are missing; refusing to publish sample data');
   }
-  if (env.CF_PAGES_BRANCH === 'main')
-    throw new Error('calendar: CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY are missing on the production build; refusing to publish sample data');
-  const fixture = env.CATALOG_FIXTURE ? JSON.parse(fs.readFileSync(env.CATALOG_FIXTURE, 'utf8')) : sample;
-  return { sample: true, ...sanitize(fixture) };
+  const { default: sample } = await import('../../data/calendar/sample.json', { with: { type: 'json' } });
+  return { sample: true, ...sanitize(sample) };
 }
-
-let cached;
-/** One load per build, shared by every calendar page. */
-export const catalog = () => (cached ??= loadCatalog());

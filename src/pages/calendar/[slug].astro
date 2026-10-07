@@ -1,5 +1,5 @@
 ---
-// One page per championship, at a stable URL (the catalog's series slug), built for searches such as
+// One page per championship, rendered on request, at a stable URL (the catalog's series slug), built for searches such as
 // "GT World Challenge Europe 2027 calendar". When the organizer has not published the featured season yet,
 // the page says so and shows the last season known, instead of an empty page.
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -8,19 +8,21 @@ import Footer from '../../components/Footer.astro';
 import SeasonTable from '../../components/calendar/SeasonTable.astro';
 import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
-import { catalog } from '../../lib/calendar/contract.mjs';
+import { derived, liveCatalog } from '../../lib/calendar/live.mjs';
 import { buildCalendar, displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
 import { DISCIPLINES, REGIONS, country, longDate } from '../../lib/calendar/format.mjs';
 
-export async function getStaticPaths() {
-  const data = await catalog();
-  const cal = buildCalendar(data);
-  return cal.championships.map((c) => ({ params: { slug: c.slug }, props: { slug: c.slug } }));
-}
+export const prerender = false;
 
-const data = await catalog();
-const cal = buildCalendar(data);
-const c = cal.championships.find((x) => x.slug === Astro.props.slug)!;
+const live = await liveCatalog(Astro.locals.cfContext);
+const data = live.data;
+const cal = derived(data, 'calendar', () => buildCalendar(data));
+Astro.response.headers.set('cache-control', 'public, max-age=300');
+Astro.response.headers.set('x-calendar-data', `${live.source}; fetched=${new Date(live.fetchedAt).toISOString()}`);
+const found = cal.championships.find((x) => x.slug === Astro.params.slug);
+// A prerendered 404 can't be rewritten to from a rendered page; a bare 404 makes the adapter serve /404.html.
+if (!found) return new Response(null, { status: 404 });
+const c = found;
 const shown = c.shown;
 const year = cal.year;
 const organizer = c.organizer_name ?? 'The organizer';

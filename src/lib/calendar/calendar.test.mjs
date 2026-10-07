@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { loadCatalog, sanitize } from './contract.mjs';
 import { dateRange, roundLabel, roundName } from './format.mjs';
+import { roundRow } from './rows.mjs';
 import { buildCalendar, featuredYear, notPublished, roundsOfYear, sharedWeekends } from './model.mjs';
 
 const series = (slug, extra = {}) => ({ slug, name: slug.toUpperCase(), short_name: null, discipline: 'gt', region: 'europe', ...extra });
@@ -82,11 +83,26 @@ test('championships sharing a weekend at the same venue are found', () => {
   assert.deepEqual(sharedWeekends(cal, gtwc).map((x) => x.championship.slug), ['gt4']);
 });
 
-test('a production build without the views fails instead of publishing sample data', async () => {
-  await assert.rejects(loadCatalog({ CF_PAGES_BRANCH: 'main' }), /refusing to publish sample data/);
-  const preview = await loadCatalog({ CF_PAGES_BRANCH: 'calendar' });
-  assert.equal(preview.sample, true);
-  assert.ok(preview.events.length > 0);
+test('production never shows sample data: without the views it fails, and live.mjs serves its last copy', async () => {
+  await assert.rejects(loadCatalog({}), /refusing to publish sample data/);
+  const down = { CATALOG_SUPABASE_URL: 'http://127.0.0.1:9', CATALOG_SUPABASE_KEY: 'k' };
+  await assert.rejects(loadCatalog(down));
+  // A preview falls back to the sample, flagged so the pages say so and are not indexed.
+  for (const env of [{}, down]) {
+    const preview = await loadCatalog(env, { allowSample: true });
+    assert.equal(preview.sample, true);
+    assert.ok(preview.events.length > 0);
+  }
+});
+
+test('the rows of the all-championships calendar escape what the catalog says', () => {
+  const c = { slug: 'a', name: 'A <b>', short_name: null, discipline: 'gt', region: null };
+  const html = roundRow({ ...round('a', 2027, '2027-04-15'), name: 'Night & "Day"', venue_name: 'Spa', venue_country_code: 'BE', championship: c });
+  assert.match(html, /data-discipline="gt" data-region="" data-month="4" data-year="2027"/);
+  assert.match(html, /A &lt;b&gt;/);
+  assert.match(html, /Night &amp; &quot;Day&quot; · /);
+  assert.match(html, /Spa, Belgium/);
+  assert.doesNotMatch(html, /<b>/);
 });
 
 test('dates and labels read the way a team writes them', () => {

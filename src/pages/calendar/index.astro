@@ -3,19 +3,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CalendarFilters from '../../components/calendar/CalendarFilters.astro';
-import RoundRow from '../../components/calendar/RoundRow.astro';
 import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
-import { catalog } from '../../lib/calendar/contract.mjs';
+import { derived, liveCatalog } from '../../lib/calendar/live.mjs';
+import { roundRows } from '../../lib/calendar/rows.mjs';
 import { buildCalendar, displayName, notPublished, roundsOfYear, years } from '../../lib/calendar/model.mjs';
 import { DISCIPLINES, MONTHS, REGIONS, monthOf } from '../../lib/calendar/format.mjs';
 
-const data = await catalog();
-const cal = buildCalendar(data);
+export const prerender = false;
+
+const live = await liveCatalog(Astro.locals.cfContext);
+const data = live.data;
+const cal = derived(data, 'calendar', () => buildCalendar(data));
+Astro.response.headers.set('cache-control', 'public, max-age=300');
+Astro.response.headers.set('x-calendar-data', `${live.source}; fetched=${new Date(live.fetchedAt).toISOString()}`);
 const allYears = years(cal);
 const year = allYears.includes(cal.year) ? cal.year : allYears[0];
 const ordered = [year, ...allYears.filter((y) => y !== year)];
-const sections = ordered.map((y) => {
+const sections = derived(data, 'sections', () => ordered.map((y) => {
   // By the month a round starts in, with its own year: a winter season (2026-2027) starts in the autumn before.
   const months = new Map<string, any[]>();
   for (const r of roundsOfYear(cal, y)) {
@@ -23,8 +28,8 @@ const sections = ordered.map((y) => {
     if (!months.has(m)) months.set(m, []);
     months.get(m)!.push(r);
   }
-  return { year: y, months: [...months.entries()] };
-});
+  return { year: y, months: [...months.entries()].map(([label, rounds]) => [label, roundRows(rounds)] as const) };
+}));
 const late = notPublished(cal);
 const published = cal.championships.length - late.length;
 const disciplines = Object.keys(DISCIPLINES).filter((d) => cal.championships.some((c) => c.discipline === d));
@@ -64,12 +69,10 @@ const breadcrumbSchema = {
 
         {sections.map((s) => (
           <section data-year={s.year} aria-label={`${s.year} season`}>
-            {s.months.map(([m, rounds]) => (
+            {s.months.map(([m, rows]) => (
               <div class="calendar-month mb-8">
                 <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">{m}</h2>
-                <ul class="bg-gray-900 border border-gray-800 rounded-lg">
-                  {rounds.map((r) => <RoundRow round={r} />)}
-                </ul>
+                <ul class="bg-gray-900 border border-gray-800 rounded-lg" set:html={rows} />
               </div>
             ))}
           </section>
