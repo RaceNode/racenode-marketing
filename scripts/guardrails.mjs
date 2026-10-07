@@ -11,6 +11,8 @@
 //   2026-10-04, "roadbook" was still on the home page on 2026-10-05.
 // - conflict detection: Willi, 2026-08-23, it does not work well yet; do not market it until he says it is solid.
 //   It was still on the Timetable page on 2026-10-05.
+// - ERP: Willi, 2026-10-07, never the word, anywhere (pages, titles, metas, JSON-LD, llms.txt, store texts); it was
+//   in the home title, hero and Organization schema that day.
 //
 // A rule only changes with Willi's agreement, his words and the date next to it. Changing a rule to let a
 // change through is the very drift it is here to stop.
@@ -40,6 +42,12 @@ const RULES = [
     dirs: ['src', 'public/llms.txt', 'store/listing.json'],
     re: /\broadbook|motorsport logistics/i,
     why: 'word the SEO reference rules out in English (§3.3): "roadbook" reads as rally-raid navigation, "motorsport logistics" as freight; write event brief, crew travel, people logistics',
+  },
+  {
+    name: 'ERP',
+    dirs: ['src', 'public', 'store/listing.json'],
+    re: /\bERPs?\b/i,
+    why: 'never the word ERP (Willi, 2026-10-07): say racing team management software',
   },
   {
     name: 'conflict detection',

@@ -69,7 +69,7 @@ Use these verbatim where relevant. They are strong credibility signals and match
 |---|---|---|
 | **roadbook** | In English this means rally-raid navigation (tulip diagrams, Dakar). It will attract the wrong audience and confuse GT teams. | event brief, race weekend brief, event pack, event info page |
 | **motorsport logistics** as a page target | Owned entirely by freight forwarders (see §4.1) | crew travel, travel & accommodation, people logistics |
-| **ERP** as the main hook | Fine as a secondary/technical descriptor, cold as a headline | operations platform, team management platform |
+| **ERP** | Never, anywhere on the site (Willi, 2026-10-07; blocked by `scripts/guardrails.mjs`) | racing team management software, operations platform |
 | **planning** alone | Meaningless to a search engine, generic PM territory | crew planning, season planning, crew scheduling |
 
 `roadbook` stays acceptable as an internal product/module name and in French communication, where the term is used for the team's event pack. It must not be a public English page target.
@@ -127,11 +127,10 @@ Titles are capped at ~60 characters, metas at ~155.
 
 ### 6.1 Home — `/`
 
-**Current title:** `Racing Team Management Software & Motorsport ERP | RaceNode` — keep.
+**Current title:** `Racing Team Management Software | RaceNode` — "Motorsport ERP" dropped on 2026-10-07 (Willi: never the word ERP).
 
 - **Primary:** racing team management software
 - **Secondary:** race team management software · motorsport team management software · race team operations platform · all-in-one platform for racing teams
-- **Owned term (no competition, high LLM value):** motorsport ERP · ERP for race teams
 - **Missing, high intent:** `free racing team management software` — RaceNode *is* free for 2026 and this does not appear in the title or meta. This is the single most qualified query in the whole field.
 - **Discipline modifiers to work in naturally:** GT3, GT4, endurance, sportscar, touring car, club racing
 
@@ -332,7 +331,6 @@ Revisit only if a non-English market shows organic signup traction.
 | free racing team management software | `/` + `/pricing/` | commercial | high |
 | motorsport team management software | `/` | commercial | high |
 | race team operations platform | `/` | commercial | medium |
-| motorsport ERP | `/` | commercial | low volume / high LLM |
 | race weekend planning software | `/management/` | commercial | high |
 | event management for racing teams | `/management/` | commercial | medium |
 | crew assignments race team | `/management/` | commercial | medium |
