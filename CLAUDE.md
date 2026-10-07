@@ -27,6 +27,7 @@ Pages compose section components from feature-specific subdirectories:
 - `src/pages/logistics.astro` → uses `src/components/logistics/*.astro`
 - `src/pages/management.astro` → uses `src/components/management/*.astro`
 - `src/pages/pricing.astro` → self-contained (no section components)
+- `src/pages/calendar/` → public race calendar (all championships + one page per championship at `/calendar/<series slug>/`, a stable URL), built from the app's championship catalog; see below
 
 All pages wrap content in `BaseLayout.astro` (SEO meta, JSON-LD schemas) with shared `Header` and `Footer`.
 
@@ -77,6 +78,14 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 - `public/llms.txt`: plain summary of the product for AI assistants; keep it in line with the pages when modules or pricing change
 - JSON-LD schemas (Organization, SoftwareApplication) in BaseLayout
 - Open Graph and Twitter meta tags on all pages
+
+## Race calendar
+
+- Data: `src/lib/calendar/contract.mjs` reads three read-only views of the app's catalog (`catalog_public_series`, `catalog_public_seasons`, `catalog_public_events`) at build time with `CATALOG_SUPABASE_URL` + `CATALOG_SUPABASE_KEY` (publishable key, Cloudflare Pages env). Only the contract's fields are kept; removed rounds never reach a page.
+- Without those variables the build uses `src/data/calendar/sample.json` (a real extract) and pages say "sample data" and are noindex; a production build (`CF_PAGES_BRANCH=main`) without them fails rather than publish it. A failing fetch fails the build, so the last good deploy stays live.
+- Rules (Willi, 2026-10-07): dates and venues only; no organizer logo or document, link to the official page; never team data, raw scrapes or logs. A season not published yet says so and shows the last one known.
+- The CTA invites to sign up; it does not promise an import until the app can adopt a catalog season.
+- Tests: `npm run test:calendar`.
 
 ## Content Notes
 

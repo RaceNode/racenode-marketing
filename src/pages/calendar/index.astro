@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CalendarFilters from '../../components/calendar/CalendarFilters.astro';
+import RoundRow from '../../components/calendar/RoundRow.astro';
+import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
+import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
+import { catalog } from '../../lib/calendar/contract.mjs';
+import { buildCalendar, displayName, notPublished, roundsOfYear, years } from '../../lib/calendar/model.mjs';
+import { DISCIPLINES, MONTHS, REGIONS, longDate, monthOf } from '../../lib/calendar/format.mjs';
+
+const data = await catalog();
+const cal = buildCalendar(data);
+const allYears = years(cal);
+const year = allYears.includes(cal.year) ? cal.year : allYears[0];
+const ordered = [year, ...allYears.filter((y) => y !== year)];
+const sections = ordered.map((y) => {
+  // By the month a round starts in, with its own year: a winter season (2026-2027) starts in the autumn before.
+  const months = new Map<string, any[]>();
+  for (const r of roundsOfYear(cal, y)) {
+    const m = `${MONTHS[monthOf(r.start_date) - 1]} ${r.start_date.slice(0, 4)}`;
+    if (!months.has(m)) months.set(m, []);
+    months.get(m)!.push(r);
+  }
+  return { year: y, months: [...months.entries()] };
+});
+const late = notPublished(cal);
+const published = cal.championships.length - late.length;
+const disciplines = Object.keys(DISCIPLINES).filter((d) => cal.championships.some((c) => c.discipline === d));
+const regions = Object.keys(REGIONS).filter((r) => cal.championships.some((c) => c.region === r));
+
+const title = `Motorsport Calendar ${cal.year}: Every Championship, Dates & Circuits | RaceNode`;
+const description = `The ${cal.year} race calendars of ${cal.championships.length} championships on one page: GT, endurance, single-seaters, one-make cups. Filter by discipline, region and month to see who races where, and when.`;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
+    { "@type": "ListItem", "position": 2, "name": "Motorsport Calendar", "item": "https://www.racenode.com/calendar/" },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} noindex={data.sample}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main class="px-4 sm:px-6 lg:px-8 pt-12 md:pt-16">
+      <div class="max-w-5xl mx-auto">
+        {data.sample && <SampleDataNotice />}
+
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">Motorsport calendar {cal.year}</h1>
+        <p class="text-lg text-gray-400 max-w-3xl mb-3">
+          Every round of {cal.championships.length} championships on one page: who races where, and when. Dates and circuits as each organizer publishes them, with a link to its official page.
+        </p>
+        <p class="text-sm text-gray-500 mb-8">
+          {published} of {cal.championships.length} championships have published their {cal.year} calendar.
+          {cal.lastCheckedAt && <> Checked against the official calendars on {longDate(cal.lastCheckedAt)}.</>}
+        </p>
+
+        <CalendarFilters years={allYears} year={year} disciplines={disciplines} regions={regions} />
+
+        {sections.map((s) => (
+          <section data-year={s.year} aria-label={`${s.year} season`}>
+            {s.months.map(([m, rounds]) => (
+              <div class="calendar-month mb-8">
+                <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">{m}</h2>
+                <ul class="bg-gray-900 border border-gray-800 rounded-lg">
+                  {rounds.map((r) => <RoundRow round={r} />)}
+                </ul>
+              </div>
+            ))}
+          </section>
+        ))}
+
+        <p id="calendar-empty" class="text-gray-400 bg-gray-900 border border-gray-800 rounded-lg px-4 py-6 mb-8" hidden>
+          No round matches these filters.
+        </p>
+
+        {late.length > 0 && (
+          <section id="calendar-not-published" data-year={cal.year} class="mt-12 mb-4">
+            <h2 class="text-xl md:text-2xl font-bold text-white mb-2">{cal.year} not published yet</h2>
+            <p class="text-gray-400 mb-4">
+              These organizers have not released their {cal.year} dates. Each page shows their last season until they do.
+            </p>
+            <ul class="grid sm:grid-cols-2 gap-2">
+              {late.map((c) => (
+                <li class="calendar-late" data-discipline={c.discipline} data-region={c.region ?? ''}>
+                  <a href={`/calendar/${c.slug}/`} class="block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-4 py-3 transition-colors">
+                    <span class="text-white font-medium">{displayName(c)}</span>
+                    <span class="block text-xs text-gray-500">Last season known: {c.shown.label} · {c.shown.rounds.length} rounds</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+      <CalendarCTA title="Found your season? Plan it in RaceNode." />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

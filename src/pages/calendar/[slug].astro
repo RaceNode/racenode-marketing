@@ -1,0 +1,168 @@
+---
+// One page per championship, at a stable URL (the catalog's series slug), built for searches such as
+// "GT World Challenge Europe 2027 calendar". When the organizer has not published the featured season yet,
+// the page says so and shows the last season known, instead of an empty page.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SeasonTable from '../../components/calendar/SeasonTable.astro';
+import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
+import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
+import { catalog } from '../../lib/calendar/contract.mjs';
+import { buildCalendar, displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
+import { DISCIPLINES, REGIONS, country, longDate } from '../../lib/calendar/format.mjs';
+
+export async function getStaticPaths() {
+  const data = await catalog();
+  const cal = buildCalendar(data);
+  return cal.championships.map((c) => ({ params: { slug: c.slug }, props: { slug: c.slug } }));
+}
+
+const data = await catalog();
+const cal = buildCalendar(data);
+const c = cal.championships.find((x) => x.slug === Astro.props.slug)!;
+const shown = c.shown;
+const year = cal.year;
+const organizer = c.organizer_name ?? 'The organizer';
+const previous = c.featured ? c.seasons.find((s: any) => s.year < year) : null;
+const shared = sharedWeekends(cal, c).slice(0, 8);
+const related = cal.championships
+  .filter((x) => x.slug !== c.slug && x.discipline === c.discipline && shared.every((s) => s.championship.slug !== x.slug))
+  .slice(0, 8);
+const facts = [DISCIPLINES[c.discipline], c.region && REGIONS[c.region], c.country_code && country(c.country_code)].filter(Boolean);
+
+const venues = [...new Set(shown.rounds.map((r: any) => r.venue_name))];
+const title = c.featured
+  ? `${c.name} ${year} Calendar: Dates & Circuits | RaceNode`
+  : `${c.name} ${year} Calendar (Not Published Yet) | RaceNode`;
+const description = c.featured
+  ? `${c.name} ${shown.label}: ${shown.rounds.length} rounds at ${venues.slice(0, 4).join(', ')}${venues.length > 4 ? ' and more' : ''}. Dates and circuits as published by ${organizer}, with links to the official pages.`
+  : `${organizer} has not published the ${c.name} ${year} calendar yet. Here is the ${shown.label} season: ${shown.rounds.length} rounds, dates and circuits, with links to the official pages.`;
+
+const url = `https://www.racenode.com/calendar/${c.slug}/`;
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
+    { "@type": "ListItem", "position": 2, "name": "Motorsport Calendar", "item": "https://www.racenode.com/calendar/" },
+    { "@type": "ListItem", "position": 3, "name": c.name, "item": url },
+  ],
+};
+// The rounds as facts: dates, place, official page. No logo, no image.
+const eventsSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": `${c.name} ${shown.label} calendar`,
+  "itemListElement": shown.rounds.map((r: any, i: number) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "item": {
+      "@type": "SportsEvent",
+      "name": `${c.name} – ${r.name}`,
+      "startDate": r.start_date,
+      "endDate": r.end_date,
+      "eventStatus": r.status === 'cancelled' ? "https://schema.org/EventCancelled" : "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "url": r.url,
+      "location": {
+        "@type": "Place",
+        "name": r.venue_name,
+        ...(r.venue_country_code && { "address": { "@type": "PostalAddress", "addressCountry": r.venue_country_code } }),
+      },
+      ...(c.organizer_name && { "organizer": { "@type": "Organization", "name": c.organizer_name, ...(c.organizer_website_url && { "url": c.organizer_website_url }) } }),
+    },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} noindex={data.sample}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(eventsSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main class="px-4 sm:px-6 lg:px-8 pt-10 md:pt-14">
+      <div class="max-w-5xl mx-auto">
+        {data.sample && <SampleDataNotice />}
+
+        <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+          <a href="/calendar/" class="hover:text-white">Motorsport calendar</a>
+          <span class="mx-1">/</span>
+          <span class="text-gray-400">{displayName(c)}</span>
+        </nav>
+
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-3">{c.name} {year} calendar</h1>
+        <p class="text-gray-400 mb-6">
+          {facts.join(' · ')}
+          {c.organizer_name && <> · Organized by {c.organizer_website_url ? <a href={c.organizer_website_url} rel="noopener nofollow" target="_blank" class="underline hover:text-white">{c.organizer_name}</a> : c.organizer_name}</>}
+        </p>
+
+        {c.featured ? (
+          <p class="text-sm text-gray-400 mb-8">
+            {shown.rounds.length} rounds published by {organizer}{shown.calendar_status === 'provisional' && ' (provisional calendar)'}.
+            {shown.last_checked_at && <> Checked against the official calendar on {longDate(shown.last_checked_at)}.</>}
+            {shown.source_url && <> <a href={shown.source_url} rel="noopener nofollow" target="_blank" class="underline hover:text-white">Official calendar ↗</a></>}
+          </p>
+        ) : (
+          <div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 mb-8" role="note">
+            <p class="text-white font-medium mb-1">The {year} calendar is not published yet.</p>
+            <p class="text-sm text-gray-400">
+              {organizer} has not released its {year} dates. Below, the {shown.label} season for reference.
+              {shown.last_checked_at && <> Last checked against the official calendar on {longDate(shown.last_checked_at)}.</>}
+              {shown.source_url && <> <a href={shown.source_url} rel="noopener nofollow" target="_blank" class="underline hover:text-white">Official calendar ↗</a></>}
+            </p>
+          </div>
+        )}
+
+        <h2 class="text-xl font-bold text-white mb-3">{shown.label} season</h2>
+        <SeasonTable season={shown} />
+
+        {previous && (
+          <details class="mt-8 group">
+            <summary class="cursor-pointer text-gray-300 hover:text-white font-medium">
+              {previous.label} season · {previous.rounds.length} rounds
+            </summary>
+            <div class="mt-3"><SeasonTable season={previous} /></div>
+          </details>
+        )}
+
+        {shared.length > 0 && (
+          <section class="mt-12">
+            <h2 class="text-xl font-bold text-white mb-2">On the same weekends</h2>
+            <p class="text-sm text-gray-400 mb-4">Championships racing at the same circuit on the same dates in {shown.label}.</p>
+            <ul class="flex flex-wrap gap-2">
+              {shared.map((s) => (
+                <li>
+                  <a href={`/calendar/${s.championship.slug}/`} class="inline-block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+                    {displayName(s.championship)} <span class="text-gray-500">· {s.count} {s.count === 1 ? 'weekend' : 'weekends'}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {related.length > 0 && (
+          <section class="mt-10">
+            <h2 class="text-xl font-bold text-white mb-4">Other {DISCIPLINES[c.discipline]} calendars</h2>
+            <ul class="flex flex-wrap gap-2">
+              {related.map((x) => (
+                <li>
+                  <a href={`/calendar/${x.slug}/`} class="inline-block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+                    {displayName(x)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <p class="mt-10 text-sm text-gray-500">
+          <a href="/calendar/" class="underline hover:text-white">All championships on one calendar</a>
+        </p>
+      </div>
+      <CalendarCTA title={`Racing in ${displayName(c)}? Plan your season in RaceNode.`} />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
