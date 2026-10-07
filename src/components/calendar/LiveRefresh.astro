@@ -1,0 +1,29 @@
+---
+// Lets the visitor's browser bring a calendar page up to date with the catalog after the morning build
+// (src/lib/calendar/refresh.mjs). The parts it may replace carry data-calendar-live="<name>" and the hash of their
+// build-time render. Outcome in <html data-calendar-refresh>: updated | same | empty | failed (for tests).
+
+interface Props {
+  /** liveConfig() of src/lib/calendar/build.mjs */
+  config: Record<string, unknown>;
+}
+const { config } = Astro.props;
+---
+
+<script type="application/json" id="calendar-live-config" set:html={JSON.stringify(config).replace(/</g, '\\u003c')} />
+
+<script>
+  import { refresh } from '../../lib/calendar/refresh.mjs';
+
+  const el = document.getElementById('calendar-live-config');
+  if (el) {
+    const root = document.documentElement;
+    refresh(document, JSON.parse(el.textContent ?? '{}'))
+      .then((outcome) => (root.dataset.calendarRefresh = outcome))
+      .catch((e) => {
+        // The build's version stays: nothing to show the visitor.
+        root.dataset.calendarRefresh = 'failed';
+        console.debug('calendar refresh:', e);
+      });
+  }
+</script>

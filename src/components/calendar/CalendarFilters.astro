@@ -1,0 +1,118 @@
+---
+// Filters of the all-championships calendar. Without JavaScript every round stays listed; with it, rows,
+// month headings and the "not published yet" list follow the selects, and the choice is kept in the URL.
+import { DISCIPLINES, MONTHS, REGIONS } from '../../lib/calendar/format.mjs';
+
+interface Props {
+  years: number[];
+  year: number;
+  disciplines: string[];
+  regions: string[];
+}
+const { years, year, disciplines, regions } = Astro.props;
+const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-accent';
+---
+
+<form id="calendar-filters" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" aria-label="Filter the calendar">
+  <label class="text-xs text-gray-500">
+    Season
+    <select name="year" class={select}>
+      {years.map((y) => <option value={y} selected={y === year}>{y}</option>)}
+    </select>
+  </label>
+  <label class="text-xs text-gray-500">
+    Discipline
+    <select name="discipline" class={select}>
+      <option value="">All disciplines</option>
+      {disciplines.map((d) => <option value={d}>{DISCIPLINES[d] ?? d}</option>)}
+    </select>
+  </label>
+  <label class="text-xs text-gray-500">
+    Region
+    <select name="region" class={select}>
+      <option value="">All regions</option>
+      {regions.map((r) => <option value={r}>{REGIONS[r] ?? r}</option>)}
+    </select>
+  </label>
+  <label class="text-xs text-gray-500">
+    Month
+    <select name="month" class={select}>
+      <option value="">All months</option>
+      {MONTHS.map((m, i) => <option value={i + 1}>{m}</option>)}
+    </select>
+  </label>
+</form>
+<p id="calendar-count" class="text-sm text-gray-500 min-h-5 mb-6" aria-live="polite"></p>
+<script is:inline>
+  // Runs before the rounds are parsed: only the chosen season shows from the first paint, so nothing jumps when the
+  // filters below start (they remove this style once they have hidden the same rows themselves).
+  (function () {
+    var select = document.querySelector('#calendar-filters select[name=year]');
+    if (!select) return;
+    var year = (new URLSearchParams(location.search).get('year') || select.value).replace(/\D/g, '');
+    var style = document.createElement('style');
+    style.id = 'calendar-first-paint';
+    style.textContent = '[data-calendar-live="body"] section[data-year]:not([data-year="' + year + '"]){display:none}';
+    document.head.appendChild(style);
+  })();
+</script>
+
+<script>
+  const form = document.getElementById('calendar-filters') as HTMLFormElement | null;
+  const count = document.getElementById('calendar-count');
+  const keys = ['year', 'discipline', 'region', 'month'] as const;
+
+  function apply() {
+    if (!form) return;
+    const f = Object.fromEntries(keys.map((k) => [k, (form.elements.namedItem(k) as HTMLSelectElement).value]));
+    const match = (el: HTMLElement, fields: readonly string[]) => fields.every((k) => !f[k] || el.dataset[k] === f[k]);
+
+    let shown = 0;
+    const championships = new Set<string>();
+    document.querySelectorAll<HTMLElement>('.calendar-row').forEach((row) => {
+      const ok = match(row, keys);
+      row.hidden = !ok;
+      if (ok) {
+        shown += 1;
+        championships.add(row.querySelector('a')?.getAttribute('href') ?? '');
+      }
+    });
+    document.querySelectorAll<HTMLElement>('.calendar-month').forEach((m) => {
+      m.hidden = !m.querySelector('.calendar-row:not([hidden])');
+    });
+    const featured = document.querySelector<HTMLElement>('#calendar-not-published');
+    if (featured) {
+      featured.hidden = f.year !== featured.dataset.year;
+      let late = 0;
+      featured.querySelectorAll<HTMLElement>('.calendar-late').forEach((el) => {
+        el.hidden = !match(el, ['discipline', 'region']);
+        if (!el.hidden) late += 1;
+      });
+      if (!late) featured.hidden = true;
+    }
+    const empty = document.getElementById('calendar-empty');
+    if (empty) empty.hidden = shown > 0;
+    if (count)
+      count.textContent = `${shown} round${shown === 1 ? '' : 's'} across ${championships.size} championship${championships.size === 1 ? '' : 's'}`;
+
+    const params = new URLSearchParams();
+    for (const k of keys) if (f[k] && !(k === 'year' && f[k] === form.dataset.defaultYear)) params.set(k, f[k]);
+    const qs = params.toString();
+    history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    document.getElementById('calendar-first-paint')?.remove();
+  }
+
+  if (form) {
+    form.dataset.defaultYear = (form.elements.namedItem('year') as HTMLSelectElement).value;
+    const params = new URLSearchParams(location.search);
+    for (const k of keys) {
+      const v = params.get(k);
+      const el = form.elements.namedItem(k) as HTMLSelectElement;
+      if (v && [...el.options].some((o) => o.value === v)) el.value = v;
+    }
+    form.addEventListener('change', apply);
+    // The browser brought the rounds up to date (LiveRefresh): the new rows follow the current filters too.
+    document.addEventListener('calendar:updated', apply);
+    apply();
+  }
+</script>
