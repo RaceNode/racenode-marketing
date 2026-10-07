@@ -6,8 +6,8 @@ import { loadCatalog } from './build.mjs';
 import { VIEWS, sanitize } from './contract.mjs';
 import { dateRange, roundLabel, roundName } from './format.mjs';
 import { refresh } from './refresh.mjs';
-import { calendarOf, championshipBody, countriesOf, hash, indexBody, indexSummary, roundRow } from './render.mjs';
-import { buildCalendar, featuredYear, notPublished, roundsOfYear, sharedWeekends } from './model.mjs';
+import { calendarOf, championshipBody, circuitBody, circuitPageSlugs, countriesOf, hash, indexBody, indexSummary, roundRow } from './render.mjs';
+import { buildCalendar, circuits, featuredYear, notPublished, upcomingRounds, sharedWeekends } from './model.mjs';
 
 const series = (slug, extra = {}) => ({ slug, name: slug.toUpperCase(), short_name: null, discipline: 'gt', region: 'europe', ...extra });
 const season = (series_slug, year, label = String(year)) => ({ series_slug, label, year, last_checked_at: `${year - 1}-10-07T03:00:00Z` });
@@ -57,7 +57,6 @@ test('a championship without its 2027 season leads with the last one and says so
   assert.equal(bySlug.late.shown.year, 2026);
   assert.equal(bySlug.empty, undefined, 'a series with no round has no page');
   assert.deepEqual(notPublished(cal).map((c) => c.slug), ['late']);
-  assert.deepEqual(roundsOfYear(cal, 2027).map((r) => r.series_slug), ['published']);
 });
 
 test('a winter season counts for the year it ends in', () => {
@@ -66,6 +65,58 @@ test('a winter season counts for the year it ends in', () => {
     { today: new Date('2026-10-07') },
   );
   assert.equal(cal.championships[0].featured.label, '2026-2027');
+});
+
+test('one chronological list from today: a season starting the autumn before sits in its month, run rounds are gone', () => {
+  const cal = buildCalendar(
+    {
+      series: [series('alms'), series('gt')],
+      seasons: [season('alms', 2027, '2026-2027'), season('gt', 2026), season('gt', 2027)],
+      events: [
+        round('alms', 2027, '2026-11-20', { season_label: '2026-2027', end_date: '2026-11-22' }),
+        round('alms', 2027, '2027-02-05', { season_label: '2026-2027' }),
+        round('gt', 2026, '2026-09-01'),
+        round('gt', 2026, '2026-10-07', { end_date: '2026-10-09' }),
+        round('gt', 2027, '2027-04-01'),
+      ],
+    },
+    { today: new Date('2026-10-08') },
+  );
+  assert.deepEqual(
+    upcomingRounds(cal, '2026-10-08').map((r) => r.start_date),
+    ['2026-10-07', '2026-11-20', '2027-02-05', '2027-04-01'],
+    'a round under way stays until its last day',
+  );
+  const html = indexBody(cal, { year: 2027, today: '2026-10-08', countries: {} });
+  assert.ok(html.indexOf('November 2026') < html.indexOf('February 2027'));
+  assert.doesNotMatch(html, /September 2026/);
+});
+
+test('circuits: one slug per venue, a page from three rounds, the upcoming ones first', () => {
+  const cal = buildCalendar(
+    {
+      series: [series('a'), series('b')],
+      seasons: [season('a', 2026), season('a', 2027), season('b', 2026)],
+      events: [
+        round('a', 2026, '2026-05-01'),
+        round('a', 2027, '2027-05-01'),
+        round('b', 2026, '2026-06-01'),
+        round('b', 2026, '2026-07-01', { venue_slug: 'zandvoort-xx', venue_name: 'Circuit Zandvoort', venue_country_code: 'NL' }),
+      ],
+    },
+    { today: new Date('2026-10-08') },
+  );
+  const all = circuits(cal);
+  assert.deepEqual(all.map((c) => [c.slug, c.rounds.length, c.page]), [['zandvoort-nl', 1, false], ['spa', 3, true]]);
+  const ctx = { year: 2027, today: '2026-10-08', countries: {}, circuitPages: ['spa'] };
+  const html = circuitBody(cal, 'spa', ctx);
+  assert.match(html, /1 upcoming round of 1 championship/);
+  assert.match(html, /Raced here, 2027 not published yet/);
+  assert.match(html, /Rounds already run at Spa · 2/);
+  assert.equal(circuitBody(cal, 'nowhere', ctx), '');
+  // The index links a round to its circuit's page only when the circuit has one.
+  const index = indexBody(cal, ctx);
+  assert.match(index, /<a href="\/calendar\/circuits\/spa\/">Spa<\/a>/);
 });
 
 test('championships sharing a weekend at the same venue are found', () => {
@@ -100,7 +151,7 @@ test('production never publishes sample data: without the views the build fails'
 test('the rows of the all-championships calendar escape what the catalog says', () => {
   const c = { slug: 'a', name: 'A <b>', short_name: null, discipline: 'gt', region: null };
   const html = roundRow({ ...round('a', 2027, '2027-04-15'), name: 'Night & "Day"', venue_name: 'Spa', venue_country_code: 'BE', championship: c }, { countries: { BE: 'Belgium' } });
-  assert.match(html, /data-discipline="gt" data-region="" data-month="4" data-year="2027"/);
+  assert.match(html, /data-discipline="gt" data-region="" data-circuit="spa" data-month="2027-04" data-end="2027-04-15"/);
   assert.match(html, /A &lt;b&gt;/);
   assert.match(html, /Night &amp; &quot;Day&quot; · /);
   assert.match(html, /Spa, Belgium/);
@@ -134,8 +185,9 @@ function serve(data, { status = 200 } = {}) {
 
 test('the browser leaves the page alone when nothing changed since the build', async () => {
   const data = await sampleData();
-  const ctx = { year: 2027, countries: countriesOf(data) };
+  const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
   const cal = calendarOf(data, ctx);
+  ctx.circuitPages = [...circuitPageSlugs(cal)];
   const p = page({ summary: indexSummary(cal), body: indexBody(cal, ctx) });
   const before = p.els.body.innerHTML;
   serve(data);
@@ -146,8 +198,9 @@ test('the browser leaves the page alone when nothing changed since the build', a
 
 test('the browser updates what changed since the build, and only that', async () => {
   const data = await sampleData();
-  const ctx = { year: 2027, countries: countriesOf(data) };
+  const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
   const cal = calendarOf(data, ctx);
+  ctx.circuitPages = [...circuitPageSlugs(cal)];
   const p = page({ summary: indexSummary(cal), body: indexBody(cal, ctx) });
   const summary = p.els.summary.innerHTML;
   // During the day an organizer moves a round.
@@ -164,19 +217,34 @@ test('the browser updates what changed since the build, and only that', async ()
 
 test("a championship's page asks the views for that championship only", async () => {
   const data = await sampleData();
-  const ctx = { year: 2027, countries: countriesOf(data) };
+  const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
   const cal = calendarOf(data, ctx);
+  ctx.circuitPages = [...circuitPageSlugs(cal)];
   const p = page({ body: championshipBody(cal, 'british-gt', ctx) });
+  assert.match(p.els.body.innerHTML, /href="\/calendar\/circuits\//, 'its rounds link to their circuit pages');
   // The static sample API ignores the query: the browser filters too, and still finds nothing new.
   const calls = serve(data);
   assert.equal(await refresh(p.doc, { url: '/calendar/sample-api', key: 'sample', ...ctx, slug: 'british-gt' }), 'same');
   assert.ok(calls.every((u) => /=eq\.british-gt&/.test(u)));
 });
 
+test("a circuit's page reads the whole catalog and finds nothing new when nothing changed", async () => {
+  const data = await sampleData();
+  const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
+  const cal = calendarOf(data, ctx);
+  ctx.circuitPages = [...circuitPageSlugs(cal)];
+  const p = page({ body: circuitBody(cal, 'spa-francochamps-be', ctx) });
+  assert.ok(p.els.body.innerHTML.length > 0);
+  const calls = serve(data);
+  assert.equal(await refresh(p.doc, { url: '/calendar/sample-api', key: 'sample', ...ctx, circuit: 'spa-francochamps-be' }), 'same');
+  assert.ok(calls.every((u) => !/=eq\./.test(u)));
+});
+
 test('the build version stays when the views fail or answer nothing', async () => {
   const data = await sampleData();
-  const ctx = { year: 2027, countries: countriesOf(data) };
+  const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
   const cal = calendarOf(data, ctx);
+  ctx.circuitPages = [...circuitPageSlugs(cal)];
   const p = page({ body: indexBody(cal, ctx) });
   const before = p.els.body.innerHTML;
   serve(data, { status: 404 }); // PGRST205 until the app's #197 is in production

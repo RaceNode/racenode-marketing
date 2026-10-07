@@ -41,17 +41,50 @@ export function buildCalendar(data, { today = new Date() } = {}) {
 
 export const displayName = (s) => s.short_name || s.name;
 
-/** Every round of a year across championships, by date: the calendar page's rows. */
-export function roundsOfYear(calendar, year) {
+/** Every round across championships and seasons, by date, each with its championship. */
+export function allRounds(calendar) {
   const out = [];
-  for (const c of calendar.championships)
-    for (const season of c.seasons)
-      if (season.year === year) for (const r of season.rounds) out.push({ ...r, championship: c });
+  for (const c of calendar.championships) for (const season of c.seasons) for (const r of season.rounds) out.push({ ...r, championship: c });
   return out.sort((a, b) => byDate(a, b) || displayName(a.championship).localeCompare(displayName(b.championship)));
 }
 
-/** Years that have at least one round, latest first. */
-export const years = (calendar) => [...new Set(calendar.championships.flatMap((c) => c.seasons.map((s) => s.year)))].sort((a, b) => b - a);
+/**
+ * The calendar page's rows: every round not over by `today` ("YYYY-MM-DD"), whatever season it belongs to (Asian
+ * Le Mans Series 2027 starts in November 2026: it sits in November 2026). Rounds already run stay on each
+ * championship's and circuit's page.
+ */
+export const upcomingRounds = (calendar, today) => allRounds(calendar).filter((r) => r.end_date >= today);
+
+/**
+ * A venue's slug in our URLs: the catalog's, with its country when the catalog did not know it ("zandvoort-xx"
+ * becomes "zandvoort-nl"), so the URL stays the same when the catalog fills it in.
+ */
+export const circuitSlug = (r) =>
+  r.venue_slug.replace(/-xx$/, r.venue_country_code ? `-${r.venue_country_code.toLowerCase()}` : '-xx');
+
+/**
+ * Race or test rounds a circuit needs in the catalog (every season) to get its own page: below, a page would be
+ * thin. A gala or a media day (kind 'other') does not make a venue a circuit.
+ */
+export const CIRCUIT_PAGE_MIN_ROUNDS = 3;
+
+/** Every venue with its rounds (all seasons, by date), by name; `page` when it has its own page. */
+export function circuits(calendar) {
+  const out = new Map();
+  for (const r of allRounds(calendar)) {
+    if (!r.venue_slug) continue;
+    const slug = circuitSlug(r);
+    if (!out.has(slug)) out.set(slug, { slug, rounds: [] });
+    const c = out.get(slug);
+    c.rounds.push(r);
+    // The latest name and country the catalog gives.
+    c.name = r.venue_name ?? c.name ?? slug;
+    c.country_code = r.venue_country_code ?? c.country_code ?? null;
+  }
+  return [...out.values()]
+    .map((c) => ({ ...c, page: c.rounds.filter((r) => r.kind !== 'other').length >= CIRCUIT_PAGE_MIN_ROUNDS }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
 
 /** Championships with no season for the featured year yet, with the latest season they do have. */
 export const notPublished = (calendar) => calendar.championships.filter((c) => !c.featured);

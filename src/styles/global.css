@@ -42,4 +42,5 @@
   .calendar-row > .c > span { @apply block text-xs text-gray-500; }
   .calendar-row > .p { @apply min-w-0 text-sm text-gray-400 sm:col-start-3; }
   .calendar-row > .p > span { @apply text-gray-300; }
+  .calendar-row > .p > a { @apply hover:text-white hover:underline; }
 }

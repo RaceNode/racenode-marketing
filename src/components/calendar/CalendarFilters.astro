@@ -1,25 +1,21 @@
 ---
-// Filters of the all-championships calendar. Without JavaScript every round stays listed; with it, rows,
-// month headings and the "not published yet" list follow the selects, and the choice is kept in the URL.
-import { DISCIPLINES, MONTHS, REGIONS } from '../../lib/calendar/format.mjs';
+// Filters of the all-championships calendar. Without JavaScript every upcoming round stays listed; with it, rows,
+// month headings and the "not published yet" list follow the selects, and the choice is kept in the URL. A round
+// the visitor's clock says is over is hidden too (the morning build may be a day behind).
+import { DISCIPLINES, REGIONS } from '../../lib/calendar/format.mjs';
 
 interface Props {
-  years: number[];
-  year: number;
   disciplines: string[];
   regions: string[];
+  /** circuits() of model.mjs that have an upcoming round */
+  circuits: { slug: string; name: string; page: boolean }[];
+  months: { value: string; label: string }[];
 }
-const { years, year, disciplines, regions } = Astro.props;
+const { disciplines, regions, circuits, months } = Astro.props;
 const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-accent';
 ---
 
 <form id="calendar-filters" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" aria-label="Filter the calendar">
-  <label class="text-xs text-gray-500">
-    Season
-    <select name="year" class={select}>
-      {years.map((y) => <option value={y} selected={y === year}>{y}</option>)}
-    </select>
-  </label>
   <label class="text-xs text-gray-500">
     Discipline
     <select name="discipline" class={select}>
@@ -35,42 +31,38 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
     </select>
   </label>
   <label class="text-xs text-gray-500">
+    Circuit
+    <select name="circuit" class={select}>
+      <option value="">All circuits</option>
+      {circuits.map((c) => <option value={c.slug} data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}>{c.name}</option>)}
+    </select>
+  </label>
+  <label class="text-xs text-gray-500">
     Month
     <select name="month" class={select}>
       <option value="">All months</option>
-      {MONTHS.map((m, i) => <option value={i + 1}>{m}</option>)}
+      {months.map((m) => <option value={m.value}>{m.label}</option>)}
     </select>
   </label>
 </form>
 <p id="calendar-count" class="text-sm text-gray-500 min-h-5 mb-6" aria-live="polite"></p>
-<script is:inline>
-  // Runs before the rounds are parsed: only the chosen season shows from the first paint, so nothing jumps when the
-  // filters below start (they remove this style once they have hidden the same rows themselves).
-  (function () {
-    var select = document.querySelector('#calendar-filters select[name=year]');
-    if (!select) return;
-    var year = (new URLSearchParams(location.search).get('year') || select.value).replace(/\D/g, '');
-    var style = document.createElement('style');
-    style.id = 'calendar-first-paint';
-    style.textContent = '[data-calendar-live="body"] section[data-year]:not([data-year="' + year + '"]){display:none}';
-    document.head.appendChild(style);
-  })();
-</script>
 
 <script>
   const form = document.getElementById('calendar-filters') as HTMLFormElement | null;
   const count = document.getElementById('calendar-count');
-  const keys = ['year', 'discipline', 'region', 'month'] as const;
+  const keys = ['discipline', 'region', 'circuit', 'month'] as const;
 
   function apply() {
     if (!form) return;
     const f = Object.fromEntries(keys.map((k) => [k, (form.elements.namedItem(k) as HTMLSelectElement).value]));
     const match = (el: HTMLElement, fields: readonly string[]) => fields.every((k) => !f[k] || el.dataset[k] === f[k]);
+    const d = new Date();
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
     let shown = 0;
     const championships = new Set<string>();
     document.querySelectorAll<HTMLElement>('.calendar-row').forEach((row) => {
-      const ok = match(row, keys);
+      const ok = match(row, keys) && !((row.dataset.end ?? '') < today);
       row.hidden = !ok;
       if (ok) {
         shown += 1;
@@ -80,30 +72,37 @@ const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rou
     document.querySelectorAll<HTMLElement>('.calendar-month').forEach((m) => {
       m.hidden = !m.querySelector('.calendar-row:not([hidden])');
     });
-    const featured = document.querySelector<HTMLElement>('#calendar-not-published');
-    if (featured) {
-      featured.hidden = f.year !== featured.dataset.year;
-      let late = 0;
-      featured.querySelectorAll<HTMLElement>('.calendar-late').forEach((el) => {
+    // The championships whose next season is not out have no round to filter by circuit or month.
+    const late = document.querySelector<HTMLElement>('#calendar-not-published');
+    if (late) {
+      let n = 0;
+      late.querySelectorAll<HTMLElement>('.calendar-late').forEach((el) => {
         el.hidden = !match(el, ['discipline', 'region']);
-        if (!el.hidden) late += 1;
+        if (!el.hidden) n += 1;
       });
-      if (!late) featured.hidden = true;
+      late.hidden = !n || Boolean(f.circuit || f.month);
     }
     const empty = document.getElementById('calendar-empty');
     if (empty) empty.hidden = shown > 0;
-    if (count)
-      count.textContent = `${shown} round${shown === 1 ? '' : 's'} across ${championships.size} championship${championships.size === 1 ? '' : 's'}`;
+    if (count) {
+      count.textContent = `${shown} upcoming round${shown === 1 ? '' : 's'} across ${championships.size} championship${championships.size === 1 ? '' : 's'}`;
+      const circuit = (form.elements.namedItem('circuit') as HTMLSelectElement).selectedOptions[0];
+      if (circuit?.dataset.page) {
+        const a = document.createElement('a');
+        a.href = circuit.dataset.page;
+        a.className = 'underline hover:text-white';
+        a.textContent = `${circuit.textContent} calendar`;
+        count.append(' · ', a);
+      }
+    }
 
     const params = new URLSearchParams();
-    for (const k of keys) if (f[k] && !(k === 'year' && f[k] === form.dataset.defaultYear)) params.set(k, f[k]);
+    for (const k of keys) if (f[k]) params.set(k, f[k]);
     const qs = params.toString();
     history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
-    document.getElementById('calendar-first-paint')?.remove();
   }
 
   if (form) {
-    form.dataset.defaultYear = (form.elements.namedItem('year') as HTMLSelectElement).value;
     const params = new URLSearchParams(location.search);
     for (const k of keys) {
       const v = params.get(k);
