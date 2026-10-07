@@ -86,8 +86,8 @@ function byMonth(rounds, ctx, pages, opts) {
   let html = '';
   for (const [m, list] of months)
     html +=
-      `<div class="calendar-month mb-8"><h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">${esc(m)}</h2>` +
-      `<ul class="bg-gray-900 border border-gray-800 rounded-lg">${list.map((r) => roundRow(r, ctx, pages, opts)).join('')}</ul></div>`;
+      `<div class="calendar-month mb-8"><h2 class="cal-month-title">${esc(m)}</h2>` +
+      `<ul class="cal-sheet">${list.map((r) => roundRow(r, ctx, pages, opts)).join('')}</ul></div>`;
   return html;
 }
 
@@ -99,9 +99,9 @@ function lateList(late) {
       .map(
         (c) =>
           `<li class="calendar-late" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}">` +
-          `<a href="/calendar/${esc(c.slug)}/" class="block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-4 py-3 transition-colors">` +
-          `<span class="text-white font-medium">${esc(displayName(c))}</span>` +
-          `<span class="block text-xs text-gray-500">Last season known: ${esc(c.shown.label)} · ${c.shown.rounds.length} rounds</span></a></li>`,
+          `<a href="/calendar/${esc(c.slug)}/" class="cal-card">` +
+          `<span>${esc(displayName(c))}</span>` +
+          `<span>Last season known: ${esc(c.shown.label)} · ${c.shown.rounds.length} rounds</span></a></li>`,
       )
       .join('') +
     '</ul>'
@@ -115,14 +115,14 @@ function lateList(late) {
 export function indexBody(cal, ctx) {
   const pages = pagesOf(ctx);
   let html = byMonth(upcomingRounds(cal, ctx.today ?? ''), ctx, pages);
-  html += '<p id="calendar-empty" class="text-gray-400 bg-gray-900 border border-gray-800 rounded-lg px-4 py-6 mb-8" hidden>No upcoming round matches these filters.</p>';
+  html += '<p id="calendar-empty" class="cal-note muted" hidden>No upcoming round matches these filters.</p>';
 
   const late = notPublished(cal);
   if (late.length > 0) {
     html +=
       `<section id="calendar-not-published" class="mt-12 mb-4">` +
-      `<h2 class="text-xl md:text-2xl font-bold text-white mb-2">${cal.year} not published yet</h2>` +
-      `<p class="text-gray-400 mb-4">These organizers have not released their ${cal.year} dates. Each page shows their last season until they do.</p>` +
+      `<h2 class="subtitle mb-2">${cal.year} not published yet</h2>` +
+      `<p class="muted mb-4">These organizers have not released their ${cal.year} dates. Each page shows their last season until they do.</p>` +
       lateList(late) +
       '</section>';
   }
@@ -139,20 +139,20 @@ export function seasonTable(season, ctx, pages = new Set()) {
     const label = roundLabel(r) || `Round ${i + 1}`;
     const name = roundName(r);
     return (
-      '<li class="grid grid-cols-[1fr_auto] sm:grid-cols-[9rem_10.5rem_1fr_auto] gap-x-4 gap-y-1 items-baseline px-4 py-3 border-b border-gray-800 last:border-b-0">' +
-      `<span class="text-xs sm:text-sm text-gray-500 col-span-2 sm:col-span-1">${esc(label)}</span>` +
-      `<span class="font-mono text-sm text-white sm:order-none">${esc(dateRange(r.start_date, r.end_date, { withYear: true }))}` +
-      (r.status === 'cancelled' ? '<span class="ml-2 text-xs text-blocking font-sans">Cancelled</span>' : '') +
+      '<li class="cal-season-row">' +
+      `<span class="text-xs sm:text-sm text-graphite col-span-2 sm:col-span-1">${esc(label)}</span>` +
+      `<span class="font-mono text-sm text-ink sm:order-none">${esc(dateRange(r.start_date, r.end_date, { withYear: true }))}` +
+      (r.status === 'cancelled' ? '<span class="ml-2 text-xs text-blocking font-sans font-semibold">Cancelled</span>' : '') +
       '</span>' +
-      (r.url ? external(r.url, 'Official page ↗', 'text-xs text-gray-400 hover:text-white whitespace-nowrap sm:col-start-4 sm:row-start-1') : '<span></span>') +
-      '<span class="text-sm text-gray-300 col-span-2 sm:col-span-1 sm:col-start-3 sm:row-start-1">' +
-      (name ? `<span class="text-white">${esc(name)}<br class="sm:hidden" /><span class="hidden sm:inline"> · </span></span>` : '') +
-      (circuitHref(r, pages) ? `<a href="${circuitHref(r, pages)}" class="hover:text-white hover:underline">${esc(r.venue_name)}</a>` : esc(r.venue_name)) +
-      `${r.venue_country_code ? `<span class="text-gray-500">, ${esc(country(r.venue_country_code, ctx))}</span>` : ''}` +
+      (r.url ? external(r.url, 'Official page ↗', 'text-xs font-semibold text-accent hover:text-accent-hover hover:underline whitespace-nowrap sm:col-start-4 sm:row-start-1') : '<span></span>') +
+      '<span class="text-sm text-graphite col-span-2 sm:col-span-1 sm:col-start-3 sm:row-start-1">' +
+      (name ? `<span class="text-ink">${esc(name)}<br class="sm:hidden" /><span class="hidden sm:inline"> · </span></span>` : '') +
+      (circuitHref(r, pages) ? `<a href="${circuitHref(r, pages)}" class="hover:text-accent hover:underline">${esc(r.venue_name)}</a>` : esc(r.venue_name)) +
+      `${r.venue_country_code ? `<span>, ${esc(country(r.venue_country_code, ctx))}</span>` : ''}` +
       '</span></li>'
     );
   });
-  return `<ol class="bg-gray-900 border border-gray-800 rounded-lg">${rows.join('')}</ol>`;
+  return `<ol class="cal-sheet">${rows.join('')}</ol>`;
 }
 
 /** Whether its season is out, when it was checked, its rounds, and the season before. Empty if unknown. */
@@ -164,17 +164,17 @@ export function championshipBody(cal, slug, ctx) {
   const pages = pagesOf(ctx);
   const organizer = esc(c.organizer_name ?? 'The organizer');
   const checked = (lead) => (shown.last_checked_at ? ` ${lead} against the official calendar on ${longDate(shown.last_checked_at)}.` : '');
-  const source = shown.source_url ? ` ${external(shown.source_url, 'Official calendar ↗', 'underline hover:text-white')}` : '';
+  const source = shown.source_url ? ` ${external(shown.source_url, 'Official calendar ↗', 'link')}` : '';
   let html = c.featured
-    ? `<p class="text-sm text-gray-400 mb-8">${shown.rounds.length} rounds published by ${organizer}${shown.calendar_status === 'provisional' ? ' (provisional calendar)' : ''}.${checked('Checked')}${source}</p>`
-    : '<div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 mb-8" role="note">' +
-      `<p class="text-white font-medium mb-1">The ${year} calendar is not published yet.</p>` +
-      `<p class="text-sm text-gray-400">${organizer} has not released its ${year} dates. Below, the ${esc(shown.label)} season for reference.${checked('Last checked')}${source}</p></div>`;
-  html += `<h2 class="text-xl font-bold text-white mb-3">${esc(shown.label)} season</h2>${seasonTable(shown, ctx, pages)}`;
+    ? `<p class="muted text-sm mb-8">${shown.rounds.length} rounds published by ${organizer}${shown.calendar_status === 'provisional' ? ' (provisional calendar)' : ''}.${checked('Checked')}${source}</p>`
+    : '<div class="cal-note" role="note">' +
+      `<p class="font-semibold text-ink mb-1">The ${year} calendar is not published yet.</p>` +
+      `<p class="muted text-sm">${organizer} has not released its ${year} dates. Below, the ${esc(shown.label)} season for reference.${checked('Last checked')}${source}</p></div>`;
+  html += `<h2 class="subtitle mb-3">${esc(shown.label)} season</h2>${seasonTable(shown, ctx, pages)}`;
   const previous = c.featured ? c.seasons.find((s) => s.year < year) : null;
   if (previous)
     html +=
-      '<details class="mt-8 group"><summary class="cursor-pointer text-gray-300 hover:text-white font-medium">' +
+      '<details class="mt-8 group"><summary class="cal-summary">' +
       `${esc(previous.label)} season · ${previous.rounds.length} rounds</summary><div class="mt-3">${seasonTable(previous, ctx, pages)}</div></details>`;
   return html;
 }
@@ -196,23 +196,23 @@ export function circuitBody(cal, slug, ctx) {
   const past = c.rounds.filter((r) => r.end_date < today).reverse();
   const n = new Set(upcoming.map((r) => r.championship.slug)).size;
   let html = upcoming.length
-    ? `<p class="text-sm text-gray-400 mb-8">${upcoming.length} upcoming round${upcoming.length === 1 ? '' : 's'} of ${n} championship${n === 1 ? '' : 's'} at ${esc(c.name)}, as each organizer publishes them.</p>` +
+    ? `<p class="muted text-sm mb-8">${upcoming.length} upcoming round${upcoming.length === 1 ? '' : 's'} of ${n} championship${n === 1 ? '' : 's'} at ${esc(c.name)}, as each organizer publishes them.</p>` +
       byMonth(upcoming, ctx, pages, { place: false })
-    : `<div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 mb-8" role="note"><p class="text-white font-medium mb-1">No round scheduled at ${esc(c.name)} in the calendars published so far.</p>` +
-      '<p class="text-sm text-gray-400">Below, the rounds already run here.</p></div>';
+    : `<div class="cal-note" role="note"><p class="font-semibold text-ink mb-1">No round scheduled at ${esc(c.name)} in the calendars published so far.</p>` +
+      '<p class="muted text-sm">Below, the rounds already run here.</p></div>';
 
   const late = notPublished(cal).filter((x) => x.shown.rounds.some((r) => r.venue_slug === venue));
   if (late.length > 0)
     html +=
       '<section class="mt-12 mb-4">' +
-      `<h2 class="text-xl font-bold text-white mb-2">Raced here, ${cal.year} not published yet</h2>` +
-      `<p class="text-gray-400 mb-4">These championships came to ${esc(c.name)} in their last season and have not released their ${cal.year} dates.</p>` +
+      `<h2 class="subtitle mb-2">Raced here, ${cal.year} not published yet</h2>` +
+      `<p class="muted mb-4">These championships came to ${esc(c.name)} in their last season and have not released their ${cal.year} dates.</p>` +
       lateList(late) +
       '</section>';
 
   if (past.length > 0)
     html +=
-      '<details class="mt-10"><summary class="cursor-pointer text-gray-300 hover:text-white font-medium mb-3">' +
+      '<details class="mt-10"><summary class="cal-summary mb-3">' +
       `Rounds already run at ${esc(c.name)} · ${past.length}</summary>${byMonth(past, ctx, pages, { place: false })}</details>`;
   return html;
 }

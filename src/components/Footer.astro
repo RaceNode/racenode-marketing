@@ -6,10 +6,11 @@ const email = "contact@racenode.com";
 
 const footerLinks = {
   product: [
-    { href: "/crew-planning/", label: "Planning" },
+    { href: "/crew-app/", label: "Personal" },
     { href: "/management/", label: "Management" },
     { href: "/logistics/", label: "Logistics" },
     { href: "/timetable/", label: "Timetable" },
+    { href: "/crew-planning/", label: "Planning" },
     { href: "/pricing/", label: "Pricing" },
     { href: "/calendar/", label: "Motorsport calendar" },
   ],
@@ -26,41 +27,42 @@ const footerLinks = {
 };
 ---
 
-<footer class="bg-gray-900 border-t border-gray-800">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<footer class="band-dark">
+  <div class="kerb" aria-hidden="true"></div>
+  <div class="page py-14">
+    <div class="grid grid-cols-2 md:grid-cols-12 gap-x-8 gap-y-10">
       <!-- Logo & Info -->
-      <div class="col-span-2 md:col-span-1">
+      <div class="col-span-2 md:col-span-6">
         <a href="/" class="inline-block mb-4">
           <img src="/logo_horizontal.svg" alt="RaceNode" class="h-8 w-auto" />
         </a>
-        <p class="text-gray-500 text-sm mb-4">
-          The all-in-one platform for racing teams.
+        <p class="font-display text-2xl font-semibold text-white mb-4 max-w-xs leading-tight">
+          Racing team management software.
         </p>
         <a
           href={`mailto:${email}`}
-          class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm group"
+          class="inline-flex items-center gap-2 text-smoke hover:text-white transition-colors text-sm"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="20" height="16" x="2" y="4" rx="2"/>
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
           </svg>
           <span>{email}</span>
         </a>
 
-        <h3 class="text-white font-semibold text-sm mt-8 mb-3">Get the app</h3>
+        <h3 class="text-smoke font-medium text-sm mt-8 mb-3">Get the app</h3>
         <StoreBadges size="sm" align="start" />
       </div>
 
       <!-- Product Links -->
-      <div>
-        <h3 class="text-white font-semibold text-sm mb-4">Product</h3>
+      <div class="md:col-span-2">
+        <h3 class="font-display text-smoke font-medium text-sm mb-4">Product</h3>
         <ul class="space-y-3">
           {footerLinks.product.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-white hover:text-accent-soft transition-colors"
               >
                 {link.label}
               </a>
@@ -70,14 +72,14 @@ const footerLinks = {
       </div>
 
       <!-- Company Links -->
-      <div>
-        <h3 class="text-white font-semibold text-sm mb-4">Company</h3>
+      <div class="md:col-span-2">
+        <h3 class="font-display text-smoke font-medium text-sm mb-4">Company</h3>
         <ul class="space-y-3">
           {footerLinks.company.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-white hover:text-accent-soft transition-colors"
               >
                 {link.label}
               </a>
@@ -87,14 +89,14 @@ const footerLinks = {
       </div>
 
       <!-- Legal Links -->
-      <div>
-        <h3 class="text-white font-semibold text-sm mb-4">Legal</h3>
+      <div class="md:col-span-2">
+        <h3 class="font-display text-smoke font-medium text-sm mb-4">Legal</h3>
         <ul class="space-y-3">
           {footerLinks.legal.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-white hover:text-accent-soft transition-colors"
               >
                 {link.label}
               </a>
@@ -105,8 +107,8 @@ const footerLinks = {
     </div>
 
     <!-- Copyright -->
-    <div class="mt-12 pt-8 border-t border-gray-800">
-      <p class="text-gray-500 text-sm text-center">
+    <div class="mt-14 pt-6 border-t border-asphalt-line">
+      <p class="text-smoke text-sm">
         &copy; {currentYear} RaceNode. All rights reserved.
       </p>
     </div>

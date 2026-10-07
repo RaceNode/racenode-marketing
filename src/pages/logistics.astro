@@ -6,8 +6,7 @@ import LogisticsHero from '../components/logistics/LogisticsHero.astro';
 import LogisticsPainPoints from '../components/logistics/LogisticsPainPoints.astro';
 import LogisticsFeatures from '../components/logistics/LogisticsFeatures.astro';
 import LogisticsSync from '../components/logistics/LogisticsSync.astro';
-import LogisticsDocuments from '../components/logistics/LogisticsDocuments.astro';
-import LogisticsRoadmap from '../components/logistics/LogisticsRoadmap.astro';
+import LogisticsImport from '../components/logistics/LogisticsImport.astro';
 import LogisticsCTA from '../components/logistics/LogisticsCTA.astro';
 
 const title = "Race Team Travel & Accommodation Software | RaceNode";
@@ -36,15 +35,14 @@ const breadcrumbSchema = {
 
 <BaseLayout title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-  <div class="min-h-screen bg-gray-950">
+  <div class="min-h-screen bg-concrete">
     <Header />
     <main>
       <LogisticsHero />
+      <LogisticsImport />
       <LogisticsPainPoints />
       <LogisticsFeatures />
       <LogisticsSync />
-      <LogisticsDocuments />
-      <LogisticsRoadmap />
       <LogisticsCTA />
     </main>
     <Footer />

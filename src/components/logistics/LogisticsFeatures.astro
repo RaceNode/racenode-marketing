@@ -1,122 +1,82 @@
 ---
-import { Image } from 'astro:assets';
-import screenshotOverview from '../../assets/screenshots/logistics-overview.png';
-import screenshotStaff from '../../assets/screenshots/logistics-staff.png';
-import screenshotAccommodation from '../../assets/screenshots/logistics-accommodation.png';
-import screenshotTravel from '../../assets/screenshots/logistics-travel.png';
-import screenshotVehicles from '../../assets/screenshots/logistics-vehicles.png';
-import screenshotInfo from '../../assets/screenshots/logistics-info.png';
+import Shot from '../Shot.astro';
+import staff from '../../assets/screenshots/logistics-staff.png';
+import staffPhone from '../../assets/screenshots/logistics-staff-phone.png';
+import accommodation from '../../assets/screenshots/logistics-accommodation.png';
+import accommodationPhone from '../../assets/screenshots/logistics-accommodation-phone.png';
+import travel from '../../assets/screenshots/logistics-travel.png';
+import travelPhone from '../../assets/screenshots/logistics-travel-phone.png';
+import vehicles from '../../assets/screenshots/logistics-vehicles.png';
+import vehiclesPhone from '../../assets/screenshots/logistics-vehicles-phone.png';
+import info from '../../assets/screenshots/logistics-info.png';
+import infoPhone from '../../assets/screenshots/logistics-info-phone.png';
 
-const screenshots = {
-  overview: screenshotOverview,
-  staff: screenshotStaff,
-  accommodation: screenshotAccommodation,
-  travel: screenshotTravel,
-  vehicles: screenshotVehicles,
-  info: screenshotInfo,
-};
-
+// The screen shows; the words only say what to look at.
 const features = [
   {
-    id: "overview",
-    badge: "Overview",
-    title: "See what's missing before it's a problem.",
-    description: "A real-time dashboard showing preparation status for each event. Instantly see how many staff members still need a departure flight, a return flight, a hotel room, or an on-site vehicle. Track completion for travel, accommodation and on-site transfers, and get alerts for anything unresolved — dismiss the ones that don't apply so the dashboard reflects reality.",
-    icon: "eye",
-  },
-  {
-    id: "staff",
+    desktop: staff,
+    phone: staffPhone,
     badge: "Event Staff",
     title: "Your full crew, their complete logistics, one view.",
-    description: "See every staff member assigned to the event alongside their travel and accommodation status. Each row shows departure, hotel, return, and on-site vehicle at a glance. Alert icons flag anyone missing a booking — ignore the ones that don't apply. Select several people at once to create a shared trip or hotel in a single action.",
-    icon: "user-check",
+    description: "Departure, hotel, return and on-site vehicle, one row per person. Select several people to book a shared trip or hotel at once.",
   },
   {
-    id: "accommodation",
+    desktop: accommodation,
+    phone: accommodationPhone,
     badge: "Accommodation",
     title: "Hotels, rooms, and rooming lists. Handled.",
-    description: "Add hotels with address auto-complete, then assign staff to rooms in a few clicks. Manage rooming lists per hotel, track room types and capacity, set check-in and check-out details. Attach booking confirmations so your team can download them directly.",
-    icon: "bed",
+    description: "Hotels, rooms and who sleeps where, with check-in and check-out. Attach the confirmation: the crew downloads it from their app.",
   },
   {
-    id: "travel",
+    desktop: travel,
+    phone: travelPhone,
     badge: "Travel",
     title: "Every journey planned, every seat assigned.",
-    description: "Create departure and return trips for any travel type: flights, cars, trucks, or mixed. Break complex journeys into segments and assign staff to each leg. Attach tickets and documents so every team member has what they need in their pocket.",
-    icon: "plane",
+    description: "Departure and return by plane, train, bus or team vehicle, split into legs, each with its people and its tickets.",
   },
   {
-    id: "vehicles",
+    desktop: vehicles,
+    phone: vehiclesPhone,
     badge: "Event Vehicles",
     title: "Fleet vehicles and rentals, ready for the road.",
-    description: "Pull vehicles from your permanent fleet or add event-specific entries for rentals and loaners. Use them for travel, and assign staff as on-site riders for daily transfers at the circuit — each person rides in one vehicle, sorted in a couple of clicks.",
-    icon: "truck",
+    description: "Your own fleet and this weekend's rentals, used for travel and for the daily transfers at the circuit.",
   },
   {
-    id: "info",
+    desktop: info,
+    phone: infoPhone,
     badge: "Info Board",
     title: "The briefing board, shared with everyone.",
-    description: "Pin the notes and documents your crew needs — hotel lists, meeting points, schedules, procedures — with the files attached. Everyone assigned to the event sees them read-only in their Personal app, always up to date.",
-    icon: "info-board",
+    description: "Where the trucks park, where the passes are, what to do if you arrive after 22:00: notes the crew reads in the app.",
   }
 ];
-
-const icons: Record<string, string> = {
-  "eye": `<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>`,
-  "user-check": `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>`,
-  "bed": `<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>`,
-  "plane": `<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>`,
-  "truck": `<path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>`,
-  "info-board": `<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>`
-};
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-        Six tools, one workspace.
+<section class="band band-paper">
+  <div class="page">
+    <div class="head">
+      <h2 class="title">
+        Every tool, one workspace.
       </h2>
     </div>
 
+    <!-- One row per tool: the words beside a screen big enough to read, sides alternating. -->
     <div class="space-y-20 md:space-y-28">
       {features.map((feature, index) => (
-        <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}>
-          <!-- Content -->
-          <div class="lg:w-1/2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium mb-4 border border-gray-700">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                set:html={icons[feature.icon]}
-              />
+        <div class="ruled grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+          <div class:list={["lg:col-span-4", index % 2 === 1 && "lg:order-2 lg:col-start-9"]}>
+            <p class="font-display text-lg font-medium text-graphite">
               {feature.badge}
-            </div>
-            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+            </p>
+            <h3 class="subtitle mt-2 md:text-3xl">
               {feature.title}
             </h3>
-            <p class="text-gray-400 text-lg leading-relaxed">
+            <p class="muted mt-4 text-lg leading-relaxed">
               {feature.description}
             </p>
           </div>
 
-          <!-- Screenshot -->
-          <div class="lg:w-1/2">
-            <div class="rounded-lg overflow-hidden shadow-2xl">
-              <Image
-                src={screenshots[feature.id as keyof typeof screenshots]}
-                alt={`RaceNode ${feature.badge} - ${feature.title}`}
-                class="w-full h-auto"
-                loading="lazy"
-                quality={85}
-              />
-            </div>
+          <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
+            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode ${feature.badge} - ${feature.title}`} crop />
           </div>
         </div>
       ))}

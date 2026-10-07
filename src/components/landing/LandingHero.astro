@@ -1,58 +1,52 @@
 ---
+import { Image } from "astro:assets";
 import StoreBadges from "../StoreBadges.astro";
+import raceWeekend from "../../assets/screenshots/crew-app-race-weekend.png";
 
 const appUrl = "https://app.racenode.com";
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:py-32">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center">
-      <!-- Badge -->
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-full text-sm mb-6 border border-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-          <path d="M4 22h16"/>
-          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
-        </svg>
-        Built by a racing Team Manager
-      </div>
-
-      <!-- Main Headline -->
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-        Racing team management software,
-        <span class="block mt-2">finally in one place.</span>
-      </h1>
-
-      <!-- Subheadline -->
-      <p class="text-xl md:text-2xl text-gray-400 mb-10 max-w-3xl mx-auto">
-        RaceNode is the motorsport ERP for racing teams. Staff, fleet, racecars, logistics, and events — all structured around your race weekends, in one race team operations platform.
+<!-- Opening: the promise on the left, the crew's phone rising from the track edge on the right. -->
+<section class="band-dark overflow-hidden">
+  <div class="page grid gap-12 pt-14 md:pt-20 lg:grid-cols-12 lg:gap-10">
+    <div class="lg:col-span-7 lg:pb-24">
+      <p class="font-display text-lg font-medium text-smoke">
+        Built by a former GT3 team manager
       </p>
 
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a
-          href={`${appUrl}/signup`}
-          class="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors w-full sm:w-auto text-center"
-        >
-          Get started
-        </a>
-        <a
-          href="#how-it-works"
-          class="bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors w-full sm:w-auto text-center"
-        >
-          See how it works
-        </a>
-      </div>
-      <p class="text-gray-500 text-sm mt-4">Free for the 2026 season.</p>
+      <h1 class="display mt-5">
+        Stop rebuilding the event PDF.
+      </h1>
 
-      <!-- Mobile app -->
-      <div class="mt-10">
-        <p class="text-gray-400 text-sm mb-4">Your crew gets the RaceNode app on iPhone and Android.</p>
-        <StoreBadges />
+      <p class="lede mt-8 max-w-2xl">
+        RaceNode puts travel, hotels, roles and the weekend timetable in one place, and on every crew member's phone. For GT, endurance, single-seater and rally teams.
+      </p>
+
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <a href={`${appUrl}/signup`} class="btn-primary text-lg">Start free</a>
+        <a href="#how-it-works" class="btn-ghost text-lg">See how it works</a>
+      </div>
+      <p class="mt-4 max-w-md text-sm text-smoke">Free until 31 December 2026. Try it on your next event yourself: no demo to book, no card.</p>
+
+      <div class="hair mt-12 flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <p class="max-w-xs text-sm text-smoke">Your crew gets the RaceNode app on iPhone and Android.</p>
+        <StoreBadges align="start" />
+      </div>
+    </div>
+
+    <!-- The phone sits on the bottom edge of the band and is cut by it. -->
+    <div class="flex h-[26rem] items-start justify-center sm:h-[30rem] lg:col-span-5 lg:h-auto lg:items-end lg:justify-end">
+      <div class="phone w-[17rem] translate-y-0 sm:w-[19rem] lg:-mb-40 lg:w-[21rem]">
+        <Image
+          src={raceWeekend}
+          alt=""
+          widths={[340, 680]}
+          sizes="(min-width: 1024px) 21rem, 17rem"
+          loading="eager"
+          quality={85}
+        />
       </div>
     </div>
   </div>
 </section>
+<div class="kerb" aria-hidden="true"></div>

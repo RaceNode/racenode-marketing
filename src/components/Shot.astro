@@ -1,0 +1,41 @@
+---
+// A product screen. From sm up, the desktop capture in a bezel (cropped to its left part with `crop`, the
+// way a 16:9 screen reads best beside text). On a phone, a capture of the same page in the app's phone
+// layout: a zoom on a desktop capture showed a corner of the wrong screen. With no phone capture, the
+// whole desktop capture, never a crop (a desktop screen shrunk to 360 px is unreadable: every module
+// screen has its phone capture). Captures: scripts/screenshots/capture.mjs.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  desktop: ImageMetadata;
+  phone?: ImageMetadata;
+  alt: string;
+  crop?: boolean;
+  /** Classes of the desktop bezel (placement in a hero: negative margins, rounded-b-none…). */
+  screenClass?: string;
+  /** Classes of the crop box, when the default 16:10 does not fit (sm:aspect-[16/7]…). */
+  cropClass?: string;
+  /** Classes of the phone frame (placement in a hero). */
+  phoneClass?: string;
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const { desktop, phone, alt, crop = false, screenClass = '', cropClass = '', phoneClass = '', sizes = '(min-width: 1024px) 1200px, 100vw', loading = 'lazy' } = Astro.props;
+---
+
+<div class:list={['screen', phone && 'hidden sm:block', screenClass]}>
+  {crop ? (
+    <div class:list={['screen-crop', cropClass]}>
+      <Image src={desktop} alt={alt} widths={[800, 1200, 1800, 2800]} sizes={sizes} loading={loading} quality={85} />
+    </div>
+  ) : (
+    <Image src={desktop} alt={alt} widths={[800, 1200, 1800, 2800]} sizes={sizes} loading={loading} quality={85} />
+  )}
+</div>
+{phone && (
+  <div class:list={['phone mx-auto w-full max-w-[19rem] sm:hidden', phoneClass]}>
+    <Image src={phone} alt={alt} widths={[400, 800, 1170]} sizes="19rem" loading={loading} quality={85} />
+  </div>
+)}

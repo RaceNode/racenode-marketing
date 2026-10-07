@@ -12,7 +12,7 @@ interface Props {
 
 const {
   title,
-  description = "RaceNode is the all-in-one platform for managing staff, fleet, racecars, events, and operations for racing teams.",
+  description = "Racing team management software: travel, hotels, roles and the race weekend timetable, on every crew member's phone.",
   image = "/og-image.png",
   type = "website",
   noindex = false
@@ -28,7 +28,7 @@ const organizationSchema = {
   "name": "RaceNode",
   "url": "https://www.racenode.com",
   "logo": "https://www.racenode.com/pwa-512x512.png",
-  "description": "All-in-one ERP platform for racing teams",
+  "description": "Racing team management software",
   "sameAs": ["https://www.linkedin.com/company/racenode", APP_STORE_URL, PLAY_STORE_URL],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -60,7 +60,7 @@ const softwareSchema = {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD",
-    "description": "Free for the 2026 racing season",
+    "description": "Free until 31 December 2026",
     "validThrough": "2026-12-31"
   },
   "publisher": { "@type": "Organization", "name": "RaceNode", "url": "https://www.racenode.com" }
@@ -117,7 +117,7 @@ const softwareSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
   </head>
-  <body class="min-h-screen bg-gray-950 text-white">
+  <body class="min-h-screen bg-concrete text-ink">
     <slot />
   </body>
 </html>

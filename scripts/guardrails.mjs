@@ -11,6 +11,8 @@
 //   2026-10-04, "roadbook" was still on the home page on 2026-10-05.
 // - conflict detection: Willi, 2026-08-23, it does not work well yet; do not market it until he says it is solid.
 //   It was still on the Timetable page on 2026-10-05.
+// - ERP: Willi, 2026-10-07, never the word, anywhere (pages, titles, metas, JSON-LD, llms.txt, store texts); it was
+//   in the home title, hero and Organization schema that day.
 //
 // A rule only changes with Willi's agreement, his words and the date next to it. Changing a rule to let a
 // change through is the very drift it is here to stop.
@@ -42,6 +44,12 @@ const RULES = [
     why: 'word the SEO reference rules out in English (§3.3): "roadbook" reads as rally-raid navigation, "motorsport logistics" as freight; write event brief, crew travel, people logistics',
   },
   {
+    name: 'ERP',
+    dirs: ['src', 'public', 'store/listing.json'],
+    re: /\bERPs?\b/i,
+    why: 'never the word ERP (Willi, 2026-10-07): say racing team management software',
+  },
+  {
     name: 'conflict detection',
     dirs: ['src', 'public/llms.txt', 'store/listing.json'],
     re: /conflict detection|detects? (?:scheduling )?conflicts?|conflict (?:alerts?|warnings?)/i,
@@ -51,9 +59,10 @@ const RULES = [
 
 // URLs declared or linked outside this repo: removing or renaming one breaks something we do not control.
 // /account-deletion is declared in Google Play Console (Data Safety); /privacy and /terms in both stores and
-// the app; the module pages and /crew-app are linked from the app, the store listings and search results.
+// the app; the module pages and /crew-app are linked from the app, the store listings and search results; /calendar
+// is indexed by Google (live since 2026-10-07).
 // Willi, 2026-10-06 (taken from the WBLT site template).
-export const STABLE_URLS = ['/account-deletion', '/privacy', '/terms', '/crew-planning', '/logistics', '/management', '/timetable', '/crew-app'];
+export const STABLE_URLS = ['/account-deletion', '/privacy', '/terms', '/crew-planning', '/logistics', '/management', '/timetable', '/crew-app', '/calendar'];
 
 const PAGE_EXTS = ['.astro', '.md', '.mdx'];
 

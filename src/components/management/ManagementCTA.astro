@@ -2,32 +2,20 @@
 const appUrl = "https://app.racenode.com";
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 text-center">
-      <div class="flex items-center justify-center gap-3 mb-6">
-        <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center border border-gray-700">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        </div>
-      </div>
-
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">
+<div class="kerb" aria-hidden="true"></div>
+<section class="band band-dark">
+  <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
+    <div class="lg:col-span-8">
+      <h2 class="title">
         Structure your next event.
       </h2>
-      <p class="text-gray-400 mb-8 max-w-xl mx-auto">
-        Free for the 2026 racing season. Set up your team in minutes.
+      <p class="lede mt-5 max-w-2xl">
+        Free until 31 December 2026: set up your 2027 season now, pay nothing this year. Try it on your next event yourself: no demo to book, no card.
       </p>
-
-      <a
-        href={`${appUrl}/signup`}
-        class="inline-block bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
-      >
-        Get started
+    </div>
+    <div class="lg:col-span-4 lg:text-right">
+      <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+        Start free
       </a>
     </div>
   </div>

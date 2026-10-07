@@ -3,17 +3,21 @@ const appUrl = "https://app.racenode.com";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/crew-planning/", label: "Planning" },
-  { href: "/management/", label: "Management" },
-  { href: "/timetable/", label: "Timetable" },
-  { href: "/logistics/", label: "Logistics" },
   { href: "/crew-app/", label: "Personal" },
+  { href: "/management/", label: "Management" },
+  { href: "/logistics/", label: "Logistics" },
+  { href: "/timetable/", label: "Timetable" },
+  { href: "/crew-planning/", label: "Planning" },
+  { href: "/pricing/", label: "Pricing" },
   { href: "/calendar/", label: "Calendar" },
 ];
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
 ---
 
-<header class="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<header class="band-dark sticky top-0 z-50 border-b border-asphalt-line">
+  <div class="page">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
       <div class="flex items-center">
@@ -23,11 +27,12 @@ const navLinks = [
       </div>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center space-x-6">
+      <nav class="hidden lg:flex items-center gap-6 h-full">
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+            class:list={["font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white", isCurrent(link.href) ? "text-white underline decoration-accent-soft decoration-2 underline-offset-[1.35rem]" : "text-smoke"]}
+            aria-current={isCurrent(link.href) ? "page" : undefined}
           >
             {link.label}
           </a>
@@ -35,16 +40,16 @@ const navLinks = [
       </nav>
 
       <!-- CTA Buttons (Desktop) -->
-      <div class="hidden md:flex items-center space-x-3">
+      <div class="hidden lg:flex items-center space-x-3">
         <a
           href={`${appUrl}/login`}
-          class="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+          class="px-3 py-2 text-smoke hover:text-white transition-colors font-medium"
         >
           Login
         </a>
         <a
           href={`${appUrl}/signup`}
-          class="bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-lg transition-colors"
+          class="bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-[3px] font-semibold transition-colors"
         >
           Sign Up
         </a>
@@ -54,7 +59,7 @@ const navLinks = [
       <button
         type="button"
         id="mobile-menu-button"
-        class="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+        class="lg:hidden p-2 rounded-[3px] text-smoke hover:text-white hover:bg-asphalt-raised transition-colors"
         aria-expanded="false"
         aria-controls="mobile-menu"
         aria-label="Open navigation menu"
@@ -93,26 +98,26 @@ const navLinks = [
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-800">
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-asphalt-line">
     <div class="px-4 py-4 space-y-3">
       {navLinks.map((link) => (
         <a
           href={link.href}
-          class="block text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors"
+          class="block font-display text-lg text-smoke hover:text-white hover:bg-asphalt-raised rounded-[3px] px-3 py-2 transition-colors"
         >
           {link.label}
         </a>
       ))}
-      <div class="pt-3 border-t border-gray-800 space-y-3">
+      <div class="pt-3 border-t border-asphalt-line space-y-3">
         <a
           href={`${appUrl}/login`}
-          class="block text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors"
+          class="block font-display text-lg text-smoke hover:text-white hover:bg-asphalt-raised rounded-[3px] px-3 py-2 transition-colors"
         >
           Login
         </a>
         <a
           href={`${appUrl}/signup`}
-          class="block bg-accent hover:bg-accent-hover text-white px-3 py-2 rounded-lg transition-colors text-center"
+          class="block bg-accent hover:bg-accent-hover text-white px-3 py-2.5 rounded-[3px] font-semibold transition-colors text-center"
         >
           Sign Up
         </a>

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-RaceNode Marketing is the public-facing marketing website for RaceNode, a multi-tenant ERP platform for racing teams. This site is separate from the main app (`app.racenode.com`) for SEO and performance optimization.
+RaceNode Marketing is the public-facing marketing website for RaceNode, a multi-tenant management platform for racing teams. This site is separate from the main app (`app.racenode.com`) for SEO and performance optimization.
 
 ## Tech Stack
 
@@ -35,7 +35,7 @@ All pages wrap content in `BaseLayout.astro` (SEO meta, JSON-LD schemas) with sh
 
 ```
 src/
-├── assets/screenshots/  # Product screenshots (imported via Astro Image)
+├── assets/screenshots/  # Product screenshots (imported via Astro Image); `*-phone.png` = the app's phone layout, shown below sm by Shot.astro
 ├── components/          # Shared (Header, Footer) + feature subdirs
 ├── data/legal/          # Markdown legal documents (rendered by legal pages)
 ├── layouts/             # BaseLayout.astro (SEO, structured data), LegalLayout.astro
@@ -47,6 +47,9 @@ scripts/brand/
 ├── logo.mjs             # Builds the logo lockups (public/logo_*.svg, public/email/logo-*.png) from favicon.svg + IBM Plex
 ├── generate.mjs         # Brand kit (brand/social/: avatars, LinkedIn banners) + public/og-image.png
 ├── carousel.mjs         # LinkedIn/Instagram carousels (PNG slides + PDF) from a JSON kept outside this public repo
+scripts/screenshots/
+├── capture.mjs          # Product screenshots (desktop 3840×2160 + phone 1170×2532) taken in the live app on the demo org, read-only; run through infisical run (see its header)
+└── files/               # Made-up documents the import screenshots drop (agency confirmation, organizer timetable)
 scripts/seo/
 └── indexnow.mjs         # Pings IndexNow (Bing…) with the live sitemap after a deploy; key file = public/<key>.txt
 scripts/store/

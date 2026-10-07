@@ -3,44 +3,331 @@
 @import "@fontsource/ibm-plex-sans/500.css";
 @import "@fontsource/ibm-plex-sans/600.css";
 @import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource/ibm-plex-sans-condensed/500.css";
+@import "@fontsource/ibm-plex-sans-condensed/600.css";
+@import "@fontsource/ibm-plex-sans-condensed/700.css";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
-@import "@fontsource/ibm-plex-mono/600.css";
 @plugin "@tailwindcss/typography";
 
 /*
- * Design tokens — mirror of the app's design system (dark values).
- * Source of truth: C:\script\RaceNode\racenode\src\index.css + docs/architecture/design-system.md
- * Rule: color signals a state, never a category. One indigo accent for actions,
- * three state hues, neutrals for everything else. No gradients.
+ * Site design: "paddock". Concrete-grey pages, asphalt bands for the moments
+ * that matter (opening, sync, call to action, footer), the product shown big.
+ * Headings in IBM Plex Sans Condensed: same family as the logo, narrower and
+ * heavier, the way numbers and names are lettered on a car or a pit board.
+ *
+ * Rule kept from the app: color signals a state, never a category. Indigo is
+ * the action (buttons, links, focus), never a module. No gradients.
+ * Contrast (checked): ink on concrete 15.6:1, graphite on concrete 6.2:1,
+ * white on accent 6.9:1, smoke on asphalt 7.9:1 (7.0:1 on a card), accent-soft on asphalt 8.2:1,
+ * white on the dark accent 5.4:1, white on blocking 6.5:1, white on ok 5.5:1.
+ *
+ * The dark bands are the app itself: asphalt, asphalt-raised, asphalt-line and smoke are the
+ * app's dark-theme neutrals (gray-950 page, gray-900 card, gray-800 border, gray-400 secondary
+ * text; app repo src/index.css), and inside them the accent takes the app's dark-theme values.
+ * Clicking "Get started" should feel like walking into the garage, not into another brand.
  */
 @theme {
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Accent — the action color (app dark theme values) */
-  --color-accent: #5b5bd6;
-  --color-accent-hover: #6a6ae0;
-  --color-accent-fg: #ffffff;
+  /* Light surfaces: pit-lane concrete and the paper of a run sheet */
+  --color-concrete: #e7e7e3;
+  --color-paper: #f5f5f2;
+  --color-ink: #17181b;
+  --color-graphite: #4f525a;
+  --color-line: #c8c8c2;
 
-  /* States (dark theme values: emerald-400 / amber-400 / red-400) */
-  --color-ok: #34d399;
-  --color-watch: #fbbf24;
-  --color-blocking: #f87171;
+  /* Dark bands: the app's dark theme, value for value */
+  --color-asphalt: #030712; /* app gray-950, page background */
+  --color-asphalt-raised: #111827; /* app gray-900, card surface */
+  --color-asphalt-line: #1f2937; /* app gray-800, raised surface and hairline */
+  --color-asphalt-edge: #374151; /* app gray-700, card border */
+  --color-smoke: #9ca3af; /* app gray-400, secondary text */
+  --color-fog: #d1d5db; /* app gray-300, label text */
+
+  /* Accent — the action color */
+  --color-accent: #4c4cc4;
+  --color-accent-hover: #3d3daa;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: #9d9df0;
+
+  /* States: dark-on-light values for the light pages, light values on asphalt */
+  --color-ok: #047857;
+  --color-watch: #b45309;
+  --color-blocking: #b91c1c;
+  --color-ok-on-dark: #34d399;
+  --color-watch-on-dark: #fbbf24;
+  --color-blocking-on-dark: #f87171;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-concrete font-sans text-ink antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-balance;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+  ::selection {
+    @apply bg-accent text-accent-fg;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* The few recipes every page shares. Extend here when a pattern appears twice. */
+@layer components {
+  .page {
+    @apply mx-auto w-full max-w-[78rem] px-4 sm:px-6 lg:px-10;
+  }
+  .band {
+    @apply py-20 md:py-28;
+  }
+  .band-dark {
+    @apply bg-asphalt text-white;
+    /* The app's dark-theme accent: lighter, and lightens on hover. */
+    --color-accent: #5b5bd6;
+    --color-accent-hover: #6a6ae0;
+  }
+  .band-paper {
+    @apply bg-paper;
+  }
+
+  /* Opening title: condensed, heavy, set tight, the one loud thing on a page. */
+  .display {
+    @apply font-display text-[2.9rem] leading-[0.95] font-bold tracking-[-0.02em] sm:text-6xl lg:text-[4.75rem];
+  }
+  /* Section title: condensed, sentence case, large. */
+  .title {
+    @apply font-display text-[2rem] leading-[1.02] font-semibold tracking-[-0.01em] md:text-5xl;
+  }
+  .subtitle {
+    @apply font-display text-2xl leading-tight font-semibold md:text-[1.75rem];
+  }
+  .lede {
+    @apply text-lg leading-relaxed text-graphite md:text-xl;
+  }
+  .band-dark .lede {
+    @apply text-smoke;
+  }
+  .muted {
+    @apply text-graphite;
+  }
+  .band-dark .muted {
+    @apply text-smoke;
+  }
+
+  /* Section head: title on the left, intro beside it on wide screens. */
+  .head {
+    @apply mb-12 grid gap-5 md:mb-16 lg:grid-cols-12 lg:items-end lg:gap-10;
+  }
+  .head > :first-child {
+    @apply lg:col-span-7;
+  }
+  .head > :not(:first-child) {
+    @apply lg:col-span-5;
+  }
+
+  /* A heavy ink rule opening an item, like the top edge of a timing sheet. */
+  .ruled {
+    @apply border-t-[3px] border-ink pt-5;
+  }
+  .band-dark .ruled {
+    @apply border-white;
+  }
+  .hair {
+    @apply border-t border-line;
+  }
+  .band-dark .hair {
+    @apply border-asphalt-line;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-ghost {
+    @apply inline-flex min-h-12 items-center justify-center rounded-[3px] px-6 text-base font-semibold transition-colors;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-fg hover:bg-accent-hover;
+  }
+  .btn-ghost {
+    @apply border border-ink/30 text-ink hover:border-ink;
+  }
+  .band-dark .btn-ghost {
+    @apply border-white/35 text-white hover:border-white;
+  }
+  .link {
+    @apply font-semibold text-accent underline decoration-2 underline-offset-4 hover:text-accent-hover;
+  }
+  .band-dark .link {
+    @apply text-accent-soft hover:text-white;
+  }
+
+  /* Product screenshot, shown as a screen: asphalt bezel, no shadow. */
+  .screen {
+    @apply overflow-hidden rounded-[4px] bg-asphalt p-1.5 ring-1 ring-ink/10 sm:p-2;
+  }
+  .screen img {
+    @apply block h-auto w-full rounded-[2px];
+  }
+  /* Crop to the part of a 4K screenshot that matters, at a readable size. From sm up only: on a
+     phone a crop shows a corner of the wrong screen, so phones get a capture of the app's phone
+     layout instead (see Shot.astro), or the whole screenshot. */
+  @media (width >= 40rem) {
+    .screen-crop {
+      @apply relative aspect-[16/10] overflow-hidden rounded-[2px];
+    }
+    .screen-crop img {
+      @apply absolute top-0 left-0 h-auto w-[150%] max-w-none rounded-none;
+    }
+  }
+  /* Kerb: a chequered strip, the edge of the track, in the site's two neutrals. Marks where an
+     asphalt band begins or ends; used sparingly, never as a background. */
+  .kerb {
+    @apply h-4 w-full;
+    background-color: var(--color-paper);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='8' height='8' fill='%23030712'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%23030712'/%3E%3C/svg%3E");
+    background-size: 16px 16px;
+  }
+  /* A problem, said in the one color that means "problem": the blocking red of the app's states.
+     A heavy red rule and a red plate with the icon, like a red flag on the timing sheet. */
+  .pain {
+    @apply border-t-4 border-blocking pt-6;
+  }
+  .pain-mark {
+    @apply flex size-12 shrink-0 items-center justify-center rounded-[3px] bg-blocking text-white;
+  }
+  .pain-mark svg {
+    @apply size-6;
+  }
+  .flag-title {
+    @apply font-display text-[1.75rem] leading-[1.05] font-bold tracking-[-0.01em] text-balance md:text-[2rem];
+  }
+
+  /* The mirror: a commitment that holds, in the ok green ("confirmed" in the app). Pricing only. */
+  .promise {
+    @apply border-t-4 border-ok pt-6;
+  }
+  .promise-mark {
+    @apply flex size-12 shrink-0 items-center justify-center rounded-[3px] bg-ok text-white;
+  }
+  .promise-mark svg {
+    @apply size-6;
+  }
+
+  /* Not there yet: a dashed rule, the way the app draws a day that is claimed but not on site. */
+  .soon {
+    @apply border-t-2 border-dashed border-graphite/50 pt-6;
+  }
+  .tag {
+    @apply inline-flex items-center rounded-[3px] border border-current px-2 py-0.5 font-mono text-xs font-medium tracking-wider uppercase;
+  }
+
+  /* Inside the dark bands, the app's own furniture: its card, its icon tile, its small caps label. */
+  .app-card {
+    @apply rounded-lg border border-asphalt-edge bg-asphalt-raised;
+  }
+  .app-icon {
+    @apply flex size-11 shrink-0 items-center justify-center rounded-md border border-asphalt-edge bg-asphalt-line text-fog;
+  }
+  .app-icon svg {
+    @apply size-5;
+  }
+  .app-label {
+    @apply text-xs font-medium tracking-wider text-smoke uppercase;
+  }
+  /* The same icon tile on a light page: a piece of the app's screen, set into the concrete. */
+  .tile {
+    @apply flex size-12 shrink-0 items-center justify-center rounded-lg bg-asphalt text-fog;
+  }
+  .tile svg {
+    @apply size-6;
+  }
+  /* The ok dot: confirmed, delivered. A state, as in the app. */
+  .ok-dot {
+    @apply inline-block size-2 shrink-0 rounded-full bg-ok-on-dark;
+  }
+
+  .phone {
+    @apply overflow-hidden rounded-[2rem] border-[6px] border-ink bg-ink;
+  }
+  .phone img {
+    @apply block h-auto w-full rounded-[1.6rem];
+  }
 }
 
 /*
- * Rows of the all-championships calendar (roundRow in src/lib/calendar/render.mjs): ~800 of them, so their classes
- * live here once instead of in every row (half the page's weight).
+ * Race calendar (/calendar/): a timing sheet. The opening on asphalt, the rounds printed on paper under a heavy
+ * ink rule, dates in mono like the times on a sheet. The rows (roundRow in src/lib/calendar/render.mjs) number
+ * ~800 on the index, so their classes live here once instead of in every row (half the page's weight).
  */
 @layer components {
-  .calendar-row { @apply grid grid-cols-[5.5rem_1fr] sm:grid-cols-[7rem_14rem_1fr] gap-x-4 gap-y-1 px-4 py-3 border-b border-gray-800 last:border-b-0; }
-  .calendar-row > .d { @apply text-sm font-mono text-gray-300 sm:row-span-1 row-span-2; }
-  .calendar-row > .d > span { @apply block text-xs text-blocking font-sans; }
+  .cal-open {
+    @apply py-12 md:py-16;
+  }
+  .cal-crumbs {
+    @apply mb-6 text-sm text-smoke;
+  }
+  .cal-crumbs a {
+    @apply hover:text-white;
+  }
+  .cal-crumbs [aria-current] {
+    @apply text-fog;
+  }
+  .cal-body {
+    @apply py-12 md:py-16;
+  }
+  .cal-month-title {
+    @apply mb-2 font-mono text-xs font-medium tracking-wider text-graphite uppercase;
+  }
+  .cal-sheet {
+    @apply border-t-[3px] border-ink bg-paper;
+  }
+  .calendar-row { @apply grid grid-cols-[5.5rem_1fr] sm:grid-cols-[7rem_14rem_1fr] gap-x-4 gap-y-1 px-4 py-3 border-b border-line last:border-b-0; }
+  .calendar-row > .d { @apply text-sm font-mono text-ink sm:row-span-1 row-span-2; }
+  .calendar-row > .d > span { @apply block text-xs text-blocking font-sans font-semibold; }
   .calendar-row > .c { @apply min-w-0; }
-  .calendar-row > .c > a { @apply text-white font-medium hover:underline; }
-  .calendar-row > .c > span { @apply block text-xs text-gray-500; }
-  .calendar-row > .p { @apply min-w-0 text-sm text-gray-400 sm:col-start-3; }
-  .calendar-row > .p > span { @apply text-gray-300; }
-  .calendar-row > .p > a { @apply hover:text-white hover:underline; }
+  .calendar-row > .c > a { @apply font-semibold text-ink hover:text-accent hover:underline; }
+  .calendar-row > .c > span { @apply block text-xs text-graphite; }
+  .calendar-row > .p { @apply min-w-0 text-sm text-graphite sm:col-start-3; }
+  .calendar-row > .p > span { @apply text-ink; }
+  .calendar-row > .p > a { @apply hover:text-accent hover:underline; }
+  .cal-season-row {
+    @apply grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_10.5rem_1fr_auto];
+  }
+  /* A card to another calendar page: paper on the concrete, the ink edge on hover. */
+  .cal-card {
+    @apply block rounded-[3px] border border-line bg-paper px-4 py-3 transition-colors hover:border-ink;
+  }
+  .cal-card > :first-child {
+    @apply font-semibold text-ink;
+  }
+  .cal-card > :not(:first-child) {
+    @apply block text-xs text-graphite;
+  }
+  .cal-chip {
+    @apply inline-block rounded-[3px] border border-line bg-paper px-3 py-2 text-sm text-ink transition-colors hover:border-ink;
+  }
+  /* A season not out yet: the dashed rule of "not there yet" (.soon), on paper. */
+  .cal-note {
+    @apply mb-8 border-t-2 border-dashed border-graphite/50 bg-paper px-5 py-4;
+  }
+  .cal-summary {
+    @apply cursor-pointer font-display text-xl font-semibold text-ink hover:text-accent;
+  }
+  .cal-select {
+    @apply mt-1 min-h-11 w-full rounded-[3px] border border-line bg-paper px-3 py-2 text-sm text-ink focus:border-accent focus:outline-none;
+  }
 }

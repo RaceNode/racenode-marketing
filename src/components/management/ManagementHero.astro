@@ -1,48 +1,49 @@
 ---
-import { Image } from 'astro:assets';
+import Shot from '../Shot.astro';
+import overviewPhone from '../../assets/screenshots/management-overview-phone.png';
 import screenshotOverview from '../../assets/screenshots/management-overview.png';
 
 const appUrl = "https://app.racenode.com";
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-12 md:mb-16">
-      <!-- Badge -->
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-full text-sm mb-6 border border-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
-          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-          <path d="m9 14 2 2 4-4"/>
-        </svg>
-        Built by a racing Team Manager
-      </div>
+<!-- Opening: the promise on the left, the event overview rising from the track edge. -->
+<section class="band-dark overflow-hidden">
+  <div class="page pt-14 md:pt-20">
+    <div class="grid gap-8 lg:grid-cols-12 lg:gap-10">
+      <div class="lg:col-span-8">
+        <p class="font-display text-lg font-medium text-smoke">
+          Management
+        </p>
 
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-        Race team management, structured.
-      </h1>
-      <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-8">
-        Crew management for racing team operations, organized by race weekend. Staff, racecars, teams, and meals per event — each weekend has its own crew composition, car assignments, and meal planning.
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a
-          href={`${appUrl}/signup`}
-          class="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
-        >
-          Get started
-        </a>
-        <span class="text-gray-500 text-sm">Free for the 2026 season</span>
+        <h1 class="display mt-5">
+          Race team management, structured.
+        </h1>
+      </div>
+      <div class="lg:col-span-4 lg:self-end">
+        <p class="lede">
+          Roles, cars and meals for every race weekend, set once and seen by the whole crew.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+            Start free
+          </a>
+          <span class="text-sm text-smoke">Free until 31 December 2026</span>
+        </div>
       </div>
     </div>
 
-    <!-- Screenshot -->
-    <div class="max-w-5xl mx-auto rounded-lg overflow-hidden shadow-2xl">
-      <Image
-        src={screenshotOverview}
-        alt="RaceNode race team management software dashboard with staff, racecars, teams and meals per event"
-        class="w-full h-auto"
-        quality={85}
-      />
-    </div>
+    <!-- The screen sits on the bottom edge of the band and is cut by it; on a phone, the app's phone screen. -->
+    <Shot
+      desktop={screenshotOverview}
+      phone={overviewPhone}
+      alt="RaceNode race team management software dashboard with staff, racecars, teams and meals per event"
+      crop
+      screenClass="-mx-4 mt-14 -mb-2 rounded-b-none sm:mx-0 md:mt-16"
+      cropClass="sm:aspect-[16/7]"
+      phoneClass="mt-12 -mb-40"
+      sizes="(min-width: 1248px) 1800px, 150vw"
+      loading="eager"
+    />
   </div>
 </section>
+<div class="kerb" aria-hidden="true"></div>

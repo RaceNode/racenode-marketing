@@ -77,44 +77,52 @@ const eventsSchema = {
 <BaseLayout title={title} description={description} noindex={data.sample}>
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   {upcoming.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(eventsSchema)} />}
-  <div class="min-h-screen bg-gray-950">
+  <div class="min-h-screen bg-concrete">
     <Header />
-    <main class="px-4 sm:px-6 lg:px-8 pt-10 md:pt-14">
-      <div class="max-w-5xl mx-auto">
+    <main>
+      <section class="band-dark cal-open">
+        <div class="page">
         {data.sample && <SampleDataNotice />}
 
-        <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-          <a href="/calendar/" class="hover:text-white">Motorsport calendar</a>
+        <nav class="cal-crumbs" aria-label="Breadcrumb">
+          <a href="/calendar/">Motorsport calendar</a>
           <span class="mx-1">/</span>
-          <a href="/calendar/circuits/" class="hover:text-white">Circuits</a>
+          <a href="/calendar/circuits/">Circuits</a>
           <span class="mx-1">/</span>
-          <span class="text-gray-400">{c.name}</span>
+          <span aria-current="page">{c.name}</span>
         </nav>
 
-        <h1 class="text-3xl md:text-5xl font-bold text-white mb-3">{c.name} {year} calendar</h1>
-        {place && <p class="text-gray-400 mb-6">Circuit · {place}</p>}
+        <h1 class="display">{c.name} {year} calendar</h1>
+        {place && <p class="lede mt-6">Circuit · {place}</p>}
+        </div>
+      </section>
+      <div class="kerb" aria-hidden="true"></div>
+
+      <section class="cal-body">
+        <div class="page">
 
         <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
 
         {nearby.length > 0 && (
           <section class="mt-12">
-            <h2 class="text-xl font-bold text-white mb-4">Other circuits in {place}</h2>
+            <h2 class="subtitle mb-4">Other circuits in {place}</h2>
             <ul class="flex flex-wrap gap-2">
               {nearby.map((x: any) => (
                 <li>
-                  <a href={`/calendar/circuits/${x.slug}/`} class="inline-block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">{x.name}</a>
+                  <a href={`/calendar/circuits/${x.slug}/`} class="cal-chip">{x.name}</a>
                 </li>
               ))}
             </ul>
           </section>
         )}
 
-        <p class="mt-10 text-sm text-gray-500">
-          <a href="/calendar/" class="underline hover:text-white">All championships on one calendar</a>
+        <p class="mt-10 text-sm">
+          <a href="/calendar/" class="link">All championships on one calendar</a>
           <span class="mx-1">·</span>
-          <a href="/calendar/circuits/" class="underline hover:text-white">All circuits</a>
+          <a href="/calendar/circuits/" class="link">All circuits</a>
         </p>
-      </div>
+        </div>
+      </section>
       <CalendarCTA title={`Racing at ${c.name}? Plan your season in RaceNode.`} />
     </main>
     <Footer />

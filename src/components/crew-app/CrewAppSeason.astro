@@ -19,51 +19,56 @@ const points = [
 ];
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-gray-900/30">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+<!-- The points on the left, the two views of the season side by side on the right. -->
+<section class="band band-paper">
+  <div class="page">
+    <div class="head">
+      <h2 class="title">
         Their whole season, not just this weekend.
       </h2>
-      <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+      <p class="lede">
         As an agenda or a month, built from your events and{" "}
-        <a href="/crew-planning/" class="text-gray-300 underline hover:text-white">crew planning</a>.
+        <a href="/crew-planning/" class="link">crew planning</a>.
       </p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-4 md:gap-6 mb-12">
-      {points.map((point) => (
-        <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
-          <h3 class="text-white font-semibold mb-2">{point.title}</h3>
-          <p class="text-gray-400">{point.text}</p>
-        </div>
-      ))}
-    </div>
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-10">
+      <ul class="flex flex-col gap-10 lg:col-span-5">
+        {points.map((point) => (
+          <li class="ruled">
+            <h3 class="subtitle">{point.title}</h3>
+            <p class="muted mt-3 text-lg leading-relaxed">{point.text}</p>
+          </li>
+        ))}
+      </ul>
 
-    <div class="flex flex-col sm:flex-row items-start justify-center gap-8 sm:gap-12">
-      <div class="w-full max-w-[260px] mx-auto sm:mx-0">
-        <div class="rounded-2xl overflow-hidden shadow-2xl border border-gray-700">
-          <Image
-            src={screenshotSeason}
-            alt="RaceNode crew app: a crew member's season as an agenda, a travel day before a race weekend at Spa"
-            class="w-full h-auto"
-            loading="lazy"
-            quality={85}
-          />
-        </div>
-        <p class="text-gray-400 text-sm text-center mt-3">Agenda</p>
-      </div>
-      <div class="w-full max-w-[260px] mx-auto sm:mx-0">
-        <div class="rounded-2xl overflow-hidden shadow-2xl border border-gray-700">
-          <Image
-            src={screenshotMonth}
-            alt="RaceNode crew app: a crew member's season as a month, with events, travel and days off"
-            class="w-full h-auto"
-            loading="lazy"
-            quality={85}
-          />
-        </div>
-        <p class="text-gray-400 text-sm text-center mt-3">Month</p>
+      <div class="grid grid-cols-2 gap-4 sm:gap-8 lg:col-span-7 lg:pl-6">
+        <figure>
+          <div class="phone">
+            <Image
+              src={screenshotSeason}
+              alt="RaceNode crew app: a crew member's season as an agenda, workshop days before a race weekend at the Nürburgring"
+              widths={[300, 600]}
+              sizes="(min-width: 1024px) 18rem, 45vw"
+              loading="lazy"
+              quality={85}
+            />
+          </div>
+          <figcaption class="mt-3 font-display text-lg font-medium">Agenda</figcaption>
+        </figure>
+        <figure class="mt-12 sm:mt-20">
+          <div class="phone">
+            <Image
+              src={screenshotMonth}
+              alt="RaceNode crew app: a crew member's season as a month, with events, travel and days off"
+              widths={[300, 600]}
+              sizes="(min-width: 1024px) 18rem, 45vw"
+              loading="lazy"
+              quality={85}
+            />
+          </div>
+          <figcaption class="mt-3 font-display text-lg font-medium">Month</figcaption>
+        </figure>
       </div>
     </div>
   </div>

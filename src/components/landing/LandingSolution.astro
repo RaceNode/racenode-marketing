@@ -1,27 +1,30 @@
 ---
-import { Image } from 'astro:assets';
+import Shot from '../Shot.astro';
+import screenshotModulesPhone from '../../assets/screenshots/landing-modules-phone.png';
 import screenshotModules from '../../assets/screenshots/landing-modules.png';
 ---
 
-<section class="px-4 sm:px-6 lg:px-8 py-20 md:py-24">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-12 md:mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-        One racing team management platform, organized around your events.
+<!-- The product: the season home, cropped to the part with data. Every module column stays in
+     the frame on wide screens; on a phone, the app's own phone home. -->
+<section class="band band-paper">
+  <div class="page">
+    <div class="head">
+      <h2 class="title">
+        Organized around your race weekends.
       </h2>
-      <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-        RaceNode is built around the way motorsport teams actually work: event by event. Each race weekend has its own workspace with its staff, racecars, logistics, and meals. You prepare one event at a time — your race team management software should work the same way.
+      <p class="lede">
+        RaceNode is racing team management software built the way teams work: each event has its own crew, cars, travel and meals. You prepare one weekend at a time; so does RaceNode.
       </p>
     </div>
 
-    <!-- Screenshot -->
-    <div class="max-w-3xl mx-auto rounded-lg overflow-hidden shadow-lg">
-      <Image
-        src={screenshotModules}
-        alt="RaceNode - Choose your module: Personal, Staff, Fleet, Racecars, Events, Management, Logistics"
-        class="w-full h-auto"
-        quality={85}
-      />
-    </div>
+    <Shot
+      desktop={screenshotModules}
+      phone={screenshotModulesPhone}
+      alt="RaceNode season home: each upcoming race weekend with its Management, Timetable and Logistics progress"
+      crop
+      screenClass="-mx-4 sm:mx-0"
+      cropClass="sm:aspect-[15/4] sm:[&_img]:w-full"
+      sizes="(min-width: 1248px) 1200px, 100vw"
+    />
   </div>
 </section>

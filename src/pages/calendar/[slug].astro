@@ -80,35 +80,42 @@ const eventsSchema = {
 <BaseLayout title={title} description={description} noindex={data.sample}>
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(eventsSchema)} />
-  <div class="min-h-screen bg-gray-950">
+  <div class="min-h-screen bg-concrete">
     <Header />
-    <main class="px-4 sm:px-6 lg:px-8 pt-10 md:pt-14">
-      <div class="max-w-5xl mx-auto">
+    <main>
+      <section class="band-dark cal-open">
+        <div class="page">
         {data.sample && <SampleDataNotice />}
 
-        <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-          <a href="/calendar/" class="hover:text-white">Motorsport calendar</a>
+        <nav class="cal-crumbs" aria-label="Breadcrumb">
+          <a href="/calendar/">Motorsport calendar</a>
           <span class="mx-1">/</span>
-          <span class="text-gray-400">{displayName(c)}</span>
+          <span aria-current="page">{displayName(c)}</span>
         </nav>
 
-        <h1 class="text-3xl md:text-5xl font-bold text-white mb-3">{c.name} {year} calendar</h1>
-        <p class="text-gray-400 mb-6">
+        <h1 class="display">{c.name} {year} calendar</h1>
+        <p class="lede mt-6 max-w-3xl">
           {facts.join(' · ')}
-          {c.organizer_name && <> · Organized by {c.organizer_website_url ? <a href={c.organizer_website_url} rel="noopener nofollow" target="_blank" class="underline hover:text-white">{c.organizer_name}</a> : c.organizer_name}</>}
+          {c.organizer_name && <> · Organized by {c.organizer_website_url ? <a href={c.organizer_website_url} rel="noopener nofollow" target="_blank" class="link">{c.organizer_name}</a> : c.organizer_name}</>}
         </p>
+        </div>
+      </section>
+      <div class="kerb" aria-hidden="true"></div>
+
+      <section class="cal-body">
+        <div class="page">
 
         <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
 
         {shared.length > 0 && (
           <section class="mt-12">
-            <h2 class="text-xl font-bold text-white mb-2">On the same weekends</h2>
-            <p class="text-sm text-gray-400 mb-4">Championships racing at the same circuit on the same dates in {shown.label}.</p>
+            <h2 class="subtitle mb-2">On the same weekends</h2>
+            <p class="muted text-sm mb-4">Championships racing at the same circuit on the same dates in {shown.label}.</p>
             <ul class="flex flex-wrap gap-2">
               {shared.map((s) => (
                 <li>
-                  <a href={`/calendar/${s.championship.slug}/`} class="inline-block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
-                    {displayName(s.championship)} <span class="text-gray-500">· {s.count} {s.count === 1 ? 'weekend' : 'weekends'}</span>
+                  <a href={`/calendar/${s.championship.slug}/`} class="cal-chip">
+                    {displayName(s.championship)} <span class="text-graphite">· {s.count} {s.count === 1 ? 'weekend' : 'weekends'}</span>
                   </a>
                 </li>
               ))}
@@ -118,11 +125,11 @@ const eventsSchema = {
 
         {related.length > 0 && (
           <section class="mt-10">
-            <h2 class="text-xl font-bold text-white mb-4">Other {DISCIPLINES[c.discipline]} calendars</h2>
+            <h2 class="subtitle mb-4">Other {DISCIPLINES[c.discipline]} calendars</h2>
             <ul class="flex flex-wrap gap-2">
               {related.map((x) => (
                 <li>
-                  <a href={`/calendar/${x.slug}/`} class="inline-block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+                  <a href={`/calendar/${x.slug}/`} class="cal-chip">
                     {displayName(x)}
                   </a>
                 </li>
@@ -131,10 +138,11 @@ const eventsSchema = {
           </section>
         )}
 
-        <p class="mt-10 text-sm text-gray-500">
-          <a href="/calendar/" class="underline hover:text-white">All championships on one calendar</a>
+        <p class="mt-10 text-sm">
+          <a href="/calendar/" class="link">All championships on one calendar</a>
         </p>
-      </div>
+        </div>
+      </section>
       <CalendarCTA title={`Racing in ${displayName(c)}? Plan your season in RaceNode.`} />
     </main>
     <Footer />
