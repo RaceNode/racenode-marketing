@@ -12,6 +12,10 @@ RaceNode is made for motorsport teams (GT, endurance, single-seater and other ch
 - [Timetable](https://www.racenode.com/timetable/): race weekend timetable and schedule. The team's schedule built around the official timetable, recurring briefings, a live countdown and an iCal feed shared with the whole team. The official sessions can be filled in from the organizer's timetable (PDF, spreadsheet, calendar file), checked in a preview before anything is saved.
 - Personal: each team member sees their own season, role, travel, hotel, meals and next sessions on their phone. Free for every team member.
 
+## Motorsport calendar
+
+- [Motorsport calendar](https://www.racenode.com/calendar/): the race calendars of the championships in the RaceNode catalog on one page, filterable by discipline, region and month, with one page per championship (https://www.racenode.com/calendar/<championship>/). Dates and circuits as each organizer publishes them, with a link to the official page; when next season is not published yet, the page says so and shows the last season known.
+
 ## Pricing and availability
 
 - [Pricing](https://www.racenode.com/pricing/): free for all racing teams until 31 December 2026. Paid plans start in 2027, monthly or annual; the price a team joins at holds until 31 December of that year.

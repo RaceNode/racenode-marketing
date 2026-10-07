@@ -1,14 +1,18 @@
-**Last Updated:** October 6, 2026
+**Last Updated:** October 7, 2026
 
 ## Publisher
 
 The website www.racenode.com and the RaceNode platform are published by:
 
 **WBLT Engineering**\
-SASU - French registered company\
-SIREN: 993 956 028\
+SASU (French simplified joint-stock company with a single shareholder) with a share capital of 1,000 euros\
+Registered office: 3 impasse de la Bourgeotte, 77120 Chailly-en-Brie, France\
+Registered with the Meaux Trade and Companies Register (RCS Meaux) under number 993 956 028\
+VAT number: FR20993956028\
 Email: contact@racenode.com\
 Website: https://www.racenode.com
+
+Publication director: William Brillouet, President of WBLT Engineering.
 
 ---
 

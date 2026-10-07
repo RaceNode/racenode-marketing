@@ -1,0 +1,92 @@
+---
+// Every championship's upcoming rounds on one chronological page, built each morning from the catalog; the
+// visitor's browser then brings the summary and the rounds up to date (LiveRefresh). Filters run in the browser too.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CalendarFilters from '../../components/calendar/CalendarFilters.astro';
+import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
+import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
+import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
+import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
+import { circuits, upcomingRounds } from '../../lib/calendar/model.mjs';
+import { hash, indexBody, indexSummary } from '../../lib/calendar/render.mjs';
+import { DISCIPLINES, MONTHS, REGIONS } from '../../lib/calendar/format.mjs';
+
+const loaded = await catalog();
+const { data, ctx, cal } = loaded;
+const upcoming = upcomingRounds(cal, ctx.today);
+const months = [...new Set(upcoming.map((r: any) => r.start_date.slice(0, 7)))].map((m) => ({
+  value: m,
+  label: `${MONTHS[Number(m.slice(5)) - 1]} ${m.slice(0, 4)}`,
+}));
+const allCircuits = circuits(cal);
+const upcomingCircuits = allCircuits.filter((c: any) => c.rounds.some((r: any) => r.end_date >= ctx.today));
+// The busiest circuits here; every circuit page is on /calendar/circuits/.
+const circuitPages = allCircuits
+  .filter((c: any) => c.page)
+  .sort((a: any, b: any) => b.rounds.length - a.rounds.length)
+  .slice(0, 24)
+  .sort((a: any, b: any) => a.name.localeCompare(b.name));
+const thisYear = Number(ctx.today.slice(0, 4));
+const span = thisYear === cal.year ? `${cal.year}` : `${thisYear}–${cal.year}`;
+const disciplines = Object.keys(DISCIPLINES).filter((d) => cal.championships.some((c) => c.discipline === d));
+const regions = Object.keys(REGIONS).filter((r) => cal.championships.some((c) => c.region === r));
+const summary = indexSummary(cal);
+const body = indexBody(cal, ctx);
+
+const title = `Motorsport Calendar ${cal.year}: Every Championship, Dates & Circuits | RaceNode`;
+const description = `The ${cal.year} race calendars of ${cal.championships.length} championships on one page: GT, endurance, single-seaters, one-make cups. Filter by discipline, region, circuit and month to see who races where, and when.`;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
+    { "@type": "ListItem", "position": 2, "name": "Motorsport Calendar", "item": "https://www.racenode.com/calendar/" },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} noindex={data.sample}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <div class="min-h-screen bg-gray-950">
+    <Header />
+    <main class="px-4 sm:px-6 lg:px-8 pt-12 md:pt-16">
+      <div class="max-w-5xl mx-auto">
+        {data.sample && <SampleDataNotice />}
+
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">Motorsport calendar {span}</h1>
+        <p class="text-lg text-gray-400 max-w-3xl mb-3">
+          The upcoming rounds of {cal.championships.length} championships, in date order: who races where, and when. Dates and circuits as each organizer publishes them, with a link to its official page.
+        </p>
+        <p class="text-sm text-gray-500 mb-8">
+          <span data-calendar-live="summary" data-hash={hash(summary)} set:html={summary} />{' '}
+          Each championship's page says when its calendar was last checked against the official one.
+        </p>
+
+        <CalendarFilters disciplines={disciplines} regions={regions} circuits={upcomingCircuits} months={months} />
+
+        <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
+
+        <p class="mt-8 text-sm text-gray-500">Rounds already run are on each championship's page.</p>
+
+        <section class="mt-12">
+          <h2 class="text-xl md:text-2xl font-bold text-white mb-2">Calendars by circuit</h2>
+          <p class="text-gray-400 mb-4">Every championship racing at a circuit, on one page.</p>
+          <ul class="flex flex-wrap gap-2">
+            {circuitPages.map((c: any) => (
+              <li>
+                <a href={`/calendar/circuits/${c.slug}/`} class="inline-block bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">{c.name}</a>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-4 text-sm text-gray-500"><a href="/calendar/circuits/" class="underline hover:text-white">All circuits</a></p>
+        </section>
+      </div>
+      <CalendarCTA title="Found your season? Plan it in RaceNode." />
+    </main>
+    <Footer />
+  </div>
+  <LiveRefresh config={liveConfig(loaded)} />
+</BaseLayout>

@@ -1,0 +1,117 @@
+---
+// Filters of the all-championships calendar. Without JavaScript every upcoming round stays listed; with it, rows,
+// month headings and the "not published yet" list follow the selects, and the choice is kept in the URL. A round
+// the visitor's clock says is over is hidden too (the morning build may be a day behind).
+import { DISCIPLINES, REGIONS } from '../../lib/calendar/format.mjs';
+
+interface Props {
+  disciplines: string[];
+  regions: string[];
+  /** circuits() of model.mjs that have an upcoming round */
+  circuits: { slug: string; venue_slug: string; name: string; page: boolean }[];
+  months: { value: string; label: string }[];
+}
+const { disciplines, regions, circuits, months } = Astro.props;
+const select = 'w-full bg-gray-900 border border-gray-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-accent';
+---
+
+<form id="calendar-filters" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" aria-label="Filter the calendar">
+  <label class="text-xs text-gray-500">
+    Discipline
+    <select name="discipline" class={select}>
+      <option value="">All disciplines</option>
+      {disciplines.map((d) => <option value={d}>{DISCIPLINES[d] ?? d}</option>)}
+    </select>
+  </label>
+  <label class="text-xs text-gray-500">
+    Region
+    <select name="region" class={select}>
+      <option value="">All regions</option>
+      {regions.map((r) => <option value={r}>{REGIONS[r] ?? r}</option>)}
+    </select>
+  </label>
+  <label class="text-xs text-gray-500">
+    Circuit
+    <select name="circuit" class={select}>
+      <option value="">All circuits</option>
+      {circuits.map((c) => <option value={c.page ? c.slug : c.venue_slug} data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}>{c.name}</option>)}
+    </select>
+  </label>
+  <label class="text-xs text-gray-500">
+    Month
+    <select name="month" class={select}>
+      <option value="">All months</option>
+      {months.map((m) => <option value={m.value}>{m.label}</option>)}
+    </select>
+  </label>
+</form>
+<p id="calendar-count" class="text-sm text-gray-500 min-h-5 mb-6" aria-live="polite"></p>
+
+<script>
+  const form = document.getElementById('calendar-filters') as HTMLFormElement | null;
+  const count = document.getElementById('calendar-count');
+  const keys = ['discipline', 'region', 'circuit', 'month'] as const;
+
+  function apply() {
+    if (!form) return;
+    const f = Object.fromEntries(keys.map((k) => [k, (form.elements.namedItem(k) as HTMLSelectElement).value]));
+    const match = (el: HTMLElement, fields: readonly string[]) => fields.every((k) => !f[k] || el.dataset[k] === f[k]);
+    const d = new Date();
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+    let shown = 0;
+    const championships = new Set<string>();
+    document.querySelectorAll<HTMLElement>('.calendar-row').forEach((row) => {
+      const ok = match(row, keys) && !((row.dataset.end ?? '') < today);
+      row.hidden = !ok;
+      if (ok) {
+        shown += 1;
+        championships.add(row.querySelector('a')?.getAttribute('href') ?? '');
+      }
+    });
+    document.querySelectorAll<HTMLElement>('.calendar-month').forEach((m) => {
+      m.hidden = !m.querySelector('.calendar-row:not([hidden])');
+    });
+    // The championships whose next season is not out have no round to filter by circuit or month.
+    const late = document.querySelector<HTMLElement>('#calendar-not-published');
+    if (late) {
+      let n = 0;
+      late.querySelectorAll<HTMLElement>('.calendar-late').forEach((el) => {
+        el.hidden = !match(el, ['discipline', 'region']);
+        if (!el.hidden) n += 1;
+      });
+      late.hidden = !n || Boolean(f.circuit || f.month);
+    }
+    const empty = document.getElementById('calendar-empty');
+    if (empty) empty.hidden = shown > 0;
+    if (count) {
+      count.textContent = `${shown} upcoming round${shown === 1 ? '' : 's'} across ${championships.size} championship${championships.size === 1 ? '' : 's'}`;
+      const circuit = (form.elements.namedItem('circuit') as HTMLSelectElement).selectedOptions[0];
+      if (circuit?.dataset.page) {
+        const a = document.createElement('a');
+        a.href = circuit.dataset.page;
+        a.className = 'underline hover:text-white';
+        a.textContent = `${circuit.textContent} calendar`;
+        count.append(' · ', a);
+      }
+    }
+
+    const params = new URLSearchParams();
+    for (const k of keys) if (f[k]) params.set(k, f[k]);
+    const qs = params.toString();
+    history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+  }
+
+  if (form) {
+    const params = new URLSearchParams(location.search);
+    for (const k of keys) {
+      const v = params.get(k);
+      const el = form.elements.namedItem(k) as HTMLSelectElement;
+      if (v && [...el.options].some((o) => o.value === v)) el.value = v;
+    }
+    form.addEventListener('change', apply);
+    // The browser brought the rounds up to date (LiveRefresh): the new rows follow the current filters too.
+    document.addEventListener('calendar:updated', apply);
+    apply();
+  }
+</script>
