@@ -3,11 +3,20 @@ import Shot from '../Shot.astro';
 import screenshotGrid from '../../assets/screenshots/planning-grid.png';
 import screenshotDays from '../../assets/screenshots/planning-days.png';
 import screenshotAttendance from '../../assets/screenshots/planning-attendance.png';
+import phoneGrid from '../../assets/screenshots/planning-grid-phone.png';
+import phoneDays from '../../assets/screenshots/planning-days-phone.png';
+import phoneAttendance from '../../assets/screenshots/planning-attendance-phone.png';
 
 const screenshots = {
   grid: screenshotGrid,
   days: screenshotDays,
   attendance: screenshotAttendance,
+};
+// On a phone the app's grid is one week: each section shows its own phone view (a championship's season, a day's sheet, a stay's dates).
+const phones = {
+  grid: phoneGrid,
+  days: phoneDays,
+  attendance: phoneAttendance,
 };
 
 const features = [
@@ -58,7 +67,7 @@ const features = [
 
           <!-- Screenshot -->
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={screenshots[feature.id as keyof typeof screenshots]} hideOnPhone alt={`RaceNode Planning ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
+            <Shot desktop={screenshots[feature.id as keyof typeof screenshots]} phone={phones[feature.id as keyof typeof phones]} alt={`RaceNode Planning ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
           </div>
         </div>
       ))}

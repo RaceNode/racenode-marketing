@@ -42,6 +42,7 @@ const SHOTS = [
     ];
   }),
   { name: 'logistics-info', who: 'claire', size: DESKTOP, url: `/logistics/info/${R07}` },
+  { name: 'logistics-info-phone', who: 'claire', size: PHONE, url: `/logistics/info/${R07}` },
   { name: 'logistics-import', who: 'claire', size: DESKTOP, url: `/logistics/overview/${R08}`, then: importPreview('booking-confirmation.html') },
   { name: 'logistics-import-phone', who: 'claire', size: PHONE, url: `/logistics/overview/${R08}`, then: importPreview('booking-confirmation.html') },
 
@@ -60,6 +61,7 @@ const SHOTS = [
   { name: 'timetable-items-phone', who: 'claire', size: PHONE, url: `/timetable/items/${R07}` },
   { name: 'timetable-rules', who: 'claire', size: DESKTOP, url: `/timetable/rules/${R07}` },
   { name: 'timetable-rules-phone', who: 'claire', size: PHONE, url: `/timetable/rules/${R07}` },
+  { name: 'timetable-day-phone', who: 'claire', size: PHONE, url: `/timetable/timetable/${R07}`, then: scrollTo('text=/Friday, October 16/') },
   { name: 'timetable-share', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}`, then: click('role=button[name=/^Share/]') },
   // `now` sets the device's clock for that shot. The paddock display, as on race morning (its clock and countdowns).
   { name: 'timetable-box', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}`, now: '2026-10-16T10:12:00+02:00', then: async (page) => { await click('role=button[name=/^Share/]')(page); await openLink('a[href*="/box/"]')(page); } },
@@ -71,6 +73,11 @@ const SHOTS = [
   { name: 'planning-grid', who: 'claire', size: DESKTOP, url: '/planning/grid', then: click('role=button[name="Quarter"]') },
   { name: 'planning-days', who: 'claire', size: DESKTOP, url: '/planning/grid', then: async (page) => { await click('role=button[name="Week"]')(page); await click('button[aria-label^="Next"]')(page); } },
   { name: 'planning-attendance', who: 'claire', size: DESKTOP, url: '/planning/grid', then: click('role=button[name="Month"]') },
+  // Phone: the grid is one week, so each section gets its own phone view. A tap on a cell or a bar opens its sheet
+  // (status, dates); the sheet is only looked at, never saved.
+  { name: 'planning-grid-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: async (page) => { await click('button[aria-label^="Next"]')(page); await click('role=button[name="Focus"]')(page); } },
+  { name: 'planning-days-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: async (page) => { await click('button[aria-label^="Next"]')(page); await click('button[aria-label^="Travel, "]')(page); } },
+  { name: 'planning-attendance-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: async (page) => { await click('button[aria-label^="Next"]')(page); await click('button[aria-label^="R07 Nürburgring, "] >> nth=2')(page); } },
   { name: 'planning-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: click('button[aria-label^="Next"]') }, // the race week
 
   // The crew app: what a chief mechanic sees on his phone.

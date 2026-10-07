@@ -9,6 +9,7 @@ import travelPhone from '../../assets/screenshots/logistics-travel-phone.png';
 import vehicles from '../../assets/screenshots/logistics-vehicles.png';
 import vehiclesPhone from '../../assets/screenshots/logistics-vehicles-phone.png';
 import info from '../../assets/screenshots/logistics-info.png';
+import infoPhone from '../../assets/screenshots/logistics-info-phone.png';
 
 // The screen shows; the words only say what to look at.
 const features = [
@@ -42,10 +43,10 @@ const features = [
   },
   {
     desktop: info,
+    phone: infoPhone,
     badge: "Info Board",
     title: "The briefing board, shared with everyone.",
     description: "Where the trucks park, where the passes are, what to do if you arrive after 22:00: notes the crew reads in the app.",
-    hideOnPhone: true,
   }
 ];
 ---
@@ -75,7 +76,7 @@ const features = [
           </div>
 
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={feature.desktop} phone={feature.phone} hideOnPhone={feature.hideOnPhone} alt={`RaceNode ${feature.badge} - ${feature.title}`} crop />
+            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode ${feature.badge} - ${feature.title}`} crop />
           </div>
         </div>
       ))}

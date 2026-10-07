@@ -1,7 +1,7 @@
 ---
 import Shot from '../Shot.astro';
 import schedule from '../../assets/screenshots/timetable-schedule.png';
-import schedulePhone from '../../assets/screenshots/timetable-schedule-phone.png';
+import schedulePhone from '../../assets/screenshots/timetable-day-phone.png';
 import items from '../../assets/screenshots/timetable-items.png';
 import itemsPhone from '../../assets/screenshots/timetable-items-phone.png';
 import rules from '../../assets/screenshots/timetable-rules.png';
@@ -16,8 +16,7 @@ const features = [
     phone: schedulePhone,
     badge: "Team Timetable",
     title: "Your schedule, next to the official one.",
-    description: "The organizer's sessions and your team's items in one table, day by day, with a countdown to each. Aim an item at the roles, groups or people it concerns: everyone gets their own slice. Flip to a calendar to drag and resize; export to Excel or CSV.",
-    hideOnPhone: true
+    description: "The organizer's sessions and your team's items in one table, day by day, with a countdown to each. Aim an item at the roles, groups or people it concerns: everyone gets their own slice. Flip to a calendar to drag and resize; export to Excel or CSV."
   },
   {
     desktop: items,
@@ -71,7 +70,7 @@ const features = [
 
           <!-- Screenshot -->
           <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={feature.desktop} phone={feature.phone} hideOnPhone={feature.hideOnPhone} alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
+            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
           </div>
         </div>
       ))}
