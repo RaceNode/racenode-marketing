@@ -26,6 +26,9 @@ const R07 = 'ba1e0000-0000-4000-8000-000000000410'; // Nürburgring: the event w
 const R08 = 'ba1e0000-0000-4000-8000-000000000408'; // Barcelona: no timetable, no bookings yet (import previews)
 const DESKTOP = { width: 1920, height: 1080, scale: 2 };
 const PHONE = { width: 390, height: 844, scale: 3 };
+// The home's module cards: a small laptop screen, shown whole beside its text, at a size where it stays readable. The
+// height is the one where no row of the Planning grid (nor of the sidebar) is cut at the bottom.
+const CARD = { width: 1100, height: 626, scale: 2 };
 const AGENDA_DAY = '2026-10-06T10:00:00+02:00'; // Tuesday before R07, first day of a workshop block
 const FILES = join(import.meta.dirname, 'files');
 
@@ -33,6 +36,12 @@ const FILES = join(import.meta.dirname, 'files');
 const SHOTS = [
   { name: 'landing-modules', who: 'claire', size: DESKTOP, url: '/home' },
   { name: 'landing-modules-phone', who: 'claire', size: PHONE, url: '/home' },
+  { name: 'management-card', who: 'claire', size: CARD, url: `/management/overview/${R07}` },
+  { name: 'logistics-card', who: 'claire', size: CARD, url: `/logistics/overview/${R07}` },
+  // The timetable's rows don't end at CARD's height: a slightly taller screen ends on a whole row, and `clip` keeps the
+  // top CARD.height px, which only drops the empty margin under the table.
+  { name: 'timetable-card', who: 'claire', size: { ...CARD, height: 637 }, clip: CARD.height, url: `/timetable/timetable/${R07}`, then: scrollTo('text=/Friday, October 16/') },
+  { name: 'planning-card', who: 'claire', size: CARD, url: '/planning/grid', now: '2026-10-10T10:00:00+02:00' },
 
   ...['overview', 'event-staff', 'accommodation', 'travel', 'vehicles'].flatMap((tab) => {
     const name = `logistics-${tab === 'event-staff' ? 'staff' : tab}`;
@@ -193,7 +202,7 @@ for (const shot of shots) {
   // Toasts and focus rings are not part of the product shot.
   await page.mouse.move(0, shot.size.height - 1);
   const file = join(out, `${shot.name}.png`);
-  await page.screenshot({ path: file });
+  await page.screenshot({ path: file, ...(shot.clip ? { clip: { x: 0, y: 0, width: shot.size.width, height: shot.clip } } : {}) });
   console.log(`✓ ${shot.name}`);
   await ctx.close(); // closes the page without closing any modal in it
 }

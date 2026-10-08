@@ -1,5 +1,5 @@
 // The modules, in the order of the app's own navigation. One list for the header menu (name + `short`) and the
-// home cards (name + `summary` + the phone capture). The pages are stable URLs (scripts/guardrails.mjs).
+// home cards (name + `summary` + the captures). The pages are stable URLs (scripts/guardrails.mjs).
 import type { ImageMetadata } from 'astro';
 import { CREW_DAYS_IN_PLANNING } from './crew-days';
 import personalPhone from '../assets/screenshots/crew-app-race-weekend.png';
@@ -7,6 +7,10 @@ import managementPhone from '../assets/screenshots/management-overview-phone.png
 import logisticsPhone from '../assets/screenshots/logistics-overview-phone.png';
 import timetablePhone from '../assets/screenshots/timetable-schedule-phone.png';
 import planningPhone from '../assets/screenshots/planning-phone.png';
+import managementScreen from '../assets/screenshots/management-card.png';
+import logisticsScreen from '../assets/screenshots/logistics-card.png';
+import timetableScreen from '../assets/screenshots/timetable-card.png';
+import planningScreen from '../assets/screenshots/planning-card.png';
 
 export interface Module {
   name: string;
@@ -15,8 +19,12 @@ export interface Module {
   short: string;
   /** Two or three lines on the home card: what it does, concretely. */
   summary: string;
+  /** The app's phone screen: the card's picture on a phone, and Personal's everywhere (the crew's own app). */
   phone: ImageMetadata;
   phoneAlt: string;
+  /** The team manager's screen, at a desk: the card's picture from sm up. Personal has none. */
+  screen?: ImageMetadata;
+  screenAlt?: string;
 }
 
 export const modules: Module[] = [
@@ -35,6 +43,8 @@ export const modules: Module[] = [
     summary: 'Roles per car and per crew, racecar entries and meals for every event: set once, seen by the whole crew, with what is still missing before the event.',
     phone: managementPhone,
     phoneAlt: 'RaceNode Management on a phone: one item to resolve before the event, team roles, staff with a role and a meal',
+    screen: managementScreen,
+    screenAlt: 'RaceNode Management: one staff without a team role to resolve before the event, team roles, staff with a role and a meal',
   },
   {
     name: 'Logistics',
@@ -43,6 +53,8 @@ export const modules: Module[] = [
     summary: 'Flights, trains, team vehicles and hotels, room by room. Flags anyone missing a flight, a hotel or a ride, and fills bookings in from the confirmation you drop.',
     phone: logisticsPhone,
     phoneAlt: 'RaceNode Logistics on a phone: staff without departure or return travel, flagged before the event',
+    screen: logisticsScreen,
+    screenAlt: 'RaceNode Logistics: three staff without departure or return travel flagged before the event, travel, accommodation and vehicles covered',
   },
   {
     name: 'Timetable',
@@ -51,6 +63,8 @@ export const modules: Module[] = [
     summary: 'Your team schedule alongside the official sessions, briefings set once and anchored to them, and a live countdown on the screen in your box.',
     phone: timetablePhone,
     phoneAlt: "RaceNode Timetable on a phone: the team's race weekend schedule with the time left before each item",
+    screen: timetableScreen,
+    screenAlt: "RaceNode Timetable: the team's Friday schedule, briefings and official sessions, with the time left before each item",
   },
   {
     name: 'Planning',
@@ -59,5 +73,7 @@ export const modules: Module[] = [
     summary: `Staff, racecars and trucks across the whole season on one grid, painted day by day${CREW_DAYS_IN_PLANNING ? ', with availability posted by your own crew' : ''}.`,
     phone: planningPhone,
     phoneAlt: "RaceNode Planning on a phone: a racing team's week, who is on track, travelling or at the workshop",
+    screen: planningScreen,
+    screenAlt: "RaceNode Planning: a racing team's month on one grid, who is on track, travelling or at the workshop, day by day",
   },
 ];

@@ -3,8 +3,11 @@ import { Image } from 'astro:assets';
 import { modules } from '../../data/modules';
 ---
 
-<!-- One card per module, the whole card a link to its page: the app's phone screen, whole (never cut by the
-     tile), in an asphalt tile, the name, two or three concrete lines. Three cards then two on wide screens. -->
+<!-- One row per module, the whole row a link to its page: a screen of the app, then the name and two or three
+     concrete lines, beside it on wide screens (sides alternate). The team manager's four modules are used at a
+     desk: their laptop screen, whole, on two thirds of the width so its text stays readable. Personal is the
+     crew's app: its phone, in an asphalt tile. On a phone, every module shows the app's phone screen (a laptop
+     screen shrunk to 360 px is unreadable). -->
 <section class="band">
   <div class="page">
     <div class="head">
@@ -16,20 +19,29 @@ import { modules } from '../../data/modules';
       </p>
     </div>
 
-    <ul class="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-6 lg:gap-x-8">
+    <ul class="grid gap-y-16 lg:gap-y-24">
       {modules.map((module, i) => (
-        <li class:list={[i < 3 ? 'lg:col-span-2' : 'lg:col-span-3', i === modules.length - 1 && 'sm:col-span-2 lg:col-span-3']}>
-          <a href={module.href} class="group flex h-full flex-col">
-            <div class="flex justify-center rounded-[4px] bg-asphalt px-6 py-8">
-              <div class="phone w-40 shrink-0 border-[5px] transition-transform duration-300 motion-safe:group-hover:-translate-y-1">
-                <Image src={module.phone} alt={module.phoneAlt} widths={[400, 600]} sizes="10rem" quality={80} />
+        <li>
+          <a href={module.href} class="group grid items-center gap-y-6 lg:grid-cols-12 lg:gap-x-12">
+            <div class:list={['lg:col-span-8', i % 2 === 1 && 'lg:order-2']}>
+              <div class:list={['flex justify-center rounded-[4px] bg-asphalt px-6 py-8', module.screen && 'sm:hidden']}>
+                <div class="phone w-56 shrink-0 lg:w-48 border-[5px] transition-transform duration-300 motion-safe:group-hover:-translate-y-1">
+                  <Image src={module.phone} alt={module.phoneAlt} widths={[400, 600]} sizes="14rem" quality={80} />
+                </div>
               </div>
+              {module.screen && (
+                <div class="screen hidden transition-transform duration-300 motion-safe:group-hover:-translate-y-1 sm:block">
+                  <Image src={module.screen} alt={module.screenAlt ?? ''} widths={[800, 1200, 1600, 2200]} sizes="(min-width: 1248px) 790px, (min-width: 1024px) 64vw, 100vw" quality={85} />
+                </div>
+              )}
             </div>
-            <h3 class="ruled mt-6 font-display text-3xl font-bold tracking-[-0.01em] md:text-4xl">{module.name}</h3>
-            <p class="muted mt-3 max-w-xl leading-relaxed">{module.summary}</p>
-            <span class="link mt-4 self-start decoration-transparent group-hover:decoration-current">
-              See {module.name} <span aria-hidden="true">→</span>
-            </span>
+            <div class="lg:col-span-4">
+              <h3 class="ruled font-display text-3xl font-bold tracking-[-0.01em] md:text-4xl">{module.name}</h3>
+              <p class="muted mt-3 max-w-xl leading-relaxed">{module.summary}</p>
+              <span class="link mt-4 inline-block decoration-transparent group-hover:decoration-current">
+                See {module.name} <span aria-hidden="true">→</span>
+              </span>
+            </div>
           </a>
         </li>
       ))}
