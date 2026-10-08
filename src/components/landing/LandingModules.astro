@@ -3,8 +3,8 @@ import { Image } from 'astro:assets';
 import { modules } from '../../data/modules';
 ---
 
-<!-- One card per module, the whole card a link to its page: a piece of the app's phone screen rising in an asphalt
-     tile, the name, two or three concrete lines. Three cards then two on wide screens. -->
+<!-- One card per module, the whole card a link to its page: the app's phone screen, whole (never cut by the
+     tile), in an asphalt tile, the name, two or three concrete lines. Three cards then two on wide screens. -->
 <section class="band">
   <div class="page">
     <div class="head">
@@ -20,9 +20,9 @@ import { modules } from '../../data/modules';
       {modules.map((module, i) => (
         <li class:list={[i < 3 ? 'lg:col-span-2' : 'lg:col-span-3', i === modules.length - 1 && 'sm:col-span-2 lg:col-span-3']}>
           <a href={module.href} class="group flex h-full flex-col">
-            <div class="flex h-56 justify-center overflow-hidden rounded-[4px] bg-asphalt px-6 pt-6 sm:h-64">
-              <div class="phone w-44 shrink-0 border-[5px] transition-transform duration-300 motion-safe:group-hover:-translate-y-2 sm:w-48">
-                <Image src={module.phone} alt={module.phoneAlt} widths={[400, 600]} sizes="12rem" quality={80} />
+            <div class="flex justify-center rounded-[4px] bg-asphalt px-6 py-8">
+              <div class="phone w-40 shrink-0 border-[5px] transition-transform duration-300 motion-safe:group-hover:-translate-y-1">
+                <Image src={module.phone} alt={module.phoneAlt} widths={[400, 600]} sizes="10rem" quality={80} />
               </div>
             </div>
             <h3 class="ruled mt-6 font-display text-3xl font-bold tracking-[-0.01em] md:text-4xl">{module.name}</h3>
