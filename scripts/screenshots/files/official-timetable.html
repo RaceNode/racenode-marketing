@@ -5,21 +5,39 @@
 <meta charset="utf-8">
 <title>EGTEC Round 8 - Barcelona - Official Timetable</title>
 <style>
-  @page { size: A4; margin: 16mm 14mm; }
-  body { font: 10.5pt/1.35 Helvetica, Arial, sans-serif; color: #111; }
-  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2.5pt solid #111; padding-bottom: 6pt; }
-  h1 { font-size: 16pt; margin: 0; }
-  .meta { text-align: right; font-size: 9pt; color: #444; }
-  table { width: 100%; border-collapse: collapse; margin-top: 12pt; }
-  th { text-align: left; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1pt solid #111; padding: 4pt 6pt; }
-  td { padding: 3.5pt 6pt; border-bottom: .5pt solid #ccc; }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 10.5pt/1.35 Helvetica, Arial, sans-serif; color: #111; }
+  .band { background: #1b1f2a; color: #fff; padding: 14mm 14mm 9mm; }
+  .mark { display: inline-block; width: 11mm; height: 11mm; background: #e63946; border-radius: 2mm; margin-bottom: 4mm; position: relative; }
+  .mark::after { content: ""; position: absolute; left: 2.6mm; top: 2.6mm; width: 5.8mm; height: 5.8mm; border: 1.1mm solid #1b1f2a; border-radius: 50%; border-right-color: transparent; }
+  .series { font-size: 9pt; letter-spacing: .12em; text-transform: uppercase; color: #e63946; font-weight: 700; }
+  h1 { font-size: 24pt; line-height: 1.1; margin: 1mm 0 0; }
+  .sub { font-size: 10.5pt; color: #c3c8d4; margin-top: 2mm; }
+  .meta { font-size: 9pt; color: #c3c8d4; margin-top: 3mm; }
+  .body { padding: 8mm 14mm 10mm; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .05em; background: #eceef3; border-bottom: 1.2pt solid #111; padding: 5pt 7pt; }
+  td { padding: 5.5pt 7pt; border-bottom: .5pt solid #d3d6de; }
   td.t { font-variant-numeric: tabular-nums; white-space: nowrap; }
-  tr.track td { font-weight: 600; }
-  footer { margin-top: 14pt; font-size: 8pt; color: #555; }
+  tr.track td { font-weight: 700; background: #fdf0f1; }
+  tr.track td:first-child { border-left: 3pt solid #e63946; }
+  .notes { margin-top: 8mm; font-size: 8.5pt; color: #333; border-top: 1.2pt solid #111; padding-top: 3pt; }
+  .notes h2 { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .05em; margin: 0 0 2pt; }
+  footer { margin-top: 4mm; font-size: 8pt; color: #555; }
 </style>
 </head>
 <body>
-
+<div class="band">
+  <div>
+    <span class="mark"></span>
+    <div class="series">EGTEC Championship · Round 8</div>
+    <h1>Barcelona Official Timetable</h1>
+    <div class="sub">Circuit de Barcelona-Catalunya · 18 – 21 November 2026</div>
+  </div>
+  <div class="meta">Version v1 · issued 2 Nov 2026 · all times local (CET)</div>
+</div>
+<div class="body">
 <table>
   <thead><tr><th>Date</th><th>Start</th><th>End</th><th>Session</th><th>Location</th></tr></thead>
   <tbody>
@@ -38,6 +56,8 @@
     <tr><td>21/11/2026</td><td class="t">17:15</td><td class="t">17:45</td><td>Podium &amp; press conference</td><td>Podium</td></tr>
   </tbody>
 </table>
+<div class="notes">Highlighted rows run on track. The organizer may amend this timetable; any update is published as a new version.</div>
 <footer>EGTEC Round 8 Barcelona · Official Timetable v1 · local time</footer>
+</div>
 </body>
 </html>

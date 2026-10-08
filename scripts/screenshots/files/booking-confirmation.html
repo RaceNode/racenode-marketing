@@ -3,11 +3,13 @@
   A travel agency's confirmation, made up for the Logistics import screenshot. Like the mails of airlines,
   hotels and booking sites, it carries its bookings as schema.org markup, which RaceNode reads on the device.
   The words a person sees are drawn by CSS on purpose: the document then has no text for the reading
-  service, so the screenshot calls no server (the demo stays untouched). Don't move them into the HTML.
+  service, so the screenshot calls no server (the demo stays untouched). Don't move them into the HTML:
+  every sentence below is a CSS "content" string (xNN::before), the body only holds empty boxes.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="application/ld+json">
 [
   {
@@ -74,30 +76,124 @@
 ]
 </script>
 <style>
-  body { margin: 0; padding: 28px 32px; font: 14px/1.5 Helvetica, Arial, sans-serif; color: #1a1a1a; background: #fff; }
-  i { display: block; font-style: normal; }
-  .brand::before { content: "Paddock Travel Agency"; font-weight: 700; font-size: 18px; }
-  .sub::before { content: "Booking confirmation · EGTEC R08 Barcelona · Valmorel Motorsport"; color: #555; }
-  hr { border: 0; border-top: 2px solid #1a1a1a; margin: 16px 0; }
-  .h::before { font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 12px; color: #555; }
-  .h1::before { content: "Hotel · ref PTA-48213"; }
-  .h2::before { content: "Flights · ref PTA-48214 / PTA-48215"; }
-  .h3::before { content: "Travellers"; }
-  .h { margin-top: 18px; }
-  .a::before { content: "Hotel Ciutat de Granollers, Carrer de Girona 51, 08402 Granollers"; font-weight: 600; }
-  .b::before { content: "Check-in Wed 18 Nov from 15:00 · Check-out Sun 22 Nov by 11:00 · 2 × Twin"; }
-  .c::before { content: "VY1653  Wed 18 Nov  LYS 09:35 → BCN 10:50"; font-family: Menlo, monospace; }
-  .d::before { content: "VY1652  Sun 22 Nov  BCN 19:20 → LYS 20:40"; font-family: Menlo, monospace; }
-  .e::before { content: "Hugo Garnier · Thierry Morand · Olivier Duret · Callum Reid"; }
-  .f::before { content: "Please present a valid ID at check-in and boarding."; color: #777; font-size: 12px; }
-  .f { margin-top: 24px; }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.45 Helvetica,Arial,sans-serif;color:#1c2330;background:#eef1f6}
+  i{display:block;font-style:normal}
+  .top{display:flex;align-items:center;gap:14px;padding:22px 32px;background:#14213d;color:#fff;flex-wrap:wrap}
+  .logo{width:42px;height:42px;border-radius:10px;background:#fca311;position:relative}
+  .logo::after{content:"";position:absolute;left:10px;top:10px;width:22px;height:22px;border:4px solid #14213d;border-radius:50%;border-right-color:transparent}
+  .co{flex:1;min-width:200px}.name{font-weight:700;font-size:21px}.tag{font-size:13px;color:#aab4c8}
+  .doc{text-align:right}.dt{font-weight:700;letter-spacing:.08em;font-size:15px;color:#fca311}.dd{font-size:13px;color:#cfd6e4}
+  .wrap{padding:22px 32px 30px;max-width:980px;margin:0 auto}
+  .card{background:#fff;border:1px solid #d9dee8;border-radius:10px;padding:16px 20px}
+  .sec{margin:22px 0 8px;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5a6679}
+  .info{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 20px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 20px;margin-top:14px;padding-top:14px;border-top:1px solid #e6e9f0}
+  .k{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7a8497}.v{font-weight:600}
+  .hn{font-size:19px;font-weight:700}.ha{color:#5a6679;font-size:14px}
+  .tbl{padding:6px 20px}
+  .r{display:grid;gap:10px;padding:9px 0;border-bottom:1px solid #edf0f5;align-items:center}
+  .f .r{grid-template-columns:1fr 1fr 2.2fr .7fr .7fr 1fr}
+  .p .r{grid-template-columns:1.6fr 1fr 1.5fr 1.5fr .8fr}
+  .th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7a8497;font-weight:700}
+  .m{font-family:Menlo,Consolas,monospace;font-size:14px}.b{font-weight:600}
+  .p .r:last-child{border-bottom:0}
+  .note{padding:10px 0 8px;font-size:12.5px;color:#5a6679}
+  .pay{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.pay>div>i{padding:2px 0}
+  .tot{text-align:right}.tot .b{font-size:20px;font-weight:700}.s{font-size:12.5px;color:#5a6679}
+  .fine{margin-top:20px;font-size:12px;color:#6b7589}
+  @media (max-width:560px){
+    body{font-size:14px}.top{padding:16px}.wrap{padding:14px 12px 20px}
+    .info,.grid{grid-template-columns:1fr 1fr}.doc{text-align:left}
+    .f .r,.p .r{grid-template-columns:1fr 1fr;gap:2px 10px}.p .r>:first-child,.f .r>:nth-child(3){grid-column:1/-1}.m{font-size:12.5px}.th{display:none}.tot{text-align:left}
+  }
+.x1::before{content:"Paddock Travel Agency"}
+.x2::before{content:"Team & motorsport travel · Lyon"}
+.x3::before{content:"BOOKING CONFIRMATION"}
+.x4::before{content:"File PTA-48213 · issued 2 Nov 2026"}
+.x5::before{content:"Client"}
+.x6::before{content:"Valmorel Motorsport"}
+.x7::before{content:"Event"}
+.x8::before{content:"EGTEC Round 8 · Barcelona"}
+.x9::before{content:"Dates"}
+.x10::before{content:"18 – 22 Nov 2026"}
+.x11::before{content:"Travellers"}
+.x12::before{content:"4 people"}
+.x13::before{content:"Your agent"}
+.x14::before{content:"Marion Leclerc"}
+.x15::before{content:"Status"}
+.x16::before{content:"CONFIRMED"}
+.x17::before{content:"Accommodation · ref PTA-48213"}
+.x18::before{content:"Hotel Ciutat de Granollers ★★★★"}
+.x19::before{content:"Carrer de Girona 51, 08402 Granollers, Spain · +34 938 79 51 00"}
+.x20::before{content:"Check-in"}
+.x21::before{content:"Wed 18 Nov from 15:00"}
+.x22::before{content:"Check-out"}
+.x23::before{content:"Sun 22 Nov by 11:00"}
+.x24::before{content:"Nights"}
+.x25::before{content:"4"}
+.x26::before{content:"Rooms"}
+.x27::before{content:"2 × Twin"}
+.x28::before{content:"Board"}
+.x29::before{content:"Breakfast included"}
+.x30::before{content:"Cancellation"}
+.x31::before{content:"Free until 11 Nov"}
+.x32::before{content:"Flights · ref PTA-48214 / PTA-48215"}
+.x33::before{content:"Flight"}
+.x34::before{content:"Date"}
+.x35::before{content:"Route"}
+.x36::before{content:"Depart"}
+.x37::before{content:"Arrive"}
+.x38::before{content:"Fare"}
+.x39::before{content:"VY1653"}
+.x40::before{content:"Wed 18 Nov"}
+.x41::before{content:"Lyon (LYS) → Barcelona (BCN)"}
+.x42::before{content:"09:35"}
+.x43::before{content:"10:50"}
+.x44::before{content:"Optima"}
+.x45::before{content:"VY1652"}
+.x46::before{content:"Sun 22 Nov"}
+.x47::before{content:"Barcelona (BCN) → Lyon (LYS)"}
+.x48::before{content:"19:20"}
+.x49::before{content:"20:40"}
+.x50::before{content:"Optima"}
+.x51::before{content:"Vueling · 1 cabin bag + 1 checked bag of 23 kg per person · online check-in opens 48 h before departure"}
+.x52::before{content:"Travellers"}
+.x53::before{content:"Name"}
+.x54::before{content:"Hotel"}
+.x55::before{content:"Outbound"}
+.x56::before{content:"Return"}
+.x57::before{content:"Bag"}
+.x58::before{content:"Hugo Garnier"}
+.x59::before{content:"Twin 1"}
+.x60::before{content:"VY1653 · seat 14A"}
+.x61::before{content:"VY1652 · seat 9C"}
+.x62::before{content:"23 kg"}
+.x63::before{content:"Thierry Morand"}
+.x64::before{content:"Twin 1"}
+.x65::before{content:"VY1653 · seat 15A"}
+.x66::before{content:"VY1652 · seat 10C"}
+.x67::before{content:"23 kg"}
+.x68::before{content:"Olivier Duret"}
+.x69::before{content:"Twin 2"}
+.x70::before{content:"VY1653 · seat 16A"}
+.x71::before{content:"VY1652 · seat 11C"}
+.x72::before{content:"23 kg"}
+.x73::before{content:"Callum Reid"}
+.x74::before{content:"Twin 2"}
+.x75::before{content:"VY1653 · seat 17A"}
+.x76::before{content:"VY1652 · seat 12C"}
+.x77::before{content:"23 kg"}
+.x78::before{content:"Payment"}
+.x79::before{content:"Hotel · 2 rooms × 4 nights — €1,184.00"}
+.x80::before{content:"Flights · 4 travellers × 2 sectors — €1,560.00"}
+.x81::before{content:"Booking fee — €112.00"}
+.x82::before{content:"Total paid €2,856.00"}
+.x83::before{content:"Invoice PTA-48213-F · paid by transfer on 2 Nov 2026"}
+.x84::before{content:"Please present a valid ID at check-in and boarding. Changes and cancellations: contact your agent at least 72 h before departure. Fares and room rates are non-transferable. Paddock Travel Agency · registered travel agency · 24/7 helpline +33 4 00 00 00 00."}
 </style>
 </head>
 <body>
-<i class="brand"></i><i class="sub"></i><hr>
-<i class="h h1"></i><i class="a"></i><i class="b"></i>
-<i class="h h2"></i><i class="c"></i><i class="d"></i>
-<i class="h h3"></i><i class="e"></i>
-<i class="f"></i>
+<div class="top"><div class="logo"></div><div class="co"><i class="name x1"></i><i class="tag x2"></i></div><div class="doc"><i class="dt x3"></i><i class="dd x4"></i></div></div><div class="wrap"><div class="card info"><div class="kv"><i class="k x5"></i><i class="v x6"></i></div><div class="kv"><i class="k x7"></i><i class="v x8"></i></div><div class="kv"><i class="k x9"></i><i class="v x10"></i></div><div class="kv"><i class="k x11"></i><i class="v x12"></i></div><div class="kv"><i class="k x13"></i><i class="v x14"></i></div><div class="kv"><i class="k x15"></i><i class="v x16"></i></div></div><div class="sec"><i class=" x17"></i></div><div class="card"><i class="hn x18"></i><i class="ha x19"></i><div class="grid"><div class="kv"><i class="k x20"></i><i class="v x21"></i></div><div class="kv"><i class="k x22"></i><i class="v x23"></i></div><div class="kv"><i class="k x24"></i><i class="v x25"></i></div><div class="kv"><i class="k x26"></i><i class="v x27"></i></div><div class="kv"><i class="k x28"></i><i class="v x29"></i></div><div class="kv"><i class="k x30"></i><i class="v x31"></i></div></div></div><div class="sec"><i class=" x32"></i></div><div class="card tbl f"><div class="r th"><i class=" x33"></i><i class=" x34"></i><i class=" x35"></i><i class=" x36"></i><i class=" x37"></i><i class=" x38"></i></div><div class="r"><i class="m x39"></i><i class=" x40"></i><i class=" x41"></i><i class="m x42"></i><i class="m x43"></i><i class=" x44"></i></div><div class="r"><i class="m x45"></i><i class=" x46"></i><i class=" x47"></i><i class="m x48"></i><i class="m x49"></i><i class=" x50"></i></div><div class="note"><i class=" x51"></i></div></div><div class="sec"><i class=" x52"></i></div><div class="card tbl p"><div class="r th"><i class=" x53"></i><i class=" x54"></i><i class=" x55"></i><i class=" x56"></i><i class=" x57"></i></div><div class="r"><i class="b x58"></i><i class=" x59"></i><i class="m x60"></i><i class="m x61"></i><i class=" x62"></i></div><div class="r"><i class="b x63"></i><i class=" x64"></i><i class="m x65"></i><i class="m x66"></i><i class=" x67"></i></div><div class="r"><i class="b x68"></i><i class=" x69"></i><i class="m x70"></i><i class="m x71"></i><i class=" x72"></i></div><div class="r"><i class="b x73"></i><i class=" x74"></i><i class="m x75"></i><i class="m x76"></i><i class=" x77"></i></div></div><div class="sec"><i class=" x78"></i></div><div class="card pay"><div><i class=" x79"></i><i class=" x80"></i><i class=" x81"></i></div><div class="tot"><i class="b x82"></i><i class="s x83"></i></div></div><div class="fine"><i class=" x84"></i></div></div>
 </body>
 </html>
