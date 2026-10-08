@@ -1,19 +1,17 @@
 ---
+import { modules } from "../data/modules";
+
 const appUrl = "https://app.racenode.com";
 
+// Home is the logo; the modules sit behind "Modules" (desktop) or are listed open (mobile menu).
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/crew-app/", label: "Personal" },
-  { href: "/management/", label: "Management" },
-  { href: "/logistics/", label: "Logistics" },
-  { href: "/timetable/", label: "Timetable" },
-  { href: "/crew-planning/", label: "Planning" },
-  { href: "/pricing/", label: "Pricing" },
   { href: "/calendar/", label: "Calendar" },
+  { href: "/pricing/", label: "Pricing" },
 ];
 
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+const inModule = modules.some((module) => isCurrent(module.href));
 ---
 
 <header class="band-dark sticky top-0 z-50 border-b border-asphalt-line">
@@ -26,8 +24,40 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWi
         </a>
       </div>
 
-      <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center gap-6 h-full">
+      <!-- Desktop Navigation: the modules behind one disclosure (click, hover with a mouse, keyboard), then
+           Calendar and Pricing. A disclosure, not an ARIA menu: Tab walks the links, Escape closes. -->
+      <nav class="hidden lg:flex items-center gap-7 h-full" aria-label="Main">
+        <div class="relative h-full flex items-center" data-modules>
+          <button
+            type="button"
+            class:list={["flex items-center gap-1.5 font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white aria-expanded:text-white", inModule ? "text-white underline decoration-accent-soft decoration-2 underline-offset-[1.35rem]" : "text-smoke"]}
+            aria-expanded="false"
+            aria-controls="modules-panel"
+            data-modules-button
+          >
+            Modules
+            <svg class="size-4 transition-transform in-aria-expanded:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div id="modules-panel" class="absolute top-full left-1/2 -translate-x-1/2 pt-px hidden" data-modules-panel>
+            <ul class="app-card w-[25rem] p-2 shadow-2xl shadow-black/50">
+              {modules.map((module) => (
+                <li>
+                  <a
+                    href={module.href}
+                    class="group block rounded-md px-4 py-3 hover:bg-asphalt-line focus-visible:bg-asphalt-line transition-colors"
+                    aria-current={isCurrent(module.href) ? "page" : undefined}
+                  >
+                    <span class="flex items-center gap-2 font-display text-lg font-semibold text-white">
+                      {module.name}
+                      {isCurrent(module.href) && <span class="size-1.5 rounded-full bg-accent-soft" aria-hidden="true"></span>}
+                    </span>
+                    <span class="block text-sm text-smoke group-hover:text-fog">{module.short}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
         {navLinks.map((link) => (
           <a
             href={link.href}
@@ -97,17 +127,35 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWi
     </div>
   </div>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden lg:hidden border-t border-asphalt-line">
+  <!-- Mobile Menu: the modules listed open, nothing to unfold under a finger. Scrolls if taller than the screen. -->
+  <nav id="mobile-menu" class="hidden lg:hidden border-t border-asphalt-line max-h-[calc(100dvh-4rem)] overflow-y-auto" aria-label="Main">
     <div class="px-4 py-4 space-y-3">
-      {navLinks.map((link) => (
-        <a
-          href={link.href}
-          class="block font-display text-lg text-smoke hover:text-white hover:bg-asphalt-raised rounded-[3px] px-3 py-2 transition-colors"
-        >
-          {link.label}
-        </a>
-      ))}
+      <p class="app-label px-3">Modules</p>
+      <ul>
+        {modules.map((module) => (
+          <li>
+            <a
+              href={module.href}
+              class:list={["block rounded-[3px] px-3 py-2 hover:bg-asphalt-raised transition-colors", isCurrent(module.href) && "bg-asphalt-raised"]}
+              aria-current={isCurrent(module.href) ? "page" : undefined}
+            >
+              <span class="block font-display text-lg text-white">{module.name}</span>
+              <span class="block text-sm text-smoke">{module.short}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="pt-3 border-t border-asphalt-line space-y-1">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="block font-display text-lg text-smoke hover:text-white hover:bg-asphalt-raised rounded-[3px] px-3 py-2 transition-colors"
+            aria-current={isCurrent(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
       <div class="pt-3 border-t border-asphalt-line space-y-3">
         <a
           href={`${appUrl}/login`}
@@ -123,10 +171,56 @@ const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWi
         </a>
       </div>
     </div>
-  </div>
+  </nav>
 </header>
 
 <script>
+  // Modules disclosure (desktop): click toggles; a mouse opens it on hover and closes it on leaving, after a
+  // short delay so the gap to the panel does not close it; Escape closes and gives focus back to the button;
+  // a click elsewhere or focus leaving the menu closes it.
+  const modules = document.querySelector<HTMLElement>('[data-modules]');
+  const modulesButton = document.querySelector<HTMLButtonElement>('[data-modules-button]');
+  const modulesPanel = document.querySelector<HTMLElement>('[data-modules-panel]');
+
+  if (modules && modulesButton && modulesPanel) {
+    let closeTimer: number | undefined;
+    // Opened by the mouse passing over it: the click that follows must not close it again.
+    let openedByHover = false;
+    const setOpen = (open: boolean) => {
+      window.clearTimeout(closeTimer);
+      modulesButton.setAttribute('aria-expanded', String(open));
+      modulesPanel.classList.toggle('hidden', !open);
+    };
+    const isOpen = () => modulesButton.getAttribute('aria-expanded') === 'true';
+
+    modulesButton.addEventListener('click', () => {
+      if (openedByHover) openedByHover = false;
+      else setOpen(!isOpen());
+    });
+    modules.addEventListener('pointerenter', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      openedByHover = !isOpen();
+      setOpen(true);
+    });
+    modules.addEventListener('pointerleave', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      openedByHover = false;
+      closeTimer = window.setTimeout(() => setOpen(false), 150);
+    });
+    modules.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        modulesButton.focus();
+      }
+    });
+    modules.addEventListener('focusout', (e) => {
+      if (!modules.contains(e.relatedTarget as Node | null)) setOpen(false);
+    });
+    document.addEventListener('click', (e) => {
+      if (isOpen() && !modules.contains(e.target as Node)) setOpen(false);
+    });
+  }
+
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
   const iconOpen = document.getElementById('menu-icon-open');

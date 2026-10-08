@@ -1,51 +1,10 @@
 ---
-import { CREW_DAYS_IN_PLANNING } from '../../data/crew-days';
-
-const modules = [
-  {
-    name: 'Management',
-    tagline: 'Event management, structured.',
-    features: [
-      'Roles per car and per crew, for every event',
-      'Racecar entries per event',
-      'Meals: where, when, who eats there'
-    ],
-    href: '/management/'
-  },
-  {
-    name: 'Logistics',
-    tagline: 'Event logistics, centralized.',
-    features: [
-      'Flights, trains, team vehicles and hotels, room by room',
-      'Flags anyone missing a flight, a hotel or a ride',
-      'Bookings filled in from the confirmation you drop'
-    ],
-    href: '/logistics/'
-  },
-  {
-    name: 'Timetable',
-    tagline: 'Event schedule, in real time.',
-    features: [
-      'Team schedule alongside the official sessions',
-      'Briefings set once, anchored to the sessions',
-      'Live countdown on the screen in your box'
-    ],
-    href: '/timetable/'
-  },
-  {
-    name: 'Planning',
-    tagline: 'The whole season, one grid.',
-    features: [
-      'Staff, racecars and trucks on one season grid',
-      'Five day codes, painted by drag',
-      CREW_DAYS_IN_PLANNING ? 'Availability posted by your own crew' : 'Partial attendance per person and per truck'
-    ],
-    href: '/crew-planning/'
-  }
-];
+import { Image } from 'astro:assets';
+import { modules } from '../../data/modules';
 ---
 
-<!-- A ledger, not a card grid: one row per module. -->
+<!-- One card per module, the whole card a link to its page: a piece of the app's phone screen rising in an asphalt
+     tile, the name, two or three concrete lines. Three cards then two on wide screens. -->
 <section class="band">
   <div class="page">
     <div class="head">
@@ -57,23 +16,21 @@ const modules = [
       </p>
     </div>
 
-    <ul>
-      {modules.map((module) => (
-        <li class="ruled grid gap-6 pb-12 lg:grid-cols-12 lg:gap-10">
-          <div class="lg:col-span-4">
-            <h3 class="font-display text-5xl font-bold tracking-[-0.02em] md:text-6xl">{module.name}</h3>
-            <p class="muted mt-2 text-lg">{module.tagline}</p>
-          </div>
-
-          <ul class="grid gap-x-8 gap-y-3 sm:grid-cols-3 lg:col-span-6 lg:pt-3">
-            {module.features.map((feature) => (
-              <li class="hair pt-3 leading-snug">{feature}</li>
-            ))}
-          </ul>
-
-          <div class="lg:col-span-2 lg:pt-3 lg:text-right">
-            <a href={module.href} class="link">Learn more</a>
-          </div>
+    <ul class="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-6 lg:gap-x-8">
+      {modules.map((module, i) => (
+        <li class:list={[i < 3 ? 'lg:col-span-2' : 'lg:col-span-3', i === modules.length - 1 && 'sm:col-span-2 lg:col-span-3']}>
+          <a href={module.href} class="group flex h-full flex-col">
+            <div class="flex h-56 justify-center overflow-hidden rounded-[4px] bg-asphalt px-6 pt-6 sm:h-64">
+              <div class="phone w-44 shrink-0 border-[5px] transition-transform duration-300 motion-safe:group-hover:-translate-y-2 sm:w-48">
+                <Image src={module.phone} alt={module.phoneAlt} widths={[400, 600]} sizes="12rem" quality={80} />
+              </div>
+            </div>
+            <h3 class="ruled mt-6 font-display text-3xl font-bold tracking-[-0.01em] md:text-4xl">{module.name}</h3>
+            <p class="muted mt-3 max-w-xl leading-relaxed">{module.summary}</p>
+            <span class="link mt-4 self-start decoration-transparent group-hover:decoration-current">
+              See {module.name} <span aria-hidden="true">→</span>
+            </span>
+          </a>
         </li>
       ))}
     </ul>
