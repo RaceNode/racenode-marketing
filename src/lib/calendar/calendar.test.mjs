@@ -1,6 +1,7 @@
 // The calendar shows only the contract's fields, stays honest when a season is not out, and never ships sample
 // data to production.
 import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
 import { test } from 'node:test';
 import { loadCatalog } from './build.mjs';
 import { VIEWS, sanitize } from './contract.mjs';
@@ -159,12 +160,61 @@ test('championships sharing a weekend at the same venue are found', () => {
 test('production never publishes sample data: without the views the build fails', async () => {
   await assert.rejects(loadCatalog({}), /refusing to publish sample data/);
   const down = { CATALOG_SUPABASE_URL: 'http://127.0.0.1:9', CATALOG_SUPABASE_KEY: 'k' };
-  await assert.rejects(loadCatalog(down));
+  await assert.rejects(loadCatalog(down, { delays: [] }));
   // A preview (CALENDAR_SAMPLE=1) falls back to the sample, flagged so the pages say so and are not indexed.
   for (const env of [{}, down]) {
-    const preview = await loadCatalog({ ...env, CALENDAR_SAMPLE: '1' });
+    const preview = await loadCatalog({ ...env, CALENDAR_SAMPLE: '1' }, { delays: [] });
     assert.equal(preview.sample, true);
     assert.ok(preview.events.length > 0);
+  }
+});
+
+/** A fake PostgREST: `answer(view, n)` gives [status, body] for the n-th request (from 1) to a view. */
+async function fakeViews(answer) {
+  const hits = {};
+  const server = createServer((req, res) => {
+    const view = new URL(req.url, 'http://x').pathname.split('/').pop();
+    hits[view] = (hits[view] ?? 0) + 1;
+    const [status, body] = answer(view, hits[view]);
+    res.writeHead(status, { 'Content-Type': 'application/json' }).end(JSON.stringify(body));
+  });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const env = { CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`, CATALOG_SUPABASE_KEY: 'k' };
+  return { env, hits, close: () => new Promise((r) => server.close(r)) };
+}
+const PGRST002 = { code: 'PGRST002', message: 'Could not query the database for the schema cache. Retrying.' };
+const rowsOf = (view) => (view === VIEWS.series ? [{ slug: 'gt4', name: 'GT4' }] : view === VIEWS.events ? [{ series_slug: 'gt4', status: 'scheduled', start_date: '2027-04-01' }] : []);
+
+test('a passing 503 (PGRST002) is retried and the build gets the catalog', async () => {
+  const api = await fakeViews((view, n) => (view === VIEWS.events && n <= 2 ? [503, PGRST002] : [200, rowsOf(view)]));
+  try {
+    const data = await loadCatalog(api.env, { delays: [1, 1, 1] });
+    assert.equal(data.sample, false);
+    assert.equal(data.events.length, 1);
+    assert.equal(api.hits[VIEWS.events], 3);
+  } finally {
+    await api.close();
+  }
+});
+
+test('a database that stays down fails the build after the retries, never an empty calendar', async () => {
+  const api = await fakeViews(() => [503, PGRST002]);
+  try {
+    await assert.rejects(loadCatalog(api.env, { delays: [1, 1] }), /answered 503 .*PGRST002/);
+    assert.equal(api.hits[VIEWS.events], 3);
+  } finally {
+    await api.close();
+  }
+});
+
+test('a 4xx (missing view, bad key) is not retried', async () => {
+  const api = await fakeViews(() => [404, { code: 'PGRST205' }]);
+  try {
+    await assert.rejects(loadCatalog(api.env, { delays: [1, 1] }), /answered 404/);
+    await new Promise((r) => setTimeout(r, 50));
+    assert.ok(Object.values(api.hits).every((n) => n === 1));
+  } finally {
+    await api.close();
   }
 });
 

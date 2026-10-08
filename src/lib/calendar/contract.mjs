@@ -44,7 +44,11 @@ async function fetchView(url, key, kind, { signal, series } = {}) {
     // preflight first (one round trip more per view).
     const q = `${url}/rest/v1/${VIEWS[kind]}?select=${FIELDS[kind].join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}&apikey=${encodeURIComponent(key)}`;
     const res = await fetch(q, { headers: { Accept: 'application/json' }, signal });
-    if (!res.ok) throw new Error(`calendar: ${VIEWS[kind]} answered ${res.status} ${await res.text()}`);
+    if (!res.ok) {
+      const e = new Error(`calendar: ${VIEWS[kind]} answered ${res.status} ${await res.text()}`);
+      e.status = res.status;
+      throw e;
+    }
     const page = await res.json();
     rows.push(...page);
     if (page.length < PAGE) return rows;

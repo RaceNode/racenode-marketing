@@ -4,18 +4,43 @@ import { featuredYear } from './model.mjs';
 import { calendarOf, circuitPageSlugs, countriesOf } from './render.mjs';
 
 /**
- * The catalog for this build, from the views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY). A failure fails the
- * build, so Cloudflare keeps the last good deploy online. `CALENDAR_SAMPLE=1` (preview env, never production) falls
+ * Waits between attempts at the views: a passing 5xx or timeout (PGRST002 while PostgREST reloads its schema cache,
+ * a slow cold start) costs a few seconds instead of the deploy; about a minute of waiting in all, then the build fails.
+ */
+export const RETRY_DELAYS_MS = [3000, 8000, 15000, 30000];
+const ATTEMPT_TIMEOUT_MS = 20000;
+
+/** Worth another try: a 5xx, a 408/429, a timeout or a network error. A 4xx (missing view, bad key) is not. */
+export function transient(e) {
+  if (e?.status) return e.status >= 500 || e.status === 408 || e.status === 429;
+  return true;
+}
+
+async function fetchWithRetry(url, key, delays) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fetchCatalog(url, key, { signal: AbortSignal.timeout(ATTEMPT_TIMEOUT_MS) });
+    } catch (e) {
+      if (attempt >= delays.length || !transient(e)) throw e;
+      console.warn(`${String(e).slice(0, 200)}; retrying in ${delays[attempt] / 1000}s (${attempt + 1}/${delays.length})`);
+      await new Promise((r) => setTimeout(r, delays[attempt]));
+    }
+  }
+}
+
+/**
+ * The catalog for this build, from the views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY). A failure that outlasts
+ * the retries fails the build, so Cloudflare keeps the last good deploy online. `CALENDAR_SAMPLE=1` (preview env, never production) falls
  * back to sample data, a real extract kept in the repo, flagged so pages say so and are not indexed: when the
  * variables are missing, or when the views do not answer (before the app's #197 reaches production: PGRST205).
  */
-export async function loadCatalog(env) {
+export async function loadCatalog(env, { delays = RETRY_DELAYS_MS } = {}) {
   const url = env.CATALOG_SUPABASE_URL;
   const key = env.CATALOG_SUPABASE_KEY;
   const allowSample = env.CALENDAR_SAMPLE === '1';
   if (url && key) {
     try {
-      return { sample: false, ...(await fetchCatalog(url, key, { signal: AbortSignal.timeout(30000) })) };
+      return { sample: false, ...(await fetchWithRetry(url, key, delays)) };
     } catch (e) {
       if (!allowSample) throw e;
       console.warn(`${String(e).slice(0, 200)}; sample data instead (preview)`);
