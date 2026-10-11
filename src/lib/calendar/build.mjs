@@ -1,6 +1,7 @@
 // The catalog for the build (Node), kept apart from contract.mjs, which the visitor's browser loads too.
 import { fetchCatalog, sanitize } from './contract.mjs';
 import { featuredYear } from './model.mjs';
+import { LIVE_API } from './relay.mjs';
 import { calendarOf, circuitPageSlugs, countriesOf } from './render.mjs';
 
 /**
@@ -29,7 +30,8 @@ async function fetchWithRetry(url, key, delays) {
 }
 
 /**
- * The catalog for this build, from the views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY). A failure that outlasts
+ * The catalog for this build, from the views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY, the server's key: it
+ * never reaches a page). A failure that outlasts
  * the retries fails the build, so Cloudflare keeps the last good deploy online. `CALENDAR_SAMPLE=1` (preview env, never production) falls
  * back to sample data, a real extract kept in the repo, flagged so pages say so and are not indexed: when the
  * variables are missing, or when the views do not answer (before the app's #197 reaches production: PGRST205).
@@ -52,8 +54,8 @@ export async function loadCatalog(env, { delays = RETRY_DELAYS_MS } = {}) {
   return { sample: true, ...sanitize(sample) };
 }
 
-/** Where a preview's browser reads the sample (src/pages/calendar/sample-api/): the views' paths, as static files. */
-export const SAMPLE_API = '/calendar/sample-api';
+/** Where a preview's browser reads the sample (src/pages/calendar/sample-api/): the relay's answer, as a static file. */
+export const SAMPLE_API = '/calendar/sample-api/catalog.json';
 
 let cached;
 /**
@@ -73,13 +75,12 @@ export const catalog = () =>
   }));
 
 /**
- * What a page hands its browser to read the views again (LiveRefresh.astro): the publishable URL and key the build
- * used (a preview on sample data gets the static sample API instead), and the render context.
+ * What a page hands its browser to read the catalog again (LiveRefresh.astro): where to ask (the site's relay; a
+ * preview on sample data gets the static sample copy instead) and the render context. Never a database URL or key.
  */
 export function liveConfig({ data, ctx }, { slug = null, circuit = null } = {}) {
   return {
-    url: data.sample ? SAMPLE_API : process.env.CATALOG_SUPABASE_URL,
-    key: data.sample ? 'sample' : process.env.CATALOG_SUPABASE_KEY,
+    api: data.sample ? SAMPLE_API : LIVE_API,
     ...ctx,
     slug,
     circuit,

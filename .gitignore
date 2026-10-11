@@ -25,3 +25,7 @@ pnpm-debug.log*
 .claude/*
 !.claude/settings.json
 !.claude/guardrails-hook.mjs
+
+# wrangler pages dev (the calendar relay, locally)
+.wrangler/
+.dev.vars

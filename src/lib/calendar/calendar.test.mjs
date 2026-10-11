@@ -3,10 +3,11 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { test } from 'node:test';
-import { loadCatalog } from './build.mjs';
+import { SAMPLE_API, liveConfig, loadCatalog } from './build.mjs';
 import { VIEWS, sanitize } from './contract.mjs';
 import { dateRange, roundLabel, roundName } from './format.mjs';
 import { refresh } from './refresh.mjs';
+import { LIVE_API, ipBudget, relay } from './relay.mjs';
 import { calendarOf, championshipBody, circuitBody, circuitPageSlugs, countriesOf, hash, indexBody, indexSummary, roundRow } from './render.mjs';
 import { buildCalendar, circuits, featuredYear, notPublished, upcomingRounds, sharedWeekends } from './model.mjs';
 
@@ -228,7 +229,7 @@ test('the rows of the all-championships calendar escape what the catalog says', 
   assert.doesNotMatch(html, /<b>/);
 });
 
-// --- The browser's refresh (refresh.mjs), against the sample served as the views would serve it ---------------
+// --- The browser's refresh (refresh.mjs), against the sample served as the relay would serve it ---------------
 
 const sampleData = async () => sanitize((await import('../../data/calendar/sample.json', { with: { type: 'json' } })).default);
 
@@ -246,9 +247,7 @@ function serve(data, { status = 200 } = {}) {
   const calls = [];
   globalThis.fetch = async (url) => {
     calls.push(url);
-    const view = /rest\/v1\/(\w+)/.exec(url)[1];
-    const kind = Object.entries(VIEWS).find(([, v]) => v === view)[0];
-    return new Response(status === 200 ? JSON.stringify(data[kind]) : '{}', { status });
+    return new Response(status === 200 ? JSON.stringify(data) : '{}', { status });
   };
   return calls;
 }
@@ -261,7 +260,7 @@ test('the browser leaves the page alone when nothing changed since the build', a
   const p = page({ summary: indexSummary(cal), body: indexBody(cal, ctx) });
   const before = p.els.body.innerHTML;
   serve(data);
-  assert.equal(await refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }), 'same');
+  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx }), 'same');
   assert.equal(p.els.body.innerHTML, before);
   assert.deepEqual(p.events, []);
 });
@@ -279,7 +278,7 @@ test('the browser updates what changed since the build, and only that', async ()
   r.start_date = '2027-04-24';
   r.end_date = '2027-04-25';
   serve(moved);
-  assert.equal(await refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }), 'updated');
+  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx }), 'updated');
   assert.match(p.els.body.innerHTML, /24–25 Apr/);
   assert.equal(p.els.summary.innerHTML, summary);
   assert.deepEqual(p.events, ['calendar:updated']);
@@ -292,10 +291,10 @@ test("a championship's page asks the views for that championship only", async ()
   ctx.circuitPages = circuitPageSlugs(cal);
   const p = page({ body: championshipBody(cal, 'british-gt', ctx) });
   assert.match(p.els.body.innerHTML, /href="\/calendar\/circuits\//, 'its rounds link to their circuit pages');
-  // The static sample API ignores the query: the browser filters too, and still finds nothing new.
+  // The static sample copy ignores the query: the browser filters too, and still finds nothing new.
   const calls = serve(data);
-  assert.equal(await refresh(p.doc, { url: '/calendar/sample-api', key: 'sample', ...ctx, slug: 'british-gt' }), 'same');
-  assert.ok(calls.every((u) => /=eq\.british-gt&/.test(u)));
+  assert.equal(await refresh(p.doc, { api: SAMPLE_API, ...ctx, slug: 'british-gt' }), 'same');
+  assert.deepEqual(calls, [`${SAMPLE_API}?series=british-gt`]);
 });
 
 test("a circuit's page reads the whole catalog and finds nothing new when nothing changed", async () => {
@@ -306,8 +305,8 @@ test("a circuit's page reads the whole catalog and finds nothing new when nothin
   const p = page({ body: circuitBody(cal, 'spa-francochamps-circuit', ctx) });
   assert.ok(p.els.body.innerHTML.length > 0);
   const calls = serve(data);
-  assert.equal(await refresh(p.doc, { url: '/calendar/sample-api', key: 'sample', ...ctx, circuit: 'spa-francochamps-circuit' }), 'same');
-  assert.ok(calls.every((u) => !/=eq\./.test(u)));
+  assert.equal(await refresh(p.doc, { api: SAMPLE_API, ...ctx, circuit: 'spa-francochamps-circuit' }), 'same');
+  assert.deepEqual(calls, [SAMPLE_API]);
 });
 
 test('the build version stays when the views fail or answer nothing', async () => {
@@ -317,10 +316,10 @@ test('the build version stays when the views fail or answer nothing', async () =
   ctx.circuitPages = circuitPageSlugs(cal);
   const p = page({ body: indexBody(cal, ctx) });
   const before = p.els.body.innerHTML;
-  serve(data, { status: 404 }); // PGRST205 until the app's #197 is in production
-  await assert.rejects(refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }));
+  serve(data, { status: 502 }); // the relay could not read the views
+  await assert.rejects(refresh(p.doc, { api: LIVE_API, ...ctx }));
   serve({ series: [], seasons: [], events: [] });
-  assert.equal(await refresh(p.doc, { url: 'https://x.supabase.co', key: 'k', ...ctx }), 'empty');
+  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx }), 'empty');
   assert.equal(p.els.body.innerHTML, before);
 });
 
@@ -335,4 +334,110 @@ test('dates and labels read the way a team writes them', () => {
   assert.equal(roundName({ name: 'Circuit de Magny-Cours', venue_name: 'Circuit de Nevers Magny-Cours' }), null);
   assert.equal(roundName({ name: 'Budapest', venue_name: 'Hungaroring' }), 'Budapest');
   assert.equal(roundName({ name: 'CrowdStrike 24 Hours of Spa', venue_name: 'Spa' }), 'CrowdStrike 24 Hours of Spa');
+});
+
+// --- The relay (relay.mjs): what the browser may ask, and what never leaves the server -------------------------
+
+const ask = (query = '', headers = { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '1.2.3.4' }) =>
+  new Request(`https://www.racenode.com${LIVE_API}${query}`, { headers });
+const relayEnv = { CATALOG_SUPABASE_URL: 'https://db.test', CATALOG_SUPABASE_KEY: 'server-secret' };
+const nodeFetch = globalThis.fetch; // the refresh tests above replace it
+
+/** An edge cache in memory, keyed like caches.default (by URL). */
+function memoryCache() {
+  const store = new Map();
+  return { store, match: async (req) => store.get(req.url)?.clone(), put: async (req, res) => void store.set(req.url, res) };
+}
+
+test('a page never carries a database URL or key, only where to ask', () => {
+  const ctx = { year: 2027, today: '2026-10-08', countries: {} };
+  const before = { CATALOG_SUPABASE_URL: process.env.CATALOG_SUPABASE_URL, CATALOG_SUPABASE_KEY: process.env.CATALOG_SUPABASE_KEY };
+  Object.assign(process.env, relayEnv);
+  try {
+    const live = JSON.stringify(liveConfig({ data: { sample: false }, ctx }, { slug: 'gt4' }));
+    assert.doesNotMatch(live, /server-secret|db\.test/);
+    assert.equal(JSON.parse(live).api, LIVE_API);
+    assert.equal(liveConfig({ data: { sample: true }, ctx }).api, SAMPLE_API);
+  } finally {
+    for (const [k, v] of Object.entries(before)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  }
+});
+
+test('the server key travels in a header, never in a URL', async () => {
+  const seen = [];
+  const server = createServer((req, res) => {
+    seen.push({ url: req.url, apikey: req.headers.apikey });
+    res.writeHead(200, { 'Content-Type': 'application/json' }).end('[]');
+  });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  globalThis.fetch = nodeFetch;
+  try {
+    await loadCatalog({ CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`, CATALOG_SUPABASE_KEY: 'server-secret' }, { delays: [] });
+    assert.equal(seen.length, 3);
+    assert.ok(seen.every((r) => r.apikey === 'server-secret' && !r.url.includes('server-secret')));
+  } finally {
+    await new Promise((r) => server.close(r));
+  }
+});
+
+test('the relay answers a page with the contract fields, from the views once, then from the cache', async () => {
+  const data = await sampleData();
+  const reads = [];
+  const read = async (url, key, { series }) => {
+    reads.push({ url, key, series });
+    return data;
+  };
+  const cache = memoryCache();
+  const pending = [];
+  const opts = { cache, read, waitUntil: (p) => pending.push(p) };
+  const res = await relay(ask('?series=british-gt'), relayEnv, opts);
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get('cache-control'), /max-age=300/);
+  const body = await res.json();
+  assert.ok(body.events.length > 0);
+  assert.doesNotMatch(JSON.stringify(body), /server-secret|db\.test/);
+  assert.deepEqual(reads, [{ url: 'https://db.test', key: 'server-secret', series: 'british-gt' }]);
+  await Promise.all(pending);
+  // Another visitor, the same question: the cache answers, the views are not read again.
+  const again = await relay(ask('?series=british-gt', { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '5.6.7.8' }), relayEnv, opts);
+  assert.equal(again.status, 200);
+  assert.equal(reads.length, 1);
+});
+
+test('the relay turns away other sites, scripts, odd queries and greedy addresses', async () => {
+  const read = async () => ({ series: [], seasons: [], events: [] });
+  // No browser same-origin header: a script, or another site's page.
+  assert.equal((await relay(ask('', {}), relayEnv, { read })).status, 403);
+  assert.equal((await relay(ask('', { 'sec-fetch-site': 'cross-site' }), relayEnv, { read })).status, 403);
+  // Only `series`, and only a slug: no PostgREST filter, column or ordering goes through.
+  for (const q of ['?select=*', '?series=eq.x', '?series=x&order=start_date', '?offset=1000', '?series=../x']) {
+    assert.equal((await relay(ask(q), relayEnv, { read })).status, 400, q);
+  }
+  // A per-IP budget per minute.
+  let t = 0;
+  const allow = ipBudget({ limit: 2, now: () => t });
+  const statuses = [];
+  for (let i = 0; i < 3; i++) statuses.push((await relay(ask(), relayEnv, { read, allow })).status);
+  assert.deepEqual(statuses, [200, 200, 429]);
+  const other = await relay(ask('', { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '9.9.9.9' }), relayEnv, { read, allow });
+  assert.equal(other.status, 200, 'another address has its own budget');
+  t = 60_000;
+  assert.equal((await relay(ask(), relayEnv, { read, allow })).status, 200, 'the budget comes back the next minute');
+});
+
+test('the relay says nothing about the database when the views fail, and caches no failure', async () => {
+  const cache = memoryCache();
+  const res = await relay(ask(), relayEnv, {
+    cache,
+    read: async () => {
+      throw new Error('calendar: catalog_public_events answered 401 {"message":"Invalid API key"}');
+    },
+  });
+  assert.equal(res.status, 502);
+  assert.doesNotMatch(await res.text(), /API key|catalog_public/);
+  assert.equal(cache.store.size, 0);
+  assert.equal((await relay(ask(), {}, {})).status, 503, 'not configured');
 });

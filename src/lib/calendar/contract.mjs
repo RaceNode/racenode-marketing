@@ -1,7 +1,8 @@
-// The public race calendar reads the app's championship catalog through three views the app opens to `anon`
-// (read-only, publishable key): series, seasons, rounds. At build time for the pages Google indexes, then in the
-// visitor's browser for what changed since (refresh.mjs). Only the fields below are ever kept: if a view grows a
-// column (raw scrape, logs, anything about a team), the site drops it before a page can show it.
+// The public race calendar reads the app's championship catalog through three read-only views: series, seasons,
+// rounds. Server-side only, with a key that never reaches a page: at build time for the pages Google indexes, and in
+// the relay (relay.mjs) the visitor's browser asks for what changed since (refresh.mjs). Only the fields below are
+// ever kept: if a view grows a column (raw scrape, logs, anything about a team), the site drops it before a page or
+// the relay can show it.
 //
 // Rules (Willi, 2026-10-07): dates and venues are publishable facts; no organizer logo or document, we link to the
 // organizer's own page; never team data, raw scrapes or logs.
@@ -40,10 +41,8 @@ async function fetchView(url, key, kind, { signal, series } = {}) {
   const only = series ? `&${kind === 'series' ? 'slug' : 'series_slug'}=eq.${encodeURIComponent(series)}` : '';
   const rows = [];
   for (let offset = 0; ; offset += PAGE) {
-    // The publishable key in the query, not in an `apikey` header: a header would make every browser request a CORS
-    // preflight first (one round trip more per view).
-    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${FIELDS[kind].join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}&apikey=${encodeURIComponent(key)}`;
-    const res = await fetch(q, { headers: { Accept: 'application/json' }, signal });
+    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${FIELDS[kind].join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
+    const res = await fetch(q, { headers: { Accept: 'application/json', apikey: key }, signal });
     if (!res.ok) {
       const e = new Error(`calendar: ${VIEWS[kind]} answered ${res.status} ${await res.text()}`);
       e.status = res.status;
@@ -55,19 +54,37 @@ async function fetchView(url, key, kind, { signal, series } = {}) {
   }
 }
 
-/**
- * The catalog from the views, at build time and in the visitor's browser. `series` keeps one championship only
- * (its page needs nothing else); the rows are filtered here too, so a source that ignores the query (the static
- * sample API of a preview) gives the same result.
- */
-export async function fetchCatalog(url, key, { signal, series } = {}) {
-  const base = url.replace(/\/$/, '');
-  const [s, se, ev] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series })));
-  const data = sanitize({ series: s, seasons: se, events: ev });
+/** One championship only (its page needs nothing else), or the whole catalog when `series` is not given. */
+function only(data, series) {
   if (!series) return data;
   return {
     series: data.series.filter((x) => x.slug === series),
     seasons: data.seasons.filter((x) => x.series_slug === series),
     events: data.events.filter((x) => x.series_slug === series),
   };
+}
+
+/**
+ * The catalog from the views, server-side (the build, the relay): `key` is the server's, it never reaches a page.
+ * `series` keeps one championship only.
+ */
+export async function fetchCatalog(url, key, { signal, series } = {}) {
+  const base = url.replace(/\/$/, '');
+  const [s, se, ev] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series })));
+  return only(sanitize({ series: s, seasons: se, events: ev }), series);
+}
+
+/**
+ * The catalog in the visitor's browser, from the site's own relay (one same-origin request, no key) or, on a preview
+ * built on sample data, from its static copy. The rows are filtered here too, so a source that ignores `series` (the
+ * static copy) gives the same result.
+ */
+export async function fetchLive(api, { signal, series } = {}) {
+  const res = await fetch(series ? `${api}?series=${encodeURIComponent(series)}` : api, { headers: { Accept: 'application/json' }, signal });
+  if (!res.ok) {
+    const e = new Error(`calendar: ${api} answered ${res.status}`);
+    e.status = res.status;
+    throw e;
+  }
+  return only(sanitize(await res.json()), series);
 }
