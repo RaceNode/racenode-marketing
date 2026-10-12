@@ -4,8 +4,10 @@
 // ever kept: if a view grows a column (raw scrape, logs, anything about a team), the site drops it before a page or
 // the relay can show it.
 //
-// Rules (Willi, 2026-10-07): dates and venues are publishable facts; no organizer logo or document, we link to the
-// organizer's own page; never team data, raw scrapes or logs.
+// Rules (Willi, 2026-10-07): dates and venues are publishable facts; no organizer document, we link to the
+// organizer's own page; never team data, raw scrapes or logs. Logos (Willi, 2026-10-08, once 80% of the championships
+// had one): the official ones, hosted by us (the build downloads them, logos.mjs), never linked from the catalog's
+// storage: the logo URLs are read by the build only (`logos`), the relay and the browser never see them.
 
 export const VIEWS = {
   series: 'catalog_public_series',
@@ -19,6 +21,9 @@ export const FIELDS = {
   events: ['series_slug', 'season_label', 'season_year', 'round_number', 'round_label', 'sub_label', 'name', 'kind', 'start_date', 'end_date', 'status', 'url', 'venue_slug', 'venue_name', 'venue_country_code', 'venue_timezone'],
 };
 
+/** The series columns only the build reads: where the catalog stores each championship's logo. */
+export const LOGO_FIELDS = ['logo_url', 'logo_light_url', 'logo_dark_url'];
+
 const ORDER = {
   series: 'slug',
   seasons: 'series_slug,year',
@@ -26,10 +31,10 @@ const ORDER = {
 };
 
 /** Keeps the contract's fields and nothing else; a removed round never reaches a page. */
-export function sanitize(data) {
-  const pick = (kind) => (row) => Object.fromEntries(FIELDS[kind].map((f) => [f, row[f] ?? null]));
+export function sanitize(data, { logos = false } = {}) {
+  const pick = (kind, extra = []) => (row) => Object.fromEntries([...FIELDS[kind], ...extra].map((f) => [f, row[f] ?? null]));
   return {
-    series: (data.series ?? []).map(pick('series')),
+    series: (data.series ?? []).map(pick('series', logos ? LOGO_FIELDS : [])),
     seasons: (data.seasons ?? []).map(pick('seasons')),
     events: (data.events ?? []).filter((e) => e.status === 'scheduled' || e.status === 'cancelled').map(pick('events')),
   };
@@ -37,11 +42,11 @@ export function sanitize(data) {
 
 const PAGE = 1000;
 
-async function fetchView(url, key, kind, { signal, series } = {}) {
+async function fetchView(url, key, kind, { signal, series, logos } = {}) {
   const only = series ? `&${kind === 'series' ? 'slug' : 'series_slug'}=eq.${encodeURIComponent(series)}` : '';
   const rows = [];
   for (let offset = 0; ; offset += PAGE) {
-    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${FIELDS[kind].join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
+    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${(kind === 'series' && logos ? [...FIELDS.series, ...LOGO_FIELDS] : FIELDS[kind]).join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
     const res = await fetch(q, { headers: { Accept: 'application/json', apikey: key }, signal });
     if (!res.ok) {
       const e = new Error(`calendar: ${VIEWS[kind]} answered ${res.status} ${await res.text()}`);
@@ -66,12 +71,12 @@ function only(data, series) {
 
 /**
  * The catalog from the views, server-side (the build, the relay): `key` is the server's, it never reaches a page.
- * `series` keeps one championship only.
+ * `series` keeps one championship only; `logos` adds the logo URLs (the build asks, the relay does not).
  */
-export async function fetchCatalog(url, key, { signal, series } = {}) {
+export async function fetchCatalog(url, key, { signal, series, logos = false } = {}) {
   const base = url.replace(/\/$/, '');
-  const [s, se, ev] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series })));
-  return only(sanitize({ series: s, seasons: se, events: ev }), series);
+  const [s, se, ev] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series, logos })));
+  return only(sanitize({ series: s, seasons: se, events: ev }, { logos }), series);
 }
 
 /**

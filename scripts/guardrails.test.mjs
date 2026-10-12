@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
-import { check } from './guardrails.mjs';
+import { check, checkDist } from './guardrails.mjs';
 
 const root = join(import.meta.dirname, '..');
 
@@ -34,4 +34,17 @@ test('the guardrails catch a drift', (t) => {
     assert.match(found, re);
   assert.doesNotMatch(found, /Fine\.astro/);
   assert.doesNotMatch(found, /\/privacy has no page/);
+});
+
+test('a built page that points to the catalog storage is caught', (t) => {
+  const copy = fs.mkdtempSync(join(os.tmpdir(), 'guardrails-dist-'));
+  t.after(() => fs.rmSync(copy, { recursive: true, force: true }));
+  assert.match(checkDist(copy).join(), /dist\/ is missing/);
+  fs.mkdirSync(join(copy, 'dist', 'calendar'), { recursive: true });
+  fs.writeFileSync(join(copy, 'dist', 'calendar', 'index.html'), '<img src="/calendar/logos/dtm.webp">');
+  assert.deepEqual(checkDist(copy), []);
+  fs.writeFileSync(join(copy, 'dist', 'calendar', 'dtm.html'), '<img src="https://abc.supabase.co/storage/v1/object/public/catalog-logos/dtm/a.png">');
+  const found = checkDist(copy).join('\n');
+  assert.match(found, /dist\/calendar\/dtm\.html mentions supabase\.co/);
+  assert.doesNotMatch(found, /index\.html/);
 });

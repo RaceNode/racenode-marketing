@@ -117,15 +117,38 @@ export function check(root) {
   try {
     const build = JSON.parse(fs.readFileSync(join(root, 'package.json'), 'utf8')).scripts?.build ?? '';
     if (!build.includes('scripts/guardrails.mjs')) out.push('package.json: npm run build no longer runs scripts/guardrails.mjs, so Cloudflare would deploy past it: put it back');
+    else if (!build.includes('guardrails.mjs --dist')) out.push('package.json: npm run build no longer checks the built site (scripts/guardrails.mjs --dist): the logos could link to the catalog storage unseen, put it back');
   } catch {
     out.push('package.json missing or unreadable');
   }
   return out;
 }
 
-// CLI: node scripts/guardrails.mjs → list, exit 1 on any violation.
+/**
+ * The built site (dist/, after `astro build`): no page points to the catalog's storage. The calendar's logos are
+ * downloaded by the build and served by the site (Willi, 2026-10-08: official logos hosted by us, never a direct
+ * link); a supabase.co address anywhere in dist/ means one slipped through as a link.
+ */
+export function checkDist(root) {
+  const dist = join(root, 'dist');
+  if (!fs.existsSync(dist)) return ['dist/ is missing: run astro build before checking it'];
+  const out = [];
+  const walk = (p) => {
+    for (const e of fs.readdirSync(p, { withFileTypes: true })) {
+      const f = join(p, e.name);
+      if (e.isDirectory()) walk(f);
+      else if (/\.(html|xml|js|mjs|css|json|txt|svg|webmanifest)$/.test(e.name) && /supabase\.co/i.test(fs.readFileSync(f, 'utf8')))
+        out.push(`${relative(root, f).replaceAll('\\', '/')} mentions supabase.co: logos are hosted by the site (/calendar/logos/), never linked from the catalog's storage`);
+    }
+  };
+  walk(dist);
+  return out;
+}
+
+// CLI: node scripts/guardrails.mjs [--dist] → list, exit 1 on any violation (--dist: the built site instead of the sources).
 if (process.argv[1] && import.meta.filename === fs.realpathSync(process.argv[1])) {
-  const found = check(join(import.meta.dirname, '..'));
+  const root = join(import.meta.dirname, '..');
+  const found = process.argv.includes('--dist') ? checkDist(root) : check(root);
   for (const m of found) console.error(`✗ ${m}`);
   if (found.length) process.exit(1);
   console.log('✓ guardrails hold');

@@ -11,7 +11,7 @@ import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
 import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
 import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
 import { displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
-import { championshipBody, hash } from '../../lib/calendar/render.mjs';
+import { championshipBody, hash, logoOf } from '../../lib/calendar/render.mjs';
 import { DISCIPLINES, REGIONS, country } from '../../lib/calendar/format.mjs';
 
 export async function getStaticPaths() {
@@ -22,6 +22,7 @@ export async function getStaticPaths() {
 const loaded = await catalog();
 const { data, ctx, cal } = loaded;
 const c = cal.championships.find((x) => x.slug === Astro.params.slug)!;
+const logo = logoOf(c.slug, ctx, { large: true }).replace('loading="lazy"', 'loading="eager"');
 const shown = c.shown;
 const year = cal.year;
 const organizer = c.organizer_name ?? 'The organizer';
@@ -50,7 +51,7 @@ const breadcrumbSchema = {
     { "@type": "ListItem", "position": 3, "name": c.name, "item": url },
   ],
 };
-// The rounds as facts: dates, place, official page. No logo, no image.
+// The rounds as facts: dates, place, official page (no image in the structured data).
 const eventsSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -93,6 +94,7 @@ const eventsSchema = {
           <span aria-current="page">{displayName(c)}</span>
         </nav>
 
+        {logo && <div class="mb-6" set:html={logo} />}
         <h1 class="display">{c.name} {year} calendar</h1>
         <p class="lede mt-6 max-w-3xl">
           {facts.join(' · ')}

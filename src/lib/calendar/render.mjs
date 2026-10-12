@@ -30,6 +30,19 @@ const country = (code, ctx) => (code ? ctx.countries[code] ?? new Intl.DisplayNa
 /** The calendar as the pages see it, for the build's featured year. */
 export const calendarOf = (data, ctx) => buildCalendar(data, { today: new Date(Date.UTC(ctx.year, 0, 1)) });
 
+/**
+ * A championship's logo, when the build hosts one (`ctx.logos`: slug → tone, see logos.mjs): the file is the build's
+ * (/calendar/logos/<slug>.webp), the path comes from the slug and nothing else. A fixed box and lazy loading: ~800
+ * rows on the index, and the page must not jump when they arrive. alt is empty: the name is written next to it.
+ * `large` is the one in a championship page's opening. '' for a championship without one: its row stays text.
+ */
+export function logoOf(slug, ctx, { large = false } = {}) {
+  const tone = ctx.logos?.[slug];
+  if (!tone) return '';
+  const [w, h] = large ? [72, 48] : [48, 32];
+  return `<img class="cal-logo${large ? ' cal-logo-lg' : ''}" data-tone="${esc(tone)}" src="/calendar/logos/${esc(slug)}.webp" alt="" width="${w}" height="${h}" loading="lazy" decoding="async">`;
+}
+
 // --- All championships (/calendar/) ---------------------------------------------------------------------------
 
 /** "/calendar/circuits/<slug>/" when the round's circuit has its own page, else null. */
@@ -63,7 +76,7 @@ export function roundRow(r, ctx, pages = new Map(), { place = true } = {}) {
   return (
     `<li class="calendar-row" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
     `<div class="d">${esc(dateRange(r.start_date, r.end_date))}${r.status === 'cancelled' ? '<span>Cancelled</span>' : ''}</div>` +
-    `<div class="c"><a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span></div>` +
+    `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span></div>` +
     (place ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>` : name ? `<div class="p"><span>${esc(name)}</span></div>` : '') +
     '</li>'
   );
@@ -92,14 +105,14 @@ function byMonth(rounds, ctx, pages, opts) {
 }
 
 /** "Last season known: 2026 · 8 rounds" cards of the championships whose featured season is not out. */
-function lateList(late) {
+function lateList(late, ctx) {
   return (
     '<ul class="grid sm:grid-cols-2 gap-2">' +
     late
       .map(
         (c) =>
           `<li class="calendar-late" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}">` +
-          `<a href="/calendar/${esc(c.slug)}/" class="cal-card">` +
+          `<a href="/calendar/${esc(c.slug)}/" class="cal-card${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}` +
           `<span>${esc(displayName(c))}</span>` +
           `<span>Last season known: ${esc(c.shown.label)} · ${c.shown.rounds.length} rounds</span></a></li>`,
       )
@@ -123,7 +136,7 @@ export function indexBody(cal, ctx) {
       `<section id="calendar-not-published" class="mt-12 mb-4">` +
       `<h2 class="subtitle mb-2">${cal.year} not published yet</h2>` +
       `<p class="muted mb-4">These organizers have not released their ${cal.year} dates. Each page shows their last season until they do.</p>` +
-      lateList(late) +
+      lateList(late, ctx) +
       '</section>';
   }
   return html;
@@ -207,7 +220,7 @@ export function circuitBody(cal, slug, ctx) {
       '<section class="mt-12 mb-4">' +
       `<h2 class="subtitle mb-2">Raced here, ${cal.year} not published yet</h2>` +
       `<p class="muted mb-4">These championships came to ${esc(c.name)} in their last season and have not released their ${cal.year} dates.</p>` +
-      lateList(late) +
+      lateList(late, ctx) +
       '</section>';
 
   if (past.length > 0)

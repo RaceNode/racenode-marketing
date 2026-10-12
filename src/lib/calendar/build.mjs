@@ -1,6 +1,7 @@
 // The catalog for the build (Node), kept apart from contract.mjs, which the visitor's browser loads too.
 import { fetchCatalog, sanitize } from './contract.mjs';
 import { featuredYear } from './model.mjs';
+import { loadLogos } from './logos.mjs';
 import { LIVE_API } from './relay.mjs';
 import { calendarOf, circuitPageSlugs, countriesOf } from './render.mjs';
 
@@ -20,7 +21,7 @@ export function transient(e) {
 async function fetchWithRetry(url, key, delays) {
   for (let attempt = 0; ; attempt++) {
     try {
-      return await fetchCatalog(url, key, { signal: AbortSignal.timeout(ATTEMPT_TIMEOUT_MS) });
+      return await fetchCatalog(url, key, { signal: AbortSignal.timeout(ATTEMPT_TIMEOUT_MS), logos: true });
     } catch (e) {
       if (attempt >= delays.length || !transient(e)) throw e;
       console.warn(`${String(e).slice(0, 200)}; retrying in ${delays[attempt] / 1000}s (${attempt + 1}/${delays.length})`);
@@ -64,14 +65,24 @@ let cached;
  * back through liveConfig().
  */
 export const catalog = () =>
-  (cached ??= loadCatalog(process.env).then((data) => {
+  (cached ??= loadCatalog(process.env).then(async (data) => {
     const now = new Date();
-    const ctx = { year: featuredYear(now), today: now.toISOString().slice(0, 10), countries: countriesOf(data) };
+    // Logos the site hosts (logos.mjs): the pages know which championships have one (ctx.logos: slug → tone, the
+    // browser's render reads the same), the files are served by src/pages/calendar/logos/[slug].webp.ts.
+    const logoFiles = await loadLogos(data.series);
+    const ctx = {
+      year: featuredYear(now),
+      today: now.toISOString().slice(0, 10),
+      countries: countriesOf(data),
+      logos: Object.fromEntries([...logoFiles].map(([slug, l]) => [slug, l.tone])),
+      // The rows keep a column for the logo (the few without one stay aligned with the others) once any exists.
+      logoColumn: logoFiles.size > 0,
+    };
     const cal = calendarOf(data, ctx);
     ctx.circuitPages = circuitPageSlugs(cal);
     // /calendar/circuits/ is the circuits' index: a championship with that slug would take its URL.
     if (cal.championships.some((c) => c.slug === 'circuits')) throw new Error('calendar: a series has the slug "circuits", reserved for /calendar/circuits/');
-    return { data, ctx, cal };
+    return { data, ctx, cal, logoFiles };
   }));
 
 /**
