@@ -9,15 +9,17 @@
 /**
  * Where the site is served from. See the template's docs/deployment.md.
  *
- * - `cloudflare`: Cloudflare (here Pages, without the template's `/api/geo`
- *   endpoint: `src/analytics/geo.ts` gets a 404 and the country stays unknown).
+ * - `cloudflare`: Cloudflare Workers with static assets, in the client's account.
  * - `static-php`: a shared web hosting with Apache and PHP (OVH, o2switch…).
+ * - `cloudflare-pages`: Cloudflare Pages with Pages Functions (this site). Not
+ *   in the template: it has no `/api/geo` endpoint, so `src/analytics/geo.ts`
+ *   sends no request and the visitor's country stays unknown.
  */
-export const hostings = ['cloudflare', 'static-php'] as const;
+export const hostings = ['cloudflare', 'static-php', 'cloudflare-pages'] as const;
 export type Hosting = (typeof hostings)[number];
 
 export const site = {
-  hosting: 'cloudflare' as Hosting,
+  hosting: 'cloudflare-pages' as Hosting,
 };
 
 export type SiteConfig = typeof site;
