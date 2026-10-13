@@ -1,11 +1,20 @@
 ---
-import StoreBadges from "../StoreBadges.astro";
-import CrewScreen from "../CrewScreen.astro";
+import StoreBadges from '../StoreBadges.astro';
+import CrewScreen from '../CrewScreen.astro';
 
 const items = [
-  { label: 'My accommodation', text: 'The hotel, a link to open it in maps, and who shares the room.' },
-  { label: 'Departure and return', text: 'The route, the vehicle or the flight, and who travels with them.' },
-  { label: 'Daily transfer', text: 'The vehicle that takes them to the circuit, and who rides along.' },
+  {
+    label: 'My accommodation',
+    text: 'The hotel, a link to open it in maps, and who shares the room.',
+  },
+  {
+    label: 'Departure and return',
+    text: 'The route, the vehicle or the flight, and who travels with them.',
+  },
+  {
+    label: 'Daily transfer',
+    text: 'The vehicle that takes them to the circuit, and who rides along.',
+  },
 ];
 ---
 
@@ -13,20 +22,17 @@ const items = [
 <section class="band band-dark">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        Assign once. Everyone knows.
-      </h2>
+      <h2 class="title">Assign once. Everyone knows.</h2>
       <p class="lede">
-        Every hotel room and every trip you assign shows up on that person's phone, in the RaceNode app. Here, a chief mechanic's race weekend.
+        Every hotel room and every trip you assign shows up on that person's phone, in the RaceNode
+        app. Here, a chief mechanic's race weekend.
       </p>
     </div>
 
     <CrewScreen screen="more" items={items} />
 
     <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <p class="max-w-md font-medium text-smoke">
-        Your crew gets the app on iPhone and Android:
-      </p>
+      <p class="max-w-md font-medium text-smoke">Your crew gets the app on iPhone and Android:</p>
       <StoreBadges align="start" />
     </div>
   </div>

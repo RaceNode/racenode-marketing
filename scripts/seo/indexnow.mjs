@@ -7,8 +7,8 @@
 //
 // Reads the live sitemap, so run it once Cloudflare Pages has published.
 
-const KEY = "8bea224a622d5882ae5365958fd16b0b";
-const HOST = "www.racenode.com";
+const KEY = '8bea224a622d5882ae5365958fd16b0b';
+const HOST = 'www.racenode.com';
 
 const index = await (await fetch(`https://${HOST}/sitemap-index.xml`)).text();
 const sitemaps = [...index.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
@@ -18,10 +18,15 @@ for (const sm of sitemaps) {
   urls.push(...[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]));
 }
 
-const res = await fetch("https://api.indexnow.org/indexnow", {
-  method: "POST",
-  headers: { "Content-Type": "application/json; charset=utf-8" },
-  body: JSON.stringify({ host: HOST, key: KEY, keyLocation: `https://${HOST}/${KEY}.txt`, urlList: urls }),
+const res = await fetch('https://api.indexnow.org/indexnow', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  body: JSON.stringify({
+    host: HOST,
+    key: KEY,
+    keyLocation: `https://${HOST}/${KEY}.txt`,
+    urlList: urls,
+  }),
 });
 console.log(`IndexNow: ${urls.length} URLs, HTTP ${res.status}`);
 if (!res.ok && res.status !== 202) process.exit(1);

@@ -7,7 +7,12 @@ import { catalog } from '../../../lib/calendar/build.mjs';
 export async function getStaticPaths() {
   const { data } = await catalog();
   if (!data.sample) return [];
-  return [{ params: { file: 'catalog.json' }, props: { body: { series: data.series, seasons: data.seasons, events: data.events } } }];
+  return [
+    {
+      params: { file: 'catalog.json' },
+      props: { body: { series: data.series, seasons: data.seasons, events: data.events } },
+    },
+  ];
 }
 
 export const GET: APIRoute = ({ props }) =>

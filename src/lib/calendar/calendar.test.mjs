@@ -8,14 +8,52 @@ import { VIEWS, sanitize } from './contract.mjs';
 import { dateRange, roundLabel, roundName } from './format.mjs';
 import { refresh } from './refresh.mjs';
 import { LIVE_API, ipBudget, relay } from './relay.mjs';
-import { calendarOf, championshipBody, circuitBody, circuitPageSlugs, countriesOf, hash, indexBody, indexSummary, roundRow } from './render.mjs';
-import { buildCalendar, circuits, featuredYear, notPublished, upcomingRounds, sharedWeekends } from './model.mjs';
+import {
+  calendarOf,
+  championshipBody,
+  circuitBody,
+  circuitPageSlugs,
+  countriesOf,
+  hash,
+  indexBody,
+  indexSummary,
+  roundRow,
+} from './render.mjs';
+import {
+  buildCalendar,
+  circuits,
+  featuredYear,
+  notPublished,
+  upcomingRounds,
+  sharedWeekends,
+} from './model.mjs';
 
-const series = (slug, extra = {}) => ({ slug, name: slug.toUpperCase(), short_name: null, discipline: 'gt', region: 'europe', ...extra });
-const season = (series_slug, year, label = String(year)) => ({ series_slug, label, year, last_checked_at: `${year - 1}-10-07T03:00:00Z` });
+const series = (slug, extra = {}) => ({
+  slug,
+  name: slug.toUpperCase(),
+  short_name: null,
+  discipline: 'gt',
+  region: 'europe',
+  ...extra,
+});
+const season = (series_slug, year, label = String(year)) => ({
+  series_slug,
+  label,
+  year,
+  last_checked_at: `${year - 1}-10-07T03:00:00Z`,
+});
 const round = (series_slug, year, start_date, extra = {}) => ({
-  series_slug, season_label: String(year), season_year: year, name: 'Round', kind: 'race',
-  start_date, end_date: start_date, status: 'scheduled', venue_slug: 'spa', venue_name: 'Spa', ...extra,
+  series_slug,
+  season_label: String(year),
+  season_year: year,
+  name: 'Round',
+  kind: 'race',
+  start_date,
+  end_date: start_date,
+  status: 'scheduled',
+  venue_slug: 'spa',
+  venue_name: 'Spa',
+  ...extra,
 });
 
 test('only the contract fields reach the pages, and removed rounds never do', () => {
@@ -34,7 +72,10 @@ test('only the contract fields reach the pages, and removed rounds never do', ()
   assert.equal(clean.events.length, 2);
   assert.equal(clean.events[0].raw, undefined);
   assert.equal(clean.events[0].id, undefined);
-  assert.deepEqual(clean.events.map((e) => e.status), ['scheduled', 'cancelled']);
+  assert.deepEqual(
+    clean.events.map((e) => e.status),
+    ['scheduled', 'cancelled'],
+  );
 });
 
 test('the featured season is next year from July', () => {
@@ -47,8 +88,17 @@ test('a championship without its 2027 season leads with the last one and says so
   const cal = buildCalendar(
     {
       series: [series('published'), series('late'), series('empty')],
-      seasons: [season('published', 2026), season('published', 2027), season('late', 2026), season('empty', 2026)],
-      events: [round('published', 2026, '2026-04-01'), round('published', 2027, '2027-04-01'), round('late', 2026, '2026-05-01')],
+      seasons: [
+        season('published', 2026),
+        season('published', 2027),
+        season('late', 2026),
+        season('empty', 2026),
+      ],
+      events: [
+        round('published', 2026, '2026-04-01'),
+        round('published', 2027, '2027-04-01'),
+        round('late', 2026, '2026-05-01'),
+      ],
     },
     { today: new Date('2026-10-07') },
   );
@@ -58,12 +108,19 @@ test('a championship without its 2027 season leads with the last one and says so
   assert.equal(bySlug.late.featured, null);
   assert.equal(bySlug.late.shown.year, 2026);
   assert.equal(bySlug.empty, undefined, 'a series with no round has no page');
-  assert.deepEqual(notPublished(cal).map((c) => c.slug), ['late']);
+  assert.deepEqual(
+    notPublished(cal).map((c) => c.slug),
+    ['late'],
+  );
 });
 
 test('a winter season counts for the year it ends in', () => {
   const cal = buildCalendar(
-    { series: [series('fe')], seasons: [season('fe', 2027, '2026-2027')], events: [round('fe', 2027, '2026-12-05', { season_label: '2026-2027' })] },
+    {
+      series: [series('fe')],
+      seasons: [season('fe', 2027, '2026-2027')],
+      events: [round('fe', 2027, '2026-12-05', { season_label: '2026-2027' })],
+    },
     { today: new Date('2026-10-07') },
   );
   assert.equal(cal.championships[0].featured.label, '2026-2027');
@@ -95,7 +152,11 @@ test('one chronological list from today: a season starting the autumn before sit
 });
 
 test('circuits: a URL from the name, never the catalog reference; the country only when two names collide', () => {
-  const venue = (venue_slug, venue_name, venue_country_code) => ({ venue_slug, venue_name, venue_country_code });
+  const venue = (venue_slug, venue_name, venue_country_code) => ({
+    venue_slug,
+    venue_name,
+    venue_country_code,
+  });
   const cal = buildCalendar(
     {
       series: [series('a'), series('b')],
@@ -114,22 +175,34 @@ test('circuits: a URL from the name, never the catalog reference; the country on
     { today: new Date('2026-10-08') },
   );
   const all = circuits(cal);
-  assert.deepEqual(all.map((c) => [c.slug, c.rounds.length, c.page]), [
-    ['autodromo-municipal-ar', 1, false],
-    ['autodromo-municipal-municipal-uy', 1, false],
-    ['autodromo-municipal-municipal-uy-q1', 1, false],
-    ['circuit-de-la-sarthe', 1, false],
-    ['circuit-zandvoort', 1, false],
-    ['spa', 3, true],
-  ]);
+  assert.deepEqual(
+    all.map((c) => [c.slug, c.rounds.length, c.page]),
+    [
+      ['autodromo-municipal-ar', 1, false],
+      ['autodromo-municipal-municipal-uy', 1, false],
+      ['autodromo-municipal-municipal-uy-q1', 1, false],
+      ['circuit-de-la-sarthe', 1, false],
+      ['circuit-zandvoort', 1, false],
+      ['spa', 3, true],
+    ],
+  );
   // The catalog cleans its reference up: the URL does not move.
   const cleaned = buildCalendar(
-    { series: [series('b')], seasons: [season('b', 2026)], events: [round('b', 2026, '2026-07-01', venue('le-mans-fr', 'Circuit de la Sarthe', 'FR'))] },
+    {
+      series: [series('b')],
+      seasons: [season('b', 2026)],
+      events: [round('b', 2026, '2026-07-01', venue('le-mans-fr', 'Circuit de la Sarthe', 'FR'))],
+    },
     { today: new Date('2026-10-08') },
   );
   assert.equal(circuits(cleaned)[0].slug, 'circuit-de-la-sarthe');
 
-  const ctx = { year: 2027, today: '2026-10-08', countries: {}, circuitPages: circuitPageSlugs(cal) };
+  const ctx = {
+    year: 2027,
+    today: '2026-10-08',
+    countries: {},
+    circuitPages: circuitPageSlugs(cal),
+  };
   assert.deepEqual(ctx.circuitPages, { spa: 'spa' });
   const html = circuitBody(cal, 'spa', ctx);
   assert.match(html, /1 upcoming round of 1 championship/);
@@ -155,7 +228,10 @@ test('championships sharing a weekend at the same venue are found', () => {
     { today: new Date('2026-10-07') },
   );
   const gtwc = cal.championships.find((c) => c.slug === 'gtwc');
-  assert.deepEqual(sharedWeekends(cal, gtwc).map((x) => x.championship.slug), ['gt4']);
+  assert.deepEqual(
+    sharedWeekends(cal, gtwc).map((x) => x.championship.slug),
+    ['gt4'],
+  );
 });
 
 test('production never publishes sample data: without the views the build fails', async () => {
@@ -180,14 +256,27 @@ async function fakeViews(answer) {
     res.writeHead(status, { 'Content-Type': 'application/json' }).end(JSON.stringify(body));
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
-  const env = { CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`, CATALOG_SUPABASE_KEY: 'k' };
+  const env = {
+    CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`,
+    CATALOG_SUPABASE_KEY: 'k',
+  };
   return { env, hits, close: () => new Promise((r) => server.close(r)) };
 }
-const PGRST002 = { code: 'PGRST002', message: 'Could not query the database for the schema cache. Retrying.' };
-const rowsOf = (view) => (view === VIEWS.series ? [{ slug: 'gt4', name: 'GT4' }] : view === VIEWS.events ? [{ series_slug: 'gt4', status: 'scheduled', start_date: '2027-04-01' }] : []);
+const PGRST002 = {
+  code: 'PGRST002',
+  message: 'Could not query the database for the schema cache. Retrying.',
+};
+const rowsOf = (view) =>
+  view === VIEWS.series
+    ? [{ slug: 'gt4', name: 'GT4' }]
+    : view === VIEWS.events
+      ? [{ series_slug: 'gt4', status: 'scheduled', start_date: '2027-04-01' }]
+      : [];
 
 test('a passing 503 (PGRST002) is retried and the build gets the catalog', async () => {
-  const api = await fakeViews((view, n) => (view === VIEWS.events && n <= 2 ? [503, PGRST002] : [200, rowsOf(view)]));
+  const api = await fakeViews((view, n) =>
+    view === VIEWS.events && n <= 2 ? [503, PGRST002] : [200, rowsOf(view)],
+  );
   try {
     const data = await loadCatalog(api.env, { delays: [1, 1, 1] });
     assert.equal(data.sample, false);
@@ -221,8 +310,20 @@ test('a 4xx (missing view, bad key) is not retried', async () => {
 
 test('the rows of the all-championships calendar escape what the catalog says', () => {
   const c = { slug: 'a', name: 'A <b>', short_name: null, discipline: 'gt', region: null };
-  const html = roundRow({ ...round('a', 2027, '2027-04-15'), name: 'Night & "Day"', venue_name: 'Spa', venue_country_code: 'BE', championship: c }, { countries: { BE: 'Belgium' } });
-  assert.match(html, /data-discipline="gt" data-region="" data-circuit="spa" data-month="2027-04" data-end="2027-04-15"/);
+  const html = roundRow(
+    {
+      ...round('a', 2027, '2027-04-15'),
+      name: 'Night & "Day"',
+      venue_name: 'Spa',
+      venue_country_code: 'BE',
+      championship: c,
+    },
+    { countries: { BE: 'Belgium' } },
+  );
+  assert.match(
+    html,
+    /data-discipline="gt" data-region="" data-circuit="spa" data-month="2027-04" data-end="2027-04-15"/,
+  );
   assert.match(html, /A &lt;b&gt;/);
   assert.match(html, /Night &amp; &quot;Day&quot; · /);
   assert.match(html, /Spa, Belgium/);
@@ -231,16 +332,25 @@ test('the rows of the all-championships calendar escape what the catalog says', 
 
 // --- The browser's refresh (refresh.mjs), against the sample served as the relay would serve it ---------------
 
-const sampleData = async () => sanitize((await import('../../data/calendar/sample.json', { with: { type: 'json' } })).default);
+const sampleData = async () =>
+  sanitize((await import('../../data/calendar/sample.json', { with: { type: 'json' } })).default);
 
 /** A page as the build left it: its live parts with their render and hash; a fetch that serves `rows`. */
 function page(parts) {
-  const els = Object.fromEntries(Object.entries(parts).map(([name, html]) => [name, { innerHTML: html, dataset: { hash: hash(html) } }]));
+  const els = Object.fromEntries(
+    Object.entries(parts).map(([name, html]) => [
+      name,
+      { innerHTML: html, dataset: { hash: hash(html) } },
+    ]),
+  );
   const events = [];
   return {
     els,
     events,
-    doc: { querySelector: (sel) => els[/data-calendar-live="(\w+)"/.exec(sel)[1]] ?? null, dispatchEvent: (e) => events.push(e.type) },
+    doc: {
+      querySelector: (sel) => els[/data-calendar-live="(\w+)"/.exec(sel)[1]] ?? null,
+      dispatchEvent: (e) => events.push(e.type),
+    },
   };
 }
 function serve(data, { status = 200 } = {}) {
@@ -290,7 +400,11 @@ test("a championship's page asks the views for that championship only", async ()
   const cal = calendarOf(data, ctx);
   ctx.circuitPages = circuitPageSlugs(cal);
   const p = page({ body: championshipBody(cal, 'british-gt', ctx) });
-  assert.match(p.els.body.innerHTML, /href="\/calendar\/circuits\//, 'its rounds link to their circuit pages');
+  assert.match(
+    p.els.body.innerHTML,
+    /href="\/calendar\/circuits\//,
+    'its rounds link to their circuit pages',
+  );
   // The static sample copy ignores the query: the browser filters too, and still finds nothing new.
   const calls = serve(data);
   assert.equal(await refresh(p.doc, { api: SAMPLE_API, ...ctx, slug: 'british-gt' }), 'same');
@@ -305,7 +419,10 @@ test("a circuit's page reads the whole catalog and finds nothing new when nothin
   const p = page({ body: circuitBody(cal, 'spa-francochamps-circuit', ctx) });
   assert.ok(p.els.body.innerHTML.length > 0);
   const calls = serve(data);
-  assert.equal(await refresh(p.doc, { api: SAMPLE_API, ...ctx, circuit: 'spa-francochamps-circuit' }), 'same');
+  assert.equal(
+    await refresh(p.doc, { api: SAMPLE_API, ...ctx, circuit: 'spa-francochamps-circuit' }),
+    'same',
+  );
   assert.deepEqual(calls, [SAMPLE_API]);
 });
 
@@ -328,30 +445,48 @@ test('dates and labels read the way a team writes them', () => {
   assert.equal(dateRange('2027-04-30', '2027-05-02'), '30 Apr – 2 May');
   assert.equal(dateRange('2026-12-30', '2027-01-02'), '30 Dec 2026 – 2 Jan 2027');
   assert.equal(dateRange('2027-04-15', '2027-04-15', { withYear: true }), '15 Apr 2027');
-  assert.equal(roundLabel({ round_label: 'Round 1', sub_label: 'Endurance Cup' }), 'Round 1 · Endurance Cup');
+  assert.equal(
+    roundLabel({ round_label: 'Round 1', sub_label: 'Endurance Cup' }),
+    'Round 1 · Endurance Cup',
+  );
   assert.equal(roundLabel({ round_number: 2, sub_label: null }), 'Round 2');
   assert.equal(roundName({ name: 'Imola', venue_name: 'Imola Circuit' }), null);
-  assert.equal(roundName({ name: 'Circuit de Magny-Cours', venue_name: 'Circuit de Nevers Magny-Cours' }), null);
+  assert.equal(
+    roundName({ name: 'Circuit de Magny-Cours', venue_name: 'Circuit de Nevers Magny-Cours' }),
+    null,
+  );
   assert.equal(roundName({ name: 'Budapest', venue_name: 'Hungaroring' }), 'Budapest');
-  assert.equal(roundName({ name: 'CrowdStrike 24 Hours of Spa', venue_name: 'Spa' }), 'CrowdStrike 24 Hours of Spa');
+  assert.equal(
+    roundName({ name: 'CrowdStrike 24 Hours of Spa', venue_name: 'Spa' }),
+    'CrowdStrike 24 Hours of Spa',
+  );
 });
 
 // --- The relay (relay.mjs): what the browser may ask, and what never leaves the server -------------------------
 
-const ask = (query = '', headers = { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '1.2.3.4' }) =>
-  new Request(`https://www.racenode.com${LIVE_API}${query}`, { headers });
+const ask = (
+  query = '',
+  headers = { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '1.2.3.4' },
+) => new Request(`https://www.racenode.com${LIVE_API}${query}`, { headers });
 const relayEnv = { CATALOG_SUPABASE_URL: 'https://db.test', CATALOG_SUPABASE_KEY: 'server-secret' };
 const nodeFetch = globalThis.fetch; // the refresh tests above replace it
 
 /** An edge cache in memory, keyed like caches.default (by URL). */
 function memoryCache() {
   const store = new Map();
-  return { store, match: async (req) => store.get(req.url)?.clone(), put: async (req, res) => void store.set(req.url, res) };
+  return {
+    store,
+    match: async (req) => store.get(req.url)?.clone(),
+    put: async (req, res) => void store.set(req.url, res),
+  };
 }
 
 test('a page never carries a database URL or key, only where to ask', () => {
   const ctx = { year: 2027, today: '2026-10-08', countries: {} };
-  const before = { CATALOG_SUPABASE_URL: process.env.CATALOG_SUPABASE_URL, CATALOG_SUPABASE_KEY: process.env.CATALOG_SUPABASE_KEY };
+  const before = {
+    CATALOG_SUPABASE_URL: process.env.CATALOG_SUPABASE_URL,
+    CATALOG_SUPABASE_KEY: process.env.CATALOG_SUPABASE_KEY,
+  };
   Object.assign(process.env, relayEnv);
   try {
     const live = JSON.stringify(liveConfig({ data: { sample: false }, ctx }, { slug: 'gt4' }));
@@ -375,7 +510,13 @@ test('the server key travels in a header, never in a URL', async () => {
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   globalThis.fetch = nodeFetch;
   try {
-    await loadCatalog({ CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`, CATALOG_SUPABASE_KEY: 'server-secret' }, { delays: [] });
+    await loadCatalog(
+      {
+        CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`,
+        CATALOG_SUPABASE_KEY: 'server-secret',
+      },
+      { delays: [] },
+    );
     assert.equal(seen.length, 3);
     assert.ok(seen.every((r) => r.apikey === 'server-secret' && !r.url.includes('server-secret')));
   } finally {
@@ -402,7 +543,11 @@ test('the relay answers a page with the contract fields, from the views once, th
   assert.deepEqual(reads, [{ url: 'https://db.test', key: 'server-secret', series: 'british-gt' }]);
   await Promise.all(pending);
   // Another visitor, the same question: the cache answers, the views are not read again.
-  const again = await relay(ask('?series=british-gt', { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '5.6.7.8' }), relayEnv, opts);
+  const again = await relay(
+    ask('?series=british-gt', { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '5.6.7.8' }),
+    relayEnv,
+    opts,
+  );
   assert.equal(again.status, 200);
   assert.equal(reads.length, 1);
 });
@@ -411,9 +556,18 @@ test('the relay turns away other sites, scripts, odd queries and greedy addresse
   const read = async () => ({ series: [], seasons: [], events: [] });
   // No browser same-origin header: a script, or another site's page.
   assert.equal((await relay(ask('', {}), relayEnv, { read })).status, 403);
-  assert.equal((await relay(ask('', { 'sec-fetch-site': 'cross-site' }), relayEnv, { read })).status, 403);
+  assert.equal(
+    (await relay(ask('', { 'sec-fetch-site': 'cross-site' }), relayEnv, { read })).status,
+    403,
+  );
   // Only `series`, and only a slug: no PostgREST filter, column or ordering goes through.
-  for (const q of ['?select=*', '?series=eq.x', '?series=x&order=start_date', '?offset=1000', '?series=../x']) {
+  for (const q of [
+    '?select=*',
+    '?series=eq.x',
+    '?series=x&order=start_date',
+    '?offset=1000',
+    '?series=../x',
+  ]) {
     assert.equal((await relay(ask(q), relayEnv, { read })).status, 400, q);
   }
   // A per-IP budget per minute.
@@ -422,10 +576,18 @@ test('the relay turns away other sites, scripts, odd queries and greedy addresse
   const statuses = [];
   for (let i = 0; i < 3; i++) statuses.push((await relay(ask(), relayEnv, { read, allow })).status);
   assert.deepEqual(statuses, [200, 200, 429]);
-  const other = await relay(ask('', { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '9.9.9.9' }), relayEnv, { read, allow });
+  const other = await relay(
+    ask('', { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '9.9.9.9' }),
+    relayEnv,
+    { read, allow },
+  );
   assert.equal(other.status, 200, 'another address has its own budget');
   t = 60_000;
-  assert.equal((await relay(ask(), relayEnv, { read, allow })).status, 200, 'the budget comes back the next minute');
+  assert.equal(
+    (await relay(ask(), relayEnv, { read, allow })).status,
+    200,
+    'the budget comes back the next minute',
+  );
 });
 
 test('the relay says nothing about the database when the views fail, and caches no failure', async () => {

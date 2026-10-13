@@ -1,0 +1,63 @@
+name: CI
+
+# The checks of the WBLT site template's ci.yml, without its deployment block:
+# Cloudflare Pages builds and deploys every push itself (docs/deployment.md).
+# This workflow deploys nothing; it keeps main green.
+#
+# The build runs on the calendar's sample data (CALENDAR_SAMPLE=1): the
+# catalog variables live in the Pages project only, never in this repository.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Check, build, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format
+        run: npm run format:check
+
+      - name: Guardrails tests
+        run: npm run test:guardrails
+
+      - name: Calendar tests
+        run: npm run test:calendar
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Build
+        env:
+          CALENDAR_SAMPLE: '1'
+        run: npm run build
+
+      # Information only (tests/lighthouse.mjs): misses are warnings, the run stays green.
+      - name: Lighthouse
+        run: npm run test:lighthouse

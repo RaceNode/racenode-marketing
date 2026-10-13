@@ -1,32 +1,33 @@
 ---
-import PainList from "../PainList.astro";
-import type { IconName } from "../icons";
+import PainList from '../PainList.astro';
+import type { IconName } from '../icons';
 
 const painPoints: { title: string; description: string; icon: IconName }[] = [
   {
-    title: "Last-minute changes after V3",
-    description: "The logistics sheet is rebuilt and sent again at every change. By Thursday, three versions are going round the crew.",
-    icon: "refresh",
+    title: 'Last-minute changes after V3',
+    description:
+      'The logistics sheet is rebuilt and sent again at every change. By Thursday, three versions are going round the crew.',
+    icon: 'refresh',
   },
   {
-    title: "Bookings in five places",
-    description: "The agency's mails, the hotel's PDF, the rental confirmation, a spreadsheet: each on someone else's laptop.",
-    icon: "files",
+    title: 'Bookings in five places',
+    description:
+      "The agency's mails, the hotel's PDF, the rental confirmation, a spreadsheet: each on someone else's laptop.",
+    icon: 'files',
   },
   {
-    title: "\"Which hotel am I in?\"",
-    description: "Mechanics, engineers and drivers ask you one by one, all week, then again on the way to the circuit.",
-    icon: "users",
-  }
+    title: '"Which hotel am I in?"',
+    description:
+      'Mechanics, engineers and drivers ask you one by one, all week, then again on the way to the circuit.',
+    icon: 'users',
+  },
 ];
 ---
 
 <section class="band">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        One flight moves. Six people need to know.
-      </h2>
+      <h2 class="title">One flight moves. Six people need to know.</h2>
     </div>
 
     <PainList points={painPoints} columns={3} />

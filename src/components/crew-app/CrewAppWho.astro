@@ -1,21 +1,21 @@
 ---
-import Icon from "../Icon.astro";
-import type { IconName } from "../icons";
+import Icon from '../Icon.astro';
+import type { IconName } from '../icons';
 
 const groups: { title: string; text: string; icon: IconName }[] = [
   {
-    title: "Your crew",
-    icon: "users",
-    text: "Mechanics, engineers, truckies, hospitality. Invite them from Staff by email or with your team code.",
+    title: 'Your crew',
+    icon: 'users',
+    text: 'Mechanics, engineers, truckies, hospitality. Invite them from Staff by email or with your team code.',
   },
   {
-    title: "Your drivers",
-    icon: "car",
-    text: "Add them to Staff with the Driver role: same weekend, same app, no separate list.",
+    title: 'Your drivers',
+    icon: 'car',
+    text: 'Add them to Staff with the Driver role: same weekend, same app, no separate list.',
   },
   {
-    title: "Freelancers",
-    icon: "user",
+    title: 'Freelancers',
+    icon: 'user',
     text: "One account across teams: both teams' events land in the same season, each marked with its team. Without a team yet, they can start on their own and join when invited.",
   },
 ];
@@ -24,9 +24,7 @@ const groups: { title: string; text: string; icon: IconName }[] = [
 <section class="band">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        Everyone who travels with the team.
-      </h2>
+      <h2 class="title">Everyone who travels with the team.</h2>
       <p class="lede">
         Crew, drivers and freelancers: each one sees their own part of the weekend.
       </p>
@@ -35,7 +33,9 @@ const groups: { title: string; text: string; icon: IconName }[] = [
     <ul class="grid gap-x-12 gap-y-12 md:grid-cols-3">
       {groups.map((group) => (
         <li class="ruled">
-          <span class="tile"><Icon name={group.icon} /></span>
+          <span class="tile">
+            <Icon name={group.icon} />
+          </span>
           <h3 class="flag-title mt-5">{group.title}</h3>
           <p class="muted mt-3 text-lg leading-relaxed">{group.text}</p>
         </li>
@@ -43,8 +43,9 @@ const groups: { title: string; text: string; icon: IconName }[] = [
     </ul>
 
     <p class="hair mt-14 max-w-3xl pt-6 text-lg leading-relaxed text-graphite">
-      Paddocks have bad network. On the iOS and Android apps, what they last opened{" "}
-      <span class="font-semibold text-ink">stays readable without a connection</span>, and refreshes when the network is back.
+      Paddocks have bad network. On the iOS and Android apps, what they last opened{' '}
+      <span class="font-semibold text-ink">stays readable without a connection</span>, and refreshes
+      when the network is back.
     </p>
   </div>
 </section>

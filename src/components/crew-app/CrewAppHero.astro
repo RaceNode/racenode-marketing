@@ -3,30 +3,36 @@ import { Image } from 'astro:assets';
 import StoreBadges from '../StoreBadges.astro';
 import screenshotWeekend from '../../assets/screenshots/crew-app-race-weekend.png';
 
-const appUrl = "https://app.racenode.com";
+const appUrl = 'https://app.racenode.com';
 
 // The situation, never the tools: what a team manager answers all weekend long.
-const questions = ["What time is my flight?", "Which hotel?", "Where's lunch?", "What's first tomorrow?"];
+const questions = [
+  'What time is my flight?',
+  'Which hotel?',
+  "Where's lunch?",
+  "What's first tomorrow?",
+];
 ---
 
 <!-- Opening: the questions of a race weekend on the left, the phone that answers them rising from the track edge. -->
 <section class="band-dark overflow-hidden">
   <div class="page grid gap-12 pt-14 md:pt-20 lg:grid-cols-12 lg:gap-10">
     <div class="lg:col-span-7 lg:pb-24">
-      <p class="font-display text-lg font-medium text-smoke">
-        Free for every team member
-      </p>
+      <p class="font-display text-lg font-medium text-smoke">Free for every team member</p>
 
-      <h1 class="display mt-5">
-        The race weekend app for your crew.
-      </h1>
-      <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2" aria-label="Questions your crew asks every race weekend">
+      <h1 class="display mt-5">The race weekend app for your crew.</h1>
+      <ul
+        class="mt-8 flex flex-wrap gap-x-6 gap-y-2"
+        aria-label="Questions your crew asks every race weekend"
+      >
         {questions.map((q) => (
           <li class="font-display text-xl font-medium text-white md:text-2xl">“{q}”</li>
         ))}
       </ul>
       <p class="lede mt-8 max-w-2xl">
-        Every race weekend, the same questions. Now each crew member finds their role, flight, hotel, meals and next session on their own phone, taken from what you already entered in RaceNode.
+        Every race weekend, the same questions. Now each crew member finds their role, flight,
+        hotel, meals and next session on their own phone, taken from what you already entered in
+        RaceNode.
       </p>
       <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
         <a href={`${appUrl}/signup`} class="btn-primary text-lg">

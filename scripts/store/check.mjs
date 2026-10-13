@@ -7,7 +7,15 @@ const listing = JSON.parse(readFileSync(file, 'utf8'));
 
 // Character limits (both consoles count characters); Apple keywords: 100 bytes.
 const LIMITS = { name: 30, subtitle: 30, shortDescription: 80, description: 4000 };
-const FIELDS = ['name', 'subtitle', 'shortDescription', 'description', 'keywords', 'supportUrl', 'privacyPolicyUrl'];
+const FIELDS = [
+  'name',
+  'subtitle',
+  'shortDescription',
+  'description',
+  'keywords',
+  'supportUrl',
+  'privacyPolicyUrl',
+];
 const chars = (s) => [...s].length;
 
 const errors = [];
@@ -31,22 +39,31 @@ for (const [locale, l] of locales) {
     keywords: l.keywords.join(','),
   };
   for (const [f, s] of Object.entries(text)) {
-    if (typeof s !== 'string' || !s.trim()) { err(`${f} empty`); continue; }
+    if (typeof s !== 'string' || !s.trim()) {
+      err(`${f} empty`);
+      continue;
+    }
     if (LIMITS[f] && chars(s) > LIMITS[f]) err(`${f}: ${chars(s)} characters, limit ${LIMITS[f]}`);
     if (s !== s.trim() || /[ \t]\n|\n[ \t]/.test(s)) err(`${f}: stray whitespace`);
     // The stores show text as typed: no Markdown, no HTML.
     if (/\*\*|__|`|^#|^>|<\/?[a-z]/im.test(s)) err(`${f}: Markdown or HTML would show as-is`);
   }
-  for (const p of l.description) if (/\n/.test(p)) err('description: one paragraph per entry, no line breaks inside');
+  for (const p of l.description)
+    if (/\n/.test(p)) err('description: one paragraph per entry, no line breaks inside');
 
   const kwBytes = Buffer.byteLength(text.keywords);
   if (kwBytes > 100) err(`keywords: ${kwBytes} bytes, limit 100`);
-  for (const k of l.keywords) if (!k || k !== k.trim() || k.includes(',')) err(`keywords: bad entry "${k}"`);
-  if (new Set(l.keywords.map((k) => k.toLowerCase())).size !== l.keywords.length) err('keywords: duplicate');
+  for (const k of l.keywords)
+    if (!k || k !== k.trim() || k.includes(',')) err(`keywords: bad entry "${k}"`);
+  if (new Set(l.keywords.map((k) => k.toLowerCase())).size !== l.keywords.length)
+    err('keywords: duplicate');
 
-  for (const f of ['supportUrl', 'privacyPolicyUrl']) if (!/^https:\/\/\S+$/.test(l[f])) err(`${f}: not an https URL`);
+  for (const f of ['supportUrl', 'privacyPolicyUrl'])
+    if (!/^https:\/\/\S+$/.test(l[f])) err(`${f}: not an https URL`);
 
-  console.log(`${locale}: name ${chars(text.name)}/30, subtitle ${chars(text.subtitle)}/30, short ${chars(text.shortDescription)}/80, description ${chars(text.description)}/4000, keywords ${kwBytes}/100`);
+  console.log(
+    `${locale}: name ${chars(text.name)}/30, subtitle ${chars(text.subtitle)}/30, short ${chars(text.shortDescription)}/80, description ${chars(text.description)}/4000, keywords ${kwBytes}/100`,
+  );
 }
 
 if (errors.length) {

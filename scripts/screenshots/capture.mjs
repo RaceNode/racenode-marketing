@@ -40,8 +40,21 @@ const SHOTS = [
   { name: 'logistics-card', who: 'claire', size: CARD, url: `/logistics/overview/${R07}` },
   // The timetable's rows don't end at CARD's height: a slightly taller screen ends on a whole row, and `clip` keeps the
   // top CARD.height px, which only drops the empty margin under the table.
-  { name: 'timetable-card', who: 'claire', size: { ...CARD, height: 637 }, clip: CARD.height, url: `/timetable/timetable/${R07}`, then: scrollTo('text=/Friday, October 16/') },
-  { name: 'planning-card', who: 'claire', size: CARD, url: '/planning/grid', now: '2026-10-10T10:00:00+02:00' },
+  {
+    name: 'timetable-card',
+    who: 'claire',
+    size: { ...CARD, height: 637 },
+    clip: CARD.height,
+    url: `/timetable/timetable/${R07}`,
+    then: scrollTo('text=/Friday, October 16/'),
+  },
+  {
+    name: 'planning-card',
+    who: 'claire',
+    size: CARD,
+    url: '/planning/grid',
+    now: '2026-10-10T10:00:00+02:00',
+  },
 
   ...['overview', 'event-staff', 'accommodation', 'travel', 'vehicles'].flatMap((tab) => {
     const name = `logistics-${tab === 'event-staff' ? 'staff' : tab}`;
@@ -52,8 +65,20 @@ const SHOTS = [
   }),
   { name: 'logistics-info', who: 'claire', size: DESKTOP, url: `/logistics/info/${R07}` },
   { name: 'logistics-info-phone', who: 'claire', size: PHONE, url: `/logistics/info/${R07}` },
-  { name: 'logistics-import', who: 'claire', size: DESKTOP, url: `/logistics/overview/${R08}`, then: importPreview('booking-confirmation.html') },
-  { name: 'logistics-import-phone', who: 'claire', size: PHONE, url: `/logistics/overview/${R08}`, then: importPreview('booking-confirmation.html') },
+  {
+    name: 'logistics-import',
+    who: 'claire',
+    size: DESKTOP,
+    url: `/logistics/overview/${R08}`,
+    then: importPreview('booking-confirmation.html'),
+  },
+  {
+    name: 'logistics-import-phone',
+    who: 'claire',
+    size: PHONE,
+    url: `/logistics/overview/${R08}`,
+    then: importPreview('booking-confirmation.html'),
+  },
 
   ...['overview', 'event-staff', 'racecars', 'crew-structure', 'meals', 'info'].flatMap((tab) => {
     const name = `management-${{ 'crew-structure': 'team' }[tab] ?? tab}`;
@@ -64,42 +89,163 @@ const SHOTS = [
   }),
 
   { name: 'timetable-overview', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}` },
-  { name: 'timetable-schedule', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}`, then: scrollTo('text=/Friday, October 16/') },
-  { name: 'timetable-schedule-phone', who: 'claire', size: PHONE, url: `/timetable/timetable/${R07}` },
+  {
+    name: 'timetable-schedule',
+    who: 'claire',
+    size: DESKTOP,
+    url: `/timetable/timetable/${R07}`,
+    then: scrollTo('text=/Friday, October 16/'),
+  },
+  {
+    name: 'timetable-schedule-phone',
+    who: 'claire',
+    size: PHONE,
+    url: `/timetable/timetable/${R07}`,
+  },
   { name: 'timetable-items', who: 'claire', size: DESKTOP, url: `/timetable/items/${R07}` },
   { name: 'timetable-items-phone', who: 'claire', size: PHONE, url: `/timetable/items/${R07}` },
   { name: 'timetable-rules', who: 'claire', size: DESKTOP, url: `/timetable/rules/${R07}` },
   { name: 'timetable-rules-phone', who: 'claire', size: PHONE, url: `/timetable/rules/${R07}` },
-  { name: 'timetable-day-phone', who: 'claire', size: PHONE, url: `/timetable/timetable/${R07}`, then: scrollTo('text=/Friday, October 16/') },
-  { name: 'timetable-share', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}`, then: click('role=button[name=/^Share/]') },
+  {
+    name: 'timetable-day-phone',
+    who: 'claire',
+    size: PHONE,
+    url: `/timetable/timetable/${R07}`,
+    then: scrollTo('text=/Friday, October 16/'),
+  },
+  {
+    name: 'timetable-share',
+    who: 'claire',
+    size: DESKTOP,
+    url: `/timetable/timetable/${R07}`,
+    then: click('role=button[name=/^Share/]'),
+  },
   // `now` sets the device's clock for that shot. The paddock display, as on race morning (its clock and countdowns).
-  { name: 'timetable-box', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R07}`, now: '2026-10-16T10:12:00+02:00', then: async (page) => { await click('role=button[name=/^Share/]')(page); await openLink('a[href*="/box/"]')(page); } },
-  { name: 'timetable-import', who: 'claire', size: DESKTOP, url: `/timetable/timetable/${R08}`, then: importPreview('official-timetable.pdf') },
-  { name: 'timetable-import-phone', who: 'claire', size: PHONE, url: `/timetable/timetable/${R08}`, then: importPreview('official-timetable.pdf') },
+  {
+    name: 'timetable-box',
+    who: 'claire',
+    size: DESKTOP,
+    url: `/timetable/timetable/${R07}`,
+    now: '2026-10-16T10:12:00+02:00',
+    then: async (page) => {
+      await click('role=button[name=/^Share/]')(page);
+      await openLink('a[href*="/box/"]')(page);
+    },
+  },
+  {
+    name: 'timetable-import',
+    who: 'claire',
+    size: DESKTOP,
+    url: `/timetable/timetable/${R08}`,
+    then: importPreview('official-timetable.pdf'),
+  },
+  {
+    name: 'timetable-import-phone',
+    who: 'claire',
+    size: PHONE,
+    url: `/timetable/timetable/${R08}`,
+    then: importPreview('official-timetable.pdf'),
+  },
 
   // Free view spans a window around today: a day where neither R06 nor R08 is cut at an edge.
-  { name: 'planning-overview', who: 'claire', size: DESKTOP, url: '/planning/grid', now: '2026-10-10T10:00:00+02:00' },
-  { name: 'planning-grid', who: 'claire', size: DESKTOP, url: '/planning/grid', then: click('role=button[name="Quarter"]') },
-  { name: 'planning-days', who: 'claire', size: DESKTOP, url: '/planning/grid', then: async (page) => { await click('role=button[name="Week"]')(page); await click('button[aria-label^="Next"]')(page); } },
-  { name: 'planning-attendance', who: 'claire', size: DESKTOP, url: '/planning/grid', then: click('role=button[name="Month"]') },
+  {
+    name: 'planning-overview',
+    who: 'claire',
+    size: DESKTOP,
+    url: '/planning/grid',
+    now: '2026-10-10T10:00:00+02:00',
+  },
+  {
+    name: 'planning-grid',
+    who: 'claire',
+    size: DESKTOP,
+    url: '/planning/grid',
+    then: click('role=button[name="Quarter"]'),
+  },
+  {
+    name: 'planning-days',
+    who: 'claire',
+    size: DESKTOP,
+    url: '/planning/grid',
+    then: async (page) => {
+      await click('role=button[name="Week"]')(page);
+      await click('button[aria-label^="Next"]')(page);
+    },
+  },
+  {
+    name: 'planning-attendance',
+    who: 'claire',
+    size: DESKTOP,
+    url: '/planning/grid',
+    then: click('role=button[name="Month"]'),
+  },
   // Phone: the grid is one week, so each section gets its own phone view. A tap on a cell or a bar opens its sheet
   // (status, dates); the sheet is only looked at, never saved.
-  { name: 'planning-grid-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: async (page) => { await click('button[aria-label^="Next"]')(page); await click('role=button[name="Focus"]')(page); } },
-  { name: 'planning-days-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: async (page) => { await click('button[aria-label^="Next"]')(page); await click('button[aria-label^="Travel, "]')(page); } },
-  { name: 'planning-attendance-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: async (page) => { await click('button[aria-label^="Next"]')(page); await click('button[aria-label^="R07 Nürburgring, "] >> nth=2')(page); } },
-  { name: 'planning-phone', who: 'claire', size: PHONE, url: '/planning/grid', then: click('button[aria-label^="Next"]') }, // the race week
+  {
+    name: 'planning-grid-phone',
+    who: 'claire',
+    size: PHONE,
+    url: '/planning/grid',
+    then: async (page) => {
+      await click('button[aria-label^="Next"]')(page);
+      await click('role=button[name="Focus"]')(page);
+    },
+  },
+  {
+    name: 'planning-days-phone',
+    who: 'claire',
+    size: PHONE,
+    url: '/planning/grid',
+    then: async (page) => {
+      await click('button[aria-label^="Next"]')(page);
+      await click('button[aria-label^="Travel, "]')(page);
+    },
+  },
+  {
+    name: 'planning-attendance-phone',
+    who: 'claire',
+    size: PHONE,
+    url: '/planning/grid',
+    then: async (page) => {
+      await click('button[aria-label^="Next"]')(page);
+      await click('button[aria-label^="R07 Nürburgring, "] >> nth=2')(page);
+    },
+  },
+  {
+    name: 'planning-phone',
+    who: 'claire',
+    size: PHONE,
+    url: '/planning/grid',
+    then: click('button[aria-label^="Next"]'),
+  }, // the race week
 
   // The crew app: what a chief mechanic sees on his phone.
   { name: 'crew-app-race-weekend', who: 'hugo', size: PHONE, url: `/personal/${R07}` },
-  { name: 'crew-app-race-weekend-more', who: 'hugo', size: PHONE, url: `/personal/${R07}`, then: scrollTo('text=/My accommodation/i') },
+  {
+    name: 'crew-app-race-weekend-more',
+    who: 'hugo',
+    size: PHONE,
+    url: `/personal/${R07}`,
+    then: scrollTo('text=/My accommodation/i'),
+  },
   // The agenda starts today: a day that begins a block, else the block's title sits above the first row.
   { name: 'crew-app-agenda', who: 'hugo', size: PHONE, url: '/personal/planning', now: AGENDA_DAY },
-  { name: 'crew-app-month', who: 'hugo', size: PHONE, url: '/personal/planning', now: AGENDA_DAY, then: click('role=button[name="Month"]') },
+  {
+    name: 'crew-app-month',
+    who: 'hugo',
+    size: PHONE,
+    url: '/personal/planning',
+    now: AGENDA_DAY,
+    then: click('role=button[name="Month"]'),
+  },
 ];
 
 function scrollTo(selector) {
   return async (page) => {
-    await page.locator(selector).first().evaluate((el) => el.scrollIntoView({ block: 'start' }));
+    await page
+      .locator(selector)
+      .first()
+      .evaluate((el) => el.scrollIntoView({ block: 'start' }));
     await page.waitForTimeout(800);
   };
 }
@@ -107,7 +253,9 @@ function scrollTo(selector) {
 /** Follows a link of the page (a share link: its public page). */
 function openLink(selector) {
   return async (page) => {
-    await page.goto(await page.locator(selector).first().getAttribute('href'), { waitUntil: 'networkidle' }).catch(() => {});
+    await page
+      .goto(await page.locator(selector).first().getAttribute('href'), { waitUntil: 'networkidle' })
+      .catch(() => {});
     await page.waitForTimeout(2500);
   };
 }
@@ -125,10 +273,18 @@ function importPreview(file) {
     const phone = page.viewportSize().width < 600;
     // On a phone, Import is the floating button when it is the page's only action, else in its "More actions" menu.
     const direct = page.locator('button[aria-label="Import"]:visible');
-    if (phone && !(await direct.count())) await page.locator('button[aria-label="More actions"]').last().click();
-    await page.getByRole('button', { name: /^Import$/ }).locator('visible=true').last().click();
+    if (phone && !(await direct.count()))
+      await page.locator('button[aria-label="More actions"]').last().click();
+    await page
+      .getByRole('button', { name: /^Import$/ })
+      .locator('visible=true')
+      .last()
+      .click();
     await page.waitForTimeout(1000);
-    await page.locator('input[type=file]').first().setInputFiles(join(file.endsWith('.pdf') ? printed : FILES, file));
+    await page
+      .locator('input[type=file]')
+      .first()
+      .setInputFiles(join(file.endsWith('.pdf') ? printed : FILES, file));
     await page.waitForTimeout(4000);
   };
 }
@@ -136,7 +292,10 @@ function importPreview(file) {
 const only = process.argv.slice(2);
 const shots = only.length ? SHOTS.filter((s) => only.includes(s.name)) : SHOTS;
 if (!shots.length) throw new Error(`no shot named ${only.join(', ')}`);
-if (!process.env.DEMO_ACCOUNTS_PASSWORD) throw new Error('DEMO_ACCOUNTS_PASSWORD missing: run through infisical run (see the top of this file)');
+if (!process.env.DEMO_ACCOUNTS_PASSWORD)
+  throw new Error(
+    'DEMO_ACCOUNTS_PASSWORD missing: run through infisical run (see the top of this file)',
+  );
 const out = process.env.OUT ?? join(import.meta.dirname, '../../src/assets/screenshots');
 fs.mkdirSync(out, { recursive: true });
 
@@ -148,7 +307,11 @@ const printed = fs.mkdtempSync(join(os.tmpdir(), 'racenode-shots-'));
 {
   const page = await browser.newPage();
   await page.goto(`file://${join(FILES, 'official-timetable.html')}`);
-  await page.pdf({ path: join(printed, 'official-timetable.pdf'), format: 'A4', printBackground: true });
+  await page.pdf({
+    path: join(printed, 'official-timetable.pdf'),
+    format: 'A4',
+    printBackground: true,
+  });
   await page.close();
 }
 const sessions = {}; // one login per account and size, kept in memory only
@@ -170,7 +333,11 @@ async function context(who, size) {
     const url = r.url().split('?')[0];
     if (/posthog|sentry\.io/.test(url)) return route.abort();
     if (['GET', 'HEAD', 'OPTIONS'].includes(r.method())) return route.continue();
-    if (/\/auth\/v1\/token$/.test(url) || /\/rest\/v1\/rpc\/(get|has|is|can|resolve)_[a-z_]+$/.test(url)) return route.continue();
+    if (
+      /\/auth\/v1\/token$/.test(url) ||
+      /\/rest\/v1\/rpc\/(get|has|is|can|resolve)_[a-z_]+$/.test(url)
+    )
+      return route.continue();
     if (/\/storage\/v1\/object\/sign\//.test(url)) return route.continue(); // signs a read URL (profile photos, files)
     dropped.push(`${r.method()} ${url.replace(/^https:\/\/[^/]+/, '')}`);
     return route.abort();
@@ -197,16 +364,24 @@ for (const shot of shots) {
   await page.waitForTimeout(2500);
   if (shot.then) await shot.then(page);
   // Profile photos load late (each one signs its URL first): wait until every image is in.
-  await page.waitForFunction(() => [...document.images].every((i) => i.complete), null, { timeout: 15000 }).catch(() => {});
+  await page
+    .waitForFunction(() => [...document.images].every((i) => i.complete), null, { timeout: 15000 })
+    .catch(() => {});
   await page.waitForTimeout(500);
   // Toasts and focus rings are not part of the product shot.
   await page.mouse.move(0, shot.size.height - 1);
   const file = join(out, `${shot.name}.png`);
-  await page.screenshot({ path: file, ...(shot.clip ? { clip: { x: 0, y: 0, width: shot.size.width, height: shot.clip } } : {}) });
+  await page.screenshot({
+    path: file,
+    ...(shot.clip ? { clip: { x: 0, y: 0, width: shot.size.width, height: shot.clip } } : {}),
+  });
   console.log(`✓ ${shot.name}`);
   await ctx.close(); // closes the page without closing any modal in it
 }
 await browser.close();
 
 const counts = Object.entries(dropped.reduce((m, d) => ({ ...m, [d]: (m[d] ?? 0) + 1 }), {}));
-if (counts.length) console.log(`Dropped (read-only):${os.EOL}${counts.map(([d, n]) => `  ${n}× ${d}`).join(os.EOL)}`);
+if (counts.length)
+  console.log(
+    `Dropped (read-only):${os.EOL}${counts.map(([d, n]) => `  ${n}× ${d}`).join(os.EOL)}`,
+  );

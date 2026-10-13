@@ -1,0 +1,15 @@
+dist
+.astro
+.wrangler
+node_modules
+package-lock.json
+playwright-report
+test-results
+# RaceNode: texts whose exact markdown is the published document (legal) or that other tools read as is
+src/data/legal
+store/listing.json
+src/data/calendar/sample.json
+public
+# Documents used as they are: email signatures pasted into mail clients, files the screenshots drop into the app
+docs/email
+scripts/screenshots/files

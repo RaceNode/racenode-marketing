@@ -1,66 +1,17 @@
-@import "tailwindcss";
-@import "@fontsource/ibm-plex-sans/400.css";
-@import "@fontsource/ibm-plex-sans/500.css";
-@import "@fontsource/ibm-plex-sans/600.css";
-@import "@fontsource/ibm-plex-sans/700.css";
-@import "@fontsource/ibm-plex-sans-condensed/500.css";
-@import "@fontsource/ibm-plex-sans-condensed/600.css";
-@import "@fontsource/ibm-plex-sans-condensed/700.css";
-@import "@fontsource/ibm-plex-mono/400.css";
-@import "@fontsource/ibm-plex-mono/500.css";
-@plugin "@tailwindcss/typography";
-
-/*
- * Site design: "paddock". Concrete-grey pages, asphalt bands for the moments
- * that matter (opening, sync, call to action, footer), the product shown big.
- * Headings in IBM Plex Sans Condensed: same family as the logo, narrower and
- * heavier, the way numbers and names are lettered on a car or a pit board.
- *
- * Rule kept from the app: color signals a state, never a category. Indigo is
- * the action (buttons, links, focus), never a module. No gradients.
- * Contrast (checked): ink on concrete 15.6:1, graphite on concrete 6.2:1,
- * white on accent 6.9:1, smoke on asphalt 7.9:1 (7.0:1 on a card), accent-soft on asphalt 8.2:1,
- * white on the dark accent 5.4:1, white on blocking 6.5:1, white on ok 5.5:1.
- *
- * The dark bands are the app itself: asphalt, asphalt-raised, asphalt-line and smoke are the
- * app's dark-theme neutrals (gray-950 page, gray-900 card, gray-800 border, gray-400 secondary
- * text; app repo src/index.css), and inside them the accent takes the app's dark-theme values.
- * Clicking "Get started" should feel like walking into the garage, not into another brand.
- */
-@theme {
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
-
-  /* Light surfaces: pit-lane concrete and the paper of a run sheet */
-  --color-concrete: #e7e7e3;
-  --color-paper: #f5f5f2;
-  --color-ink: #17181b;
-  --color-graphite: #4f525a;
-  --color-line: #c8c8c2;
-
-  /* Dark bands: the app's dark theme, value for value */
-  --color-asphalt: #030712; /* app gray-950, page background */
-  --color-asphalt-raised: #111827; /* app gray-900, card surface */
-  --color-asphalt-line: #1f2937; /* app gray-800, raised surface and hairline */
-  --color-asphalt-edge: #374151; /* app gray-700, card border */
-  --color-smoke: #9ca3af; /* app gray-400, secondary text */
-  --color-fog: #d1d5db; /* app gray-300, label text */
-
-  /* Accent — the action color */
-  --color-accent: #4c4cc4;
-  --color-accent-hover: #3d3daa;
-  --color-accent-fg: #ffffff;
-  --color-accent-soft: #9d9df0;
-
-  /* States: dark-on-light values for the light pages, light values on asphalt */
-  --color-ok: #047857;
-  --color-watch: #b45309;
-  --color-blocking: #b91c1c;
-  --color-ok-on-dark: #34d399;
-  --color-watch-on-dark: #fbbf24;
-  --color-blocking-on-dark: #f87171;
-}
+@import 'tailwindcss';
+/* The CI workflow is not markup: its words ("contents") would become utilities. */
+@source not '../../.github';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource/ibm-plex-sans-condensed/500.css';
+@import '@fontsource/ibm-plex-sans-condensed/600.css';
+@import '@fontsource/ibm-plex-sans-condensed/700.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import './tokens.css';
+@plugin '@tailwindcss/typography';
 
 @layer base {
   html {
@@ -295,26 +246,65 @@
   .cal-sheet {
     @apply border-t-[3px] border-ink bg-paper;
   }
-  .calendar-row { @apply grid grid-cols-[5.5rem_1fr] sm:grid-cols-[7rem_14rem_1fr] gap-x-4 gap-y-1 px-4 py-3 border-b border-line last:border-b-0; }
-  .calendar-row > .d { @apply text-sm font-mono text-ink sm:row-span-1 row-span-2; }
-  .calendar-row > .d > span { @apply block text-xs text-blocking font-sans font-semibold; }
-  .calendar-row > .c { @apply min-w-0; }
-  .calendar-row > .c > a { @apply font-semibold text-ink hover:text-accent hover:underline; }
-  .calendar-row > .c > span { @apply block text-xs text-graphite; }
+  .calendar-row {
+    @apply grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[7rem_14rem_1fr];
+  }
+  .calendar-row > .d {
+    @apply row-span-2 font-mono text-sm text-ink sm:row-span-1;
+  }
+  .calendar-row > .d > span {
+    @apply block font-sans text-xs font-semibold text-blocking;
+  }
+  .calendar-row > .c {
+    @apply min-w-0;
+  }
+  .calendar-row > .c > a {
+    @apply font-semibold text-ink hover:text-accent hover:underline;
+  }
+  .calendar-row > .c > span {
+    @apply block text-xs text-graphite;
+  }
   /* A championship's logo (logoOf in render.mjs): a fixed box so nothing moves when it loads; a logo made for a dark background sits on an ink chip. */
-  .cal-logo { @apply block h-8 w-12 rounded-[2px] object-contain; }
-  .cal-logo[data-tone='d'] { @apply bg-ink p-1; }
-  .cal-logo-lg { @apply h-12 w-[4.5rem] rounded-[3px] bg-paper p-1.5; }
-  .cal-logo-lg[data-tone='d'] { @apply bg-ink; }
-  .calendar-row > .c.has-logo { @apply grid grid-cols-[3rem_1fr] gap-x-3; }
-  .calendar-row > .c.has-logo > .cal-logo { @apply row-span-2 self-center; }
-  .calendar-row > .c.has-logo > a, .calendar-row > .c.has-logo > span { @apply col-start-2; }
-  .cal-card.has-logo { @apply grid grid-cols-[3rem_1fr] gap-x-3; }
-  .cal-card.has-logo > .cal-logo { @apply row-span-2 self-center; }
-  .cal-card.has-logo > :not(.cal-logo) { @apply col-start-2; }
-  .calendar-row > .p { @apply min-w-0 text-sm text-graphite sm:col-start-3; }
-  .calendar-row > .p > span { @apply text-ink; }
-  .calendar-row > .p > a { @apply hover:text-accent hover:underline; }
+  .cal-logo {
+    @apply block h-8 w-12 rounded-[2px] object-contain;
+  }
+  .cal-logo[data-tone='d'] {
+    @apply bg-ink p-1;
+  }
+  .cal-logo-lg {
+    @apply h-12 w-[4.5rem] rounded-[3px] bg-paper p-1.5;
+  }
+  .cal-logo-lg[data-tone='d'] {
+    @apply bg-ink;
+  }
+  .calendar-row > .c.has-logo {
+    @apply grid grid-cols-[3rem_1fr] gap-x-3;
+  }
+  .calendar-row > .c.has-logo > .cal-logo {
+    @apply row-span-2 self-center;
+  }
+  .calendar-row > .c.has-logo > a,
+  .calendar-row > .c.has-logo > span {
+    @apply col-start-2;
+  }
+  .cal-card.has-logo {
+    @apply grid grid-cols-[3rem_1fr] gap-x-3;
+  }
+  .cal-card.has-logo > .cal-logo {
+    @apply row-span-2 self-center;
+  }
+  .cal-card.has-logo > :not(.cal-logo) {
+    @apply col-start-2;
+  }
+  .calendar-row > .p {
+    @apply min-w-0 text-sm text-graphite sm:col-start-3;
+  }
+  .calendar-row > .p > span {
+    @apply text-ink;
+  }
+  .calendar-row > .p > a {
+    @apply hover:text-accent hover:underline;
+  }
   .cal-season-row {
     @apply grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_10.5rem_1fr_auto];
   }

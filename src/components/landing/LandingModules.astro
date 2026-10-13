@@ -11,9 +11,7 @@ import { modules } from '../../data/modules';
 <section class="band">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        Modules that work together.
-      </h2>
+      <h2 class="title">Modules that work together.</h2>
       <p class="lede">
         Staff, fleet, racecars and events are shared by every module: entered once, used everywhere.
       </p>
@@ -24,19 +22,38 @@ import { modules } from '../../data/modules';
         <li>
           <a href={module.href} class="group grid items-center gap-y-6 lg:grid-cols-12 lg:gap-x-12">
             <div class:list={['lg:col-span-8', i % 2 === 1 && 'lg:order-2']}>
-              <div class:list={['flex justify-center rounded-[4px] bg-asphalt px-6 py-8', module.screen && 'sm:hidden']}>
+              <div
+                class:list={[
+                  'flex justify-center rounded-[4px] bg-asphalt px-6 py-8',
+                  module.screen && 'sm:hidden',
+                ]}
+              >
                 <div class="phone w-56 shrink-0 lg:w-48 border-[5px] transition-transform duration-300 motion-safe:group-hover:-translate-y-1">
-                  <Image src={module.phone} alt={module.phoneAlt} widths={[400, 600]} sizes="14rem" quality={80} />
+                  <Image
+                    src={module.phone}
+                    alt={module.phoneAlt}
+                    widths={[400, 600]}
+                    sizes="14rem"
+                    quality={80}
+                  />
                 </div>
               </div>
               {module.screen && (
                 <div class="screen hidden transition-transform duration-300 motion-safe:group-hover:-translate-y-1 sm:block">
-                  <Image src={module.screen} alt={module.screenAlt ?? ''} widths={[800, 1200, 1600, 2200]} sizes="(min-width: 1248px) 790px, (min-width: 1024px) 64vw, 100vw" quality={85} />
+                  <Image
+                    src={module.screen}
+                    alt={module.screenAlt ?? ''}
+                    widths={[800, 1200, 1600, 2200]}
+                    sizes="(min-width: 1248px) 790px, (min-width: 1024px) 64vw, 100vw"
+                    quality={85}
+                  />
                 </div>
               )}
             </div>
             <div class="lg:col-span-4">
-              <h3 class="ruled font-display text-3xl font-bold tracking-[-0.01em] md:text-4xl">{module.name}</h3>
+              <h3 class="ruled font-display text-3xl font-bold tracking-[-0.01em] md:text-4xl">
+                {module.name}
+              </h3>
               <p class="muted mt-3 max-w-xl leading-relaxed">{module.summary}</p>
               <span class="link mt-4 inline-block decoration-transparent group-hover:decoration-current">
                 See {module.name} <span aria-hidden="true">→</span>

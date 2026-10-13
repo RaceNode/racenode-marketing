@@ -21,53 +21,58 @@ const phones = {
 
 const features = [
   {
-    id: "grid",
-    badge: "Season Grid",
-    title: "The whole season, one screen.",
-    description: "Days across, people grouped by role, championships on top, racecars and trucks below. From a week to the whole year, with the days worked counted on each row."
+    id: 'grid',
+    badge: 'Season Grid',
+    title: 'The whole season, one screen.',
+    description:
+      'Days across, people grouped by role, championships on top, racecars and trucks below. From a week to the whole year, with the days worked counted on each row.',
   },
   {
-    id: "days",
-    badge: "Day Codes",
-    title: "Paint days, not cells.",
-    description: "Paint the days: on track, travelling, workshop, remote, unavailable. Every change saves itself and can be undone."
+    id: 'days',
+    badge: 'Day Codes',
+    title: 'Paint days, not cells.',
+    description:
+      'Paint the days: on track, travelling, workshop, remote, unavailable. Every change saves itself and can be undone.',
   },
   {
-    id: "attendance",
-    badge: "Partial Attendance",
-    title: "The truck loads early. The engineer stays late.",
-    description: "Resize a bar to set when that person, car or truck is really there. The event's dates stay as they are."
-  }
+    id: 'attendance',
+    badge: 'Partial Attendance',
+    title: 'The truck loads early. The engineer stays late.',
+    description:
+      "Resize a bar to set when that person, car or truck is really there. The event's dates stay as they are.",
+  },
 ];
 ---
 
 <section class="band band-paper">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        One grid, the whole operation.
-      </h2>
+      <h2 class="title">One grid, the whole operation.</h2>
     </div>
 
     <div class="space-y-20 md:space-y-28">
       {features.map((feature, index) => (
         <div class="ruled grid gap-8 lg:grid-cols-12 lg:gap-10">
           <!-- Content -->
-          <div class:list={["lg:col-span-4", index % 2 === 1 && "lg:order-2 lg:col-start-9"]}>
-            <p class="font-display text-lg font-medium text-graphite">
-              {feature.badge}
-            </p>
-            <h3 class="subtitle mt-2 md:text-4xl">
-              {feature.title}
-            </h3>
-            <p class="muted mt-4 text-lg leading-relaxed">
-              {feature.description}
-            </p>
+          <div class:list={['lg:col-span-4', index % 2 === 1 && 'lg:order-2 lg:col-start-9']}>
+            <p class="font-display text-lg font-medium text-graphite">{feature.badge}</p>
+            <h3 class="subtitle mt-2 md:text-4xl">{feature.title}</h3>
+            <p class="muted mt-4 text-lg leading-relaxed">{feature.description}</p>
           </div>
 
           <!-- Screenshot -->
-          <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={screenshots[feature.id as keyof typeof screenshots]} phone={phones[feature.id as keyof typeof phones]} alt={`RaceNode Planning ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
+          <div
+            class:list={[
+              'lg:col-span-8',
+              index % 2 === 1 && 'lg:order-1 lg:col-start-1 lg:row-start-1',
+            ]}
+          >
+            <Shot
+              desktop={screenshots[feature.id as keyof typeof screenshots]}
+              phone={phones[feature.id as keyof typeof phones]}
+              alt={`RaceNode Planning ${feature.badge} - ${feature.title}`}
+              sizes="(min-width: 1024px) 820px, 100vw"
+            />
           </div>
         </div>
       ))}

@@ -14,63 +14,69 @@ const features = [
   {
     desktop: schedule,
     phone: schedulePhone,
-    badge: "Team Timetable",
-    title: "Your schedule, next to the official one.",
-    description: "The organizer's sessions and your team's items in one table, day by day, with a countdown to each. Aim an item at the roles, groups or people it concerns: everyone gets their own slice. Flip to a calendar to drag and resize; export to Excel or CSV."
+    badge: 'Team Timetable',
+    title: 'Your schedule, next to the official one.',
+    description:
+      "The organizer's sessions and your team's items in one table, day by day, with a countdown to each. Aim an item at the roles, groups or people it concerns: everyone gets their own slice. Flip to a calendar to drag and resize; export to Excel or CSV.",
   },
   {
     desktop: items,
     phone: itemsPhone,
-    badge: "Item Templates",
-    title: "Build once, reuse every weekend.",
-    description: "Track walk, briefings, pit setup: saved once with their type, place and duration. Start typing on the schedule and they fill themselves in."
+    badge: 'Item Templates',
+    title: 'Build once, reuse every weekend.',
+    description:
+      'Track walk, briefings, pit setup: saved once with their type, place and duration. Start typing on the schedule and they fill themselves in.',
   },
   {
     desktop: rules,
     phone: rulesPhone,
-    badge: "Automation Rules",
-    title: "Anchor to the sessions. Let the rest follow.",
-    description: "\"Car by car briefing, 60 minutes before each session\": one rule creates the items across the weekend. When a session moves, its items move with it, without duplicates."
+    badge: 'Automation Rules',
+    title: 'Anchor to the sessions. Let the rest follow.',
+    description:
+      '"Car by car briefing, 60 minutes before each session": one rule creates the items across the weekend. When a session moves, its items move with it, without duplicates.',
   },
   {
     desktop: importScreen,
     phone: importPhone,
-    badge: "Import",
+    badge: 'Import',
     title: "Drop the organizer's PDF. Check it. It's filled in.",
-    description: "Drop the official timetable on the event: its sessions come out as rows to check, then fill the event's programme. Nothing is saved before you confirm.",
-    small: "PDF, Excel, .ics, a picture or a screenshot… up to 10 MB."
-  }
+    description:
+      "Drop the official timetable on the event: its sessions come out as rows to check, then fill the event's programme. Nothing is saved before you confirm.",
+    small: 'PDF, Excel, .ics, a picture or a screenshot… up to 10 MB.',
+  },
 ];
 ---
 
 <section class="band band-paper">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        One schedule, built around the official one.
-      </h2>
+      <h2 class="title">One schedule, built around the official one.</h2>
     </div>
 
     <div class="space-y-20 md:space-y-28">
       {features.map((feature, index) => (
         <div class="ruled grid gap-8 lg:grid-cols-12 lg:gap-10">
           <!-- Content -->
-          <div class:list={["lg:col-span-4", index % 2 === 1 && "lg:order-2 lg:col-start-9"]}>
-            <p class="font-display text-lg font-medium text-graphite">
-              {feature.badge}
-            </p>
-            <h3 class="subtitle mt-2 md:text-4xl">
-              {feature.title}
-            </h3>
-            <p class="muted mt-4 text-lg leading-relaxed">
-              {feature.description}
-            </p>
+          <div class:list={['lg:col-span-4', index % 2 === 1 && 'lg:order-2 lg:col-start-9']}>
+            <p class="font-display text-lg font-medium text-graphite">{feature.badge}</p>
+            <h3 class="subtitle mt-2 md:text-4xl">{feature.title}</h3>
+            <p class="muted mt-4 text-lg leading-relaxed">{feature.description}</p>
             {feature.small && <p class="muted mt-4 text-sm leading-relaxed">{feature.small}</p>}
           </div>
 
           <!-- Screenshot -->
-          <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`} sizes="(min-width: 1024px) 820px, 100vw" />
+          <div
+            class:list={[
+              'lg:col-span-8',
+              index % 2 === 1 && 'lg:order-1 lg:col-start-1 lg:row-start-1',
+            ]}
+          >
+            <Shot
+              desktop={feature.desktop}
+              phone={feature.phone}
+              alt={`RaceNode Timetable ${feature.badge} - ${feature.title}`}
+              sizes="(min-width: 1024px) 820px, 100vw"
+            />
           </div>
         </div>
       ))}

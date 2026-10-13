@@ -9,5 +9,7 @@ export async function getStaticPaths() {
 
 export async function GET({ params }: { params: { slug: string } }) {
   const { logoFiles } = await catalog();
-  return new Response(logoFiles.get(params.slug)!.file, { headers: { 'content-type': 'image/webp' } });
+  return new Response(logoFiles.get(params.slug)!.file, {
+    headers: { 'content-type': 'image/webp' },
+  });
 }

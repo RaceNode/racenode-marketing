@@ -2,7 +2,13 @@
 // Filters of the all-championships calendar. Without JavaScript every upcoming round stays listed; with it, rows,
 // month headings and the "not published yet" list follow the selects, and the choice is kept in the URL. A round
 // the visitor's clock says is over is hidden too (the morning build may be a day behind).
-import { DISCIPLINES, REGIONS } from '../../lib/calendar/format.mjs';
+import {
+  DISCIPLINES as DISCIPLINE_NAMES,
+  REGIONS as REGION_NAMES,
+} from '../../lib/calendar/format.mjs';
+
+const DISCIPLINES: Record<string, string> = DISCIPLINE_NAMES;
+const REGIONS: Record<string, string> = REGION_NAMES;
 
 interface Props {
   disciplines: string[];
@@ -15,33 +21,50 @@ const { disciplines, regions, circuits, months } = Astro.props;
 const select = 'cal-select';
 ---
 
-<form id="calendar-filters" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" aria-label="Filter the calendar">
+<form
+  id="calendar-filters"
+  class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"
+  aria-label="Filter the calendar"
+>
   <label class="text-xs font-medium text-graphite">
     Discipline
     <select name="discipline" class={select}>
       <option value="">All disciplines</option>
-      {disciplines.map((d) => <option value={d}>{DISCIPLINES[d] ?? d}</option>)}
+      {disciplines.map((d) => (
+        <option value={d}>{DISCIPLINES[d] ?? d}</option>
+      ))}
     </select>
   </label>
   <label class="text-xs font-medium text-graphite">
     Region
     <select name="region" class={select}>
       <option value="">All regions</option>
-      {regions.map((r) => <option value={r}>{REGIONS[r] ?? r}</option>)}
+      {regions.map((r) => (
+        <option value={r}>{REGIONS[r] ?? r}</option>
+      ))}
     </select>
   </label>
   <label class="text-xs font-medium text-graphite">
     Circuit
     <select name="circuit" class={select}>
       <option value="">All circuits</option>
-      {circuits.map((c) => <option value={c.page ? c.slug : c.venue_slug} data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}>{c.name}</option>)}
+      {circuits.map((c) => (
+        <option
+          value={c.page ? c.slug : c.venue_slug}
+          data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}
+        >
+          {c.name}
+        </option>
+      ))}
     </select>
   </label>
   <label class="text-xs font-medium text-graphite">
     Month
     <select name="month" class={select}>
       <option value="">All months</option>
-      {months.map((m) => <option value={m.value}>{m.label}</option>)}
+      {months.map((m) => (
+        <option value={m.value}>{m.label}</option>
+      ))}
     </select>
   </label>
 </form>
@@ -54,8 +77,11 @@ const select = 'cal-select';
 
   function apply() {
     if (!form) return;
-    const f = Object.fromEntries(keys.map((k) => [k, (form.elements.namedItem(k) as HTMLSelectElement).value]));
-    const match = (el: HTMLElement, fields: readonly string[]) => fields.every((k) => !f[k] || el.dataset[k] === f[k]);
+    const f = Object.fromEntries(
+      keys.map((k) => [k, (form.elements.namedItem(k) as HTMLSelectElement).value]),
+    );
+    const match = (el: HTMLElement, fields: readonly string[]) =>
+      fields.every((k) => !f[k] || el.dataset[k] === f[k]);
     const d = new Date();
     const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 

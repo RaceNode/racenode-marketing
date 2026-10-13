@@ -1,9 +1,9 @@
 ---
-import { Image } from "astro:assets";
-import StoreBadges from "../StoreBadges.astro";
-import raceWeekend from "../../assets/screenshots/crew-app-race-weekend.png";
+import { Image } from 'astro:assets';
+import StoreBadges from '../StoreBadges.astro';
+import raceWeekend from '../../assets/screenshots/crew-app-race-weekend.png';
 
-const appUrl = "https://app.racenode.com";
+const appUrl = 'https://app.racenode.com';
 ---
 
 <!-- Opening: the promise on the left, the crew's phone rising from the track edge on the right. -->
@@ -14,22 +14,29 @@ const appUrl = "https://app.racenode.com";
         Built by William Brillouet, former GT3 team manager
       </p>
 
-      <h1 class="display mt-5">
-        Stop rebuilding the event PDF.
-      </h1>
+      <h1 class="display mt-5">Stop rebuilding the event PDF.</h1>
 
       <p class="lede mt-8 max-w-2xl">
-        RaceNode puts travel, hotels, roles and the weekend timetable in one place, and on every crew member's phone. For GT, endurance, single-seater and rally teams.
+        RaceNode puts travel, hotels, roles and the weekend timetable in one place, and on every
+        crew member's phone. For GT, endurance, single-seater and rally teams.
       </p>
 
       <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <a href={`${appUrl}/signup`} class="btn-primary text-lg">Start free</a>
-        <a href="#how-it-works" class="btn-ghost text-lg">See how it works</a>
+        <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+          Start free
+        </a>
+        <a href="#how-it-works" class="btn-ghost text-lg">
+          See how it works
+        </a>
       </div>
-      <p class="mt-4 max-w-md text-sm text-smoke">Free until 31 December 2026. Try it on your next event yourself: no demo to book, no card.</p>
+      <p class="mt-4 max-w-md text-sm text-smoke">
+        Free until 31 December 2026. Try it on your next event yourself: no demo to book, no card.
+      </p>
 
       <div class="hair mt-12 flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p class="max-w-xs text-sm text-smoke">Your crew gets the RaceNode app on iPhone and Android.</p>
+        <p class="max-w-xs text-sm text-smoke">
+          Your crew gets the RaceNode app on iPhone and Android.
+        </p>
         <StoreBadges align="start" />
       </div>
     </div>

@@ -39,20 +39,33 @@ export function ipBudget({ limit = IP_BUDGET, windowMs = WINDOW_MS, now = Date.n
 const json = (body, status, headers = {}) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { 'content-type': 'application/json', 'x-robots-tag': 'noindex', 'cache-control': 'no-store', ...headers },
+    headers: {
+      'content-type': 'application/json',
+      'x-robots-tag': 'noindex',
+      'cache-control': 'no-store',
+      ...headers,
+    },
   });
 
 /**
  * Answers one browser request. `cache` is the edge cache (caches.default) or null, `allow` the IP budget, `waitUntil`
  * keeps the cache write alive after the answer, `read` the views (fetchCatalog; tests replace it).
  */
-export async function relay(request, env, { cache = null, allow = () => true, waitUntil = () => {}, read = fetchCatalog } = {}) {
+export async function relay(
+  request,
+  env,
+  { cache = null, allow = () => true, waitUntil = () => {}, read = fetchCatalog } = {},
+) {
   // Browsers say where a request comes from; a script that does not bother to pretend is turned away here.
-  if (request.headers.get('sec-fetch-site') !== 'same-origin') return json({ error: 'same-origin only' }, 403);
+  if (request.headers.get('sec-fetch-site') !== 'same-origin')
+    return json({ error: 'same-origin only' }, 403);
 
   const url = new URL(request.url);
   const series = url.searchParams.get('series');
-  if ([...url.searchParams.keys()].some((k) => k !== 'series') || (series !== null && !SERIES.test(series))) {
+  if (
+    [...url.searchParams.keys()].some((k) => k !== 'series') ||
+    (series !== null && !SERIES.test(series))
+  ) {
     return json({ error: 'bad query' }, 400);
   }
 
@@ -65,7 +78,8 @@ export async function relay(request, env, { cache = null, allow = () => true, wa
   const hit = cache && (await cache.match(key));
   if (hit) return hit;
 
-  if (!env.CATALOG_SUPABASE_URL || !env.CATALOG_SUPABASE_KEY) return json({ error: 'not configured' }, 503);
+  if (!env.CATALOG_SUPABASE_URL || !env.CATALOG_SUPABASE_KEY)
+    return json({ error: 'not configured' }, 503);
   let data;
   try {
     data = await read(env.CATALOG_SUPABASE_URL, env.CATALOG_SUPABASE_KEY, {

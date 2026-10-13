@@ -1,15 +1,26 @@
 {
-  "name": "y",
+  "name": "racenode-marketing",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/store/check.mjs && node scripts/guardrails.mjs && astro build && node scripts/guardrails.mjs --dist",
     "guardrails": "node scripts/guardrails.mjs",
     "test:guardrails": "node --test scripts/guardrails.test.mjs",
-    "test:unit": "vitest run",
     "test:calendar": "node --test src/lib/calendar/calendar.test.mjs src/lib/calendar/logos.test.mjs",
+    "test:unit": "vitest run",
+    "test:lighthouse": "node tests/lighthouse.mjs",
+    "test": "npm run check && npm run lint && npm run format:check && npm run test:guardrails && npm run test:calendar && npm run test:unit",
     "preview": "astro preview",
+    "check": "astro check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "astro": "astro"
   },
   "dependencies": {
@@ -26,9 +37,20 @@
     "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "eslint": "^10.12.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.13.0",
     "opentype.js": "^2.0.0",
     "playwright-core": "^1.62.1",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.3",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.2",
     "vitest": "^5.0.4"
   }
 }

@@ -8,40 +8,51 @@
 //
 // Post visuals live in the private marketing repo (RaceNode/marketing-prive).
 
-import { chromium } from "playwright-core";
-import { readFileSync, mkdirSync, copyFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
+import { chromium } from 'playwright-core';
+import { readFileSync, mkdirSync, copyFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const OUT = path.join(ROOT, "brand/social");
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const OUT = path.join(ROOT, 'brand/social');
 mkdirSync(OUT, { recursive: true });
 
 // Tokens (dark values: src/styles/global.css + Tailwind gray ramp)
 const T = {
-  bg: "#030712", card: "#111827", border: "#1f2937",
-  text: "#ffffff", muted: "#9ca3af", faint: "#6b7280",
-  mark: "#aab4bd", accent: "#5b5bd6",
+  bg: '#030712',
+  card: '#111827',
+  border: '#1f2937',
+  text: '#ffffff',
+  muted: '#9ca3af',
+  faint: '#6b7280',
+  mark: '#aab4bd',
+  accent: '#5b5bd6',
 };
 
-const readPublic = (f) => readFileSync(path.join(ROOT, "public", f), "utf8");
+const readPublic = (f) => readFileSync(path.join(ROOT, 'public', f), 'utf8');
 const inlineSvg = (svg) =>
-  svg.replace(/<\?xml[^>]*>/, "").replace(/<svg([^>]*?)\s(height|width)="[^"]+"/g, "<svg$1");
-const MARK = inlineSvg(readPublic("favicon.svg"));          // the R node alone
-const LOGO = inlineSvg(readPublic("logo_horizontal.svg"));  // mark + wordmark (logo.mjs)
-const LOGO_RATIO = "417.49/100";
+  svg.replace(/<\?xml[^>]*>/, '').replace(/<svg([^>]*?)\s(height|width)="[^"]+"/g, '<svg$1');
+const MARK = inlineSvg(readPublic('favicon.svg')); // the R node alone
+const LOGO = inlineSvg(readPublic('logo_horizontal.svg')); // mark + wordmark (logo.mjs)
+const LOGO_RATIO = '417.49/100';
 
 const fontFace = (family, dir, weight) => {
-  const file = path.join(ROOT, "node_modules/@fontsource", dir, "files", `${dir}-latin-${weight}-normal.woff2`);
-  const b64 = readFileSync(file).toString("base64");
+  const file = path.join(
+    ROOT,
+    'node_modules/@fontsource',
+    dir,
+    'files',
+    `${dir}-latin-${weight}-normal.woff2`,
+  );
+  const b64 = readFileSync(file).toString('base64');
   return `@font-face{font-family:"${family}";font-weight:${weight};font-style:normal;src:url(data:font/woff2;base64,${b64}) format("woff2")}`;
 };
 const FONTS = [
-  fontFace("IBM Plex Sans", "ibm-plex-sans", 400),
-  fontFace("IBM Plex Sans", "ibm-plex-sans", 500),
-  fontFace("IBM Plex Sans", "ibm-plex-sans", 600),
-  fontFace("IBM Plex Mono", "ibm-plex-mono", 500),
-].join("\n");
+  fontFace('IBM Plex Sans', 'ibm-plex-sans', 400),
+  fontFace('IBM Plex Sans', 'ibm-plex-sans', 500),
+  fontFace('IBM Plex Sans', 'ibm-plex-sans', 600),
+  fontFace('IBM Plex Mono', 'ibm-plex-mono', 500),
+].join('\n');
 
 const BASE_CSS = `
   ${FONTS}
@@ -69,7 +80,7 @@ const avatar = () =>
 
 // Logo + tagline, centered in the safe zone. `shift`/`right`/`align` keep the
 // block clear of the LinkedIn avatar overlay (bottom-left).
-const banner = ({ shift = "0", right = "0", align = "center", logoPx, tagPx, gap }) =>
+const banner = ({ shift = '0', right = '0', align = 'center', logoPx, tagPx, gap }) =>
   page(
     `body{display:flex;align-items:center;justify-content:${align};padding-left:${shift};padding-right:${right}}
      .row{display:flex;align-items:center;gap:${gap}px}
@@ -99,29 +110,47 @@ const og = () =>
 // ---------- Render ----------
 
 const JOBS = {
-  "avatar-1024": { W: 1024, H: 1024, scale: 1, html: avatar() },
-  "avatar-400": { W: 400, H: 400, scale: 1, html: avatar() },
+  'avatar-1024': { W: 1024, H: 1024, scale: 1, html: avatar() },
+  'avatar-400': { W: 400, H: 400, scale: 1, html: avatar() },
   // LinkedIn company page cover: 1128x191, rendered at 2x. Block kept in the central 60%.
-  "linkedin-banner-company-2256x382": {
-    W: 1128, H: 191, scale: 2, html: banner({ logoPx: 66, tagPx: 16, gap: 18 }),
+  'linkedin-banner-company-2256x382': {
+    W: 1128,
+    H: 191,
+    scale: 2,
+    html: banner({ logoPx: 66, tagPx: 16, gap: 18 }),
   },
   // LinkedIn personal profile cover: 1584x396, rendered at 2x. Block kept right of the avatar overlay.
-  "linkedin-banner-profile-3168x792": {
-    W: 1584, H: 396, scale: 2, html: banner({ shift: "22%", right: "8%", align: "flex-end", logoPx: 94, tagPx: 19, gap: 26 }),
+  'linkedin-banner-profile-3168x792': {
+    W: 1584,
+    H: 396,
+    scale: 2,
+    html: banner({ shift: '22%', right: '8%', align: 'flex-end', logoPx: 94, tagPx: 19, gap: 26 }),
   },
-  "og-image-1200x630": { W: 1200, H: 630, scale: 2, html: og(), copyTo: path.join(ROOT, "public/og-image.png") },
+  'og-image-1200x630': {
+    W: 1200,
+    H: 630,
+    scale: 2,
+    html: og(),
+    copyTo: path.join(ROOT, 'public/og-image.png'),
+  },
 };
 
 const browser = await chromium.launch();
 for (const [name, job] of Object.entries(JOBS)) {
-  const ctx = await browser.newContext({ viewport: { width: job.W, height: job.H }, deviceScaleFactor: job.scale });
+  const ctx = await browser.newContext({
+    viewport: { width: job.W, height: job.H },
+    deviceScaleFactor: job.scale,
+  });
   const pg = await ctx.newPage();
-  await pg.setContent(job.html, { waitUntil: "load" });
+  await pg.setContent(job.html, { waitUntil: 'load' });
   await pg.evaluate(() => document.fonts.ready);
   const file = path.join(OUT, `${name}.png`);
-  await pg.screenshot({ path: file, type: "png" });
+  await pg.screenshot({ path: file, type: 'png' });
   await ctx.close();
-  console.log("wrote", path.relative(ROOT, file));
-  if (job.copyTo) { copyFileSync(file, job.copyTo); console.log("copied to", path.relative(ROOT, job.copyTo)); }
+  console.log('wrote', path.relative(ROOT, file));
+  if (job.copyTo) {
+    copyFileSync(file, job.copyTo);
+    console.log('copied to', path.relative(ROOT, job.copyTo));
+  }
 }
 await browser.close();
