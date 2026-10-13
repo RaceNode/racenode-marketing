@@ -38,6 +38,9 @@ jobs:
       - name: Typecheck
         run: npm run check
 
+      - name: Lint
+        run: npm run lint
+
       - name: Guardrails tests
         run: npm run test:guardrails
 
