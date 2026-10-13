@@ -1,8 +1,9 @@
 ---
 import StoreBadges from "./StoreBadges.astro";
+import { site } from "../site.config";
 
 const currentYear = new Date().getFullYear();
-const email = "contact@racenode.com";
+const email = site.contact.email;
 
 const footerLinks = {
   product: [
