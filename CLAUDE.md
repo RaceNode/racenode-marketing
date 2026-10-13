@@ -105,7 +105,8 @@ The site follows the WBLT site template (`~/script/wblt/templates/template-site`
 - **Cloudflare Pages, not Workers + assets**: no `wrangler.jsonc`, no `@astrojs/cloudflare`, no `src/hosting/`, no `npm run serve`, no `worker-configuration.d.ts` in `tsconfig.json`, no deployment in CI. Pages deploys on push; the relay is a Pages Function. See [docs/deployment.md](docs/deployment.md).
 - **One language, no Paraglide**: pages at the root (the template's single-language layout), texts in the components; no `messages/`, `project.inlang/`, `middleware.ts`.
 - **No contact form**: contact by `mailto:`, the journey is the app signup.
-- **Tests stay on `node --test`** (`test:calendar`, `test:guardrails`), no Vitest.
+- **Tests stay on `node --test`** (`test:calendar`, `test:guardrails`, `test:seo`), no Vitest.
+- **Lighthouse** (`tests/lighthouse.mjs`, `npm run test:lighthouse`, also in CI): the template's script and targets, on `astro preview` or the live site (`LIGHTHOUSE_BASE`), information only until the performance lot (`LIGHTHOUSE_STRICT=1` fails as in the template).
 - **`src/site.config.ts` is reduced**: no `hosting`, `locales`, `contactForm`, `sections`, `nav`, `profiles` or local business; `business` keeps only description, logo, founder. `src/lib/seo.ts` keeps the template's helpers as they are, with RaceNode's own Organization (founder, contact point, store listings passed by the caller, `data/stores.ts` staying their single source) and SoftwareApplication; imports are relative so node --test loads it.
 - **ESLint**: the template's config plus one override, `no-explicit-any` off in `src/pages/calendar/**` (its data comes from the untyped `.mjs` of `src/lib/calendar`).
 - **The site's components and token names** (`concrete`, `asphalt`…) stay, in the template's `tokens.css`; the web fonts are imported in `global.css` (the template uses the system stack); the template's `Hero`/`Cta`/… examples are not used.

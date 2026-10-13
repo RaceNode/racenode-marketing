@@ -54,3 +54,7 @@ jobs:
         env:
           CALENDAR_SAMPLE: '1'
         run: npm run build
+
+      # Information only (tests/lighthouse.mjs): misses are warnings, the run stays green.
+      - name: Lighthouse
+        run: npm run test:lighthouse
