@@ -29,7 +29,7 @@ const RULES = [
     name: 'colors',
     dirs: ['src'],
     re: /\b(?:bg|text|border|ring|outline|fill|stroke|from|via|to|divide|decoration|shadow|accent|caret)-(?:red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b|\bbg-(?:gradient|linear|radial|conic)-|\b(?:linear|radial|conic)-gradient\(/,
-    why: 'literal color class or gradient: color signals a state, never a category; use the tokens of src/styles/global.css (accent, ok, watch, blocking) or a gray',
+    why: 'literal color class or gradient: color signals a state, never a category; use the tokens of src/styles/tokens.css (accent, ok, watch, blocking) or a gray',
   },
   {
     name: 'pricing',
