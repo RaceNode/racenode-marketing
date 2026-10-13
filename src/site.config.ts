@@ -2,12 +2,27 @@
  * Site configuration — the single place to describe the company and the site.
  *
  * Reduced from the WBLT site template's `site.config.ts`: one language, no
- * hosting switch (Cloudflare Pages, docs/deployment.md), no contact form, no
- * local business. Brand colours and fonts live in `src/styles/global.css`.
+ * contact form, no local business; hosting `cloudflare-pages`, a value the
+ * template does not have (docs/deployment.md). Brand colours and fonts live in
+ * `src/styles/tokens.css`.
  * Keep this file free of secrets: it is bundled into the public site.
  */
 
+/**
+ * Where the site is served from. See the template's docs/deployment.md.
+ *
+ * - `cloudflare`: Cloudflare Workers with static assets, in the client's account.
+ * - `static-php`: a shared web hosting with Apache and PHP (OVH, o2switch…).
+ * - `cloudflare-pages`: Cloudflare Pages with Pages Functions (this site). Not
+ *   in the template: it has no `/api/geo` endpoint, so `src/analytics/geo.ts`
+ *   sends no request and the visitor's country stays unknown.
+ */
+export const hostings = ['cloudflare', 'static-php', 'cloudflare-pages'] as const;
+export type Hosting = (typeof hostings)[number];
+
 export const site = {
+  hosting: 'cloudflare-pages' as Hosting,
+
   /** Public name, used in titles, structured data and the legal notice. */
   name: 'RaceNode',
 

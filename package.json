@@ -12,9 +12,9 @@
     "guardrails": "node scripts/guardrails.mjs",
     "test:guardrails": "node --test scripts/guardrails.test.mjs",
     "test:calendar": "node --test src/lib/calendar/calendar.test.mjs src/lib/calendar/logos.test.mjs",
-    "test:seo": "node --test src/lib/seo.test.mjs",
+    "test:unit": "vitest run",
     "test:lighthouse": "node tests/lighthouse.mjs",
-    "test": "npm run check && npm run lint && npm run format:check && npm run test:guardrails && npm run test:calendar && npm run test:seo",
+    "test": "npm run check && npm run lint && npm run format:check && npm run test:guardrails && npm run test:calendar && npm run test:unit",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
@@ -33,7 +33,8 @@
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^7.2.4",
     "posthog-js": "^1.438.3",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -49,6 +50,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.71.2"
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^5.0.4"
   }
 }

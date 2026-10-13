@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { APP_STORE_ID, APP_STORE_URL, PLAY_STORE_URL } from '../data/stores';
 import { organizationJsonLd, softwareApplicationJsonLd, websiteJsonLd } from '../lib/seo';
 import { site } from '../site.config';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title: string;
@@ -78,11 +79,9 @@ const schemas = [
     {schemas.map((schema) => (
       <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     ))}
+    <Analytics />
   </head>
-  <body class="min-h-screen bg-concrete text-ink">
+  <body class="min-h-screen bg-concrete text-ink" data-privacy-href="/privacy/">
     <slot />
-    <script>
-      import '../lib/analytics.mjs';
-    </script>
   </body>
 </html>

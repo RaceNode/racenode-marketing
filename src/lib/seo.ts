@@ -1,6 +1,6 @@
 /**
  * Structured data (JSON-LD) built from the site configuration.
- * Pure functions, tested by seo.test.mjs (node --test); rendered by
+ * Pure functions, unit-tested (tests/unit/seo.test.ts); rendered by
  * `BaseLayout.astro` (site-wide entities) and by the pages (their own entities).
  *
  * From the WBLT site template's `src/lib/seo.ts`: `compact`, `absolute`,
@@ -8,10 +8,8 @@
  * organisation keeps what RaceNode already published (description, founder,
  * contact point, store listings) and the app gets its SoftwareApplication. No
  * local business, phone or services: the company has none to publish.
- *
- * No runtime import here, so node --test can load this file as is.
  */
-import type { SiteConfig } from '../site.config';
+import type { SiteConfig } from '@/site.config';
 
 type JsonLd = Record<string, unknown>;
 

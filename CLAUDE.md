@@ -37,9 +37,10 @@ All pages wrap content in `BaseLayout.astro` (SEO meta, JSON-LD schemas) with sh
 ```
 src/
 ├── assets/screenshots/  # Product screenshots (imported via Astro Image); `*-phone.png` = the app's phone layout, shown below sm by Shot.astro
+├── analytics/           # Analytics brick of the WBLT site template (see "Analytics and consent")
 ├── components/          # Shared (Header, Footer) + feature subdirs
 ├── data/legal/          # Markdown legal documents (rendered by legal pages); legal-notice.mdx reads site.legal
-├── lib/seo.ts           # JSON-LD builders (pure, tested by seo.test.mjs, npm run test:seo)
+├── lib/seo.ts           # JSON-LD builders (pure, tested by tests/unit/seo.test.ts, npm run test:unit)
 ├── site.config.ts       # Name, URL, contact, social, legal identity: the single place
 ├── layouts/             # BaseLayout.astro (SEO, structured data), LegalLayout.astro
 ├── pages/               # index, module pages, crew-app, pricing, terms, privacy, account-deletion, legal-notice
@@ -86,6 +87,12 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 - JSON-LD from `src/lib/seo.ts`: Organization, WebSite, SoftwareApplication in BaseLayout (one Organization `@id`, referenced by the others); BreadcrumbList and FAQPage on the pages that show them. The calendar pages still write their own
 - Open Graph and Twitter meta tags on all pages
 
+## Analytics and consent
+
+- `src/analytics/`, `Analytics.astro`, `AnalyticsDisclosure.astro` and `vitest.config.ts` are the analytics brick of the WBLT site template (`~/script/wblt/templates/template-site`), kept as close to it as possible so changes can travel both ways; the deviations are listed in the PR that brought it (consent-banner). `src/paraglide/` is a stub that gives the brick its English messages (banner texts live there), `src/site.config.ts` its `hosting`.
+- Tool: PostHog (`ANALYTICS_PROVIDER=posthog` + `PUBLIC_POSTHOG_KEY` in the Cloudflare Pages env; absent in dev, so nothing runs locally). Before a choice or after "Reject", it measures with nothing stored (memory persistence); after "Accept", a first-party cookie `ph_<key>_posthog` on www only, and links to `https://app.racenode.com` carry `?ph=<distinct_id>` (the app reads it; `POSTHOG_HANDOFF_ORIGINS` in `config.ts`). "Cookie settings" in the footer reopens the choice; withdrawing erases the cookie.
+- Banner styling: `#cc-main` variables in `src/styles/global.css`, tokens only. Tests: `npm run test:unit`.
+
 ## Race calendar
 
 - Static like the rest of the site, plus one Pages Function (the relay below; free plan only, no Workers Paid plan: Willi, 2026-10-07, so no Durable Objects and no rate-limit binding). Built from the catalog at every deploy, and every morning by the n8n workflow `racenode-site-rebuild` (06:45 UTC): that is what Google indexes.
@@ -108,9 +115,9 @@ The site follows the WBLT site template (`~/script/wblt/templates/template-site`
 - **Cloudflare Pages, not Workers + assets**: no `wrangler.jsonc`, no `@astrojs/cloudflare`, no `src/hosting/`, no `npm run serve`, no `worker-configuration.d.ts` in `tsconfig.json`, no deployment in CI. Pages deploys on push; the relay is a Pages Function. See [docs/deployment.md](docs/deployment.md).
 - **One language, no Paraglide**: pages at the root (the template's single-language layout), texts in the components; no `messages/`, `project.inlang/`, `middleware.ts`.
 - **No contact form**: contact by `mailto:`, the journey is the app signup.
-- **Tests stay on `node --test`** (`test:calendar`, `test:guardrails`, `test:seo`), no Vitest.
+- **Two test runners**: Vitest for the TypeScript units, as in the template (`npm run test:unit`: analytics, seo); the calendar and guardrail tests stay on `node --test` (`test:calendar`, `test:guardrails`), not converted.
 - **Lighthouse** (`tests/lighthouse.mjs`, `npm run test:lighthouse`, also in CI): the template's script and targets, on `astro preview` or the live site (`LIGHTHOUSE_BASE`), information only until the performance lot (`LIGHTHOUSE_STRICT=1` fails as in the template).
-- **`src/site.config.ts` is reduced**: no `hosting`, `locales`, `contactForm`, `sections`, `nav`, `profiles` or local business; `business` keeps only description, logo, founder. `src/lib/seo.ts` keeps the template's helpers as they are, with RaceNode's own Organization (founder, contact point, store listings passed by the caller, `data/stores.ts` staying their single source) and SoftwareApplication; imports are relative so node --test loads it.
+- **`src/site.config.ts` is reduced**: no `hosting`, `locales`, `contactForm`, `sections`, `nav`, `profiles` or local business; `business` keeps only description, logo, founder. `src/lib/seo.ts` keeps the template's helpers as they are, with RaceNode's own Organization (founder, contact point, store listings passed by the caller, `data/stores.ts` staying their single source) and SoftwareApplication; `hosting: 'cloudflare-pages'`, a value the template does not have (no `/api/geo`).
 - **Prettier**: the template's config; `.prettierignore` also leaves out the legal texts (`src/data/legal`: their exact markdown is the published document), `store/listing.json`, the calendar sample and `public/`.
 - **ESLint**: the template's config plus one override, `no-explicit-any` off in `src/pages/calendar/**` (its data comes from the untyped `.mjs` of `src/lib/calendar`).
 - **The site's components and token names** (`concrete`, `asphalt`…) stay, in the template's `tokens.css`; the web fonts are imported in `global.css` (the template uses the system stack); the template's `Hero`/`Cta`/… examples are not used.
