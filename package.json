@@ -14,11 +14,13 @@
     "test:calendar": "node --test src/lib/calendar/calendar.test.mjs src/lib/calendar/logos.test.mjs",
     "test:seo": "node --test src/lib/seo.test.mjs",
     "test:lighthouse": "node tests/lighthouse.mjs",
-    "test": "npm run check && npm run lint && npm run test:guardrails && npm run test:calendar && npm run test:seo",
+    "test": "npm run check && npm run lint && npm run format:check && npm run test:guardrails && npm run test:calendar && npm run test:seo",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "astro": "astro"
   },
   "dependencies": {
@@ -42,6 +44,9 @@
     "globals": "^17.13.0",
     "opentype.js": "^2.0.0",
     "playwright-core": "^1.62.1",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.71.2"
