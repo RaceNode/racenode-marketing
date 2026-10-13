@@ -35,12 +35,14 @@ export const FIELDS = {
     'source_url',
     'last_checked_at',
     'event_count',
+    'round_count',
   ],
   events: [
     'series_slug',
     'season_label',
     'season_year',
     'round_number',
+    'round_numbers',
     'round_label',
     'sub_label',
     'name',
@@ -55,6 +57,13 @@ export const FIELDS = {
     'venue_timezone',
   ],
 };
+
+/**
+ * Columns the views gained with the app's "one meeting, one event" catalog (a double-header is one event, its rounds in
+ * `round_numbers`; `round_count` = races a season lists). Until that is in production the views lack them: the read
+ * then asks again without them, and they stay null.
+ */
+export const NEW_FIELDS = { seasons: ['round_count'], events: ['round_numbers'] };
 
 /** The series columns only the build reads: where the catalog stores each championship's logo. */
 export const LOGO_FIELDS = ['logo_url', 'logo_light_url', 'logo_dark_url'];
@@ -82,13 +91,24 @@ export function sanitize(data, { logos = false } = {}) {
 
 const PAGE = 1000;
 
-async function fetchView(url, key, kind, { signal, series, logos } = {}) {
+async function fetchView(url, key, kind, opts = {}) {
+  try {
+    return await fetchColumns(url, key, kind, FIELDS[kind], opts);
+  } catch (e) {
+    // 42703: undefined column, a view from before the columns above.
+    if (!NEW_FIELDS[kind] || e.status !== 400 || !/42703/.test(e.message)) throw e;
+    const old = FIELDS[kind].filter((f) => !NEW_FIELDS[kind].includes(f));
+    return await fetchColumns(url, key, kind, old, opts);
+  }
+}
+
+async function fetchColumns(url, key, kind, fields, { signal, series, logos } = {}) {
   const only = series
     ? `&${kind === 'series' ? 'slug' : 'series_slug'}=eq.${encodeURIComponent(series)}`
     : '';
   const rows = [];
   for (let offset = 0; ; offset += PAGE) {
-    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${(kind === 'series' && logos ? [...FIELDS.series, ...LOGO_FIELDS] : FIELDS[kind]).join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
+    const q = `${url}/rest/v1/${VIEWS[kind]}?select=${(kind === 'series' && logos ? [...fields, ...LOGO_FIELDS] : fields).join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
     const res = await fetch(q, { headers: { Accept: 'application/json', apikey: key }, signal });
     if (!res.ok) {
       const e = new Error(`calendar: ${VIEWS[kind]} answered ${res.status} ${await res.text()}`);
