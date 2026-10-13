@@ -99,19 +99,16 @@ const softwareSchema = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageURL} />
 
-    <!-- Favicons & PWA -->
+    <!-- Favicons (no web app manifest: the site is not installable, the app is in the stores) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json" />
 
     <!-- iOS Smart App Banner (Safari shows a native "Open in App Store" banner) -->
     <meta name="apple-itunes-app" content={`app-id=${APP_STORE_ID}`} />
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#030712" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
