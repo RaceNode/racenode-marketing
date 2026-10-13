@@ -19,11 +19,11 @@ jobs:
         with:
           node-version-file: .node-version
       - name: Wait for the Pages preview of this commit
-        run: sleep 150
-      - name: Lighthouse, 3 rounds, interleaved
+        run: sleep 10
+      - name: Lighthouse, 5 rounds, interleaved
         run: |
-          for i in 1 2 3; do
+          for i in 1 2 3 4 5; do
             for side in consent-banner perf-lot9; do
-              LIGHTHOUSE_BASE=https://$side.racenode-marketing.pages.dev node tests/lighthouse.mjs / /calendar/ /calendar/british-gt/ 2>&1 | grep "performance=" | sed "s/^/$side /"
+              LIGHTHOUSE_BASE=https://$side.racenode-marketing.pages.dev node tests/lighthouse.mjs / /logistics/ /calendar/ /calendar/british-gt/ 2>&1 | grep "performance=" | sed "s/^/$side /"
             done
           done
