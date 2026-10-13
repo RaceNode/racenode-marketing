@@ -55,4 +55,11 @@ async function boot() {
   }
 }
 
-void boot();
+// RaceNode: started once the page has loaded and the browser is idle, so neither the banner nor the
+// tool (PostHog is ~100 KB) competes with the first render. Not in the template yet.
+function start() {
+  if ('requestIdleCallback' in window) requestIdleCallback(() => void boot(), { timeout: 2000 });
+  else setTimeout(() => void boot(), 0);
+}
+if (document.readyState === 'complete') start();
+else addEventListener('load', start, { once: true });
