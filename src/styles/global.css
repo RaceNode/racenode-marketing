@@ -246,6 +246,12 @@
   .cal-sheet {
     @apply border-t-[3px] border-ink bg-paper;
   }
+  /* A month of rounds is laid out only when it nears the screen: the index has ~800 rows, and laying them all out
+     at load (then again when each web font arrives) took most of the main thread on a phone. */
+  .calendar-month {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1200px;
+  }
   .calendar-row {
     @apply grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[7rem_14rem_1fr];
   }
