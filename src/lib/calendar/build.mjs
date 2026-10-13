@@ -1,12 +1,12 @@
 // The catalog for the build (Node), kept apart from contract.mjs, which the visitor's browser loads too.
-import { fetchCatalog, sanitize } from './contract.mjs';
+import { catalogSource, sanitize } from './contract.mjs';
 import { featuredYear } from './model.mjs';
 import { loadLogos } from './logos.mjs';
 import { LIVE_API } from './relay.mjs';
 import { calendarOf, circuitPageSlugs, countriesOf } from './render.mjs';
 
 /**
- * Waits between attempts at the views: a passing 5xx or timeout (PGRST002 while PostgREST reloads its schema cache,
+ * Waits between attempts at the catalog: a passing 5xx or timeout (PGRST002 while PostgREST reloads its schema cache,
  * a slow cold start) costs a few seconds instead of the deploy; about a minute of waiting in all, then the build fails.
  */
 export const RETRY_DELAYS_MS = [3000, 8000, 15000, 30000];
@@ -18,10 +18,10 @@ export function transient(e) {
   return true;
 }
 
-async function fetchWithRetry(url, key, delays) {
+async function fetchWithRetry({ read, url, key }, delays) {
   for (let attempt = 0; ; attempt++) {
     try {
-      return await fetchCatalog(url, key, {
+      return await read(url, key, {
         signal: AbortSignal.timeout(ATTEMPT_TIMEOUT_MS),
         logos: true,
       });
@@ -36,26 +36,26 @@ async function fetchWithRetry(url, key, delays) {
 }
 
 /**
- * The catalog for this build, from the views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY, the server's key: it
- * never reaches a page). A failure that outlasts
+ * The catalog for this build, from the motorsport-data API (MOTORSPORT_DATA_API_KEY) or, without that key, the app's
+ * views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY): catalogSource in contract.mjs. The server's key never reaches a
+ * page. A failure that outlasts
  * the retries fails the build, so Cloudflare keeps the last good deploy online. `CALENDAR_SAMPLE=1` (preview env, never production) falls
  * back to sample data, a real extract kept in the repo, flagged so pages say so and are not indexed: when the
- * variables are missing, or when the views do not answer (before the app's #197 reaches production: PGRST205).
+ * variables are missing, or when the catalog does not answer.
  */
 export async function loadCatalog(env, { delays = RETRY_DELAYS_MS } = {}) {
-  const url = env.CATALOG_SUPABASE_URL;
-  const key = env.CATALOG_SUPABASE_KEY;
+  const source = catalogSource(env);
   const allowSample = env.CALENDAR_SAMPLE === '1';
-  if (url && key) {
+  if (source) {
     try {
-      return { sample: false, ...(await fetchWithRetry(url, key, delays)) };
+      return { sample: false, ...(await fetchWithRetry(source, delays)) };
     } catch (e) {
       if (!allowSample) throw e;
       console.warn(`${String(e).slice(0, 200)}; sample data instead (preview)`);
     }
   } else if (!allowSample) {
     throw new Error(
-      'calendar: CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY are missing; refusing to publish sample data',
+      'calendar: MOTORSPORT_DATA_API_KEY (or CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY) missing; refusing to publish sample data',
     );
   }
   const { default: sample } = await import('../../data/calendar/sample.json', {
