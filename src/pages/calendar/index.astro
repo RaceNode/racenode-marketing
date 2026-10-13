@@ -21,7 +21,9 @@ const months = [...new Set(upcoming.map((r: any) => r.start_date.slice(0, 7)))].
   label: `${MONTHS[Number(m.slice(5)) - 1]} ${m.slice(0, 4)}`,
 }));
 const allCircuits = circuits(cal);
-const upcomingCircuits = allCircuits.filter((c: any) => c.rounds.some((r: any) => r.end_date >= ctx.today));
+const upcomingCircuits = allCircuits.filter((c: any) =>
+  c.rounds.some((r: any) => r.end_date >= ctx.today),
+);
 // The busiest circuits here; every circuit page is on /calendar/circuits/.
 const circuitPages = allCircuits
   .filter((c: any) => c.page)
@@ -30,8 +32,12 @@ const circuitPages = allCircuits
   .sort((a: any, b: any) => a.name.localeCompare(b.name));
 const thisYear = Number(ctx.today.slice(0, 4));
 const span = thisYear === cal.year ? `${cal.year}` : `${thisYear}–${cal.year}`;
-const disciplines = Object.keys(DISCIPLINES).filter((d) => cal.championships.some((c: any) => c.discipline === d));
-const regions = Object.keys(REGIONS).filter((r) => cal.championships.some((c: any) => c.region === r));
+const disciplines = Object.keys(DISCIPLINES).filter((d) =>
+  cal.championships.some((c: any) => c.discipline === d),
+);
+const regions = Object.keys(REGIONS).filter((r) =>
+  cal.championships.some((c: any) => c.region === r),
+);
 const summary = indexSummary(cal);
 const body = indexBody(cal, ctx);
 
@@ -39,11 +45,16 @@ const title = `Motorsport Calendar ${cal.year}: Every Championship, Dates & Circ
 const description = `The ${cal.year} race calendars of ${cal.championships.length} championships on one page: GT, endurance, single-seaters, one-make cups. Filter by discipline, region, circuit and month to see who races where, and when.`;
 
 const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
-    { "@type": "ListItem", "position": 2, "name": "Motorsport Calendar", "item": "https://www.racenode.com/calendar/" },
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.racenode.com' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Motorsport Calendar',
+      item: 'https://www.racenode.com/calendar/',
+    },
   ],
 };
 ---
@@ -55,40 +66,53 @@ const breadcrumbSchema = {
     <main>
       <section class="band-dark cal-open">
         <div class="page">
-        {data.sample && <SampleDataNotice />}
+          {data.sample && <SampleDataNotice />}
 
-        <h1 class="display">Motorsport calendar {span}</h1>
-        <p class="lede mt-6 max-w-3xl">
-          The upcoming rounds of {cal.championships.length} championships, in date order: who races where, and when. Dates and circuits as each organizer publishes them, with a link to its official page.
-        </p>
-        <p class="mt-4 max-w-3xl text-sm text-smoke">
-          <span data-calendar-live="summary" data-hash={hash(summary)} set:html={summary} />{' '}
-          Each championship's page says when its calendar was last checked against the official one.
-        </p>
+          <h1 class="display">Motorsport calendar {span}</h1>
+          <p class="lede mt-6 max-w-3xl">
+            The upcoming rounds of {cal.championships.length} championships, in date order: who
+            races where, and when. Dates and circuits as each organizer publishes them, with a link
+            to its official page.
+          </p>
+          <p class="mt-4 max-w-3xl text-sm text-smoke">
+            <span data-calendar-live="summary" data-hash={hash(summary)} set:html={summary} /> Each
+            championship's page says when its calendar was last checked against the official one.
+          </p>
         </div>
       </section>
       <div class="kerb" aria-hidden="true"></div>
 
       <section class="cal-body">
         <div class="page">
-        <CalendarFilters disciplines={disciplines} regions={regions} circuits={upcomingCircuits} months={months} />
+          <CalendarFilters
+            disciplines={disciplines}
+            regions={regions}
+            circuits={upcomingCircuits}
+            months={months}
+          />
 
-        <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
+          <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
 
-        <p class="muted mt-8 text-sm">Rounds already run are on each championship's page.</p>
+          <p class="muted mt-8 text-sm">Rounds already run are on each championship's page.</p>
 
-        <section class="mt-12">
-          <h2 class="subtitle mb-2">Calendars by circuit</h2>
-          <p class="muted mb-4">Every championship racing at a circuit, on one page.</p>
-          <ul class="flex flex-wrap gap-2">
-            {circuitPages.map((c: any) => (
-              <li>
-                <a href={`/calendar/circuits/${c.slug}/`} class="cal-chip">{c.name}</a>
-              </li>
-            ))}
-          </ul>
-          <p class="mt-4 text-sm"><a href="/calendar/circuits/" class="link">All circuits</a></p>
-        </section>
+          <section class="mt-12">
+            <h2 class="subtitle mb-2">Calendars by circuit</h2>
+            <p class="muted mb-4">Every championship racing at a circuit, on one page.</p>
+            <ul class="flex flex-wrap gap-2">
+              {circuitPages.map((c: any) => (
+                <li>
+                  <a href={`/calendar/circuits/${c.slug}/`} class="cal-chip">
+                    {c.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-4 text-sm">
+              <a href="/calendar/circuits/" class="link">
+                All circuits
+              </a>
+            </p>
+          </section>
         </div>
       </section>
       <CalendarCTA title="Found your season? Plan it in RaceNode." />

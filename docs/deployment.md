@@ -6,10 +6,10 @@ The site follows the WBLT site template (`WBLT-Engineering/template-site`) where
 
 Cloudflare Pages project `racenode-marketing` (RaceNode account), connected to this GitHub repository.
 
-| Event          | What happens                                                                                 |
-| -------------- | -------------------------------------------------------------------------------------------- |
-| Push to `main` | Pages runs `npm run build` and publishes `dist/` on www.racenode.com                         |
-| Push to a branch | Pages publishes a preview (`<branch>.racenode-marketing.pages.dev`), with the preview env   |
+| Event               | What happens                                                                                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Push to `main`      | Pages runs `npm run build` and publishes `dist/` on www.racenode.com                                                              |
+| Push to a branch    | Pages publishes a preview (`<branch>.racenode-marketing.pages.dev`), with the preview env                                         |
 | Every day 06:45 UTC | n8n workflow `racenode-site-rebuild` asks the Pages API for a new production deployment, so the race calendar follows the catalog |
 
 The "Cloudflare Pages" check on the commit turns green once the deployment is live. A failing build (guardrails, `store/listing.json`, calendar read) publishes nothing: the last good deployment stays online. Rollback: "Rollback to this deployment" on an earlier deployment in the Pages dashboard.
@@ -20,11 +20,11 @@ GitHub Actions (`.github/workflows/ci.yml`, the template's checks without its de
 
 ## Variables (Pages project settings)
 
-| Name                                          | Env                 | Role                                                                                       |
-| --------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------------ |
-| `CATALOG_SUPABASE_URL`, `CATALOG_SUPABASE_KEY` | production, preview | Catalog read by the build and the relay. The key is a Supabase secret key, encrypted       |
-| `CALENDAR_SAMPLE`                             | preview only        | `1`: sample calendar data when the views do not answer (pages flagged and noindex)         |
-| `PUBLIC_POSTHOG_KEY`                          | production, preview | PostHog project key (public by design)                                                     |
+| Name                                           | Env                 | Role                                                                                 |
+| ---------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------ |
+| `CATALOG_SUPABASE_URL`, `CATALOG_SUPABASE_KEY` | production, preview | Catalog read by the build and the relay. The key is a Supabase secret key, encrypted |
+| `CALENDAR_SAMPLE`                              | preview only        | `1`: sample calendar data when the views do not answer (pages flagged and noindex)   |
+| `PUBLIC_POSTHOG_KEY`                           | production, preview | PostHog project key (public by design)                                               |
 
 The values live in the Pages project and in Infisical (`racenode`), never in this public repository.
 

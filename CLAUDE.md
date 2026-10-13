@@ -23,6 +23,7 @@ npm run preview  # Preview production build
 ## Architecture
 
 Pages compose section components from feature-specific subdirectories:
+
 - `src/pages/index.astro` → uses `src/components/landing/*.astro`
 - `src/pages/logistics.astro` → uses `src/components/logistics/*.astro`
 - `src/pages/management.astro` → uses `src/components/management/*.astro`
@@ -67,6 +68,7 @@ The logo is the store icon mark (the R node, `public/favicon.svg`) plus "RaceNod
 ## Design System
 
 Dark theme mirroring the app's design system. Tokens are defined in `src/styles/tokens.css` (mirror of the app's `src/index.css`; source of truth: `docs/architecture/design-system.md` in the app repo). **Color signals a state, never a category** — no module colors, no gradients.
+
 - **Background**: `bg-gray-950` (main), `bg-gray-900` (cards), `border-gray-800`
 - **Text**: `text-white` (primary), `text-gray-400` (secondary)
 - **Accent**: indigo, via tokens only — `bg-accent hover:bg-accent-hover` for CTAs; never a literal color class
@@ -102,6 +104,7 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 ## Écarts au template WBLT
 
 The site follows the WBLT site template (`~/script/wblt/templates/template-site`, Willi 2026-10-13: "RaceNode, ça va être quand même un site WBLT"): a template brick is copied as is when it serves, adapted only where the site requires it. Every deviation is listed here on purpose, so do not "fix" one back to the template:
+
 - **Cloudflare Pages, not Workers + assets**: no `wrangler.jsonc`, no `@astrojs/cloudflare`, no `src/hosting/`, no `npm run serve`, no `worker-configuration.d.ts` in `tsconfig.json`, no deployment in CI. Pages deploys on push; the relay is a Pages Function. See [docs/deployment.md](docs/deployment.md).
 - **One language, no Paraglide**: pages at the root (the template's single-language layout), texts in the components; no `messages/`, `project.inlang/`, `middleware.ts`.
 - **No contact form**: contact by `mailto:`, the journey is the app signup.

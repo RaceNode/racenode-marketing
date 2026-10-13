@@ -11,10 +11,14 @@ import TimetableSync from '../components/timetable/TimetableSync.astro';
 import TimetableShare from '../components/timetable/TimetableShare.astro';
 import TimetableCTA from '../components/timetable/TimetableCTA.astro';
 
-const title = "Race Weekend Timetable & Schedule Software | RaceNode";
-const description = "Build your team's schedule around the official timetable, automate recurring briefings, and share a live countdown and iCal feed with the whole team.";
+const title = 'Race Weekend Timetable & Schedule Software | RaceNode';
+const description =
+  "Build your team's schedule around the official timetable, automate recurring briefings, and share a live countdown and iCal feed with the whole team.";
 
-const breadcrumbSchema = breadcrumbJsonLd(site, [{ name: 'Home', url: '/' }, { name: 'Motorsport Timetable', url: '/timetable/' }]);
+const breadcrumbSchema = breadcrumbJsonLd(site, [
+  { name: 'Home', url: '/' },
+  { name: 'Motorsport Timetable', url: '/timetable/' },
+]);
 ---
 
 <BaseLayout title={title} description={description}>

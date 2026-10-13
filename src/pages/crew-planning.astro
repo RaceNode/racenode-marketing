@@ -10,10 +10,14 @@ import PlanningFeatures from '../components/planning/PlanningFeatures.astro';
 import PlanningSync from '../components/planning/PlanningSync.astro';
 import PlanningCTA from '../components/planning/PlanningCTA.astro';
 
-const title = "Crew Planning & Season Scheduling for Race Teams | RaceNode";
-const description = "Plan who works which race across the season. Crew availability, rotas and staffing for motorsport teams, connected to every event on the calendar.";
+const title = 'Crew Planning & Season Scheduling for Race Teams | RaceNode';
+const description =
+  'Plan who works which race across the season. Crew availability, rotas and staffing for motorsport teams, connected to every event on the calendar.';
 
-const breadcrumbSchema = breadcrumbJsonLd(site, [{ name: 'Home', url: '/' }, { name: 'Crew Planning', url: '/crew-planning/' }]);
+const breadcrumbSchema = breadcrumbJsonLd(site, [
+  { name: 'Home', url: '/' },
+  { name: 'Crew Planning', url: '/crew-planning/' },
+]);
 ---
 
 <BaseLayout title={title} description={description}>

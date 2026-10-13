@@ -1,17 +1,17 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 /* The CI workflow is not markup: its words ("contents") would become utilities. */
-@source not "../../.github";
-@import "@fontsource/ibm-plex-sans/400.css";
-@import "@fontsource/ibm-plex-sans/500.css";
-@import "@fontsource/ibm-plex-sans/600.css";
-@import "@fontsource/ibm-plex-sans/700.css";
-@import "@fontsource/ibm-plex-sans-condensed/500.css";
-@import "@fontsource/ibm-plex-sans-condensed/600.css";
-@import "@fontsource/ibm-plex-sans-condensed/700.css";
-@import "@fontsource/ibm-plex-mono/400.css";
-@import "@fontsource/ibm-plex-mono/500.css";
-@import "./tokens.css";
-@plugin "@tailwindcss/typography";
+@source not '../../.github';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource/ibm-plex-sans-condensed/500.css';
+@import '@fontsource/ibm-plex-sans-condensed/600.css';
+@import '@fontsource/ibm-plex-sans-condensed/700.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import './tokens.css';
+@plugin '@tailwindcss/typography';
 
 @layer base {
   html {
@@ -246,26 +246,65 @@
   .cal-sheet {
     @apply border-t-[3px] border-ink bg-paper;
   }
-  .calendar-row { @apply grid grid-cols-[5.5rem_1fr] sm:grid-cols-[7rem_14rem_1fr] gap-x-4 gap-y-1 px-4 py-3 border-b border-line last:border-b-0; }
-  .calendar-row > .d { @apply text-sm font-mono text-ink sm:row-span-1 row-span-2; }
-  .calendar-row > .d > span { @apply block text-xs text-blocking font-sans font-semibold; }
-  .calendar-row > .c { @apply min-w-0; }
-  .calendar-row > .c > a { @apply font-semibold text-ink hover:text-accent hover:underline; }
-  .calendar-row > .c > span { @apply block text-xs text-graphite; }
+  .calendar-row {
+    @apply grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[7rem_14rem_1fr];
+  }
+  .calendar-row > .d {
+    @apply row-span-2 font-mono text-sm text-ink sm:row-span-1;
+  }
+  .calendar-row > .d > span {
+    @apply block font-sans text-xs font-semibold text-blocking;
+  }
+  .calendar-row > .c {
+    @apply min-w-0;
+  }
+  .calendar-row > .c > a {
+    @apply font-semibold text-ink hover:text-accent hover:underline;
+  }
+  .calendar-row > .c > span {
+    @apply block text-xs text-graphite;
+  }
   /* A championship's logo (logoOf in render.mjs): a fixed box so nothing moves when it loads; a logo made for a dark background sits on an ink chip. */
-  .cal-logo { @apply block h-8 w-12 rounded-[2px] object-contain; }
-  .cal-logo[data-tone='d'] { @apply bg-ink p-1; }
-  .cal-logo-lg { @apply h-12 w-[4.5rem] rounded-[3px] bg-paper p-1.5; }
-  .cal-logo-lg[data-tone='d'] { @apply bg-ink; }
-  .calendar-row > .c.has-logo { @apply grid grid-cols-[3rem_1fr] gap-x-3; }
-  .calendar-row > .c.has-logo > .cal-logo { @apply row-span-2 self-center; }
-  .calendar-row > .c.has-logo > a, .calendar-row > .c.has-logo > span { @apply col-start-2; }
-  .cal-card.has-logo { @apply grid grid-cols-[3rem_1fr] gap-x-3; }
-  .cal-card.has-logo > .cal-logo { @apply row-span-2 self-center; }
-  .cal-card.has-logo > :not(.cal-logo) { @apply col-start-2; }
-  .calendar-row > .p { @apply min-w-0 text-sm text-graphite sm:col-start-3; }
-  .calendar-row > .p > span { @apply text-ink; }
-  .calendar-row > .p > a { @apply hover:text-accent hover:underline; }
+  .cal-logo {
+    @apply block h-8 w-12 rounded-[2px] object-contain;
+  }
+  .cal-logo[data-tone='d'] {
+    @apply bg-ink p-1;
+  }
+  .cal-logo-lg {
+    @apply h-12 w-[4.5rem] rounded-[3px] bg-paper p-1.5;
+  }
+  .cal-logo-lg[data-tone='d'] {
+    @apply bg-ink;
+  }
+  .calendar-row > .c.has-logo {
+    @apply grid grid-cols-[3rem_1fr] gap-x-3;
+  }
+  .calendar-row > .c.has-logo > .cal-logo {
+    @apply row-span-2 self-center;
+  }
+  .calendar-row > .c.has-logo > a,
+  .calendar-row > .c.has-logo > span {
+    @apply col-start-2;
+  }
+  .cal-card.has-logo {
+    @apply grid grid-cols-[3rem_1fr] gap-x-3;
+  }
+  .cal-card.has-logo > .cal-logo {
+    @apply row-span-2 self-center;
+  }
+  .cal-card.has-logo > :not(.cal-logo) {
+    @apply col-start-2;
+  }
+  .calendar-row > .p {
+    @apply min-w-0 text-sm text-graphite sm:col-start-3;
+  }
+  .calendar-row > .p > span {
+    @apply text-ink;
+  }
+  .calendar-row > .p > a {
+    @apply hover:text-accent hover:underline;
+  }
   .cal-season-row {
     @apply grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_10.5rem_1fr_auto];
   }

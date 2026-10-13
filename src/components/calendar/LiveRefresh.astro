@@ -10,8 +10,11 @@ interface Props {
 const { config } = Astro.props;
 ---
 
-<script type="application/json" id="calendar-live-config" set:html={JSON.stringify(config).replace(/</g, '\\u003c')} />
-
+<script
+  type="application/json"
+  id="calendar-live-config"
+  set:html={JSON.stringify(config).replace(/</g, '\\u003c')}
+/>
 <script>
   import { refresh } from '../../lib/calendar/refresh.mjs';
 

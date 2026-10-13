@@ -10,7 +10,7 @@ import { site } from './src/site.config';
 export default defineConfig({
   site: site.url,
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
   integrations: [
     mdx(),
@@ -18,6 +18,6 @@ export default defineConfig({
       changefreq: 'weekly',
       priority: 0.7,
       lastmod: new Date(),
-    })
-  ]
+    }),
+  ],
 });

@@ -11,10 +11,14 @@ import LogisticsSync from '../components/logistics/LogisticsSync.astro';
 import LogisticsImport from '../components/logistics/LogisticsImport.astro';
 import LogisticsCTA from '../components/logistics/LogisticsCTA.astro';
 
-const title = "Race Team Travel & Accommodation Software | RaceNode";
-const description = "Manage crew travel, flights, hotels and room allocation for every race weekend. People logistics for racing teams — not freight.";
+const title = 'Race Team Travel & Accommodation Software | RaceNode';
+const description =
+  'Manage crew travel, flights, hotels and room allocation for every race weekend. People logistics for racing teams — not freight.';
 
-const breadcrumbSchema = breadcrumbJsonLd(site, [{ name: 'Home', url: '/' }, { name: 'Race Team Travel & Accommodation', url: '/logistics/' }]);
+const breadcrumbSchema = breadcrumbJsonLd(site, [
+  { name: 'Home', url: '/' },
+  { name: 'Race Team Travel & Accommodation', url: '/logistics/' },
+]);
 ---
 
 <BaseLayout title={title} description={description}>

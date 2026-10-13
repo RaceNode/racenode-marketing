@@ -12,7 +12,11 @@ import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
 import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
 import { displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
 import { championshipBody, hash, logoOf } from '../../lib/calendar/render.mjs';
-import { DISCIPLINES as DISCIPLINE_NAMES, REGIONS as REGION_NAMES, country } from '../../lib/calendar/format.mjs';
+import {
+  DISCIPLINES as DISCIPLINE_NAMES,
+  REGIONS as REGION_NAMES,
+  country,
+} from '../../lib/calendar/format.mjs';
 
 const DISCIPLINES: Record<string, string> = DISCIPLINE_NAMES;
 const REGIONS: Record<string, string> = REGION_NAMES;
@@ -32,9 +36,18 @@ const organizer = c.organizer_name ?? 'The organizer';
 const body = championshipBody(cal, c.slug, ctx);
 const shared = sharedWeekends(cal, c).slice(0, 8);
 const related = cal.championships
-  .filter((x: any) => x.slug !== c.slug && x.discipline === c.discipline && shared.every((s) => s.championship.slug !== x.slug))
+  .filter(
+    (x: any) =>
+      x.slug !== c.slug &&
+      x.discipline === c.discipline &&
+      shared.every((s) => s.championship.slug !== x.slug),
+  )
   .slice(0, 8);
-const facts = [DISCIPLINES[c.discipline], c.region && REGIONS[c.region], c.country_code && country(c.country_code)].filter(Boolean);
+const facts = [
+  DISCIPLINES[c.discipline],
+  c.region && REGIONS[c.region],
+  c.country_code && country(c.country_code),
+].filter(Boolean);
 
 const venues = [...new Set(shown.rounds.map((r: any) => r.venue_name))];
 const title = c.featured
@@ -46,36 +59,52 @@ const description = c.featured
 
 const url = `https://www.racenode.com/calendar/${c.slug}/`;
 const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
-    { "@type": "ListItem", "position": 2, "name": "Motorsport Calendar", "item": "https://www.racenode.com/calendar/" },
-    { "@type": "ListItem", "position": 3, "name": c.name, "item": url },
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.racenode.com' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Motorsport Calendar',
+      item: 'https://www.racenode.com/calendar/',
+    },
+    { '@type': 'ListItem', position: 3, name: c.name, item: url },
   ],
 };
 // The rounds as facts: dates, place, official page (no image in the structured data).
 const eventsSchema = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": `${c.name} ${shown.label} calendar`,
-  "itemListElement": shown.rounds.map((r: any, i: number) => ({
-    "@type": "ListItem",
-    "position": i + 1,
-    "item": {
-      "@type": "SportsEvent",
-      "name": `${c.name} – ${r.name}`,
-      "startDate": r.start_date,
-      "endDate": r.end_date,
-      "eventStatus": r.status === 'cancelled' ? "https://schema.org/EventCancelled" : "https://schema.org/EventScheduled",
-      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-      "url": r.url,
-      "location": {
-        "@type": "Place",
-        "name": r.venue_name,
-        ...(r.venue_country_code && { "address": { "@type": "PostalAddress", "addressCountry": r.venue_country_code } }),
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `${c.name} ${shown.label} calendar`,
+  itemListElement: shown.rounds.map((r: any, i: number) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'SportsEvent',
+      name: `${c.name} – ${r.name}`,
+      startDate: r.start_date,
+      endDate: r.end_date,
+      eventStatus:
+        r.status === 'cancelled'
+          ? 'https://schema.org/EventCancelled'
+          : 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      url: r.url,
+      location: {
+        '@type': 'Place',
+        name: r.venue_name,
+        ...(r.venue_country_code && {
+          address: { '@type': 'PostalAddress', addressCountry: r.venue_country_code },
+        }),
       },
-      ...(c.organizer_name && { "organizer": { "@type": "Organization", "name": c.organizer_name, ...(c.organizer_website_url && { "url": c.organizer_website_url }) } }),
+      ...(c.organizer_name && {
+        organizer: {
+          '@type': 'Organization',
+          name: c.organizer_name,
+          ...(c.organizer_website_url && { url: c.organizer_website_url }),
+        },
+      }),
     },
   })),
 };
@@ -89,63 +118,88 @@ const eventsSchema = {
     <main>
       <section class="band-dark cal-open">
         <div class="page">
-        {data.sample && <SampleDataNotice />}
+          {data.sample && <SampleDataNotice />}
 
-        <nav class="cal-crumbs" aria-label="Breadcrumb">
-          <a href="/calendar/">Motorsport calendar</a>
-          <span class="mx-1">/</span>
-          <span aria-current="page">{displayName(c)}</span>
-        </nav>
+          <nav class="cal-crumbs" aria-label="Breadcrumb">
+            <a href="/calendar/">Motorsport calendar</a>
+            <span class="mx-1">/</span>
+            <span aria-current="page">{displayName(c)}</span>
+          </nav>
 
-        {logo && <div class="mb-6" set:html={logo} />}
-        <h1 class="display">{c.name} {year} calendar</h1>
-        <p class="lede mt-6 max-w-3xl">
-          {facts.join(' · ')}
-          {c.organizer_name && <> · Organized by {c.organizer_website_url ? <a href={c.organizer_website_url} rel="noopener nofollow" target="_blank" class="link">{c.organizer_name}</a> : c.organizer_name}</>}
-        </p>
+          {logo && <div class="mb-6" set:html={logo} />}
+          <h1 class="display">
+            {c.name} {year} calendar
+          </h1>
+          <p class="lede mt-6 max-w-3xl">
+            {facts.join(' · ')}
+            {c.organizer_name && (
+              <>
+                {' '}
+                · Organized by{' '}
+                {c.organizer_website_url ? (
+                  <a
+                    href={c.organizer_website_url}
+                    rel="noopener nofollow"
+                    target="_blank"
+                    class="link"
+                  >
+                    {c.organizer_name}
+                  </a>
+                ) : (
+                  c.organizer_name
+                )}
+              </>
+            )}
+          </p>
         </div>
       </section>
       <div class="kerb" aria-hidden="true"></div>
 
       <section class="cal-body">
         <div class="page">
+          <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
 
-        <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
+          {shared.length > 0 && (
+            <section class="mt-12">
+              <h2 class="subtitle mb-2">On the same weekends</h2>
+              <p class="muted text-sm mb-4">
+                Championships racing at the same circuit on the same dates in {shown.label}.
+              </p>
+              <ul class="flex flex-wrap gap-2">
+                {shared.map((s) => (
+                  <li>
+                    <a href={`/calendar/${s.championship.slug}/`} class="cal-chip">
+                      {displayName(s.championship)}{' '}
+                      <span class="text-graphite">
+                        · {s.count} {s.count === 1 ? 'weekend' : 'weekends'}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-        {shared.length > 0 && (
-          <section class="mt-12">
-            <h2 class="subtitle mb-2">On the same weekends</h2>
-            <p class="muted text-sm mb-4">Championships racing at the same circuit on the same dates in {shown.label}.</p>
-            <ul class="flex flex-wrap gap-2">
-              {shared.map((s) => (
-                <li>
-                  <a href={`/calendar/${s.championship.slug}/`} class="cal-chip">
-                    {displayName(s.championship)} <span class="text-graphite">· {s.count} {s.count === 1 ? 'weekend' : 'weekends'}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+          {related.length > 0 && (
+            <section class="mt-10">
+              <h2 class="subtitle mb-4">Other {DISCIPLINES[c.discipline]} calendars</h2>
+              <ul class="flex flex-wrap gap-2">
+                {related.map((x: any) => (
+                  <li>
+                    <a href={`/calendar/${x.slug}/`} class="cal-chip">
+                      {displayName(x)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-        {related.length > 0 && (
-          <section class="mt-10">
-            <h2 class="subtitle mb-4">Other {DISCIPLINES[c.discipline]} calendars</h2>
-            <ul class="flex flex-wrap gap-2">
-              {related.map((x: any) => (
-                <li>
-                  <a href={`/calendar/${x.slug}/`} class="cal-chip">
-                    {displayName(x)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        <p class="mt-10 text-sm">
-          <a href="/calendar/" class="link">All championships on one calendar</a>
-        </p>
+          <p class="mt-10 text-sm">
+            <a href="/calendar/" class="link">
+              All championships on one calendar
+            </a>
+          </p>
         </div>
       </section>
       <CalendarCTA title={`Racing in ${displayName(c)}? Plan your season in RaceNode.`} />

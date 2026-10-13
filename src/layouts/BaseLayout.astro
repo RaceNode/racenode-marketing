@@ -16,8 +16,8 @@ const {
   title,
   description = "Racing team management software: travel, hotels, roles and the race weekend timetable, on every crew member's phone.",
   image = site.ogImage,
-  type = "website",
-  noindex = false
+  type = 'website',
+  noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -75,7 +75,9 @@ const schemas = [
     <meta name="theme-color" content={site.themeColor} />
 
     <!-- JSON-LD Structured Data -->
-    {schemas.map((schema) => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}
+    {schemas.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
   </head>
   <body class="min-h-screen bg-concrete text-ink">
     <slot />

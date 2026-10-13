@@ -4,7 +4,15 @@
 // Pure: no Intl at render time (country names come from `ctx.countries`, collected at build time), no clock (the
 // featured year and the day the lists start from are the build's, `ctx.year` and `ctx.today`); the same data gives
 // the same string in Node and in any browser.
-import { DISCIPLINES, MONTHS, dateRange, longDate, monthOf, roundLabel, roundName } from './format.mjs';
+import {
+  DISCIPLINES,
+  MONTHS,
+  dateRange,
+  longDate,
+  monthOf,
+  roundLabel,
+  roundName,
+} from './format.mjs';
 import { buildCalendar, circuits, displayName, notPublished, upcomingRounds } from './model.mjs';
 
 const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -20,15 +28,24 @@ export function hash(s) {
 /** Country names for every code in the catalog, in English, computed once at build time and shipped to the page. */
 export function countriesOf(data) {
   const names = new Intl.DisplayNames(['en'], { type: 'region' });
-  const codes = new Set([...data.series.map((s) => s.country_code), ...data.events.map((e) => e.venue_country_code)].filter(Boolean));
+  const codes = new Set(
+    [
+      ...data.series.map((s) => s.country_code),
+      ...data.events.map((e) => e.venue_country_code),
+    ].filter(Boolean),
+  );
   return Object.fromEntries([...codes].sort().map((c) => [c, names.of(c) ?? c]));
 }
 
 // A code the build did not know (a venue added since) falls back to the browser's own name for it.
-const country = (code, ctx) => (code ? ctx.countries[code] ?? new Intl.DisplayNames(['en'], { type: 'region' }).of(code) ?? code : '');
+const country = (code, ctx) =>
+  code
+    ? (ctx.countries[code] ?? new Intl.DisplayNames(['en'], { type: 'region' }).of(code) ?? code)
+    : '';
 
 /** The calendar as the pages see it, for the build's featured year. */
-export const calendarOf = (data, ctx) => buildCalendar(data, { today: new Date(Date.UTC(ctx.year, 0, 1)) });
+export const calendarOf = (data, ctx) =>
+  buildCalendar(data, { today: new Date(Date.UTC(ctx.year, 0, 1)) });
 
 /**
  * A championship's logo, when the build hosts one (`ctx.logos`: slug → tone, see logos.mjs): the file is the build's
@@ -46,14 +63,20 @@ export function logoOf(slug, ctx, { large = false } = {}) {
 // --- All championships (/calendar/) ---------------------------------------------------------------------------
 
 /** "/calendar/circuits/<slug>/" when the round's circuit has its own page, else null. */
-const circuitHref = (r, pages) => (pages.has(r.venue_slug) ? `/calendar/circuits/${pages.get(r.venue_slug)}/` : null);
+const circuitHref = (r, pages) =>
+  pages.has(r.venue_slug) ? `/calendar/circuits/${pages.get(r.venue_slug)}/` : null;
 
 /**
  * The circuits that have their own page, catalog `venue_slug` → URL slug, decided by the build
  * (`ctx.circuitPages`): a championship's page reads only its own rounds in the browser, so it could neither tell
  * which circuit has a page nor which names collide, and a circuit page only exists from the next build.
  */
-export const circuitPageSlugs = (cal) => Object.fromEntries(circuits(cal).filter((c) => c.page).map((c) => [c.venue_slug, c.slug]));
+export const circuitPageSlugs = (cal) =>
+  Object.fromEntries(
+    circuits(cal)
+      .filter((c) => c.page)
+      .map((c) => [c.venue_slug, c.slug]),
+  );
 const pagesOf = (ctx) => new Map(Object.entries(ctx.circuitPages ?? {}));
 
 /** What the circuit filter matches a round on: its page's slug, or the catalog's for a circuit without a page. */
@@ -77,7 +100,11 @@ export function roundRow(r, ctx, pages = new Map(), { place = true } = {}) {
     `<li class="calendar-row" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
     `<div class="d">${esc(dateRange(r.start_date, r.end_date))}${r.status === 'cancelled' ? '<span>Cancelled</span>' : ''}</div>` +
     `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span></div>` +
-    (place ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>` : name ? `<div class="p"><span>${esc(name)}</span></div>` : '') +
+    (place
+      ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>`
+      : name
+        ? `<div class="p"><span>${esc(name)}</span></div>`
+        : '') +
     '</li>'
   );
 }
@@ -128,7 +155,8 @@ function lateList(late, ctx) {
 export function indexBody(cal, ctx) {
   const pages = pagesOf(ctx);
   let html = byMonth(upcomingRounds(cal, ctx.today ?? ''), ctx, pages);
-  html += '<p id="calendar-empty" class="cal-note muted" hidden>No upcoming round matches these filters.</p>';
+  html +=
+    '<p id="calendar-empty" class="cal-note muted" hidden>No upcoming round matches these filters.</p>';
 
   const late = notPublished(cal);
   if (late.length > 0) {
@@ -144,7 +172,8 @@ export function indexBody(cal, ctx) {
 
 // --- One championship (/calendar/<slug>/) ---------------------------------------------------------------------
 
-const external = (href, text, cls) => `<a href="${esc(href)}" rel="noopener nofollow" target="_blank" class="${cls}">${text}</a>`;
+const external = (href, text, cls) =>
+  `<a href="${esc(href)}" rel="noopener nofollow" target="_blank" class="${cls}">${text}</a>`;
 
 /** A season's rounds: a table from sm up, stacked cards on a phone. */
 export function seasonTable(season, ctx, pages = new Set()) {
@@ -155,12 +184,24 @@ export function seasonTable(season, ctx, pages = new Set()) {
       '<li class="cal-season-row">' +
       `<span class="text-xs sm:text-sm text-graphite col-span-2 sm:col-span-1">${esc(label)}</span>` +
       `<span class="font-mono text-sm text-ink sm:order-none">${esc(dateRange(r.start_date, r.end_date, { withYear: true }))}` +
-      (r.status === 'cancelled' ? '<span class="ml-2 text-xs text-blocking font-sans font-semibold">Cancelled</span>' : '') +
+      (r.status === 'cancelled'
+        ? '<span class="ml-2 text-xs text-blocking font-sans font-semibold">Cancelled</span>'
+        : '') +
       '</span>' +
-      (r.url ? external(r.url, 'Official page ↗', 'text-xs font-semibold text-accent hover:text-accent-hover hover:underline whitespace-nowrap sm:col-start-4 sm:row-start-1') : '<span></span>') +
+      (r.url
+        ? external(
+            r.url,
+            'Official page ↗',
+            'text-xs font-semibold text-accent hover:text-accent-hover hover:underline whitespace-nowrap sm:col-start-4 sm:row-start-1',
+          )
+        : '<span></span>') +
       '<span class="text-sm text-graphite col-span-2 sm:col-span-1 sm:col-start-3 sm:row-start-1">' +
-      (name ? `<span class="text-ink">${esc(name)}<br class="sm:hidden" /><span class="hidden sm:inline"> · </span></span>` : '') +
-      (circuitHref(r, pages) ? `<a href="${circuitHref(r, pages)}" class="hover:text-accent hover:underline">${esc(r.venue_name)}</a>` : esc(r.venue_name)) +
+      (name
+        ? `<span class="text-ink">${esc(name)}<br class="sm:hidden" /><span class="hidden sm:inline"> · </span></span>`
+        : '') +
+      (circuitHref(r, pages)
+        ? `<a href="${circuitHref(r, pages)}" class="hover:text-accent hover:underline">${esc(r.venue_name)}</a>`
+        : esc(r.venue_name)) +
       `${r.venue_country_code ? `<span>, ${esc(country(r.venue_country_code, ctx))}</span>` : ''}` +
       '</span></li>'
     );
@@ -176,8 +217,13 @@ export function championshipBody(cal, slug, ctx) {
   const year = cal.year;
   const pages = pagesOf(ctx);
   const organizer = esc(c.organizer_name ?? 'The organizer');
-  const checked = (lead) => (shown.last_checked_at ? ` ${lead} against the official calendar on ${longDate(shown.last_checked_at)}.` : '');
-  const source = shown.source_url ? ` ${external(shown.source_url, 'Official calendar ↗', 'link')}` : '';
+  const checked = (lead) =>
+    shown.last_checked_at
+      ? ` ${lead} against the official calendar on ${longDate(shown.last_checked_at)}.`
+      : '';
+  const source = shown.source_url
+    ? ` ${external(shown.source_url, 'Official calendar ↗', 'link')}`
+    : '';
   let html = c.featured
     ? `<p class="muted text-sm mb-8">${shown.rounds.length} rounds published by ${organizer}${shown.calendar_status === 'provisional' ? ' (provisional calendar)' : ''}.${checked('Checked')}${source}</p>`
     : '<div class="cal-note" role="note">' +

@@ -29,7 +29,10 @@ async function download(url, fetchImpl) {
   if (!res.ok) throw new Error(`answered ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());
   if (buf.length > MAX_BYTES) throw new Error('too big');
-  return sharp(buf, { density: 300 }).resize({ ...KEPT, fit: 'inside' }).webp({ quality: 85 }).toBuffer();
+  return sharp(buf, { density: 300 })
+    .resize({ ...KEPT, fit: 'inside' })
+    .webp({ quality: 85 })
+    .toBuffer();
 }
 
 /**
@@ -46,7 +49,9 @@ export async function loadLogos(series, { fetchImpl = fetch } = {}) {
       try {
         out.set(slug, { tone: pick.tone, file: await download(pick.url, fetchImpl) });
       } catch (e) {
-        console.warn(`calendar: no logo for ${slug} (${String(e.message ?? e).slice(0, 80)}); its rows stay text`);
+        console.warn(
+          `calendar: no logo for ${slug} (${String(e.message ?? e).slice(0, 80)}); its rows stay text`,
+        );
       }
     }
   };

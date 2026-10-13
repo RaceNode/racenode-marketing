@@ -7,48 +7,60 @@ import { site } from '../site.config';
 import StoreBadges from '../components/StoreBadges.astro';
 import Icon from '../components/Icon.astro';
 
-const appUrl = "https://app.racenode.com";
-const title = "Pricing — Free until 31 December 2026 | RaceNode";
-const description = "RaceNode is free for all racing teams until 31 December 2026: every module, every team member. Set up your 2027 season now. Paid plans come in 2027, monthly or annual, and the price you join at is guaranteed for the whole season.";
+const appUrl = 'https://app.racenode.com';
+const title = 'Pricing — Free until 31 December 2026 | RaceNode';
+const description =
+  'RaceNode is free for all racing teams until 31 December 2026: every module, every team member. Set up your 2027 season now. Paid plans come in 2027, monthly or annual, and the price you join at is guaranteed for the whole season.';
 const points = [
   {
-    title: "Free until 31 December 2026",
-    description: "Every module, every team, no payment details required. Nothing is charged before January 2027.",
+    title: 'Free until 31 December 2026',
+    description:
+      'Every module, every team, no payment details required. Nothing is charged before January 2027.',
   },
   {
-    title: "Monthly or annual",
-    description: "Paid plans arrive in 2027 as a monthly subscription, with the option to pay for the year upfront.",
+    title: 'Monthly or annual',
+    description:
+      'Paid plans arrive in 2027 as a monthly subscription, with the option to pay for the year upfront.',
   },
   {
-    title: "Your price holds for the whole season",
-    description: "Whenever you join during the year, the price you subscribe at is guaranteed until 31 December. No mid-season increase.",
+    title: 'Your price holds for the whole season',
+    description:
+      'Whenever you join during the year, the price you subscribe at is guaranteed until 31 December. No mid-season increase.',
   },
   {
-    title: "Personal is free for every team member",
-    description: "The Personal app — each crew member's own schedule, travel, and assignments — costs your crew nothing.",
-    badges: true
-  }
+    title: 'Personal is free for every team member',
+    description:
+      "The Personal app — each crew member's own schedule, travel, and assignments — costs your crew nothing.",
+    badges: true,
+  },
 ];
 
 const faq = [
   {
-    q: "Is RaceNode free?",
-    a: "Yes — RaceNode is free for all racing teams until 31 December 2026, with every module included and no payment details required."
+    q: 'Is RaceNode free?',
+    a: 'Yes — RaceNode is free for all racing teams until 31 December 2026, with every module included and no payment details required.',
   },
   {
-    q: "What happens after 2026?",
-    a: "Paid plans arrive in 2027, and nothing is charged before January. Plans are billed monthly, with an option to pay annually, and the price you subscribe at is guaranteed until 31 December of that year, whenever you join. Prices will be announced before any billing starts."
+    q: 'What happens after 2026?',
+    a: 'Paid plans arrive in 2027, and nothing is charged before January. Plans are billed monthly, with an option to pay annually, and the price you subscribe at is guaranteed until 31 December of that year, whenever you join. Prices will be announced before any billing starts.',
   },
   {
-    q: "Does my crew have to pay for the app?",
-    a: "No. The Personal app is free for every team member.",
-    badges: true
-  }
+    q: 'Does my crew have to pay for the app?',
+    a: 'No. The Personal app is free for every team member.',
+    badges: true,
+  },
 ];
 
-const breadcrumbSchema = breadcrumbJsonLd(site, [{ name: 'Home', url: '/' }, { name: 'Pricing', url: '/pricing/' }]);
+const breadcrumbSchema = breadcrumbJsonLd(site, [
+  { name: 'Home', url: '/' },
+  { name: 'Pricing', url: '/pricing/' },
+]);
 
-const faqSchema = faqJsonLd(site, '/pricing/', faq.map((item) => ({ question: item.q, answer: item.a })));
+const faqSchema = faqJsonLd(
+  site,
+  '/pricing/',
+  faq.map((item) => ({ question: item.q, answer: item.a })),
+);
 ---
 
 <BaseLayout title={title} description={description}>
@@ -60,11 +72,10 @@ const faqSchema = faqJsonLd(site, '/pricing/', faq.map((item) => ({ question: it
       <!-- Hero -->
       <section class="band band-dark">
         <div class="page">
-          <h1 class="display max-w-4xl">
-            Free until 31 December 2026.
-          </h1>
+          <h1 class="display max-w-4xl">Free until 31 December 2026.</h1>
           <p class="lede mt-8 max-w-2xl">
-            Set up your 2027 season now and pay nothing this year. Paid plans start in 2027; prices are published before anything is billed.
+            Set up your 2027 season now and pay nothing this year. Paid plans start in 2027; prices
+            are published before anything is billed.
           </p>
           <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
             <a href={`${appUrl}/signup`} class="btn-primary text-lg">
@@ -82,7 +93,9 @@ const faqSchema = faqJsonLd(site, '/pricing/', faq.map((item) => ({ question: it
           <ul class="grid gap-x-12 gap-y-14 md:grid-cols-2">
             {points.map((point) => (
               <li class="promise">
-                <span class="promise-mark"><Icon name="check" /></span>
+                <span class="promise-mark">
+                  <Icon name="check" />
+                </span>
                 <h2 class="flag-title mt-6">{point.title}</h2>
                 <p class="muted mt-4 max-w-xl text-lg leading-relaxed">{point.description}</p>
                 {point.badges && <StoreBadges size="sm" align="start" class="mt-5" />}
@@ -95,9 +108,7 @@ const faqSchema = faqJsonLd(site, '/pricing/', faq.map((item) => ({ question: it
       <!-- FAQ -->
       <section class="band band-paper">
         <div class="page grid gap-10 lg:grid-cols-12 lg:gap-10">
-          <h2 class="title lg:col-span-4">
-            Frequently asked questions
-          </h2>
+          <h2 class="title lg:col-span-4">Frequently asked questions</h2>
           <div class="lg:col-span-8">
             {faq.map((item) => (
               <div class="hair py-6">
@@ -115,11 +126,10 @@ const faqSchema = faqJsonLd(site, '/pricing/', faq.map((item) => ({ question: it
       <section class="band band-dark">
         <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
           <div class="lg:col-span-8">
-            <h2 class="title">
-              Get your 2027 season ready.
-            </h2>
+            <h2 class="title">Get your 2027 season ready.</h2>
             <p class="lede mt-5 max-w-2xl">
-              Free until 31 December 2026. Try it on your next event yourself: no demo to book, no card.
+              Free until 31 December 2026. Try it on your next event yourself: no demo to book, no
+              card.
             </p>
           </div>
           <div class="lg:col-span-4 lg:text-right">

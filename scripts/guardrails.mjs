@@ -63,7 +63,17 @@ const RULES = [
 // is indexed by Google (live since 2026-10-07).
 // Willi, 2026-10-06. Specific to this site: the WBLT site template has no such list (only scripts/legacy-urls, for
 // redirects); a candidate to bring up to the template.
-export const STABLE_URLS = ['/account-deletion', '/privacy', '/terms', '/crew-planning', '/logistics', '/management', '/timetable', '/crew-app', '/calendar'];
+export const STABLE_URLS = [
+  '/account-deletion',
+  '/privacy',
+  '/terms',
+  '/crew-planning',
+  '/logistics',
+  '/management',
+  '/timetable',
+  '/crew-app',
+  '/calendar',
+];
 
 const PAGE_EXTS = ['.astro', '.md', '.mdx'];
 
@@ -71,15 +81,23 @@ const EXTS = ['.astro', '.ts', '.js', '.mjs', '.md', '.mdx', '.css', '.txt', '.j
 
 /** The text without its comments: the rule is about what the page shows, not what a comment says. */
 export const code = (t) =>
-  t.replace(/<!--[\s\S]*?-->/g, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:"'`\\])\/\/.*$/gm, '$1');
+  t
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/(^|[^:"'`\\])\/\/.*$/gm, '$1');
 
 function files(root, target) {
   const out = [];
   const walk = (p) => {
     let st;
-    try { st = fs.statSync(p); } catch { return; }
+    try {
+      st = fs.statSync(p);
+    } catch {
+      return;
+    }
     if (st.isDirectory()) {
-      for (const e of fs.readdirSync(p)) if (e !== 'node_modules' && !e.startsWith('.')) walk(join(p, e));
+      for (const e of fs.readdirSync(p))
+        if (e !== 'node_modules' && !e.startsWith('.')) walk(join(p, e));
     } else if (EXTS.some((x) => p.endsWith(x))) {
       out.push({ rel: relative(root, p).replaceAll('\\', '/'), text: fs.readFileSync(p, 'utf8') });
     }
@@ -91,7 +109,9 @@ function files(root, target) {
 export function check(root) {
   const out = [];
   for (const rule of RULES) {
-    const found = rule.dirs.flatMap((d) => files(root, d)).filter((f) => rule.re.test(code(f.text)));
+    const found = rule.dirs
+      .flatMap((d) => files(root, d))
+      .filter((f) => rule.re.test(code(f.text)));
     const tolerated = TOLERATED[rule.name] ?? [];
     for (const f of found) {
       if (tolerated.includes(f.rel)) continue;
@@ -99,26 +119,41 @@ export function check(root) {
       out.push(`${f.rel} has "${hit}": ${rule.why}`);
     }
     for (const t of tolerated.filter((t) => !found.some((f) => f.rel === t)))
-      out.push(`${t} no longer breaks "${rule.name}": remove it from TOLERATED in scripts/guardrails.mjs`);
+      out.push(
+        `${t} no longer breaks "${rule.name}": remove it from TOLERATED in scripts/guardrails.mjs`,
+      );
   }
 
   for (const url of STABLE_URLS) {
     const page = join(root, 'src/pages', url);
     if (!PAGE_EXTS.some((x) => fs.existsSync(page + x) || fs.existsSync(join(page, 'index' + x))))
-      out.push(`${url} has no page in src/pages any more: it is a stable URL (declared at Google Play or linked from the app and stores), put the page back`);
+      out.push(
+        `${url} has no page in src/pages any more: it is a stable URL (declared at Google Play or linked from the app and stores), put the page back`,
+      );
   }
 
   // Wiring: the triggers still exist.
   try {
-    const hooks = JSON.stringify(JSON.parse(fs.readFileSync(join(root, '.claude/settings.json'), 'utf8')).hooks?.PostToolUse ?? []);
-    if (!hooks.includes('guardrails-hook.mjs')) out.push('.claude/settings.json no longer runs the guardrails hook: put it back');
+    const hooks = JSON.stringify(
+      JSON.parse(fs.readFileSync(join(root, '.claude/settings.json'), 'utf8')).hooks?.PostToolUse ??
+        [],
+    );
+    if (!hooks.includes('guardrails-hook.mjs'))
+      out.push('.claude/settings.json no longer runs the guardrails hook: put it back');
   } catch {
     out.push('.claude/settings.json missing or unreadable: the guardrails hook is no longer wired');
   }
   try {
-    const build = JSON.parse(fs.readFileSync(join(root, 'package.json'), 'utf8')).scripts?.build ?? '';
-    if (!build.includes('scripts/guardrails.mjs')) out.push('package.json: npm run build no longer runs scripts/guardrails.mjs, so Cloudflare would deploy past it: put it back');
-    else if (!build.includes('guardrails.mjs --dist')) out.push('package.json: npm run build no longer checks the built site (scripts/guardrails.mjs --dist): the logos could link to the catalog storage unseen, put it back');
+    const build =
+      JSON.parse(fs.readFileSync(join(root, 'package.json'), 'utf8')).scripts?.build ?? '';
+    if (!build.includes('scripts/guardrails.mjs'))
+      out.push(
+        'package.json: npm run build no longer runs scripts/guardrails.mjs, so Cloudflare would deploy past it: put it back',
+      );
+    else if (!build.includes('guardrails.mjs --dist'))
+      out.push(
+        'package.json: npm run build no longer checks the built site (scripts/guardrails.mjs --dist): the logos could link to the catalog storage unseen, put it back',
+      );
   } catch {
     out.push('package.json missing or unreadable');
   }
@@ -138,8 +173,13 @@ export function checkDist(root) {
     for (const e of fs.readdirSync(p, { withFileTypes: true })) {
       const f = join(p, e.name);
       if (e.isDirectory()) walk(f);
-      else if (/\.(html|xml|js|mjs|css|json|txt|svg|webmanifest)$/.test(e.name) && /supabase\.co/i.test(fs.readFileSync(f, 'utf8')))
-        out.push(`${relative(root, f).replaceAll('\\', '/')} mentions supabase.co: logos are hosted by the site (/calendar/logos/), never linked from the catalog's storage`);
+      else if (
+        /\.(html|xml|js|mjs|css|json|txt|svg|webmanifest)$/.test(e.name) &&
+        /supabase\.co/i.test(fs.readFileSync(f, 'utf8'))
+      )
+        out.push(
+          `${relative(root, f).replaceAll('\\', '/')} mentions supabase.co: logos are hosted by the site (/calendar/logos/), never linked from the catalog's storage`,
+        );
     }
   };
   walk(dist);

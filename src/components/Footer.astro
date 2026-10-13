@@ -1,29 +1,29 @@
 ---
-import StoreBadges from "./StoreBadges.astro";
-import { site } from "../site.config";
+import StoreBadges from './StoreBadges.astro';
+import { site } from '../site.config';
 
 const currentYear = new Date().getFullYear();
 const email = site.contact.email;
 
 const footerLinks = {
   product: [
-    { href: "/crew-app/", label: "Personal" },
-    { href: "/management/", label: "Management" },
-    { href: "/logistics/", label: "Logistics" },
-    { href: "/timetable/", label: "Timetable" },
-    { href: "/crew-planning/", label: "Planning" },
-    { href: "/pricing/", label: "Pricing" },
-    { href: "/calendar/", label: "Motorsport calendar" },
+    { href: '/crew-app/', label: 'Personal' },
+    { href: '/management/', label: 'Management' },
+    { href: '/logistics/', label: 'Logistics' },
+    { href: '/timetable/', label: 'Timetable' },
+    { href: '/crew-planning/', label: 'Planning' },
+    { href: '/pricing/', label: 'Pricing' },
+    { href: '/calendar/', label: 'Motorsport calendar' },
   ],
   company: [
     // { href: "/about", label: "About" },  // TODO: Create About page
-    { href: `mailto:${email}`, label: "Contact" },
+    { href: `mailto:${email}`, label: 'Contact' },
   ],
   legal: [
-    { href: "/terms/", label: "Terms" },
-    { href: "/privacy/", label: "Privacy" },
-    { href: "/account-deletion/", label: "Account Deletion" },
-    { href: "/legal-notice/", label: "Legal Notice" },
+    { href: '/terms/', label: 'Terms' },
+    { href: '/privacy/', label: 'Privacy' },
+    { href: '/account-deletion/', label: 'Account Deletion' },
+    { href: '/legal-notice/', label: 'Legal Notice' },
   ],
 };
 ---
@@ -44,9 +44,18 @@ const footerLinks = {
           href={`mailto:${email}`}
           class="inline-flex items-center gap-2 text-smoke hover:text-white transition-colors text-sm"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="20" height="16" x="2" y="4" rx="2"/>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
           </svg>
           <span>{email}</span>
         </a>
@@ -61,10 +70,7 @@ const footerLinks = {
         <ul class="space-y-3">
           {footerLinks.product.map((link) => (
             <li>
-              <a
-                href={link.href}
-                class="text-white hover:text-accent-soft transition-colors"
-              >
+              <a href={link.href} class="text-white hover:text-accent-soft transition-colors">
                 {link.label}
               </a>
             </li>
@@ -78,10 +84,7 @@ const footerLinks = {
         <ul class="space-y-3">
           {footerLinks.company.map((link) => (
             <li>
-              <a
-                href={link.href}
-                class="text-white hover:text-accent-soft transition-colors"
-              >
+              <a href={link.href} class="text-white hover:text-accent-soft transition-colors">
                 {link.label}
               </a>
             </li>
@@ -95,10 +98,7 @@ const footerLinks = {
         <ul class="space-y-3">
           {footerLinks.legal.map((link) => (
             <li>
-              <a
-                href={link.href}
-                class="text-white hover:text-accent-soft transition-colors"
-              >
+              <a href={link.href} class="text-white hover:text-accent-soft transition-colors">
                 {link.label}
               </a>
             </li>
@@ -109,9 +109,7 @@ const footerLinks = {
 
     <!-- Copyright -->
     <div class="mt-14 pt-6 border-t border-asphalt-line">
-      <p class="text-smoke text-sm">
-        &copy; {currentYear} RaceNode. All rights reserved.
-      </p>
+      <p class="text-smoke text-sm">&copy; {currentYear} RaceNode. All rights reserved.</p>
     </div>
   </div>
 </footer>

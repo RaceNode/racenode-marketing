@@ -1,16 +1,16 @@
 ---
-import { modules } from "../data/modules";
+import { modules } from '../data/modules';
 
-const appUrl = "https://app.racenode.com";
+const appUrl = 'https://app.racenode.com';
 
 // Home is the logo; the modules sit behind "Modules" (desktop) or are listed open (mobile menu).
 const navLinks = [
-  { href: "/calendar/", label: "Calendar" },
-  { href: "/pricing/", label: "Pricing" },
+  { href: '/calendar/', label: 'Calendar' },
+  { href: '/pricing/', label: 'Pricing' },
 ];
 
 const path = Astro.url.pathname;
-const isCurrent = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 const inModule = modules.some((module) => isCurrent(module.href));
 ---
 
@@ -30,28 +30,55 @@ const inModule = modules.some((module) => isCurrent(module.href));
         <div class="relative h-full flex items-center" data-modules>
           <button
             type="button"
-            class:list={["flex items-center gap-1.5 font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white aria-expanded:text-white", inModule ? "text-white underline decoration-accent-soft decoration-2 underline-offset-[1.35rem]" : "text-smoke"]}
+            class:list={[
+              'flex items-center gap-1.5 font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white aria-expanded:text-white',
+              inModule
+                ? 'text-white underline decoration-accent-soft decoration-2 underline-offset-[1.35rem]'
+                : 'text-smoke',
+            ]}
             aria-expanded="false"
             aria-controls="modules-panel"
             data-modules-button
           >
             Modules
-            <svg class="size-4 transition-transform in-aria-expanded:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            <svg
+              class="size-4 transition-transform in-aria-expanded:rotate-180"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
           </button>
-          <div id="modules-panel" class="absolute top-full left-1/2 -translate-x-1/2 pt-px hidden" data-modules-panel>
+          <div
+            id="modules-panel"
+            class="absolute top-full left-1/2 -translate-x-1/2 pt-px hidden"
+            data-modules-panel
+          >
             <ul class="app-card w-[25rem] p-2 shadow-2xl shadow-black/50">
               {modules.map((module) => (
                 <li>
                   <a
                     href={module.href}
                     class="group block rounded-md px-4 py-3 hover:bg-asphalt-line focus-visible:bg-asphalt-line transition-colors"
-                    aria-current={isCurrent(module.href) ? "page" : undefined}
+                    aria-current={isCurrent(module.href) ? 'page' : undefined}
                   >
                     <span class="flex items-center gap-2 font-display text-lg font-semibold text-white">
                       {module.name}
-                      {isCurrent(module.href) && <span class="size-1.5 rounded-full bg-accent-soft" aria-hidden="true"></span>}
+                      {isCurrent(module.href) && (
+                        <span
+                          class="size-1.5 rounded-full bg-accent-soft"
+                          aria-hidden="true"
+                        ></span>
+                      )}
                     </span>
-                    <span class="block text-sm text-smoke group-hover:text-fog">{module.short}</span>
+                    <span class="block text-sm text-smoke group-hover:text-fog">
+                      {module.short}
+                    </span>
                   </a>
                 </li>
               ))}
@@ -61,8 +88,13 @@ const inModule = modules.some((module) => isCurrent(module.href));
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class:list={["font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white", isCurrent(link.href) ? "text-white underline decoration-accent-soft decoration-2 underline-offset-[1.35rem]" : "text-smoke"]}
-            aria-current={isCurrent(link.href) ? "page" : undefined}
+            class:list={[
+              'font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white',
+              isCurrent(link.href)
+                ? 'text-white underline decoration-accent-soft decoration-2 underline-offset-[1.35rem]'
+                : 'text-smoke',
+            ]}
+            aria-current={isCurrent(link.href) ? 'page' : undefined}
           >
             {link.label}
           </a>
@@ -105,9 +137,9 @@ const inModule = modules.some((module) => isCurrent(module.href));
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <line x1="4" x2="20" y1="12" y2="12"/>
-          <line x1="4" x2="20" y1="6" y2="6"/>
-          <line x1="4" x2="20" y1="18" y2="18"/>
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="18" y2="18" />
         </svg>
         <svg
           id="menu-icon-close"
@@ -120,15 +152,19 @@ const inModule = modules.some((module) => isCurrent(module.href));
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <path d="M18 6 6 18"/>
-          <path d="m6 6 12 12"/>
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
         </svg>
       </button>
     </div>
   </div>
 
   <!-- Mobile Menu: the modules listed open, nothing to unfold under a finger. Scrolls if taller than the screen. -->
-  <nav id="mobile-menu" class="hidden lg:hidden border-t border-asphalt-line max-h-[calc(100dvh-4rem)] overflow-y-auto" aria-label="Main">
+  <nav
+    id="mobile-menu"
+    class="hidden lg:hidden border-t border-asphalt-line max-h-[calc(100dvh-4rem)] overflow-y-auto"
+    aria-label="Main"
+  >
     <div class="px-4 py-4 space-y-3">
       <p class="app-label px-3">Modules</p>
       <ul>
@@ -136,8 +172,11 @@ const inModule = modules.some((module) => isCurrent(module.href));
           <li>
             <a
               href={module.href}
-              class:list={["block rounded-[3px] px-3 py-2 hover:bg-asphalt-raised transition-colors", isCurrent(module.href) && "bg-asphalt-raised"]}
-              aria-current={isCurrent(module.href) ? "page" : undefined}
+              class:list={[
+                'block rounded-[3px] px-3 py-2 hover:bg-asphalt-raised transition-colors',
+                isCurrent(module.href) && 'bg-asphalt-raised',
+              ]}
+              aria-current={isCurrent(module.href) ? 'page' : undefined}
             >
               <span class="block font-display text-lg text-white">{module.name}</span>
               <span class="block text-sm text-smoke">{module.short}</span>
@@ -150,7 +189,7 @@ const inModule = modules.some((module) => isCurrent(module.href));
           <a
             href={link.href}
             class="block font-display text-lg text-smoke hover:text-white hover:bg-asphalt-raised rounded-[3px] px-3 py-2 transition-colors"
-            aria-current={isCurrent(link.href) ? "page" : undefined}
+            aria-current={isCurrent(link.href) ? 'page' : undefined}
           >
             {link.label}
           </a>
@@ -235,7 +274,10 @@ const inModule = modules.some((module) => isCurrent(module.href));
       iconOpen.classList.toggle('hidden');
       iconClose.classList.toggle('hidden');
 
-      menuButton.setAttribute('aria-label', isExpanded ? 'Open navigation menu' : 'Close navigation menu');
+      menuButton.setAttribute(
+        'aria-label',
+        isExpanded ? 'Open navigation menu' : 'Close navigation menu',
+      );
     });
   }
 </script>

@@ -1,11 +1,17 @@
 ---
-import StoreBadges from "../StoreBadges.astro";
-import CrewScreen from "../CrewScreen.astro";
+import StoreBadges from '../StoreBadges.astro';
+import CrewScreen from '../CrewScreen.astro';
 
 const items = [
-  { label: 'Up next', text: 'The next items of the day with a countdown, rolling over on its own as the weekend runs.' },
+  {
+    label: 'Up next',
+    text: 'The next items of the day with a countdown, rolling over on its own as the weekend runs.',
+  },
   { label: 'View all', text: 'One tap opens the whole timetable.' },
-  { label: 'Always current', text: 'Change the schedule once: the phones show the new time, no new PDF to send.' },
+  {
+    label: 'Always current',
+    text: 'Change the schedule once: the phones show the new time, no new PDF to send.',
+  },
 ];
 ---
 
@@ -13,20 +19,17 @@ const items = [
 <section class="band band-dark">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        Everyone sees what's next, in real time.
-      </h2>
+      <h2 class="title">Everyone sees what's next, in real time.</h2>
       <p class="lede">
-        The timetable you build is the one each person carries in the RaceNode app. Here, a chief mechanic's race weekend.
+        The timetable you build is the one each person carries in the RaceNode app. Here, a chief
+        mechanic's race weekend.
       </p>
     </div>
 
     <CrewScreen screen="top" items={items} />
 
     <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <p class="max-w-md font-medium text-smoke">
-        Your crew gets the app on iPhone and Android:
-      </p>
+      <p class="max-w-md font-medium text-smoke">Your crew gets the app on iPhone and Android:</p>
       <StoreBadges align="start" />
     </div>
   </div>

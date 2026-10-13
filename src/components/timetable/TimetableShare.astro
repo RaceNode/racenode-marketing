@@ -13,11 +13,10 @@ const points = [
   <div class="page grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-10">
     <!-- Text -->
     <div class="lg:col-span-5">
-      <h2 class="title">
-        Put the countdown on the wall.
-      </h2>
+      <h2 class="title">Put the countdown on the wall.</h2>
       <p class="lede mt-5">
-        Cast the display page to the TV in your box: every session with a live countdown. Or give the team one iCal link.
+        Cast the display page to the TV in your box: every session with a live countdown. Or give
+        the team one iCal link.
       </p>
       <ul class="mt-8">
         {points.map((point) => (
@@ -28,7 +27,11 @@ const points = [
 
     <!-- Screenshot: the wall screen, shown big; whole on a phone too. -->
     <div class="lg:col-span-7">
-      <Shot desktop={screenshotBox} alt="RaceNode public timetable display with live countdowns to each session" sizes="(min-width: 1024px) 720px, 100vw" />
+      <Shot
+        desktop={screenshotBox}
+        alt="RaceNode public timetable display with live countdowns to each session"
+        sizes="(min-width: 1024px) 720px, 100vw"
+      />
     </div>
   </div>
 </section>

@@ -10,10 +10,14 @@ import ManagementFeatures from '../components/management/ManagementFeatures.astr
 import ManagementSync from '../components/management/ManagementSync.astro';
 import ManagementCTA from '../components/management/ManagementCTA.astro';
 
-const title = "Race Weekend & Crew Management Software | RaceNode";
-const description = "Plan every race weekend in one place: crew assignments and roles, racecar entries, team structure and meals. Event management built for racing teams.";
+const title = 'Race Weekend & Crew Management Software | RaceNode';
+const description =
+  'Plan every race weekend in one place: crew assignments and roles, racecar entries, team structure and meals. Event management built for racing teams.';
 
-const breadcrumbSchema = breadcrumbJsonLd(site, [{ name: 'Home', url: '/' }, { name: 'Race Team Management', url: '/management/' }]);
+const breadcrumbSchema = breadcrumbJsonLd(site, [
+  { name: 'Home', url: '/' },
+  { name: 'Race Team Management', url: '/management/' },
+]);
 ---
 
 <BaseLayout title={title} description={description}>

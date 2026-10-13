@@ -16,67 +16,73 @@ const features = [
   {
     desktop: staff,
     phone: staffPhone,
-    badge: "Event Staff",
-    title: "Your full crew, their complete logistics, one view.",
-    description: "Departure, hotel, return and on-site vehicle, one row per person. Select several people to book a shared trip or hotel at once.",
+    badge: 'Event Staff',
+    title: 'Your full crew, their complete logistics, one view.',
+    description:
+      'Departure, hotel, return and on-site vehicle, one row per person. Select several people to book a shared trip or hotel at once.',
   },
   {
     desktop: accommodation,
     phone: accommodationPhone,
-    badge: "Accommodation",
-    title: "Hotels, rooms, and rooming lists. Handled.",
-    description: "Hotels, rooms and who sleeps where, with check-in and check-out. Attach the confirmation: the crew downloads it from their app.",
+    badge: 'Accommodation',
+    title: 'Hotels, rooms, and rooming lists. Handled.',
+    description:
+      'Hotels, rooms and who sleeps where, with check-in and check-out. Attach the confirmation: the crew downloads it from their app.',
   },
   {
     desktop: travel,
     phone: travelPhone,
-    badge: "Travel",
-    title: "Every journey planned, every seat assigned.",
-    description: "Departure and return by plane, train, bus or team vehicle, split into legs, each with its people and its tickets.",
+    badge: 'Travel',
+    title: 'Every journey planned, every seat assigned.',
+    description:
+      'Departure and return by plane, train, bus or team vehicle, split into legs, each with its people and its tickets.',
   },
   {
     desktop: vehicles,
     phone: vehiclesPhone,
-    badge: "Event Vehicles",
-    title: "Fleet vehicles and rentals, ready for the road.",
-    description: "Your own fleet and this weekend's rentals, used for travel and for the daily transfers at the circuit.",
+    badge: 'Event Vehicles',
+    title: 'Fleet vehicles and rentals, ready for the road.',
+    description:
+      "Your own fleet and this weekend's rentals, used for travel and for the daily transfers at the circuit.",
   },
   {
     desktop: info,
     phone: infoPhone,
-    badge: "Info Board",
-    title: "The briefing board, shared with everyone.",
-    description: "Where the trucks park, where the passes are, what to do if you arrive after 22:00: notes the crew reads in the app.",
-  }
+    badge: 'Info Board',
+    title: 'The briefing board, shared with everyone.',
+    description:
+      'Where the trucks park, where the passes are, what to do if you arrive after 22:00: notes the crew reads in the app.',
+  },
 ];
 ---
 
 <section class="band band-paper">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        Every tool, one workspace.
-      </h2>
+      <h2 class="title">Every tool, one workspace.</h2>
     </div>
 
     <!-- One row per tool: the words beside a screen big enough to read, sides alternating. -->
     <div class="space-y-20 md:space-y-28">
       {features.map((feature, index) => (
         <div class="ruled grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
-          <div class:list={["lg:col-span-4", index % 2 === 1 && "lg:order-2 lg:col-start-9"]}>
-            <p class="font-display text-lg font-medium text-graphite">
-              {feature.badge}
-            </p>
-            <h3 class="subtitle mt-2 md:text-3xl">
-              {feature.title}
-            </h3>
-            <p class="muted mt-4 text-lg leading-relaxed">
-              {feature.description}
-            </p>
+          <div class:list={['lg:col-span-4', index % 2 === 1 && 'lg:order-2 lg:col-start-9']}>
+            <p class="font-display text-lg font-medium text-graphite">{feature.badge}</p>
+            <h3 class="subtitle mt-2 md:text-3xl">{feature.title}</h3>
+            <p class="muted mt-4 text-lg leading-relaxed">{feature.description}</p>
           </div>
 
-          <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode ${feature.badge} - ${feature.title}`} />
+          <div
+            class:list={[
+              'lg:col-span-8',
+              index % 2 === 1 && 'lg:order-1 lg:col-start-1 lg:row-start-1',
+            ]}
+          >
+            <Shot
+              desktop={feature.desktop}
+              phone={feature.phone}
+              alt={`RaceNode ${feature.badge} - ${feature.title}`}
+            />
           </div>
         </div>
       ))}

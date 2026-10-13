@@ -29,10 +29,14 @@ const STRICT = process.env.LIGHTHOUSE_STRICT === '1';
 const MIN = { performance: 90, accessibility: 100, 'best-practices': 100, seo: 100 };
 
 // One page per kind: home, a module page, the calendar, a championship page (the first one built).
-const championship = LIVE ? 'british-gt' : readdirSync('dist/calendar', { withFileTypes: true })
-  .filter((d) => d.isDirectory() && !['circuits', 'logos', 'sample-api', 'api'].includes(d.name))
-  .map((d) => d.name)
-  .sort()[0];
+const championship = LIVE
+  ? 'british-gt'
+  : readdirSync('dist/calendar', { withFileTypes: true })
+      .filter(
+        (d) => d.isDirectory() && !['circuits', 'logos', 'sample-api', 'api'].includes(d.name),
+      )
+      .map((d) => d.name)
+      .sort()[0];
 const pages = process.argv.slice(2).length
   ? process.argv.slice(2)
   : ['/', '/logistics/', '/calendar/', ...(championship ? [`/calendar/${championship}/`] : [])];
@@ -82,13 +86,19 @@ function run(path) {
   );
   const report = JSON.parse(readFileSync(output, 'utf8'));
   const scores = Object.fromEntries(
-    Object.entries(report.categories).map(([id, category]) => [id, Math.round(category.score * 100)]),
+    Object.entries(report.categories).map(([id, category]) => [
+      id,
+      Math.round(category.score * 100),
+    ]),
   );
   // What drags each category down: the failing audits, for the next lot.
   const failing = Object.values(report.categories).flatMap((category) =>
     category.auditRefs
       .filter((ref) => ref.weight > 0 && (report.audits[ref.id].score ?? 1) < 0.9)
-      .map((ref) => `${category.id}: ${ref.id} (${report.audits[ref.id].displayValue ?? report.audits[ref.id].score})`),
+      .map(
+        (ref) =>
+          `${category.id}: ${ref.id} (${report.audits[ref.id].displayValue ?? report.audits[ref.id].score})`,
+      ),
   );
   return { scores, failing };
 }

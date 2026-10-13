@@ -1,4 +1,5 @@
 # Store Listing (App Store & Play Store)
+
 _Last updated: 2026-10-05_
 
 ## Overview
@@ -13,12 +14,12 @@ Both stores review a login-gated app with credentials we provide. An empty
 organization reads as a "minimum functionality" rejection, so the reviewer
 lands in a seeded team.
 
-| | |
-|---|---|
-| Email | `reviewer@racenode.com` |
-| Password | `RaceNode-Review-2026!` |
-| Organization | Falcon GT Racing — 6 staff, 2 trucks, 2 GT3 cars, 2 upcoming events, timetable, hotel, meals, crew, budget |
-| Seed | `scripts/seed-demo-org.sql` — run in the dashboard SQL editor; destructive and idempotent on its own fixed ids; event dates are relative to run day, so **re-run it before each submission** to keep the data looking current |
+|              |                                                                                                                                                                                                                               |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Email        | `reviewer@racenode.com`                                                                                                                                                                                                       |
+| Password     | `RaceNode-Review-2026!`                                                                                                                                                                                                       |
+| Organization | Falcon GT Racing — 6 staff, 2 trucks, 2 GT3 cars, 2 upcoming events, timetable, hotel, meals, crew, budget                                                                                                                    |
+| Seed         | `scripts/seed-demo-org.sql` — run in the dashboard SQL editor; destructive and idempotent on its own fixed ids; event dates are relative to run day, so **re-run it before each submission** to keep the data looking current |
 
 Enter the credentials in App Store Connect → App Review Information, and in
 Play Console → App content → App access.
@@ -65,13 +66,13 @@ collection changes (analytics, push tokens, payments in-app).
 
 Everything is purpose "App Functionality"; nothing is used for tracking.
 
-| Category | Answer | Linked to identity |
-|---|---|---|
-| Contact info: name, email, phone | Collected (accounts + staff profiles) | Yes |
-| User content: photos, other content | Collected (profile/car photos, documents, team data) | Yes |
-| Identifiers: user ID | Collected (Supabase account) | Yes |
-| Diagnostics: crash + performance data | Collected (Sentry; no `setUser` in the code) | No |
-| Everything else (location, financial, browsing, advertising…) | Not collected — Places is typed addresses, not device location; Stripe is web-only | — |
+| Category                                                      | Answer                                                                             | Linked to identity |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------ |
+| Contact info: name, email, phone                              | Collected (accounts + staff profiles)                                              | Yes                |
+| User content: photos, other content                           | Collected (profile/car photos, documents, team data)                               | Yes                |
+| Identifiers: user ID                                          | Collected (Supabase account)                                                       | Yes                |
+| Diagnostics: crash + performance data                         | Collected (Sentry; no `setUser` in the code)                                       | No                 |
+| Everything else (location, financial, browsing, advertising…) | Not collected — Places is typed addresses, not device location; Stripe is web-only | —                  |
 
 ### Google — Data Safety
 
@@ -87,10 +88,10 @@ Everything is purpose "App Functionality"; nothing is used for tracking.
 
 ## Visual assets
 
-| Asset | Requirement |
-|---|---|
-| iPhone screenshots | 3–10, format 6.9″ (1320×2868). Capture on a device from TestFlight. iPad screenshots are **not** needed — the 1.0 is iPhone-only (`TARGETED_DEVICE_FAMILY = 1`) |
-| Play phone screenshots | ≥ 2, captured on a device |
+| Asset                  | Requirement                                                                                                                                                     |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| iPhone screenshots     | 3–10, format 6.9″ (1320×2868). Capture on a device from TestFlight. iPad screenshots are **not** needed — the 1.0 is iPhone-only (`TARGETED_DEVICE_FAMILY = 1`) |
+| Play phone screenshots | ≥ 2, captured on a device                                                                                                                                       |
 
 **Shot order** (same on both stores, personal-first like the copy — all taken
 on the review account): 1. Personal season timeline — six rounds and the

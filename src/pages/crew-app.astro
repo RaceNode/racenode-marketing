@@ -12,18 +12,22 @@ import CrewAppFAQ from '../components/crew-app/CrewAppFAQ.astro';
 import CrewAppCTA from '../components/crew-app/CrewAppCTA.astro';
 import { crewAppFaq } from '../components/crew-app/faq';
 
-const title = "The Race Weekend App for Your Crew | RaceNode";
-const description = "Every crew member and driver sees their own role, flight, hotel, meals and next session on their phone. The crew app is free for every team member.";
+const title = 'The Race Weekend App for Your Crew | RaceNode';
+const description =
+  'Every crew member and driver sees their own role, flight, hotel, meals and next session on their phone. The crew app is free for every team member.';
 
-const breadcrumbSchema = breadcrumbJsonLd(site, [{ name: 'Home', url: '/' }, { name: 'Crew App', url: '/crew-app/' }]);
+const breadcrumbSchema = breadcrumbJsonLd(site, [
+  { name: 'Home', url: '/' },
+  { name: 'Crew App', url: '/crew-app/' },
+]);
 
 const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": crewAppFaq.map((item) => ({
-    "@type": "Question",
-    "name": item.q,
-    "acceptedAnswer": { "@type": "Answer", "text": item.a },
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: crewAppFaq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
   })),
 };
 ---

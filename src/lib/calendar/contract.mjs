@@ -16,9 +16,44 @@ export const VIEWS = {
 };
 
 export const FIELDS = {
-  series: ['slug', 'name', 'short_name', 'discipline', 'region', 'country_code', 'website_url', 'organizer_name', 'organizer_website_url'],
-  seasons: ['series_slug', 'label', 'year', 'calendar_status', 'source_url', 'last_checked_at', 'event_count'],
-  events: ['series_slug', 'season_label', 'season_year', 'round_number', 'round_label', 'sub_label', 'name', 'kind', 'start_date', 'end_date', 'status', 'url', 'venue_slug', 'venue_name', 'venue_country_code', 'venue_timezone'],
+  series: [
+    'slug',
+    'name',
+    'short_name',
+    'discipline',
+    'region',
+    'country_code',
+    'website_url',
+    'organizer_name',
+    'organizer_website_url',
+  ],
+  seasons: [
+    'series_slug',
+    'label',
+    'year',
+    'calendar_status',
+    'source_url',
+    'last_checked_at',
+    'event_count',
+  ],
+  events: [
+    'series_slug',
+    'season_label',
+    'season_year',
+    'round_number',
+    'round_label',
+    'sub_label',
+    'name',
+    'kind',
+    'start_date',
+    'end_date',
+    'status',
+    'url',
+    'venue_slug',
+    'venue_name',
+    'venue_country_code',
+    'venue_timezone',
+  ],
 };
 
 /** The series columns only the build reads: where the catalog stores each championship's logo. */
@@ -32,18 +67,25 @@ const ORDER = {
 
 /** Keeps the contract's fields and nothing else; a removed round never reaches a page. */
 export function sanitize(data, { logos = false } = {}) {
-  const pick = (kind, extra = []) => (row) => Object.fromEntries([...FIELDS[kind], ...extra].map((f) => [f, row[f] ?? null]));
+  const pick =
+    (kind, extra = []) =>
+    (row) =>
+      Object.fromEntries([...FIELDS[kind], ...extra].map((f) => [f, row[f] ?? null]));
   return {
     series: (data.series ?? []).map(pick('series', logos ? LOGO_FIELDS : [])),
     seasons: (data.seasons ?? []).map(pick('seasons')),
-    events: (data.events ?? []).filter((e) => e.status === 'scheduled' || e.status === 'cancelled').map(pick('events')),
+    events: (data.events ?? [])
+      .filter((e) => e.status === 'scheduled' || e.status === 'cancelled')
+      .map(pick('events')),
   };
 }
 
 const PAGE = 1000;
 
 async function fetchView(url, key, kind, { signal, series, logos } = {}) {
-  const only = series ? `&${kind === 'series' ? 'slug' : 'series_slug'}=eq.${encodeURIComponent(series)}` : '';
+  const only = series
+    ? `&${kind === 'series' ? 'slug' : 'series_slug'}=eq.${encodeURIComponent(series)}`
+    : '';
   const rows = [];
   for (let offset = 0; ; offset += PAGE) {
     const q = `${url}/rest/v1/${VIEWS[kind]}?select=${(kind === 'series' && logos ? [...FIELDS.series, ...LOGO_FIELDS] : FIELDS[kind]).join(',')}${only}&order=${ORDER[kind]}&limit=${PAGE}&offset=${offset}`;
@@ -75,7 +117,9 @@ function only(data, series) {
  */
 export async function fetchCatalog(url, key, { signal, series, logos = false } = {}) {
   const base = url.replace(/\/$/, '');
-  const [s, se, ev] = await Promise.all(['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series, logos })));
+  const [s, se, ev] = await Promise.all(
+    ['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series, logos })),
+  );
   return only(sanitize({ series: s, seasons: se, events: ev }, { logos }), series);
 }
 
@@ -85,7 +129,10 @@ export async function fetchCatalog(url, key, { signal, series, logos = false } =
  * static copy) gives the same result.
  */
 export async function fetchLive(api, { signal, series } = {}) {
-  const res = await fetch(series ? `${api}?series=${encodeURIComponent(series)}` : api, { headers: { Accept: 'application/json' }, signal });
+  const res = await fetch(series ? `${api}?series=${encodeURIComponent(series)}` : api, {
+    headers: { Accept: 'application/json' },
+    signal,
+  });
   if (!res.ok) {
     const e = new Error(`calendar: ${api} answered ${res.status}`);
     e.status = res.status;
