@@ -19,7 +19,7 @@ jobs:
         with:
           node-version-file: .node-version
       - name: Wait for the Pages preview of this commit
-        run: sleep 10
+        run: sleep 180
       - name: Lighthouse, 5 rounds, interleaved
         run: |
           for i in 1 2 3 4 5; do
