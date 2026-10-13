@@ -1,5 +1,7 @@
 ---
 import StoreBadges from "./StoreBadges.astro";
+import { analytics } from "@/analytics/config";
+import { m } from "@/paraglide/messages";
 
 const currentYear = new Date().getFullYear();
 const email = "contact@racenode.com";
@@ -102,6 +104,17 @@ const footerLinks = {
               </a>
             </li>
           ))}
+          {analytics.consentRequired && (
+            <li>
+              <button
+                type="button"
+                data-cc="show-preferencesModal"
+                class="text-white hover:text-accent-soft transition-colors cursor-pointer"
+              >
+                {m.consent_manage()}
+              </button>
+            </li>
+          )}
         </ul>
       </div>
     </div>

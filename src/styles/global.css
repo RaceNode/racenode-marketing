@@ -342,3 +342,64 @@
     @apply mt-1 min-h-11 w-full rounded-[3px] border border-line bg-paper px-3 py-2 text-sm text-ink focus:border-accent focus:outline-none;
   }
 }
+
+/* Consent banner (vanilla-cookieconsent, src/analytics/consent.ts): the footer's
+   dark card, the site's type and square corners. `html #cc-main` outranks the
+   banner's own stylesheet, loaded later and only when the banner shows. */
+html #cc-main {
+  --cc-font-family: var(--font-sans);
+  --cc-modal-border-radius: 3px;
+  --cc-btn-border-radius: 3px;
+  --cc-bg: var(--color-asphalt-raised);
+  --cc-primary-color: var(--color-white);
+  --cc-secondary-color: var(--color-fog);
+  --cc-btn-primary-bg: var(--color-accent);
+  --cc-btn-primary-color: var(--color-accent-fg);
+  --cc-btn-primary-hover-bg: var(--color-accent-hover);
+  --cc-btn-primary-hover-color: var(--color-accent-fg);
+  --cc-btn-secondary-bg: var(--color-asphalt-line);
+  --cc-btn-secondary-color: var(--color-white);
+  --cc-btn-secondary-border-color: var(--color-asphalt-edge);
+  --cc-btn-secondary-hover-bg: var(--color-asphalt-edge);
+  --cc-btn-secondary-hover-color: var(--color-white);
+  --cc-btn-secondary-hover-border-color: var(--color-asphalt-edge);
+  --cc-separator-border-color: var(--color-asphalt-line);
+  --cc-link-color: var(--color-accent-soft);
+  --cc-toggle-on-bg: var(--color-accent);
+  --cc-toggle-off-bg: var(--color-asphalt-edge);
+  --cc-toggle-readonly-bg: var(--color-asphalt-line);
+  --cc-toggle-readonly-knob-bg: var(--color-smoke);
+  --cc-cookie-category-block-bg: var(--color-asphalt-line);
+  --cc-cookie-category-block-border: var(--color-asphalt-line);
+  --cc-cookie-category-block-hover-bg: var(--color-asphalt-edge);
+  --cc-cookie-category-block-hover-border: var(--color-asphalt-edge);
+  --cc-cookie-category-expanded-block-hover-bg: var(--color-asphalt-edge);
+  --cc-footer-bg: var(--color-asphalt);
+  --cc-footer-color: var(--color-smoke);
+  --cc-footer-border-color: var(--color-asphalt-line);
+}
+
+/* On a phone the banner stacks its three buttons and covers half the page:
+   Accept and Reject side by side, same size, and tighter spacing. */
+@media screen and (max-width: 640px) {
+  html #cc-main .cm__btn-group:first-child {
+    flex-direction: row !important;
+    gap: 0.5rem;
+  }
+  html #cc-main .cm__btn-group:first-child .cm__btn {
+    flex: 1 1 0 !important;
+    margin: 0 !important;
+  }
+  html #cc-main .cm__title {
+    margin-top: 0.75rem !important;
+  }
+  html #cc-main .cm__btns {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+  html #cc-main .cm__btn {
+    min-height: 2.75rem;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+}

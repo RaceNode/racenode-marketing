@@ -1,0 +1,63 @@
+---
+/**
+ * The measurement and consent section of the privacy and cookies pages,
+ * generated from the same configuration as the banner. Import it in a
+ * content page: `<AnalyticsDisclosure />`.
+ */
+import { analytics } from '@/analytics/config';
+import { servicesByCategory } from '@/analytics/resolve';
+import { m } from '@/paraglide/messages';
+
+const grouped = servicesByCategory(analytics.services);
+const messages = m as unknown as Record<string, () => string>;
+const text = (key: string) => messages[key]?.() ?? key;
+---
+
+{grouped.length === 0 ? (
+  <p>{m.disclosure_none()}</p>
+) : (
+  <>
+    <p>{analytics.consentRequired ? m.disclosure_consent_note() : m.disclosure_exempt_note()}</p>
+    {grouped.map(([category, services]) => (
+      <>
+        <h3>{text(`consent_cat_${category}_title`)}</h3>
+        <p>{text(`consent_cat_${category}_text`)}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>{m.disclosure_col_service()}</th>
+              <th>{m.disclosure_col_vendor()}</th>
+              <th>{m.disclosure_col_purpose()}</th>
+              <th>{m.disclosure_col_cookies()}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {services.map((service) => (
+              <tr>
+                <td>{text(`service_${service.id}_label`)}</td>
+                <td>
+                  <a href={service.privacyUrl} rel="noopener">
+                    {service.vendor}
+                  </a>
+                </td>
+                <td>{text(`service_${service.id}_text`)}</td>
+                <td>
+                  {service.cookies.length > 0
+                    ? `${service.cookies.join(', ')} (${service.retention})`
+                    : m.disclosure_no_cookies()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    ))}
+    {analytics.consentRequired && (
+      <p>
+        <button type="button" data-cc="show-preferencesModal">
+          {m.consent_manage()}
+        </button>
+      </p>
+    )}
+  </>
+)}

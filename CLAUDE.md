@@ -36,6 +36,7 @@ All pages wrap content in `BaseLayout.astro` (SEO meta, JSON-LD schemas) with sh
 ```
 src/
 ├── assets/screenshots/  # Product screenshots (imported via Astro Image); `*-phone.png` = the app's phone layout, shown below sm by Shot.astro
+├── analytics/           # Analytics brick of the WBLT site template (see "Analytics and consent")
 ├── components/          # Shared (Header, Footer) + feature subdirs
 ├── data/legal/          # Markdown legal documents (rendered by legal pages)
 ├── layouts/             # BaseLayout.astro (SEO, structured data), LegalLayout.astro
@@ -81,6 +82,12 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 - `public/llms.txt`: plain summary of the product for AI assistants; keep it in line with the pages when modules or pricing change
 - JSON-LD schemas (Organization, SoftwareApplication) in BaseLayout
 - Open Graph and Twitter meta tags on all pages
+
+## Analytics and consent
+
+- `src/analytics/`, `Analytics.astro`, `AnalyticsDisclosure.astro` and `vitest.config.ts` are the analytics brick of the WBLT site template (`~/script/wblt/templates/template-site`), kept as close to it as possible so changes can travel both ways; the deviations are listed in the PR that brought it (consent-banner). `src/paraglide/` is a stub that gives the brick its English messages (banner texts live there), `src/site.config.ts` the one setting it reads.
+- Tool: PostHog (`ANALYTICS_PROVIDER=posthog` + `PUBLIC_POSTHOG_KEY` in the Cloudflare Pages env; absent in dev, so nothing runs locally). Before a choice or after "Reject", it measures with nothing stored (memory persistence); after "Accept", a first-party cookie `ph_<key>_posthog` on www only, and links to `https://app.racenode.com` carry `?ph=<distinct_id>` (the app reads it; `POSTHOG_HANDOFF_ORIGINS` in `config.ts`). "Cookie settings" in the footer reopens the choice; withdrawing erases the cookie.
+- Banner styling: `#cc-main` variables in `src/styles/global.css`, tokens only. Tests: `npm run test:unit`.
 
 ## Race calendar
 

@@ -1,6 +1,7 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
 import { Content } from '../data/legal/privacy-policy.md';
+import AnalyticsDisclosure from '../components/AnalyticsDisclosure.astro';
 ---
 
 <LegalLayout
@@ -9,4 +10,6 @@ import { Content } from '../data/legal/privacy-policy.md';
   heading="Privacy Policy"
 >
   <Content />
+  <h2 id="cookies">Annex: Cookies and consent</h2>
+  <AnalyticsDisclosure />
 </LegalLayout>
