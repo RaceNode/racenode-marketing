@@ -1,0 +1,29 @@
+name: Lighthouse A/B (temporary)
+
+# Measures the two Pages previews (before: consent-banner, after: perf-lot9) from a clean runner.
+# Temporary: removed before the perf PR is merged.
+
+on:
+  push:
+    branches: [perf-lot9]
+
+permissions:
+  contents: read
+
+jobs:
+  ab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Wait for the Pages preview of this commit
+        run: sleep 150
+      - name: Lighthouse, 3 rounds, interleaved
+        run: |
+          for i in 1 2 3; do
+            for side in consent-banner perf-lot9; do
+              LIGHTHOUSE_BASE=https://$side.racenode-marketing.pages.dev node tests/lighthouse.mjs / /calendar/ /calendar/british-gt/ 2>&1 | grep "performance=" | sed "s/^/$side /"
+            done
+          done
