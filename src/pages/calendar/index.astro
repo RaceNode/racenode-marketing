@@ -30,8 +30,8 @@ const circuitPages = allCircuits
   .sort((a: any, b: any) => a.name.localeCompare(b.name));
 const thisYear = Number(ctx.today.slice(0, 4));
 const span = thisYear === cal.year ? `${cal.year}` : `${thisYear}–${cal.year}`;
-const disciplines = Object.keys(DISCIPLINES).filter((d) => cal.championships.some((c) => c.discipline === d));
-const regions = Object.keys(REGIONS).filter((r) => cal.championships.some((c) => c.region === r));
+const disciplines = Object.keys(DISCIPLINES).filter((d) => cal.championships.some((c: any) => c.discipline === d));
+const regions = Object.keys(REGIONS).filter((r) => cal.championships.some((c: any) => c.region === r));
 const summary = indexSummary(cal);
 const body = indexBody(cal, ctx);
 

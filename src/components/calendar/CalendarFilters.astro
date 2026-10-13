@@ -2,7 +2,10 @@
 // Filters of the all-championships calendar. Without JavaScript every upcoming round stays listed; with it, rows,
 // month headings and the "not published yet" list follow the selects, and the choice is kept in the URL. A round
 // the visitor's clock says is over is hidden too (the morning build may be a day behind).
-import { DISCIPLINES, REGIONS } from '../../lib/calendar/format.mjs';
+import { DISCIPLINES as DISCIPLINE_NAMES, REGIONS as REGION_NAMES } from '../../lib/calendar/format.mjs';
+
+const DISCIPLINES: Record<string, string> = DISCIPLINE_NAMES;
+const REGIONS: Record<string, string> = REGION_NAMES;
 
 interface Props {
   disciplines: string[];
