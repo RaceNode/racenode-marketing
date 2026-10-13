@@ -100,7 +100,7 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 ## Écarts au template WBLT
 
 The site follows the WBLT site template (`~/script/wblt/templates/template-site`, Willi 2026-10-13: "RaceNode, ça va être quand même un site WBLT"): a template brick is copied as is when it serves, adapted only where the site requires it. Every deviation is listed here on purpose, so do not "fix" one back to the template:
-- **Cloudflare Pages, not Workers + assets**: no `wrangler.jsonc`, no `@astrojs/cloudflare`, no `src/hosting/`, no `npm run serve`, no deployment in CI. Pages deploys on push; the relay is a Pages Function. See [docs/deployment.md](docs/deployment.md).
+- **Cloudflare Pages, not Workers + assets**: no `wrangler.jsonc`, no `@astrojs/cloudflare`, no `src/hosting/`, no `npm run serve`, no `worker-configuration.d.ts` in `tsconfig.json`, no deployment in CI. Pages deploys on push; the relay is a Pages Function. See [docs/deployment.md](docs/deployment.md).
 - **One language, no Paraglide**: pages at the root (the template's single-language layout), texts in the components; no `messages/`, `project.inlang/`, `middleware.ts`.
 - **No contact form**: contact by `mailto:`, the journey is the app signup.
 - **Tests stay on `node --test`** (`test:calendar`, `test:guardrails`), no Vitest.

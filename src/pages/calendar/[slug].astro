@@ -12,16 +12,19 @@ import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
 import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
 import { displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
 import { championshipBody, hash, logoOf } from '../../lib/calendar/render.mjs';
-import { DISCIPLINES, REGIONS, country } from '../../lib/calendar/format.mjs';
+import { DISCIPLINES as DISCIPLINE_NAMES, REGIONS as REGION_NAMES, country } from '../../lib/calendar/format.mjs';
+
+const DISCIPLINES: Record<string, string> = DISCIPLINE_NAMES;
+const REGIONS: Record<string, string> = REGION_NAMES;
 
 export async function getStaticPaths() {
   const { cal } = await catalog();
-  return cal.championships.map((c) => ({ params: { slug: c.slug } }));
+  return cal.championships.map((c: any) => ({ params: { slug: c.slug } }));
 }
 
 const loaded = await catalog();
 const { data, ctx, cal } = loaded;
-const c = cal.championships.find((x) => x.slug === Astro.params.slug)!;
+const c = cal.championships.find((x: any) => x.slug === (Astro.params as { slug: string }).slug)!;
 const logo = logoOf(c.slug, ctx, { large: true }).replace('loading="lazy"', 'loading="eager"');
 const shown = c.shown;
 const year = cal.year;
@@ -29,7 +32,7 @@ const organizer = c.organizer_name ?? 'The organizer';
 const body = championshipBody(cal, c.slug, ctx);
 const shared = sharedWeekends(cal, c).slice(0, 8);
 const related = cal.championships
-  .filter((x) => x.slug !== c.slug && x.discipline === c.discipline && shared.every((s) => s.championship.slug !== x.slug))
+  .filter((x: any) => x.slug !== c.slug && x.discipline === c.discipline && shared.every((s) => s.championship.slug !== x.slug))
   .slice(0, 8);
 const facts = [DISCIPLINES[c.discipline], c.region && REGIONS[c.region], c.country_code && country(c.country_code)].filter(Boolean);
 
@@ -129,7 +132,7 @@ const eventsSchema = {
           <section class="mt-10">
             <h2 class="subtitle mb-4">Other {DISCIPLINES[c.discipline]} calendars</h2>
             <ul class="flex flex-wrap gap-2">
-              {related.map((x) => (
+              {related.map((x: any) => (
                 <li>
                   <a href={`/calendar/${x.slug}/`} class="cal-chip">
                     {displayName(x)}
