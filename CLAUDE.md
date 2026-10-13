@@ -97,6 +97,17 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 - Rules (Willi, 2026-10-07): dates and venues only; no organizer document, link to the official page; never team data, raw scrapes or logs. A season not published yet says so and shows the last one known.
 - The CTA invites to sign up; it does not promise an import until the app can adopt a catalog season.
 
+## Écarts au template WBLT
+
+The site follows the WBLT site template (`~/script/wblt/templates/template-site`, Willi 2026-10-13: "RaceNode, ça va être quand même un site WBLT"): a template brick is copied as is when it serves, adapted only where the site requires it. Every deviation is listed here on purpose, so do not "fix" one back to the template:
+- **Cloudflare Pages, not Workers + assets**: no `wrangler.jsonc`, no `@astrojs/cloudflare`, no `src/hosting/`, no `npm run serve`, no deployment in CI. Pages deploys on push; the relay is a Pages Function. See [docs/deployment.md](docs/deployment.md).
+- **One language, no Paraglide**: pages at the root (the template's single-language layout), texts in the components; no `messages/`, `project.inlang/`, `middleware.ts`.
+- **No contact form**: contact by `mailto:`, the journey is the app signup.
+- **Tests stay on `node --test`** (`test:calendar`, `test:guardrails`), no Vitest.
+- **The site's components and token names** (`concrete`, `asphalt`…) stay; the template's `Hero`/`Cta`/… examples are not used.
+- **Ahead of the template**: guardrails in the build, `STABLE_URLS`, the calendar relay; candidates to bring up to it.
+- `renovate.json` extends the private preset `WBLT-Engineering/renovate-config`: Renovate needs access to both organizations.
+
 ## Content Notes
 
 - Legal docs (terms, privacy, account-deletion, legal-notice) are markdown in `src/data/legal/`, rendered by their pages via `LegalLayout.astro` — edit the `.md` files, not the pages
