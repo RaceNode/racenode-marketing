@@ -42,7 +42,7 @@ src/
 ├── site.config.ts       # Name, URL, contact, social, legal identity: the single place
 ├── layouts/             # BaseLayout.astro (SEO, structured data), LegalLayout.astro
 ├── pages/               # index, module pages, crew-app, pricing, terms, privacy, account-deletion, legal-notice
-└── styles/              # global.css (Tailwind entry + typography plugin, imported by BaseLayout)
+└── styles/              # tokens.css (brand tokens: fonts, colours, as in the WBLT template), global.css (Tailwind entry, fonts, typography plugin, base and recipes, imported by BaseLayout)
 public/
 └── *.svg, *.png         # Logos, favicons, PWA icons (generated, see below)
 scripts/brand/
@@ -66,7 +66,7 @@ The logo is the store icon mark (the R node, `public/favicon.svg`) plus "RaceNod
 
 ## Design System
 
-Dark theme mirroring the app's design system. Tokens are defined in `src/styles/global.css` (mirror of the app's `src/index.css`; source of truth: `docs/architecture/design-system.md` in the app repo). **Color signals a state, never a category** — no module colors, no gradients.
+Dark theme mirroring the app's design system. Tokens are defined in `src/styles/tokens.css` (mirror of the app's `src/index.css`; source of truth: `docs/architecture/design-system.md` in the app repo). **Color signals a state, never a category** — no module colors, no gradients.
 - **Background**: `bg-gray-950` (main), `bg-gray-900` (cards), `border-gray-800`
 - **Text**: `text-white` (primary), `text-gray-400` (secondary)
 - **Accent**: indigo, via tokens only — `bg-accent hover:bg-accent-hover` for CTAs; never a literal color class
@@ -108,7 +108,7 @@ The site follows the WBLT site template (`~/script/wblt/templates/template-site`
 - **Tests stay on `node --test`** (`test:calendar`, `test:guardrails`), no Vitest.
 - **`src/site.config.ts` is reduced**: no `hosting`, `locales`, `contactForm`, `sections`, `nav`, `profiles` or local business; `business` keeps only description, logo, founder. `src/lib/seo.ts` keeps the template's helpers as they are, with RaceNode's own Organization (founder, contact point, store listings passed by the caller, `data/stores.ts` staying their single source) and SoftwareApplication; imports are relative so node --test loads it.
 - **ESLint**: the template's config plus one override, `no-explicit-any` off in `src/pages/calendar/**` (its data comes from the untyped `.mjs` of `src/lib/calendar`).
-- **The site's components and token names** (`concrete`, `asphalt`…) stay; the template's `Hero`/`Cta`/… examples are not used.
+- **The site's components and token names** (`concrete`, `asphalt`…) stay, in the template's `tokens.css`; the web fonts are imported in `global.css` (the template uses the system stack); the template's `Hero`/`Cta`/… examples are not used.
 - **Ahead of the template**: guardrails in the build, `STABLE_URLS`, the calendar relay; candidates to bring up to it.
 - `renovate.json` extends the private preset `WBLT-Engineering/renovate-config`: Renovate needs access to both organizations.
 
