@@ -12,9 +12,11 @@
     "guardrails": "node scripts/guardrails.mjs",
     "test:guardrails": "node --test scripts/guardrails.test.mjs",
     "test:calendar": "node --test src/lib/calendar/calendar.test.mjs src/lib/calendar/logos.test.mjs",
-    "test": "npm run check && npm run test:guardrails && npm run test:calendar",
+    "test": "npm run check && npm run lint && npm run test:guardrails && npm run test:calendar",
     "preview": "astro preview",
     "check": "astro check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "astro": "astro"
   },
   "dependencies": {
@@ -31,10 +33,15 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^24.19.2",
+    "eslint": "^10.12.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.13.0",
     "opentype.js": "^2.0.0",
     "playwright-core": "^1.62.1",
     "sharp": "^0.35.3",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.2"
   }
 }

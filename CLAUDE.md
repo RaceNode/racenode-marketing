@@ -104,6 +104,7 @@ The site follows the WBLT site template (`~/script/wblt/templates/template-site`
 - **One language, no Paraglide**: pages at the root (the template's single-language layout), texts in the components; no `messages/`, `project.inlang/`, `middleware.ts`.
 - **No contact form**: contact by `mailto:`, the journey is the app signup.
 - **Tests stay on `node --test`** (`test:calendar`, `test:guardrails`), no Vitest.
+- **ESLint**: the template's config plus one override, `no-explicit-any` off in `src/pages/calendar/**` (its data comes from the untyped `.mjs` of `src/lib/calendar`).
 - **The site's components and token names** (`concrete`, `asphalt`…) stay; the template's `Hero`/`Cta`/… examples are not used.
 - **Ahead of the template**: guardrails in the build, `STABLE_URLS`, the calendar relay; candidates to bring up to it.
 - `renovate.json` extends the private preset `WBLT-Engineering/renovate-config`: Renovate needs access to both organizations.
