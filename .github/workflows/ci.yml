@@ -47,6 +47,9 @@ jobs:
       - name: Calendar tests
         run: npm run test:calendar
 
+      - name: Structured data tests
+        run: npm run test:seo
+
       - name: Build
         env:
           CALENDAR_SAMPLE: '1'
