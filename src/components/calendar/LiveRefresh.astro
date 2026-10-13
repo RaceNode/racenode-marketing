@@ -18,8 +18,9 @@ const { config } = Astro.props;
 <script>
   import { refresh } from '../../lib/calendar/refresh.mjs';
 
-  const el = document.getElementById('calendar-live-config');
-  if (el) {
+  function run() {
+    const el = document.getElementById('calendar-live-config');
+    if (!el) return;
     const root = document.documentElement;
     refresh(document, JSON.parse(el.textContent ?? '{}'))
       .then((outcome) => (root.dataset.calendarRefresh = outcome))
@@ -29,4 +30,12 @@ const { config } = Astro.props;
         console.debug('calendar refresh:', e);
       });
   }
+  // After the load and in an idle moment: the page already shows the build's version, the refresh (fetch, render,
+  // hash of hundreds of rows) must not compete with the first render.
+  const start = () =>
+    'requestIdleCallback' in window
+      ? requestIdleCallback(run, { timeout: 2000 })
+      : setTimeout(run, 0);
+  if (document.readyState === 'complete') start();
+  else addEventListener('load', start, { once: true });
 </script>

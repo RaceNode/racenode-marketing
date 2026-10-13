@@ -28,6 +28,10 @@ export default defineConfig({
       PUBLIC_POSTHOG_KEY: envField.string({ context: 'client', access: 'public', optional: true }),
     },
   },
+  // As in the WBLT template: the CSS travels in each page, no render-blocking request before the first paint.
+  build: {
+    inlineStylesheets: 'always',
+  },
   vite: {
     plugins: [tailwindcss()],
   },

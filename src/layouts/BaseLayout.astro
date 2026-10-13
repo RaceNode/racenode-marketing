@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { APP_STORE_ID, APP_STORE_URL, PLAY_STORE_URL } from '../data/stores';
 import { organizationJsonLd, softwareApplicationJsonLd, websiteJsonLd } from '../lib/seo';
 import { site } from '../site.config';
+import { preloadFonts } from '../styles/fonts';
 import Analytics from '../components/Analytics.astro';
 
 interface Props {
@@ -41,6 +42,10 @@ const schemas = [
 
     <!-- Primary Meta Tags -->
     <title>{title}</title>
+    {/* Fonts of the first screen, fetched at once: no visible swap, no layout shift. */}
+    {preloadFonts.map((font) => (
+      <link rel="preload" href={font} as="font" type="font/woff2" crossorigin />
+    ))}
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}

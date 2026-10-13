@@ -41,6 +41,15 @@ const pages = process.argv.slice(2).length
   ? process.argv.slice(2)
   : ['/', '/logistics/', '/calendar/', ...(championship ? [`/calendar/${championship}/`] : [])];
 
+// Astro 7 may run `astro preview` as a background server that outlives its parent: `astro preview stop`
+// ends it, before starting (one left by an earlier run would serve another port) and at the end.
+const stopPreview = () => {
+  try {
+    execFileSync('npx', ['astro', 'preview', 'stop'], { stdio: 'ignore' });
+  } catch {
+    // none running
+  }
+};
 let server;
 const stop = () => {
   try {
@@ -48,10 +57,13 @@ const stop = () => {
   } catch {
     // already stopped
   }
+  if (server) stopPreview();
+  server = undefined;
 };
 process.on('exit', stop);
 
 if (!LIVE) {
+  stopPreview();
   server = spawn('npx', ['astro', 'preview', '--port', PORT, '--host', '127.0.0.1'], {
     stdio: 'ignore',
     detached: true,
