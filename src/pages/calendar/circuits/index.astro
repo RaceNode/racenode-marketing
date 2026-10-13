@@ -13,7 +13,7 @@ const { data, ctx, cal } = await catalog();
 const pages = circuits(cal).filter((c: any) => c.page);
 const byCountry = new Map<string, any[]>();
 for (const c of pages) {
-  const name = c.country_code ? ctx.countries[c.country_code] ?? c.country_code : 'Other';
+  const name = c.country_code ? (ctx.countries[c.country_code] ?? c.country_code) : 'Other';
   if (!byCountry.has(name)) byCountry.set(name, []);
   byCountry.get(name)!.push(c);
 }
@@ -23,12 +23,22 @@ const upcoming = (c: any) => c.rounds.filter((r: any) => r.end_date >= ctx.today
 const title = `Motorsport Calendar ${cal.year} by Circuit: Every Race at Each Track | RaceNode`;
 const description = `${pages.length} circuits, one page each: which championships race there in ${cal.year} and when. Dates as each organizer publishes them.`;
 const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.racenode.com" },
-    { "@type": "ListItem", "position": 2, "name": "Motorsport Calendar", "item": "https://www.racenode.com/calendar/" },
-    { "@type": "ListItem", "position": 3, "name": "Circuits", "item": "https://www.racenode.com/calendar/circuits/" },
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.racenode.com' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Motorsport Calendar',
+      item: 'https://www.racenode.com/calendar/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Circuits',
+      item: 'https://www.racenode.com/calendar/circuits/',
+    },
   ],
 };
 ---
@@ -40,44 +50,50 @@ const breadcrumbSchema = {
     <main>
       <section class="band-dark cal-open">
         <div class="page">
-        {data.sample && <SampleDataNotice />}
+          {data.sample && <SampleDataNotice />}
 
-        <nav class="cal-crumbs" aria-label="Breadcrumb">
-          <a href="/calendar/">Motorsport calendar</a>
-          <span class="mx-1">/</span>
-          <span aria-current="page">Circuits</span>
-        </nav>
+          <nav class="cal-crumbs" aria-label="Breadcrumb">
+            <a href="/calendar/">Motorsport calendar</a>
+            <span class="mx-1">/</span>
+            <span aria-current="page">Circuits</span>
+          </nav>
 
-        <h1 class="display">Race calendars by circuit</h1>
-        <p class="lede mt-6 max-w-3xl">
-          Every championship racing at a circuit, on one page, in date order. Dates as each organizer publishes them.
-        </p>
+          <h1 class="display">Race calendars by circuit</h1>
+          <p class="lede mt-6 max-w-3xl">
+            Every championship racing at a circuit, on one page, in date order. Dates as each
+            organizer publishes them.
+          </p>
         </div>
       </section>
       <div class="kerb" aria-hidden="true"></div>
 
       <section class="cal-body">
         <div class="page">
+          {countries.map(([country, list]) => (
+            <section class="mb-8">
+              <h2 class="cal-month-title">{country}</h2>
+              <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {list.map((c: any) => (
+                  <li>
+                    <a href={`/calendar/circuits/${c.slug}/`} class="cal-card">
+                      <span>{c.name}</span>
+                      <span>
+                        {upcoming(c)
+                          ? `${upcoming(c)} upcoming round${upcoming(c) === 1 ? '' : 's'}`
+                          : 'No upcoming round published yet'}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
 
-        {countries.map(([country, list]) => (
-          <section class="mb-8">
-            <h2 class="cal-month-title">{country}</h2>
-            <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {list.map((c: any) => (
-                <li>
-                  <a href={`/calendar/circuits/${c.slug}/`} class="cal-card">
-                    <span>{c.name}</span>
-                    <span>{upcoming(c) ? `${upcoming(c)} upcoming round${upcoming(c) === 1 ? "" : "s"}` : 'No upcoming round published yet'}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-
-        <p class="mt-10 text-sm">
-          <a href="/calendar/" class="link">All championships on one calendar</a>
-        </p>
+          <p class="mt-10 text-sm">
+            <a href="/calendar/" class="link">
+              All championships on one calendar
+            </a>
+          </p>
         </div>
       </section>
       <CalendarCTA />

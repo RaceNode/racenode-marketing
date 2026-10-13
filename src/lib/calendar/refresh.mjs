@@ -4,7 +4,14 @@
 // The browser renders with the same functions as the build (render.mjs) and compares hashes, so on most visits it
 // finds nothing new and does not touch the page at all; it only replaces a part whose render differs.
 import { fetchLive } from './contract.mjs';
-import { calendarOf, championshipBody, circuitBody, hash, indexBody, indexSummary } from './render.mjs';
+import {
+  calendarOf,
+  championshipBody,
+  circuitBody,
+  hash,
+  indexBody,
+  indexSummary,
+} from './render.mjs';
 
 const TIMEOUT_MS = 8000;
 
@@ -14,7 +21,10 @@ const TIMEOUT_MS = 8000;
  * one championship), circuit (pages of one circuit: they read the whole catalog, every championship may race there).
  */
 export async function refresh(doc, cfg) {
-  const data = await fetchLive(cfg.api, { signal: AbortSignal.timeout(TIMEOUT_MS), series: cfg.slug ?? undefined });
+  const data = await fetchLive(cfg.api, {
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+    series: cfg.slug ?? undefined,
+  });
   if (!data.series.length || !data.events.length) return 'empty';
   const cal = calendarOf(data, cfg);
   const parts = cfg.slug

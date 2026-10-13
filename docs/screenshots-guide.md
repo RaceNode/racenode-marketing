@@ -17,6 +17,7 @@ Les images sont optimisées automatiquement par Astro (WebP, srcset, lazy loadin
 ```
 
 **Exemples :**
+
 - `logistics-overview.png`
 - `management-event-staff.png`
 - `landing-modules.png`

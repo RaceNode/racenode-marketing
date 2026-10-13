@@ -4,4 +4,5 @@ import { ipBudget, relay } from '../../../src/lib/calendar/relay.mjs';
 
 const allow = ipBudget();
 
-export const onRequestGet = ({ request, env, waitUntil }) => relay(request, env, { cache: caches.default, allow, waitUntil });
+export const onRequestGet = ({ request, env, waitUntil }) =>
+  relay(request, env, { cache: caches.default, allow, waitUntil });

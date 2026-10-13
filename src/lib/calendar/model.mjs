@@ -4,9 +4,11 @@
  * The season teams are looking for: next year's from July (2027 calendars come out between September and
  * December), this year's before.
  */
-export const featuredYear = (today) => (today.getUTCMonth() >= 6 ? today.getUTCFullYear() + 1 : today.getUTCFullYear());
+export const featuredYear = (today) =>
+  today.getUTCMonth() >= 6 ? today.getUTCFullYear() + 1 : today.getUTCFullYear();
 
-const byDate = (a, b) => a.start_date.localeCompare(b.start_date) || (a.round_number ?? 0) - (b.round_number ?? 0);
+const byDate = (a, b) =>
+  a.start_date.localeCompare(b.start_date) || (a.round_number ?? 0) - (b.round_number ?? 0);
 
 /**
  * One championship per series that has at least one round, with:
@@ -44,8 +46,13 @@ export const displayName = (s) => s.short_name || s.name;
 /** Every round across championships and seasons, by date, each with its championship. */
 export function allRounds(calendar) {
   const out = [];
-  for (const c of calendar.championships) for (const season of c.seasons) for (const r of season.rounds) out.push({ ...r, championship: c });
-  return out.sort((a, b) => byDate(a, b) || displayName(a.championship).localeCompare(displayName(b.championship)));
+  for (const c of calendar.championships)
+    for (const season of c.seasons)
+      for (const r of season.rounds) out.push({ ...r, championship: c });
+  return out.sort(
+    (a, b) =>
+      byDate(a, b) || displayName(a.championship).localeCompare(displayName(b.championship)),
+  );
 }
 
 /**
@@ -53,7 +60,8 @@ export function allRounds(calendar) {
  * Le Mans Series 2027 starts in November 2026: it sits in November 2026). Rounds already run stay on each
  * championship's and circuit's page.
  */
-export const upcomingRounds = (calendar, today) => allRounds(calendar).filter((r) => r.end_date >= today);
+export const upcomingRounds = (calendar, today) =>
+  allRounds(calendar).filter((r) => r.end_date >= today);
 
 /** "Circuit de Spa-Francorchamps" → "circuit-de-spa-francorchamps", "Autódromo" → "autodromo". */
 export const slugify = (name) =>
@@ -87,7 +95,9 @@ export function circuits(calendar) {
     c.name = r.venue_name ?? c.name ?? r.venue_slug;
     c.country_code = r.venue_country_code ?? c.country_code ?? null;
   }
-  const list = [...out.values()].sort((a, b) => a.name.localeCompare(b.name) || a.venue_slug.localeCompare(b.venue_slug));
+  const list = [...out.values()].sort(
+    (a, b) => a.name.localeCompare(b.name) || a.venue_slug.localeCompare(b.venue_slug),
+  );
   const named = (c) => slugify(c.name) || slugify(c.venue_slug);
   const country = (c) => (c.country_code ? `${named(c)}-${c.country_code.toLowerCase()}` : null);
   const tally = (key) => list.reduce((m, c) => m.set(key(c), (m.get(key(c)) ?? 0) + 1), new Map());
@@ -95,7 +105,12 @@ export function circuits(calendar) {
   const byCountry = tally(country);
   return list.map((c) => ({
     ...c,
-    slug: byName.get(named(c)) === 1 ? named(c) : country(c) && byCountry.get(country(c)) === 1 ? country(c) : `${named(c)}-${slugify(c.venue_slug)}`,
+    slug:
+      byName.get(named(c)) === 1
+        ? named(c)
+        : country(c) && byCountry.get(country(c)) === 1
+          ? country(c)
+          : `${named(c)}-${slugify(c.venue_slug)}`,
     page: c.rounds.filter((r) => r.kind !== 'other').length >= CIRCUIT_PAGE_MIN_ROUNDS,
   }));
 }
@@ -118,7 +133,10 @@ export function sharedWeekends(calendar, championship) {
       }
     }
   }
-  return [...out.values()].sort((a, b) => b.count - a.count || displayName(a.championship).localeCompare(displayName(b.championship)));
+  return [...out.values()].sort(
+    (a, b) =>
+      b.count - a.count || displayName(a.championship).localeCompare(displayName(b.championship)),
+  );
 }
 
 const DAY = 86400000;

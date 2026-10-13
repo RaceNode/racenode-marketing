@@ -21,10 +21,15 @@ export function transient(e) {
 async function fetchWithRetry(url, key, delays) {
   for (let attempt = 0; ; attempt++) {
     try {
-      return await fetchCatalog(url, key, { signal: AbortSignal.timeout(ATTEMPT_TIMEOUT_MS), logos: true });
+      return await fetchCatalog(url, key, {
+        signal: AbortSignal.timeout(ATTEMPT_TIMEOUT_MS),
+        logos: true,
+      });
     } catch (e) {
       if (attempt >= delays.length || !transient(e)) throw e;
-      console.warn(`${String(e).slice(0, 200)}; retrying in ${delays[attempt] / 1000}s (${attempt + 1}/${delays.length})`);
+      console.warn(
+        `${String(e).slice(0, 200)}; retrying in ${delays[attempt] / 1000}s (${attempt + 1}/${delays.length})`,
+      );
       await new Promise((r) => setTimeout(r, delays[attempt]));
     }
   }
@@ -49,9 +54,13 @@ export async function loadCatalog(env, { delays = RETRY_DELAYS_MS } = {}) {
       console.warn(`${String(e).slice(0, 200)}; sample data instead (preview)`);
     }
   } else if (!allowSample) {
-    throw new Error('calendar: CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY are missing; refusing to publish sample data');
+    throw new Error(
+      'calendar: CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY are missing; refusing to publish sample data',
+    );
   }
-  const { default: sample } = await import('../../data/calendar/sample.json', { with: { type: 'json' } });
+  const { default: sample } = await import('../../data/calendar/sample.json', {
+    with: { type: 'json' },
+  });
   return { sample: true, ...sanitize(sample) };
 }
 
@@ -81,7 +90,10 @@ export const catalog = () =>
     const cal = calendarOf(data, ctx);
     ctx.circuitPages = circuitPageSlugs(cal);
     // /calendar/circuits/ is the circuits' index: a championship with that slug would take its URL.
-    if (cal.championships.some((c) => c.slug === 'circuits')) throw new Error('calendar: a series has the slug "circuits", reserved for /calendar/circuits/');
+    if (cal.championships.some((c) => c.slug === 'circuits'))
+      throw new Error(
+        'calendar: a series has the slug "circuits", reserved for /calendar/circuits/',
+      );
     return { data, ctx, cal, logoFiles };
   }));
 

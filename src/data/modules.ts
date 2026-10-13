@@ -32,39 +32,50 @@ export const modules: Module[] = [
     name: 'Personal',
     href: '/crew-app/',
     short: "Each crew member's weekend, on their phone",
-    summary: 'Role, flight, hotel, meals and the next session on each crew member\'s own phone, taken from what you already entered. Free for every team member.',
+    summary:
+      "Role, flight, hotel, meals and the next session on each crew member's own phone, taken from what you already entered. Free for every team member.",
     phone: personalPhone,
-    phoneAlt: "RaceNode crew app: a chief mechanic's race weekend with what is up next, his roles, his next meal and his hotel",
+    phoneAlt:
+      "RaceNode crew app: a chief mechanic's race weekend with what is up next, his roles, his next meal and his hotel",
   },
   {
     name: 'Management',
     href: '/management/',
     short: 'Roles, racecars and meals per event',
-    summary: 'Roles per car and per crew, racecar entries and meals for every event: set once, seen by the whole crew, with what is still missing before the event.',
+    summary:
+      'Roles per car and per crew, racecar entries and meals for every event: set once, seen by the whole crew, with what is still missing before the event.',
     phone: managementPhone,
-    phoneAlt: 'RaceNode Management on a phone: one item to resolve before the event, team roles, staff with a role and a meal',
+    phoneAlt:
+      'RaceNode Management on a phone: one item to resolve before the event, team roles, staff with a role and a meal',
     screen: managementScreen,
-    screenAlt: 'RaceNode Management: one staff without a team role to resolve before the event, team roles, staff with a role and a meal',
+    screenAlt:
+      'RaceNode Management: one staff without a team role to resolve before the event, team roles, staff with a role and a meal',
   },
   {
     name: 'Logistics',
     href: '/logistics/',
     short: 'Crew travel, hotels and vehicles',
-    summary: 'Flights, trains, team vehicles and hotels, room by room. Flags anyone missing a flight, a hotel or a ride, and fills bookings in from the confirmation you drop.',
+    summary:
+      'Flights, trains, team vehicles and hotels, room by room. Flags anyone missing a flight, a hotel or a ride, and fills bookings in from the confirmation you drop.',
     phone: logisticsPhone,
-    phoneAlt: 'RaceNode Logistics on a phone: staff without departure or return travel, flagged before the event',
+    phoneAlt:
+      'RaceNode Logistics on a phone: staff without departure or return travel, flagged before the event',
     screen: logisticsScreen,
-    screenAlt: 'RaceNode Logistics: three staff without departure or return travel flagged before the event, travel, accommodation and vehicles covered',
+    screenAlt:
+      'RaceNode Logistics: three staff without departure or return travel flagged before the event, travel, accommodation and vehicles covered',
   },
   {
     name: 'Timetable',
     href: '/timetable/',
     short: 'The race weekend schedule, live',
-    summary: 'Your team schedule alongside the official sessions, briefings set once and anchored to them, and a live countdown on the screen in your box.',
+    summary:
+      'Your team schedule alongside the official sessions, briefings set once and anchored to them, and a live countdown on the screen in your box.',
     phone: timetablePhone,
-    phoneAlt: "RaceNode Timetable on a phone: the team's race weekend schedule with the time left before each item",
+    phoneAlt:
+      "RaceNode Timetable on a phone: the team's race weekend schedule with the time left before each item",
     screen: timetableScreen,
-    screenAlt: "RaceNode Timetable: the team's Friday schedule, briefings and official sessions, with the time left before each item",
+    screenAlt:
+      "RaceNode Timetable: the team's Friday schedule, briefings and official sessions, with the time left before each item",
   },
   {
     name: 'Planning',
@@ -72,8 +83,10 @@ export const modules: Module[] = [
     short: 'The whole season on one grid',
     summary: `Staff, racecars and trucks across the whole season on one grid, painted day by day${CREW_DAYS_IN_PLANNING ? ', with availability posted by your own crew' : ''}.`,
     phone: planningPhone,
-    phoneAlt: "RaceNode Planning on a phone: a racing team's week, who is on track, travelling or at the workshop",
+    phoneAlt:
+      "RaceNode Planning on a phone: a racing team's week, who is on track, travelling or at the workshop",
     screen: planningScreen,
-    screenAlt: "RaceNode Planning: a racing team's month on one grid, who is on track, travelling or at the workshop, day by day",
+    screenAlt:
+      "RaceNode Planning: a racing team's month on one grid, who is on track, travelling or at the workshop, day by day",
   },
 ];

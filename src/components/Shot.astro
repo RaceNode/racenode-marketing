@@ -22,20 +22,51 @@ interface Props {
   loading?: 'lazy' | 'eager';
 }
 
-const { desktop, phone, alt, crop = false, screenClass = '', cropClass = '', phoneClass = '', sizes = '(min-width: 1024px) 1200px, 100vw', loading = 'lazy' } = Astro.props;
+const {
+  desktop,
+  phone,
+  alt,
+  crop = false,
+  screenClass = '',
+  cropClass = '',
+  phoneClass = '',
+  sizes = '(min-width: 1024px) 1200px, 100vw',
+  loading = 'lazy',
+} = Astro.props;
 ---
 
 <div class:list={['screen', phone && 'hidden sm:block', screenClass]}>
   {crop ? (
     <div class:list={['screen-crop', cropClass]}>
-      <Image src={desktop} alt={alt} widths={[800, 1200, 1800, 2800]} sizes={sizes} loading={loading} quality={85} />
+      <Image
+        src={desktop}
+        alt={alt}
+        widths={[800, 1200, 1800, 2800]}
+        sizes={sizes}
+        loading={loading}
+        quality={85}
+      />
     </div>
   ) : (
-    <Image src={desktop} alt={alt} widths={[800, 1200, 1800, 2800]} sizes={sizes} loading={loading} quality={85} />
+    <Image
+      src={desktop}
+      alt={alt}
+      widths={[800, 1200, 1800, 2800]}
+      sizes={sizes}
+      loading={loading}
+      quality={85}
+    />
   )}
 </div>
 {phone && (
   <div class:list={['phone mx-auto w-full max-w-[19rem] sm:hidden', phoneClass]}>
-    <Image src={phone} alt={alt} widths={[400, 800, 1170]} sizes="19rem" loading={loading} quality={85} />
+    <Image
+      src={phone}
+      alt={alt}
+      widths={[400, 800, 1170]}
+      sizes="19rem"
+      loading={loading}
+      quality={85}
+    />
   </div>
 )}

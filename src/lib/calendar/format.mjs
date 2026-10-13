@@ -23,11 +23,24 @@ export const REGIONS = {
   africa: 'Africa',
 };
 
-export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+export const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 const SHORT = MONTHS.map((m) => m.slice(0, 3));
 
 const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
-export const country = (code) => (code ? regionNames.of(code) ?? code : '');
+export const country = (code) => (code ? (regionNames.of(code) ?? code) : '');
 
 const parts = (d) => d.split('-').map(Number);
 
@@ -52,15 +65,27 @@ export const monthOf = (date) => parts(date)[1];
 
 /** "Round 3 · Endurance Cup", or the kind for a test or media day without a label. */
 export function roundLabel(r) {
-  const label = r.round_label ?? (r.round_number != null ? `Round ${r.round_number}` : r.kind === 'test' ? 'Test' : null);
+  const label =
+    r.round_label ??
+    (r.round_number != null ? `Round ${r.round_number}` : r.kind === 'test' ? 'Test' : null);
   return [label, r.sub_label].filter(Boolean).join(' · ');
 }
 
 /** The round's name, unless it only repeats the venue ("Circuit de Magny-Cours" at "Circuit de Nevers Magny-Cours"). */
-const GENERIC = /\b(?:circuit|circuito|autodromo|autódromo|international|internacional|raceway|speedway|motorsport|park|de|del|di|du|the|of)\b/g;
+const GENERIC =
+  /\b(?:circuit|circuito|autodromo|autódromo|international|internacional|raceway|speedway|motorsport|park|de|del|di|du|the|of)\b/g;
 export function roundName(r) {
-  const n = (s) => s.toLowerCase().replace(GENERIC, '').replace(/[^a-z0-9]+/g, '');
+  const n = (s) =>
+    s
+      .toLowerCase()
+      .replace(GENERIC, '')
+      .replace(/[^a-z0-9]+/g, '');
   const name = n(r.name);
   const venue = n(r.venue_name ?? '');
-  return name && venue && (venue.includes(name) || name.includes(venue)) && name.length <= venue.length + 2 ? null : r.name;
+  return name &&
+    venue &&
+    (venue.includes(name) || name.includes(venue)) &&
+    name.length <= venue.length + 2
+    ? null
+    : r.name;
 }

@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { APP_STORE_ID, APP_STORE_URL, PLAY_STORE_URL } from '../data/stores';
+import { organizationJsonLd, softwareApplicationJsonLd, websiteJsonLd } from '../lib/seo';
+import { site } from '../site.config';
 
 interface Props {
   title: string;
@@ -13,59 +15,21 @@ interface Props {
 const {
   title,
   description = "Racing team management software: travel, hotels, roles and the race weekend timetable, on every crew member's phone.",
-  image = "/og-image.png",
-  type = "website",
-  noindex = false
+  image = site.ogImage,
+  type = 'website',
+  noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const imageURL = new URL(image, Astro.site);
 
-// JSON-LD Schema for Organization
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "RaceNode",
-  "url": "https://www.racenode.com",
-  "logo": "https://www.racenode.com/pwa-512x512.png",
-  "description": "Racing team management software",
-  "founder": { "@type": "Person", "name": "William Brillouet", "jobTitle": "Founder" },
-  "sameAs": ["https://www.linkedin.com/company/racenode", APP_STORE_URL, PLAY_STORE_URL],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "Customer Support",
-    "email": "contact@racenode.com",
-    "url": "https://www.racenode.com"
-  }
-};
-
-// JSON-LD Schema for WebSite (gives search engines the site name)
-const websiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "RaceNode",
-  "url": "https://www.racenode.com/"
-};
-
-// JSON-LD Schema for SoftwareApplication
-const softwareSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "RaceNode",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web, iOS, Android",
-  "description": description,
-  "url": "https://www.racenode.com",
-  "installUrl": [APP_STORE_URL, PLAY_STORE_URL],
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD",
-    "description": "Free until 31 December 2026",
-    "validThrough": "2026-12-31"
-  },
-  "publisher": { "@type": "Organization", "name": "RaceNode", "url": "https://www.racenode.com" }
-};
+// Site-wide structured data (src/lib/seo.ts); pages add their own (breadcrumb, FAQ).
+const stores = [APP_STORE_URL, PLAY_STORE_URL];
+const schemas = [
+  organizationJsonLd(site, stores),
+  websiteJsonLd(site, 'en'),
+  softwareApplicationJsonLd(site, { description, installUrl: stores }),
+];
 ---
 
 <!doctype html>
@@ -89,7 +53,7 @@ const softwareSchema = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={imageURL} />
-    <meta property="og:site_name" content="RaceNode" />
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
@@ -108,12 +72,12 @@ const softwareSchema = {
     <meta name="apple-itunes-app" content={`app-id=${APP_STORE_ID}`} />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content="#030712" />
+    <meta name="theme-color" content={site.themeColor} />
 
     <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    {schemas.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
   </head>
   <body class="min-h-screen bg-concrete text-ink">
     <slot />

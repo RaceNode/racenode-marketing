@@ -16,67 +16,73 @@ const features = [
   {
     desktop: staff,
     phone: staffPhone,
-    badge: "Event Staff",
-    title: "Your full crew, roles and meals included.",
-    description: "Everyone on the event with their roles and meals. The same list as in Logistics: assign once, visible everywhere."
+    badge: 'Event Staff',
+    title: 'Your full crew, roles and meals included.',
+    description:
+      'Everyone on the event with their roles and meals. The same list as in Logistics: assign once, visible everywhere.',
   },
   {
     desktop: racecars,
     phone: racecarsPhone,
-    badge: "Racecars",
-    title: "Assign your cars to each event.",
-    description: "Pick the cars from your racecar list: chassis, model and race number come with them, nothing to type again."
+    badge: 'Racecars',
+    title: 'Assign your cars to each event.',
+    description:
+      'Pick the cars from your racecar list: chassis, model and race number come with them, nothing to type again.',
   },
   {
     desktop: team,
     phone: teamPhone,
-    badge: "Team",
-    title: "Build your crew structure, event by event.",
-    description: "Team roles and car roles defined once, filled per event. When the crew changes, reassign: the structure stays."
+    badge: 'Team',
+    title: 'Build your crew structure, event by event.',
+    description:
+      'Team roles and car roles defined once, filled per event. When the crew changes, reassign: the structure stays.',
   },
   {
     desktop: meals,
     phone: mealsPhone,
-    badge: "Meals",
-    title: "Plan every meal across the event.",
-    description: "Breakfast, lunch and dinner for every day, with the place, the time and who eats there."
+    badge: 'Meals',
+    title: 'Plan every meal across the event.',
+    description:
+      'Breakfast, lunch and dinner for every day, with the place, the time and who eats there.',
   },
   {
     desktop: info,
     phone: infoPhone,
-    badge: "Info Board",
-    title: "The intel your crew needs, in their pocket.",
-    description: "Radio channels, garage plans, the latest timetable: notes and files the crew reads in their app, always the latest version."
-  }
+    badge: 'Info Board',
+    title: 'The intel your crew needs, in their pocket.',
+    description:
+      'Radio channels, garage plans, the latest timetable: notes and files the crew reads in their app, always the latest version.',
+  },
 ];
 ---
 
 <section class="band band-paper">
   <div class="page">
     <div class="head">
-      <h2 class="title">
-        Every tool, one workspace.
-      </h2>
+      <h2 class="title">Every tool, one workspace.</h2>
     </div>
 
     <!-- One row per tool: the words beside a screen big enough to read, sides alternating. -->
     <div class="space-y-20 md:space-y-28">
       {features.map((feature, index) => (
         <div class="ruled grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
-          <div class:list={["lg:col-span-4", index % 2 === 1 && "lg:order-2 lg:col-start-9"]}>
-            <p class="font-display text-lg font-medium text-graphite">
-              {feature.badge}
-            </p>
-            <h3 class="subtitle mt-2 md:text-3xl">
-              {feature.title}
-            </h3>
-            <p class="muted mt-4 text-lg leading-relaxed">
-              {feature.description}
-            </p>
+          <div class:list={['lg:col-span-4', index % 2 === 1 && 'lg:order-2 lg:col-start-9']}>
+            <p class="font-display text-lg font-medium text-graphite">{feature.badge}</p>
+            <h3 class="subtitle mt-2 md:text-3xl">{feature.title}</h3>
+            <p class="muted mt-4 text-lg leading-relaxed">{feature.description}</p>
           </div>
 
-          <div class:list={["lg:col-span-8", index % 2 === 1 && "lg:order-1 lg:col-start-1 lg:row-start-1"]}>
-            <Shot desktop={feature.desktop} phone={feature.phone} alt={`RaceNode ${feature.badge} - ${feature.title}`} />
+          <div
+            class:list={[
+              'lg:col-span-8',
+              index % 2 === 1 && 'lg:order-1 lg:col-start-1 lg:row-start-1',
+            ]}
+          >
+            <Shot
+              desktop={feature.desktop}
+              phone={feature.phone}
+              alt={`RaceNode ${feature.badge} - ${feature.title}`}
+            />
           </div>
         </div>
       ))}

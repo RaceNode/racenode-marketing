@@ -19,7 +19,10 @@ try {
 
   const said = [];
   const marker = join(os.tmpdir(), `guardrails-racenode-marketing-${input.session_id ?? 'x'}`);
-  if (!fs.existsSync(marker)) { fs.writeFileSync(marker, ''); said.push(REMINDER); }
+  if (!fs.existsSync(marker)) {
+    fs.writeFileSync(marker, '');
+    said.push(REMINDER);
+  }
 
   const { check } = await import('../scripts/guardrails.mjs');
   const all = check(root);
@@ -27,9 +30,16 @@ try {
   const shown = mine.length ? mine : all;
   if (shown.length) {
     const rest = all.length - shown.length;
-    said.push(`Guardrails broken, fix now:\n${shown.map((m) => `- ${m}`).join('\n')}${rest ? `\n(+${rest} elsewhere)` : ''}`);
+    said.push(
+      `Guardrails broken, fix now:\n${shown.map((m) => `- ${m}`).join('\n')}${rest ? `\n(+${rest} elsewhere)` : ''}`,
+    );
   }
-  if (said.length) console.log(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: said.join('\n\n') } }));
+  if (said.length)
+    console.log(
+      JSON.stringify({
+        hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: said.join('\n\n') },
+      }),
+    );
 } catch (error) {
   console.error(`guardrails-hook: ${error.message}`);
 }
