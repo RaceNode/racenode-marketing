@@ -214,6 +214,65 @@ test('circuits: a URL from the name, never the catalog reference; the country on
   assert.match(index, /<a href="\/calendar\/circuits\/spa\/">Spa<\/a>/);
 });
 
+test('a folded double-header counts its rounds: a circuit with two meetings, one a double-header, keeps its page', () => {
+  const old = {
+    series: [series('fe')],
+    seasons: [season('fe', 2027)],
+    events: [
+      round('fe', 2027, '2027-01-10', { round_number: 1, name: 'R01 Jeddah E-Prix' }),
+      round('fe', 2027, '2027-01-11', { round_number: 2, name: 'R02 Jeddah E-Prix' }),
+      round('fe', 2027, '2027-05-10', { round_number: 7 }),
+    ],
+  };
+  const folded = {
+    ...old,
+    seasons: [{ ...season('fe', 2027), round_count: 3 }],
+    events: [
+      round('fe', 2027, '2027-01-10', {
+        end_date: '2027-01-11',
+        round_number: 1,
+        round_numbers: [1, 2],
+        round_label: 'Rounds 1–2',
+        name: 'Jeddah E-Prix',
+      }),
+      round('fe', 2027, '2027-05-10', { round_number: 7, round_numbers: [7] }),
+    ],
+  };
+  const today = { today: new Date('2026-10-08') };
+  for (const data of [old, folded]) {
+    const [spa] = circuits(buildCalendar(sanitize(data), today));
+    assert.equal(spa.page, true);
+  }
+  const clean = sanitize(folded);
+  assert.deepEqual(clean.events[0].round_numbers, [1, 2]);
+  assert.equal(clean.seasons[0].round_count, 3);
+  // The catalog of today has no round_numbers: null, read as one round per event.
+  assert.equal(sanitize(old).events[0].round_numbers, null);
+  const html = championshipBody(buildCalendar(clean, today), 'fe', {
+    year: 2027,
+    today: '2026-10-08',
+    countries: {},
+    circuitPages: {},
+  });
+  assert.match(html, /Rounds 1–2/);
+});
+
+test('views from before round_numbers: the read asks again without the new columns', async () => {
+  const seen = [];
+  const api = await fakeViews((view, n, url) => {
+    seen.push(url);
+    return /round_count|round_numbers/.test(url)
+      ? [400, { code: '42703', message: 'column does not exist' }]
+      : [200, []];
+  });
+  try {
+    await loadCatalog(api.env, { delays: [] });
+    assert.ok(seen.some((u) => /catalog_public_events\?select=(?!.*round_numbers)/.test(u)));
+  } finally {
+    await api.close();
+  }
+});
+
 test('championships sharing a weekend at the same venue are found', () => {
   const cal = buildCalendar(
     {
@@ -252,7 +311,7 @@ async function fakeViews(answer) {
   const server = createServer((req, res) => {
     const view = new URL(req.url, 'http://x').pathname.split('/').pop();
     hits[view] = (hits[view] ?? 0) + 1;
-    const [status, body] = answer(view, hits[view]);
+    const [status, body] = answer(view, hits[view], decodeURIComponent(req.url));
     res.writeHead(status, { 'Content-Type': 'application/json' }).end(JSON.stringify(body));
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
@@ -450,6 +509,17 @@ test('dates and labels read the way a team writes them', () => {
     'Round 1 · Endurance Cup',
   );
   assert.equal(roundLabel({ round_number: 2, sub_label: null }), 'Round 2');
+  // The catalog folds a double-header into one event (round_numbers), from the app's "one meeting, one event".
+  assert.equal(roundLabel({ round_number: 1, round_numbers: [1, 2] }), 'Rounds 1–2');
+  assert.equal(roundLabel({ round_number: 4, round_numbers: [4, 6] }), 'Rounds 4, 6');
+  assert.equal(roundLabel({ round_number: 3, round_numbers: [] }), 'Round 3');
+  assert.equal(roundLabel({ round_label: 'Rounds 1–2', round_numbers: [1, 2] }), 'Rounds 1–2');
+  // Names lose their "R01" / "Round 3" prefix: a name that is just the place reads as the venue, the label keeps the round.
+  assert.equal(roundName({ name: 'Autopolis', venue_name: 'Autopolis' }), null);
+  assert.equal(
+    roundName({ name: 'Jeddah E-Prix', venue_name: 'Jeddah Corniche Circuit' }),
+    'Jeddah E-Prix',
+  );
   assert.equal(roundName({ name: 'Imola', venue_name: 'Imola Circuit' }), null);
   assert.equal(
     roundName({ name: 'Circuit de Magny-Cours', venue_name: 'Circuit de Nevers Magny-Cours' }),
