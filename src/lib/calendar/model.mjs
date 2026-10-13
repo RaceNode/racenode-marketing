@@ -74,7 +74,8 @@ export const slugify = (name) =>
 
 /**
  * Race or test rounds a circuit needs in the catalog (every season) to get its own page: below, a page would be
- * thin. A gala or a media day (kind 'other') does not make a venue a circuit.
+ * thin. A gala or a media day (kind 'other') does not make a venue a circuit. Rounds, not events: a double-header
+ * (one event since the catalog folds a meeting, `round_numbers` {1,2}) counts two, so the fold moves no page away.
  */
 export const CIRCUIT_PAGE_MIN_ROUNDS = 3;
 
@@ -111,7 +112,11 @@ export function circuits(calendar) {
         : country(c) && byCountry.get(country(c)) === 1
           ? country(c)
           : `${named(c)}-${slugify(c.venue_slug)}`,
-    page: c.rounds.filter((r) => r.kind !== 'other').length >= CIRCUIT_PAGE_MIN_ROUNDS,
+    page:
+      c.rounds
+        .filter((r) => r.kind !== 'other')
+        .reduce((n, r) => n + Math.max(1, r.round_numbers?.length ?? 0), 0) >=
+      CIRCUIT_PAGE_MIN_ROUNDS,
   }));
 }
 

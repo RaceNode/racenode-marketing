@@ -63,11 +63,21 @@ export function longDate(ts) {
 
 export const monthOf = (date) => parts(date)[1];
 
-/** "Round 3 · Endurance Cup", or the kind for a test or media day without a label. */
+/** The rounds an event holds: `round_numbers` (a double-header holds two), else `round_number`, else none. */
+export const roundsOf = (r) =>
+  r.round_numbers?.length ? r.round_numbers : r.round_number != null ? [r.round_number] : [];
+
+/** "Round 3", "Rounds 1–2" for a double-header, "Rounds 4, 6" when they do not follow. */
+function numbered(n) {
+  if (n.length === 0) return null;
+  if (n.length === 1) return `Round ${n[0]}`;
+  const run = n.every((x, i) => i === 0 || x === n[i - 1] + 1);
+  return `Rounds ${run ? `${n[0]}–${n.at(-1)}` : n.join(', ')}`;
+}
+
+/** "Round 3 · Endurance Cup", "Rounds 1–2", or the kind for a test or media day without a label. */
 export function roundLabel(r) {
-  const label =
-    r.round_label ??
-    (r.round_number != null ? `Round ${r.round_number}` : r.kind === 'test' ? 'Test' : null);
+  const label = r.round_label ?? numbered(roundsOf(r)) ?? (r.kind === 'test' ? 'Test' : null);
   return [label, r.sub_label].filter(Boolean).join(' · ');
 }
 
