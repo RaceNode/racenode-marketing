@@ -14,6 +14,8 @@ Cloudflare Pages project `racenode-marketing` (RaceNode account), connected to t
 
 The "Cloudflare Pages" check on the commit turns green once the deployment is live. A failing build (guardrails, `store/listing.json`, calendar read) publishes nothing: the last good deployment stays online. Rollback: "Rollback to this deployment" on an earlier deployment in the Pages dashboard.
 
+GitHub Actions (`.github/workflows/ci.yml`, the template's checks without its deployment block) checks every push to `main` and every pull request: tests, then the build on the calendar's sample data. It deploys nothing.
+
 `npm run build` = `scripts/store/check.mjs` (store listing limits), `scripts/guardrails.mjs` (content rules), `astro build`, then `guardrails.mjs --dist` (the built pages). Node version: `.node-version`, read by the Pages build image (v3); no `NODE_VERSION` variable on the project, keep it that way so the file stays the only source.
 
 ## Variables (Pages project settings)
