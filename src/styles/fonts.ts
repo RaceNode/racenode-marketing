@@ -8,4 +8,4 @@ import display700 from '@fontsource/ibm-plex-sans-condensed/files/ibm-plex-sans-
 import sans400 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
 import sans600 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2?url';
 
-export const preloadFonts: string[] = []; void [display700, sans400, sans600]; // EXPERIMENT
+export const preloadFonts: string[] = [display700, sans400, sans600];
