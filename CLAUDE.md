@@ -93,6 +93,7 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 - Tool: PostHog (`ANALYTICS_PROVIDER=posthog` + `PUBLIC_POSTHOG_KEY` in the Cloudflare Pages env; absent in dev, so nothing runs locally). Before a choice or after "Reject", it measures with nothing stored (memory persistence); after "Accept", a first-party cookie `ph_<key>_posthog` on www only, and links to `https://app.racenode.com` carry `?ph=<distinct_id>` (the app reads it; `POSTHOG_HANDOFF_ORIGINS` in `config.ts`). "Cookie settings" in the footer reopens the choice; withdrawing erases the cookie.
 - Banner styling: `#cc-main` variables in `src/styles/global.css`, tokens only. Tests: `npm run test:unit`.
 - One deviation from the brick: `boot.ts` starts after the `load` event, in an idle moment (banner and PostHog, ~100 KB, out of the first render). Candidate for the template.
+
 ## Race calendar
 
 - Static like the rest of the site, plus one Pages Function (the relay below; free plan only, no Workers Paid plan: Willi, 2026-10-07, so no Durable Objects and no rate-limit binding). Built from the catalog at every deploy, and every morning by the systemd timer `racenode-site-rebuild` on wblt-server (06:45 UTC; by hand: `sudo systemctl start racenode-site-rebuild.service`, log: `journalctl -u racenode-site-rebuild`): that is what Google indexes.
