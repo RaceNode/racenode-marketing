@@ -1,6 +1,6 @@
 // The relay between the visitor's browser and the catalog (a Pages Function: functions/calendar/api/catalog.js).
-// The browser never talks to the catalog: the relay reads it (the motorsport-data API, or the app's views until the
-// clean-up: catalogSource in contract.mjs) with the server's key and answers the one
+// The browser never talks to the catalog: the relay reads it (the motorsport-data API: catalogSource in
+// contract.mjs) with the server's key and answers the one
 // question a calendar page asks (the whole catalog, or one championship), from the edge cache when it can. It is
 // no more open than the pages themselves, and makes bulk downloads slow: same-origin requests only, a per-IP
 // budget, fixed queries (no filter, column or ordering of the caller's choosing).
@@ -9,7 +9,7 @@ import { catalogSource } from './contract.mjs';
 /** Where the browser asks (liveConfig in build.mjs). */
 export const LIVE_API = '/calendar/api/catalog';
 
-/** How long an answer is served from the edge cache (and the visitor's browser) before the views are read again. */
+/** How long an answer is served from the edge cache (and the visitor's browser) before the catalog is read again. */
 export const CACHE_SECONDS = 300;
 /** Requests per IP and per minute. A visitor sends one per calendar page; a crawler of the relay soon waits. */
 export const IP_BUDGET = 30;

@@ -36,9 +36,8 @@ async function fetchWithRetry({ read, url, key }, delays) {
 }
 
 /**
- * The catalog for this build, from the motorsport-data API (MOTORSPORT_DATA_API_KEY) or, without that key, the app's
- * views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY): catalogSource in contract.mjs. The server's key never reaches a
- * page. A failure that outlasts
+ * The catalog for this build, from the motorsport-data API (MOTORSPORT_DATA_API_KEY: catalogSource in contract.mjs).
+ * The server's key never reaches a page. A failure that outlasts
  * the retries fails the build, so Cloudflare keeps the last good deploy online. `CALENDAR_SAMPLE=1` (preview env, never production) falls
  * back to sample data, a real extract kept in the repo, flagged so pages say so and are not indexed: when the
  * variables are missing, or when the catalog does not answer.
@@ -55,7 +54,7 @@ export async function loadCatalog(env, { delays = RETRY_DELAYS_MS } = {}) {
     }
   } else if (!allowSample) {
     throw new Error(
-      'calendar: MOTORSPORT_DATA_API_KEY (or CATALOG_SUPABASE_URL and CATALOG_SUPABASE_KEY) missing; refusing to publish sample data',
+      'calendar: MOTORSPORT_DATA_API_KEY missing (the motorsport-data API is the only catalog source); refusing to publish sample data',
     );
   }
   const { default: sample } = await import('../../data/calendar/sample.json', {

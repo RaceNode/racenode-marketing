@@ -20,11 +20,11 @@ GitHub Actions (`.github/workflows/ci.yml`, the template's checks without its de
 
 ## Variables (Pages project settings)
 
-| Name                                           | Env                 | Role                                                                                 |
-| ---------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------ |
-| `CATALOG_SUPABASE_URL`, `CATALOG_SUPABASE_KEY` | production, preview | Catalog read by the build and the relay. The key is a Supabase secret key, encrypted |
-| `CALENDAR_SAMPLE`                              | preview only        | `1`: sample calendar data when the views do not answer (pages flagged and noindex)   |
-| `PUBLIC_POSTHOG_KEY`                           | production, preview | PostHog project key (public by design)                                               |
+| Name                      | Env                 | Role                                                                                                      |
+| ------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------- |
+| `MOTORSPORT_DATA_API_KEY` | production, preview | Catalog read by the build and the relay (motorsport-data API), encrypted                                  |
+| `CALENDAR_SAMPLE`         | preview only        | `1`: sample calendar data without the API key or when the API does not answer (pages flagged and noindex) |
+| `PUBLIC_POSTHOG_KEY`      | production, preview | PostHog project key (public by design)                                                                    |
 
 The values live in the Pages project and in Infisical (`racenode`), never in this public repository.
 

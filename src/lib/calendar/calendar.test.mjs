@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { test } from 'node:test';
 import { SAMPLE_API, liveConfig, loadCatalog } from './build.mjs';
-import { API_URL, VIEWS, catalogSource, sanitize } from './contract.mjs';
+import { API_URL, catalogSource, sanitize } from './contract.mjs';
 import { dateRange, roundLabel, roundName } from './format.mjs';
 import { refresh } from './refresh.mjs';
 import { LIVE_API, ipBudget, relay } from './relay.mjs';
@@ -257,22 +257,6 @@ test('a folded double-header counts its rounds: a circuit with two meetings, one
   assert.match(html, /Rounds 1–2/);
 });
 
-test('views from before round_numbers: the read asks again without the new columns', async () => {
-  const seen = [];
-  const api = await fakeViews((view, n, url) => {
-    seen.push(url);
-    return /round_count|round_numbers/.test(url)
-      ? [400, { code: '42703', message: 'column does not exist' }]
-      : [200, []];
-  });
-  try {
-    await loadCatalog(api.env, { delays: [] });
-    assert.ok(seen.some((u) => /catalog_public_events\?select=(?!.*round_numbers)/.test(u)));
-  } finally {
-    await api.close();
-  }
-});
-
 test('championships sharing a weekend at the same venue are found', () => {
   const cal = buildCalendar(
     {
@@ -293,9 +277,9 @@ test('championships sharing a weekend at the same venue are found', () => {
   );
 });
 
-test('production never publishes sample data: without the views the build fails', async () => {
-  await assert.rejects(loadCatalog({}), /refusing to publish sample data/);
-  const down = { CATALOG_SUPABASE_URL: 'http://127.0.0.1:9', CATALOG_SUPABASE_KEY: 'k' };
+test('production never publishes sample data: without the API key the build fails', async () => {
+  await assert.rejects(loadCatalog({}), /MOTORSPORT_DATA_API_KEY missing/);
+  const down = { MOTORSPORT_DATA_API_KEY: 'k', MOTORSPORT_DATA_API_URL: 'http://127.0.0.1:9' };
   await assert.rejects(loadCatalog(down, { delays: [] }));
   // A preview (CALENDAR_SAMPLE=1) falls back to the sample, flagged so the pages say so and are not indexed.
   for (const env of [{}, down]) {
@@ -305,59 +289,59 @@ test('production never publishes sample data: without the views the build fails'
   }
 });
 
-/** A fake PostgREST: `answer(view, n)` gives [status, body] for the n-th request (from 1) to a view. */
-async function fakeViews(answer) {
+/** A fake API: `answer(list, n)` gives [status, body] for the n-th request (from 1) to a list (series, seasons, events). */
+async function fakeUpstream(answer) {
   const hits = {};
   const server = createServer((req, res) => {
-    const view = new URL(req.url, 'http://x').pathname.split('/').pop();
-    hits[view] = (hits[view] ?? 0) + 1;
-    const [status, body] = answer(view, hits[view], decodeURIComponent(req.url));
+    const list = new URL(req.url, 'http://x').pathname.split('/').pop();
+    hits[list] = (hits[list] ?? 0) + 1;
+    const [status, body] = answer(list, hits[list]);
     res.writeHead(status, { 'Content-Type': 'application/json' }).end(JSON.stringify(body));
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   const env = {
-    CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`,
-    CATALOG_SUPABASE_KEY: 'k',
+    MOTORSPORT_DATA_API_KEY: 'k',
+    MOTORSPORT_DATA_API_URL: `http://127.0.0.1:${server.address().port}`,
   };
   return { env, hits, close: () => new Promise((r) => server.close(r)) };
 }
-const PGRST002 = {
-  code: 'PGRST002',
-  message: 'Could not query the database for the schema cache. Retrying.',
-};
-const rowsOf = (view) =>
-  view === VIEWS.series
-    ? [{ slug: 'gt4', name: 'GT4' }]
-    : view === VIEWS.events
-      ? [{ series_slug: 'gt4', status: 'scheduled', start_date: '2027-04-01' }]
-      : [];
+const UNAVAILABLE = { error: { code: 'unavailable', message: 'Retry later.' } };
+const rowsOf = (list) => ({
+  data:
+    list === 'series'
+      ? [{ slug: 'gt4', name: 'GT4' }]
+      : list === 'events'
+        ? [{ series_slug: 'gt4', status: 'scheduled', start_date: '2027-04-01' }]
+        : [],
+  next_cursor: null,
+});
 
-test('a passing 503 (PGRST002) is retried and the build gets the catalog', async () => {
-  const api = await fakeViews((view, n) =>
-    view === VIEWS.events && n <= 2 ? [503, PGRST002] : [200, rowsOf(view)],
+test('a passing 503 is retried and the build gets the catalog', async () => {
+  const api = await fakeUpstream((list, n) =>
+    list === 'events' && n <= 2 ? [503, UNAVAILABLE] : [200, rowsOf(list)],
   );
   try {
     const data = await loadCatalog(api.env, { delays: [1, 1, 1] });
     assert.equal(data.sample, false);
     assert.equal(data.events.length, 1);
-    assert.equal(api.hits[VIEWS.events], 3);
+    assert.equal(api.hits.events, 3);
   } finally {
     await api.close();
   }
 });
 
-test('a database that stays down fails the build after the retries, never an empty calendar', async () => {
-  const api = await fakeViews(() => [503, PGRST002]);
+test('a catalog that stays down fails the build after the retries, never an empty calendar', async () => {
+  const api = await fakeUpstream(() => [503, UNAVAILABLE]);
   try {
-    await assert.rejects(loadCatalog(api.env, { delays: [1, 1] }), /answered 503 .*PGRST002/);
-    assert.equal(api.hits[VIEWS.events], 3);
+    await assert.rejects(loadCatalog(api.env, { delays: [1, 1] }), /answered 503 .*unavailable/);
+    assert.equal(api.hits.events, 3);
   } finally {
     await api.close();
   }
 });
 
-test('a 4xx (missing view, bad key) is not retried', async () => {
-  const api = await fakeViews(() => [404, { code: 'PGRST205' }]);
+test('a 4xx (missing route, bad key) is not retried', async () => {
+  const api = await fakeUpstream(() => [404, { error: { code: 'not_found' } }]);
   try {
     await assert.rejects(loadCatalog(api.env, { delays: [1, 1] }), /answered 404/);
     await new Promise((r) => setTimeout(r, 50));
@@ -544,7 +528,10 @@ const ask = (
   query = '',
   headers = { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '1.2.3.4' },
 ) => new Request(`https://www.racenode.com${LIVE_API}${query}`, { headers });
-const relayEnv = { CATALOG_SUPABASE_URL: 'https://db.test', CATALOG_SUPABASE_KEY: 'server-secret' };
+const relayEnv = {
+  MOTORSPORT_DATA_API_KEY: 'server-secret',
+  MOTORSPORT_DATA_API_URL: 'https://db.test',
+};
 const nodeFetch = globalThis.fetch; // the refresh tests above replace it
 
 /** An edge cache in memory, keyed like caches.default (by URL). */
@@ -580,30 +567,7 @@ test('a page never carries a database URL or key, only where to ask', () => {
   }
 });
 
-test('the server key travels in a header, never in a URL', async () => {
-  const seen = [];
-  const server = createServer((req, res) => {
-    seen.push({ url: req.url, apikey: req.headers.apikey });
-    res.writeHead(200, { 'Content-Type': 'application/json' }).end('[]');
-  });
-  await new Promise((r) => server.listen(0, '127.0.0.1', r));
-  globalThis.fetch = nodeFetch;
-  try {
-    await loadCatalog(
-      {
-        CATALOG_SUPABASE_URL: `http://127.0.0.1:${server.address().port}`,
-        CATALOG_SUPABASE_KEY: 'server-secret',
-      },
-      { delays: [] },
-    );
-    assert.equal(seen.length, 3);
-    assert.ok(seen.every((r) => r.apikey === 'server-secret' && !r.url.includes('server-secret')));
-  } finally {
-    await new Promise((r) => server.close(r));
-  }
-});
-
-test('the relay answers a page with the contract fields, from the views once, then from the cache', async () => {
+test('the relay answers a page with the contract fields, from the catalog once, then from the cache', async () => {
   const data = await sampleData();
   const reads = [];
   const read = async (url, key, { series }) => {
@@ -669,24 +633,23 @@ test('the relay turns away other sites, scripts, odd queries and greedy addresse
   );
 });
 
-test('the relay says nothing about the database when the views fail, and caches no failure', async () => {
+test('the relay says nothing about the database when the catalog fails, and caches no failure', async () => {
   const cache = memoryCache();
   const res = await relay(ask(), relayEnv, {
     cache,
     read: async () => {
-      throw new Error('calendar: catalog_public_events answered 401 {"message":"Invalid API key"}');
+      throw new Error('calendar: /events answered 401 {"message":"Invalid API key"}');
     },
   });
   assert.equal(res.status, 502);
-  assert.doesNotMatch(await res.text(), /API key|catalog_public/);
+  assert.doesNotMatch(await res.text(), /API key|events/);
   assert.equal(cache.store.size, 0);
   assert.equal((await relay(ask(), {}, {})).status, 503, 'not configured');
 });
 
-// The motorsport-data API (catalogSource): with MOTORSPORT_DATA_API_KEY set, the build and the relay read it instead
-// of the views, and get the very same rows.
+// The motorsport-data API (catalogSource): the build and the relay read it with MOTORSPORT_DATA_API_KEY.
 
-/** The views' rows as the API serves them: organizer, logo and venue nested, extra fields the site must drop. */
+/** The contract's flat rows as the API serves them: organizer, logo and venue nested, extra fields the site must drop. */
 function asApi(views) {
   return {
     series: views.series.map(({ organizer_name, organizer_website_url, logo_url, ...s }) => ({
@@ -772,21 +735,14 @@ const rawSample = async () => {
   return { series, seasons: s.seasons, events: s.events };
 };
 
-test('the API gives the build the very rows the views give, across pages, in the same order', async () => {
+test('the API gives the build the contract rows, flattened, across pages, by championship then date', async () => {
   const views = await rawSample();
-  const fromViews = await fakeViews((view) => [
-    200,
-    { [VIEWS.series]: views.series, [VIEWS.seasons]: views.seasons, [VIEWS.events]: views.events }[
-      view
-    ],
-  ]);
   const api = await fakeApi(asApi(views));
   globalThis.fetch = nodeFetch;
   try {
     const a = await loadCatalog(api.env, { delays: [] });
-    const b = await loadCatalog(fromViews.env, { delays: [] });
     assert.ok(a.events.length > 800 && a.series.some((s) => s.logo_url));
-    assert.deepEqual(a, b);
+    assert.deepEqual(a, { sample: false, ...sanitize(views, { logos: true }) });
     // 825 events in pages of 37: every page was read, each with the cursor of the one before.
     assert.equal(
       api.seen.filter((r) => r.url.startsWith('/v1/events')).length,
@@ -797,7 +753,6 @@ test('the API gives the build the very rows the views give, across pages, in the
     );
   } finally {
     await api.close();
-    await fromViews.close();
   }
 });
 
@@ -823,12 +778,9 @@ test("a championship's relay answer from the API: that championship only, no log
   }
 });
 
-test('the API key picks the API; without it, the views (the way back); a bad key fails the build, unretried', async () => {
-  const views = { CATALOG_SUPABASE_URL: 'https://db.test', CATALOG_SUPABASE_KEY: 'k' };
-  assert.equal(catalogSource({ ...views, MOTORSPORT_DATA_API_KEY: 'a' }).name, 'api');
+test('no API key, no source; a bad key fails the build, unretried', async () => {
   assert.equal(catalogSource({ MOTORSPORT_DATA_API_KEY: 'a' }).url, API_URL);
-  assert.equal(catalogSource(views).name, 'views');
-  assert.equal(catalogSource({ ...views, MOTORSPORT_DATA_API_KEY: '' }).name, 'views');
+  assert.equal(catalogSource({ MOTORSPORT_DATA_API_KEY: '' }), null);
   assert.equal(catalogSource({}), null);
 
   const api = await fakeApi(asApi(await rawSample()), { key: 'another-key' });
