@@ -1,9 +1,10 @@
-// The relay between the visitor's browser and the catalog views (a Pages Function: functions/calendar/api/catalog.js).
-// The browser never talks to the database: the relay reads the views with the server's key and answers the one
+// The relay between the visitor's browser and the catalog (a Pages Function: functions/calendar/api/catalog.js).
+// The browser never talks to the catalog: the relay reads it (the motorsport-data API, or the app's views until the
+// clean-up: catalogSource in contract.mjs) with the server's key and answers the one
 // question a calendar page asks (the whole catalog, or one championship), from the edge cache when it can. It is
 // no more open than the pages themselves, and makes bulk downloads slow: same-origin requests only, a per-IP
 // budget, fixed queries (no filter, column or ordering of the caller's choosing).
-import { fetchCatalog } from './contract.mjs';
+import { catalogSource } from './contract.mjs';
 
 /** Where the browser asks (liveConfig in build.mjs). */
 export const LIVE_API = '/calendar/api/catalog';
@@ -49,12 +50,12 @@ const json = (body, status, headers = {}) =>
 
 /**
  * Answers one browser request. `cache` is the edge cache (caches.default) or null, `allow` the IP budget, `waitUntil`
- * keeps the cache write alive after the answer, `read` the views (fetchCatalog; tests replace it).
+ * keeps the cache write alive after the answer, `read` replaces the source's read (catalogSource; tests only).
  */
 export async function relay(
   request,
   env,
-  { cache = null, allow = () => true, waitUntil = () => {}, read = fetchCatalog } = {},
+  { cache = null, allow = () => true, waitUntil = () => {}, read = null } = {},
 ) {
   // Browsers say where a request comes from; a script that does not bother to pretend is turned away here.
   if (request.headers.get('sec-fetch-site') !== 'same-origin')
@@ -78,11 +79,11 @@ export async function relay(
   const hit = cache && (await cache.match(key));
   if (hit) return hit;
 
-  if (!env.CATALOG_SUPABASE_URL || !env.CATALOG_SUPABASE_KEY)
-    return json({ error: 'not configured' }, 503);
+  const source = catalogSource(env);
+  if (!source) return json({ error: 'not configured' }, 503);
   let data;
   try {
-    data = await read(env.CATALOG_SUPABASE_URL, env.CATALOG_SUPABASE_KEY, {
+    data = await (read ?? source.read)(source.url, source.key, {
       series: series ?? undefined,
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });

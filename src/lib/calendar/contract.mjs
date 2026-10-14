@@ -1,5 +1,6 @@
-// The public race calendar reads the app's championship catalog through three read-only views: series, seasons,
-// rounds. Server-side only, with a key that never reaches a page: at build time for the pages Google indexes, and in
+// The public race calendar reads the championship catalog: series, seasons, rounds. From the motorsport-data API when
+// MOTORSPORT_DATA_API_KEY is set, else from the app's three read-only views (catalogSource below; the views go at the
+// clean-up). Both give the same rows (the views' shape). Server-side only, with a key that never reaches a page: at build time for the pages Google indexes, and in
 // the relay (relay.mjs) the visitor's browser asks for what changed since (refresh.mjs). Only the fields below are
 // ever kept: if a view grows a column (raw scrape, logs, anything about a team), the site drops it before a page or
 // the relay can show it.
@@ -141,6 +142,113 @@ export async function fetchCatalog(url, key, { signal, series, logos = false } =
     ['series', 'seasons', 'events'].map((k) => fetchView(base, key, k, { signal, series, logos })),
   );
   return only(sanitize({ series: s, seasons: se, events: ev }, { logos }), series);
+}
+
+/** The motorsport-data read API (WBLT Engineering), the catalog's home since it left the app. */
+export const API_URL = 'https://api.wblt-engineering.com/motorsport/v1';
+
+/**
+ * The API's objects as the views' rows: the same columns, nested ones flattened (organizer, logo, venue), so that
+ * everything after this point reads one shape whichever source answered. Parity with the views was checked column by
+ * column (motorsport-data scripts/compare-api.mjs).
+ */
+const FROM_API = {
+  series: (a) => ({
+    ...a,
+    organizer_name: a.organizer?.name ?? null,
+    organizer_website_url: a.organizer?.website_url ?? null,
+    logo_url: a.logo?.url ?? null,
+    logo_light_url: a.logo?.light ?? null,
+    logo_dark_url: a.logo?.dark ?? null,
+  }),
+  seasons: (a) => a,
+  events: (a) => ({
+    ...a,
+    venue_slug: a.venue?.slug ?? null,
+    venue_name: a.venue?.name ?? null,
+    venue_country_code: a.venue?.country_code ?? null,
+    venue_timezone: a.venue?.timezone ?? null,
+  }),
+};
+
+const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+/** The views' order (ORDER above), which the API does not share for events (it lists them by date first). */
+const SORT = {
+  series: (a, b) => cmp(a.slug, b.slug),
+  seasons: (a, b) => cmp(a.series_slug, b.series_slug) || a.year - b.year,
+  events: (a, b) => cmp(a.series_slug, b.series_slug) || cmp(a.start_date, b.start_date),
+};
+
+async function apiGet(url, key, path, signal) {
+  const res = await fetch(`${url}${path}`, {
+    headers: { Accept: 'application/json', Authorization: `Bearer ${key}` },
+    signal,
+  });
+  if (!res.ok) {
+    const e = new Error(
+      `calendar: ${path.split('?')[0]} answered ${res.status} ${await res.text()}`,
+    );
+    e.status = res.status;
+    throw e;
+  }
+  return res.json();
+}
+
+async function fetchList(url, key, kind, { signal, series } = {}) {
+  // One championship: its own record (a 404 = not in the catalog); its seasons and events, filtered by the API.
+  if (series && kind === 'series') {
+    try {
+      return [(await apiGet(url, key, `/series/${encodeURIComponent(series)}`, signal)).data];
+    } catch (e) {
+      if (e.status === 404) return [];
+      throw e;
+    }
+  }
+  const rows = [];
+  let cursor = null;
+  do {
+    const q = new URLSearchParams({ limit: String(PAGE) });
+    if (series) q.set('series', series);
+    if (cursor) q.set('cursor', cursor);
+    const page = await apiGet(url, key, `/${kind}?${q}`, signal);
+    rows.push(...page.data);
+    cursor = page.next_cursor;
+  } while (cursor);
+  return rows;
+}
+
+/** The catalog from the API, server-side, in the views' shape and order: what fetchCatalog gives from the views. */
+export async function fetchCatalogApi(url, key, { signal, series, logos = false } = {}) {
+  const base = url.replace(/\/$/, '');
+  const [s, se, ev] = await Promise.all(
+    ['series', 'seasons', 'events'].map(async (k) =>
+      (await fetchList(base, key, k, { signal, series })).map(FROM_API[k]).sort(SORT[k]),
+    ),
+  );
+  return only(sanitize({ series: s, seasons: se, events: ev }, { logos }), series);
+}
+
+/**
+ * Where the server reads the catalog, from its environment: the API when MOTORSPORT_DATA_API_KEY is set
+ * (MOTORSPORT_DATA_API_URL overrides its address), else the app's views (CATALOG_SUPABASE_URL + CATALOG_SUPABASE_KEY),
+ * kept until the clean-up as the way back: removing the API key switches back. Null when neither is configured.
+ */
+export function catalogSource(env) {
+  if (env.MOTORSPORT_DATA_API_KEY)
+    return {
+      name: 'api',
+      url: env.MOTORSPORT_DATA_API_URL || API_URL,
+      key: env.MOTORSPORT_DATA_API_KEY,
+      read: fetchCatalogApi,
+    };
+  if (env.CATALOG_SUPABASE_URL && env.CATALOG_SUPABASE_KEY)
+    return {
+      name: 'views',
+      url: env.CATALOG_SUPABASE_URL,
+      key: env.CATALOG_SUPABASE_KEY,
+      read: fetchCatalog,
+    };
+  return null;
 }
 
 /**

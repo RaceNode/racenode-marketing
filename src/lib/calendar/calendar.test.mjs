@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { test } from 'node:test';
 import { SAMPLE_API, liveConfig, loadCatalog } from './build.mjs';
-import { VIEWS, sanitize } from './contract.mjs';
+import { API_URL, VIEWS, catalogSource, sanitize } from './contract.mjs';
 import { dateRange, roundLabel, roundName } from './format.mjs';
 import { refresh } from './refresh.mjs';
 import { LIVE_API, ipBudget, relay } from './relay.mjs';
@@ -553,14 +553,17 @@ function memoryCache() {
 
 test('a page never carries a database URL or key, only where to ask', () => {
   const ctx = { year: 2027, today: '2026-10-08', countries: {} };
-  const before = {
-    CATALOG_SUPABASE_URL: process.env.CATALOG_SUPABASE_URL,
-    CATALOG_SUPABASE_KEY: process.env.CATALOG_SUPABASE_KEY,
+  const apiEnv = {
+    MOTORSPORT_DATA_API_KEY: 'api-secret',
+    MOTORSPORT_DATA_API_URL: 'https://api.test/motorsport/v1',
   };
-  Object.assign(process.env, relayEnv);
+  const before = Object.fromEntries(
+    Object.keys({ ...relayEnv, ...apiEnv }).map((k) => [k, process.env[k]]),
+  );
+  Object.assign(process.env, relayEnv, apiEnv);
   try {
     const live = JSON.stringify(liveConfig({ data: { sample: false }, ctx }, { slug: 'gt4' }));
-    assert.doesNotMatch(live, /server-secret|db\.test/);
+    assert.doesNotMatch(live, /server-secret|db\.test|api-secret|api\.test|wblt-engineering/);
     assert.equal(JSON.parse(live).api, LIVE_API);
     assert.equal(liveConfig({ data: { sample: true }, ctx }).api, SAMPLE_API);
   } finally {
@@ -672,4 +675,169 @@ test('the relay says nothing about the database when the views fail, and caches 
   assert.doesNotMatch(await res.text(), /API key|catalog_public/);
   assert.equal(cache.store.size, 0);
   assert.equal((await relay(ask(), {}, {})).status, 503, 'not configured');
+});
+
+// The motorsport-data API (catalogSource): with MOTORSPORT_DATA_API_KEY set, the build and the relay read it instead
+// of the views, and get the very same rows.
+
+/** The views' rows as the API serves them: organizer, logo and venue nested, extra fields the site must drop. */
+function asApi(views) {
+  return {
+    series: views.series.map(({ organizer_name, organizer_website_url, logo_url, ...s }) => ({
+      id: `id-${s.slug}`,
+      ...s,
+      organizer: organizer_name
+        ? { name: organizer_name, website_url: organizer_website_url }
+        : null,
+      aliases: ['alias'],
+      logo: { url: logo_url ?? null, light: null, dark: null },
+      updated_at: '2026-10-13T00:00:00Z',
+    })),
+    seasons: views.seasons.map((s) => ({
+      id: `id-${s.series_slug}-${s.label}`,
+      ...s,
+      updated_at: 'x',
+    })),
+    // The API lists events by date first; the views by championship, then date.
+    events: views.events
+      .map(({ venue_slug, venue_name, venue_country_code, venue_timezone, ...e }) => ({
+        id: `id-${e.series_slug}-${e.start_date}-${e.name}`,
+        ...e,
+        tickets_url: 'https://tickets.test',
+        venue: {
+          id: 'v',
+          slug: venue_slug,
+          name: venue_name,
+          country_code: venue_country_code,
+          timezone: venue_timezone,
+        },
+      }))
+      .sort((a, b) => a.start_date.localeCompare(b.start_date)),
+  };
+}
+
+/**
+ * A fake motorsport-data API: pages of `pageSize` rows whatever the `limit` (the cursor is the offset), the key in the
+ * Authorization header, unknown parameters refused like the real one.
+ */
+async function fakeApi(data, { pageSize = 37, key = 'site-key' } = {}) {
+  const seen = [];
+  const server = createServer((req, res) => {
+    const url = new URL(req.url, 'http://x');
+    seen.push({ url: req.url, authorization: req.headers.authorization });
+    const send = (status, body) =>
+      res.writeHead(status, { 'Content-Type': 'application/json' }).end(JSON.stringify(body));
+    if (req.headers.authorization !== `Bearer ${key}`)
+      return send(401, { error: { code: 'unauthorized', message: 'bad key' } });
+    if ([...url.searchParams.keys()].some((k) => !['limit', 'cursor', 'series'].includes(k)))
+      return send(400, { error: { code: 'bad_request', message: 'unknown parameter' } });
+    const [, kind, ref] = url.pathname.replace(/^\/v1/, '').split('/');
+    if (ref) {
+      const one = data.series.find((s) => s.slug === ref);
+      return one
+        ? send(200, { data: one })
+        : send(404, { error: { code: 'not_found', message: '' } });
+    }
+    const series = url.searchParams.get('series');
+    const rows = data[kind].filter((r) => !series || (r.series_slug ?? r.slug) === series);
+    const from = Number(url.searchParams.get('cursor') ?? 0);
+    const next = from + pageSize < rows.length ? String(from + pageSize) : null;
+    send(200, { data: rows.slice(from, from + pageSize), next_cursor: next });
+  });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const env = {
+    MOTORSPORT_DATA_API_KEY: key,
+    MOTORSPORT_DATA_API_URL: `http://127.0.0.1:${server.address().port}/v1`,
+  };
+  return {
+    env,
+    seen,
+    close: () => new Promise((r) => (server.close(r), server.closeAllConnections())),
+  };
+}
+
+const rawSample = async () => {
+  const { default: s } = await import('../../data/calendar/sample.json', {
+    with: { type: 'json' },
+  });
+  const series = s.series.map((x, i) =>
+    i % 3 ? x : { ...x, logo_url: `https://logos.test/${x.slug}.svg` },
+  );
+  return { series, seasons: s.seasons, events: s.events };
+};
+
+test('the API gives the build the very rows the views give, across pages, in the same order', async () => {
+  const views = await rawSample();
+  const fromViews = await fakeViews((view) => [
+    200,
+    { [VIEWS.series]: views.series, [VIEWS.seasons]: views.seasons, [VIEWS.events]: views.events }[
+      view
+    ],
+  ]);
+  const api = await fakeApi(asApi(views));
+  globalThis.fetch = nodeFetch;
+  try {
+    const a = await loadCatalog(api.env, { delays: [] });
+    const b = await loadCatalog(fromViews.env, { delays: [] });
+    assert.ok(a.events.length > 800 && a.series.some((s) => s.logo_url));
+    assert.deepEqual(a, b);
+    // 825 events in pages of 37: every page was read, each with the cursor of the one before.
+    assert.equal(
+      api.seen.filter((r) => r.url.startsWith('/v1/events')).length,
+      Math.ceil(825 / 37),
+    );
+    assert.ok(
+      api.seen.every((r) => r.authorization === 'Bearer site-key' && !r.url.includes('site-key')),
+    );
+  } finally {
+    await api.close();
+    await fromViews.close();
+  }
+});
+
+test("a championship's relay answer from the API: that championship only, no logo, unknown slugs empty", async () => {
+  const views = await rawSample();
+  const api = await fakeApi(asApi(views));
+  globalThis.fetch = nodeFetch;
+  try {
+    const res = await relay(ask('?series=british-gt'), api.env, {});
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.deepEqual(new Set(body.events.map((e) => e.series_slug)), new Set(['british-gt']));
+    assert.deepEqual(
+      body.series.map((s) => s.slug),
+      ['british-gt'],
+    );
+    assert.ok(!('logo_url' in body.series[0]) && !('venue' in body.events[0]));
+    assert.doesNotMatch(JSON.stringify(body), /site-key|127\.0\.0\.1|tickets|alias/);
+    const none = await (await relay(ask('?series=no-such-series'), api.env, {})).json();
+    assert.deepEqual(none, { series: [], seasons: [], events: [] });
+  } finally {
+    await api.close();
+  }
+});
+
+test('the API key picks the API; without it, the views (the way back); a bad key fails the build, unretried', async () => {
+  const views = { CATALOG_SUPABASE_URL: 'https://db.test', CATALOG_SUPABASE_KEY: 'k' };
+  assert.equal(catalogSource({ ...views, MOTORSPORT_DATA_API_KEY: 'a' }).name, 'api');
+  assert.equal(catalogSource({ MOTORSPORT_DATA_API_KEY: 'a' }).url, API_URL);
+  assert.equal(catalogSource(views).name, 'views');
+  assert.equal(catalogSource({ ...views, MOTORSPORT_DATA_API_KEY: '' }).name, 'views');
+  assert.equal(catalogSource({}), null);
+
+  const api = await fakeApi(asApi(await rawSample()), { key: 'another-key' });
+  globalThis.fetch = nodeFetch;
+  try {
+    await assert.rejects(
+      loadCatalog({ ...api.env, MOTORSPORT_DATA_API_KEY: 'site-key' }, { delays: [1, 1] }),
+      /answered 401/,
+    );
+    await new Promise((r) => setTimeout(r, 50));
+    assert.ok(api.seen.length <= 3, 'one try per list at most, no retry on a 4xx');
+    const res = await relay(ask(), { ...api.env, MOTORSPORT_DATA_API_KEY: 'site-key' }, {});
+    assert.equal(res.status, 502);
+    assert.doesNotMatch(await res.text(), /401|bad key|127\.0\.0\.1/);
+  } finally {
+    await api.close();
+  }
 });
