@@ -92,12 +92,7 @@ Dark theme mirroring the app's design system. Tokens are defined in `src/styles/
 - `src/analytics/`, `Analytics.astro`, `AnalyticsDisclosure.astro` and `vitest.config.ts` are the analytics brick of the WBLT site template (`~/script/wblt/templates/template-site`), kept as close to it as possible so changes can travel both ways; the deviations are listed in the PR that brought it (consent-banner). `src/paraglide/` is a stub that gives the brick its English messages (banner texts live there), `src/site.config.ts` its `hosting`.
 - Tool: PostHog (`ANALYTICS_PROVIDER=posthog` + `PUBLIC_POSTHOG_KEY` in the Cloudflare Pages env; absent in dev, so nothing runs locally). Before a choice or after "Reject", it measures with nothing stored (memory persistence); after "Accept", a first-party cookie `ph_<key>_posthog` on www only, and links to `https://app.racenode.com` carry `?ph=<distinct_id>` (the app reads it; `POSTHOG_HANDOFF_ORIGINS` in `config.ts`). "Cookie settings" in the footer reopens the choice; withdrawing erases the cookie.
 - Banner styling: `#cc-main` variables in `src/styles/global.css`, tokens only. Tests: `npm run test:unit`.
-  <<<<<<< HEAD
 - One deviation from the brick: `boot.ts` starts after the `load` event, in an idle moment (banner and PostHog, ~100 KB, out of the first render). Candidate for the template.
-  \=======
-
-> > > > > > > origin/main
-
 ## Race calendar
 
 - Static like the rest of the site, plus one Pages Function (the relay below; free plan only, no Workers Paid plan: Willi, 2026-10-07, so no Durable Objects and no rate-limit binding). Built from the catalog at every deploy, and every morning by the systemd timer `racenode-site-rebuild` on wblt-server (06:45 UTC; by hand: `sudo systemctl start racenode-site-rebuild.service`, log: `journalctl -u racenode-site-rebuild`): that is what Google indexes.
@@ -121,14 +116,8 @@ The site follows the WBLT site template (`~/script/wblt/templates/template-site`
 - **One language, no Paraglide**: pages at the root (the template's single-language layout), texts in the components; no `messages/`, `project.inlang/`, `middleware.ts`.
 - **No contact form**: contact by `mailto:`, the journey is the app signup.
 - **Two test runners**: Vitest for the TypeScript units, as in the template (`npm run test:unit`: analytics, seo); the calendar and guardrail tests stay on `node --test` (`test:calendar`, `test:guardrails`), not converted.
-  <<<<<<< HEAD
 - **Lighthouse** (`tests/lighthouse.mjs`, `npm run test:lighthouse`, also in CI): the template's script and targets, on `astro preview` or the live site (`LIGHTHOUSE_BASE`), information only (`LIGHTHOUSE_STRICT=1` fails as in the template). Scores depend on the machine's CPU: compare before/after on the same machine, ideally a quiet one (a GitHub runner), never against a number taken elsewhere.
 - **Performance settings from the template**: `build.inlineStylesheets: 'always'`, first-screen fonts preloaded (`src/styles/fonts.ts`, three files). The calendar refresh (`LiveRefresh.astro`) also waits for the load event.
-  \=======
-- **Lighthouse** (`tests/lighthouse.mjs`, `npm run test:lighthouse`, also in CI): the template's script and targets, on `astro preview` or the live site (`LIGHTHOUSE_BASE`), information only until the performance lot (`LIGHTHOUSE_STRICT=1` fails as in the template).
-
-> > > > > > > origin/main
-
 - **`src/site.config.ts` is reduced**: no `hosting`, `locales`, `contactForm`, `sections`, `nav`, `profiles` or local business; `business` keeps only description, logo, founder. `src/lib/seo.ts` keeps the template's helpers as they are, with RaceNode's own Organization (founder, contact point, store listings passed by the caller, `data/stores.ts` staying their single source) and SoftwareApplication; `hosting: 'cloudflare-pages'`, a value the template does not have (no `/api/geo`).
 - **Prettier**: the template's config; `.prettierignore` also leaves out the legal texts (`src/data/legal`: their exact markdown is the published document), `store/listing.json`, the calendar sample and `public/`.
 - **ESLint**: the template's config plus one override, `no-explicit-any` off in `src/pages/calendar/**` (its data comes from the untyped `.mjs` of `src/lib/calendar`).
