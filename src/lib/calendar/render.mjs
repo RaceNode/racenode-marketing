@@ -177,8 +177,8 @@ const external = (href, text, cls) =>
 
 /** A season's rounds: a table from sm up, stacked cards on a phone. */
 export function seasonTable(season, ctx, pages = new Set()) {
-  const rows = season.rounds.map((r, i) => {
-    const label = roundLabel(r) || `Round ${i + 1}`;
+  const rows = season.rounds.map((r) => {
+    const label = roundLabel(r);
     const name = roundName(r);
     return (
       '<li class="cal-season-row">' +

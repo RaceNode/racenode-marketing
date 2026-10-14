@@ -509,6 +509,12 @@ test('dates and labels read the way a team writes them', () => {
     'Round 1 · Endurance Cup',
   );
   assert.equal(roundLabel({ round_number: 2, sub_label: null }), 'Round 2');
+  // No number from the source: no label, never one guessed from the order.
+  assert.equal(roundLabel({ round_number: null, round_label: 'Round' }), '');
+  assert.equal(
+    roundLabel({ round_number: null, round_label: null, sub_label: 'Sprint' }),
+    'Sprint',
+  );
   // The catalog folds a double-header into one event (round_numbers), from the app's "one meeting, one event".
   assert.equal(roundLabel({ round_number: 1, round_numbers: [1, 2] }), 'Rounds 1–2');
   assert.equal(roundLabel({ round_number: 4, round_numbers: [4, 6] }), 'Rounds 4, 6');

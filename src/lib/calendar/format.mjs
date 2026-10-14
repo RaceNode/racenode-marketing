@@ -77,7 +77,9 @@ function numbered(n) {
 
 /** "Round 3 · Endurance Cup", "Rounds 1–2", or the kind for a test or media day without a label. */
 export function roundLabel(r) {
-  const label = r.round_label ?? numbered(roundsOf(r)) ?? (r.kind === 'test' ? 'Test' : null);
+  // A bare "Round" (the source printed no number) says nothing: never guessed from the order.
+  const given = /^rounds?$/i.test(r.round_label?.trim() ?? '') ? null : r.round_label;
+  const label = given ?? numbered(roundsOf(r)) ?? (r.kind === 'test' ? 'Test' : null);
   return [label, r.sub_label].filter(Boolean).join(' · ');
 }
 
