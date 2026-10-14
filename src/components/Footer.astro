@@ -1,6 +1,8 @@
 ---
 import StoreBadges from './StoreBadges.astro';
 import { site } from '../site.config';
+import { analytics } from '@/analytics/config';
+import { m } from '@/paraglide/messages';
 
 const currentYear = new Date().getFullYear();
 const email = site.contact.email;
@@ -103,6 +105,17 @@ const footerLinks = {
               </a>
             </li>
           ))}
+          {analytics.consentRequired && (
+            <li>
+              <button
+                type="button"
+                data-cc="show-preferencesModal"
+                class="text-white hover:text-accent-soft transition-colors cursor-pointer"
+              >
+                {m.consent_manage()}
+              </button>
+            </li>
+          )}
         </ul>
       </div>
     </div>
@@ -110,6 +123,16 @@ const footerLinks = {
     <!-- Copyright -->
     <div class="mt-14 pt-6 border-t border-asphalt-line">
       <p class="text-smoke text-sm">&copy; {currentYear} RaceNode. All rights reserved.</p>
+      <p class="text-smoke text-xs mt-2">
+        Designed by{' '}
+        <a
+          href="https://wblt-engineering.com"
+          rel="nofollow"
+          class="underline-offset-2 hover:text-white hover:underline"
+        >
+          WBLT Engineering
+        </a>
+      </p>
     </div>
   </div>
 </footer>

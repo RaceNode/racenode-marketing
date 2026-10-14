@@ -1,5 +1,5 @@
 **Effective Date:** January 25, 2026\
-**Last Updated:** October 9, 2026
+**Last Updated:** October 13, 2026
 
 This Privacy Policy explains how WBLT Engineering ("we", "us", "our") collects, uses, and protects your personal data when you use the RaceNode platform ("Service") or visit our website (www.racenode.com), in accordance with the General Data Protection Regulation (GDPR).
 
@@ -40,7 +40,7 @@ Website: https://www.racenode.com
 - **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f))
 
 ### 2.5 Product Analytics (in the app)
-- **What we collect**: Screens viewed and clicks in the app (clicked text masked), platform and browser type, linked to your account identifier and your organization (identifier and name). No email address, name or session recording. No cookies or storage on your device.
+- **What we collect**: Screens viewed and clicks in the app (clicked text masked), platform and browser type, linked to your account identifier and your organization (identifier and name). No email address, name or session recording. No cookies or storage on your device. If you accepted the website cookie (Section 2.7), your sign-up can be linked to the website visits that led to it.
 - **Purpose**: Understand how the Service is used in order to improve it
 - **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f)). You can object at any time at contact@racenode.com.
 
@@ -53,9 +53,12 @@ Website: https://www.racenode.com
 
 ### 2.7 Website Analytics
 - **What we collect**: When you visit our website (www.racenode.com), two tools measure the visit. Cloudflare Web Analytics counts page views and visits and measures page load performance: page visited (without the query string), referring site, country, browser, operating system and device type. PostHog (EU hosting) records which pages are viewed and which buttons and links are clicked (the text of what is clicked is masked), with the referring site, country, browser, operating system and device type, so that we can see how visitors move through the website up to the sign-up.
-- **What we do not do**: No cookies, no localStorage and nothing else stored on your device: a visit is only known for as long as the page stays open, and a later visit cannot be linked to an earlier one. No profile of you is created, no session recording, no advertising and no tracking across websites. Cloudflare does not fingerprint visitors. These statistics are not linked to your RaceNode account.
+- **Without your consent** (before you choose, or if you reject cookies): nothing is stored on your device. A visit is only known for as long as the page stays open, and a later visit cannot be linked to an earlier one.
+- **With your consent** (the "Accept" button of the cookie banner): PostHog keeps a random visitor identifier in a cookie on www.racenode.com (`ph_<project key>_posthog`, 1 year), so that the pages you view and your later visits are linked. The website also adds this identifier to its links to the RaceNode app (`?ph=`), so that your sign-up, if you create an account, can be linked to the visits that led to it. A second cookie (`cc_cookie`, 6 months) remembers your choice, whatever it is.
+- **Withdrawing your consent**: at any time, from "Cookie settings" at the bottom of every page. The PostHog cookie is then erased and later pages are measured without storage again.
+- **What we do not do**: No profile of you is created, no session recording, no advertising and no tracking across websites. Cloudflare sets no cookie and does not fingerprint visitors. The list of cookies is in the annex at the end of this policy.
 - **Purpose**: Know how many people visit the website, which pages they read and where they leave, improve the pages, and keep them fast
-- **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f)). You can object at any time at contact@racenode.com.
+- **Legal basis**: Legitimate interests (GDPR Art. 6(1)(f)) for the measurement without storage; you can object at any time at contact@racenode.com. Your consent (GDPR Art. 6(1)(a)) for the PostHog cookie and the link to your sign-up.
 
 ---
 
@@ -84,7 +87,7 @@ We do not sell or rent your personal data.
 - **Billing records**: 10 years (French legal requirement)
 - **Technical logs**: 90 days
 - **Product analytics data**: PostHog's default retention period; erased when you delete your account (see Section 7) or on request (see Section 8)
-- **Website analytics (PostHog)**: PostHog's default retention period
+- **Website analytics (PostHog)**: PostHog's default retention period; the PostHog cookie expires after 1 year and is erased when you withdraw your consent
 - **Website visit statistics (Cloudflare)**: Detailed data for 7 days, then reduced to aggregated statistics; available to us for 6 months
 
 After cancellation, modules remain accessible in read-only mode for 6 months, then data is deleted (except billing records retained for legal compliance).

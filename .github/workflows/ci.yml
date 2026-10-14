@@ -50,8 +50,8 @@ jobs:
       - name: Calendar tests
         run: npm run test:calendar
 
-      - name: Structured data tests
-        run: npm run test:seo
+      - name: Unit tests
+        run: npm run test:unit
 
       - name: Build
         env:

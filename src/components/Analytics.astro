@@ -1,0 +1,18 @@
+---
+/**
+ * Everything analytics, in <head>:
+ * 1. Google Consent Mode default (denied), inline, first — only when a
+ *    Google tool is configured. This is what makes the "no tag before
+ *    consent" rule hold whatever the rest of the page does.
+ * 2. The boot script: consent banner and the configured adapter.
+ */
+import { CONSENT_DEFAULT_SNIPPET } from '@/analytics/adapters/google';
+import { analytics } from '@/analytics/config';
+
+const usesGoogle = analytics.provider === 'ga4' || analytics.provider === 'gtm';
+---
+
+{usesGoogle && <script is:inline set:html={CONSENT_DEFAULT_SNIPPET}></script>}
+<script>
+  import '@/analytics/boot';
+</script>
