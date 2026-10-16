@@ -1,0 +1,6 @@
+# Analytics and consent
+
+- `src/analytics/`, `Analytics.astro`, `AnalyticsDisclosure.astro` and `vitest.config.ts` are the analytics brick of the WBLT site template (`~/script/wblt/templates/template-site`), kept as close to it as possible so changes can travel both ways; the deviations are listed in the PR that brought it (consent-banner). `src/paraglide/` is a stub that gives the brick its English messages (banner texts live there), `src/site.config.ts` its `hosting`.
+- Tool: PostHog (`ANALYTICS_PROVIDER=posthog` + `PUBLIC_POSTHOG_KEY` in the Cloudflare Pages env; absent in dev, so nothing runs locally). Before a choice or after "Reject", it measures with nothing stored (memory persistence); after "Accept", a first-party cookie `ph_<key>_posthog` on www only, and links to `https://app.racenode.com` carry `?ph=<distinct_id>` (the app reads it; `POSTHOG_HANDOFF_ORIGINS` in `config.ts`). "Cookie settings" in the footer reopens the choice; withdrawing erases the cookie.
+- Banner styling: `#cc-main` variables in `src/styles/global.css`, tokens only. Tests: `npm run test:unit`.
+- One deviation from the brick: `boot.ts` starts after the `load` event, in an idle moment (banner and PostHog, ~100 KB, out of the first render). Candidate for the template.
