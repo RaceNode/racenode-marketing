@@ -81,7 +81,13 @@ const select = 'cal-select';
       keys.map((k) => [k, (form.elements.namedItem(k) as HTMLSelectElement).value]),
     );
     const match = (el: HTMLElement, fields: readonly string[]) =>
-      fields.every((k) => !f[k] || el.dataset[k] === f[k]);
+      fields.every((k) =>
+        !f[k]
+          ? true
+          : k === 'discipline'
+            ? (el.dataset[k] ?? '').split(' ').includes(f[k])
+            : el.dataset[k] === f[k],
+      );
     const d = new Date();
     const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 

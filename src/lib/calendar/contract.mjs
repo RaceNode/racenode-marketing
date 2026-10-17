@@ -15,6 +15,7 @@ export const FIELDS = {
     'name',
     'short_name',
     'discipline',
+    'disciplines',
     'region',
     'country_code',
     'website_url',
@@ -62,7 +63,17 @@ export function sanitize(data, { logos = false } = {}) {
     (row) =>
       Object.fromEntries([...FIELDS[kind], ...extra].map((f) => [f, row[f] ?? null]));
   return {
-    series: (data.series ?? []).map(pick('series', logos ? LOGO_FIELDS : [])),
+    series: (data.series ?? []).map((row) => {
+      const s = pick('series', logos ? LOGO_FIELDS : [])(row);
+      // Most important first; a source that does not send them files the championship under its one discipline.
+      s.disciplines =
+        Array.isArray(s.disciplines) && s.disciplines.length
+          ? s.disciplines
+          : s.discipline
+            ? [s.discipline]
+            : [];
+      return s;
+    }),
     seasons: (data.seasons ?? []).map(pick('seasons')),
     events: (data.events ?? [])
       .filter((e) => e.status === 'scheduled' || e.status === 'cancelled')

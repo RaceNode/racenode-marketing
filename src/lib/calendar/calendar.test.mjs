@@ -373,6 +373,24 @@ test('the rows of the all-championships calendar escape what the catalog says', 
   assert.doesNotMatch(html, /<b>/);
 });
 
+test('a championship in two disciplines carries both in its row, shows the primary one, and falls back to one', () => {
+  const wec = sanitize({
+    series: [
+      { slug: 'wec', name: 'WEC', discipline: 'prototype', disciplines: ['prototype', 'gt'] },
+    ],
+  }).series[0];
+  const html = roundRow(
+    { ...round('wec', 2027, '2027-04-15'), venue_name: 'Spa', championship: wec },
+    { countries: {} },
+  );
+  assert.match(html, /data-discipline="prototype gt"/);
+  assert.match(html, /<span>[^<]*Prototype[^<]*<\/span><\/div>/i);
+  assert.doesNotMatch(html, /Prototype[^<]*GT|GT[^<]*<\/span><\/div>/);
+  assert.deepEqual(sanitize({ series: [{ slug: 'x', discipline: 'gt' }] }).series[0].disciplines, [
+    'gt',
+  ]);
+});
+
 // --- The browser's refresh (refresh.mjs), against the sample served as the relay would serve it ---------------
 
 const sampleData = async () =>

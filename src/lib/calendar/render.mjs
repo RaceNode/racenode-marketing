@@ -89,6 +89,9 @@ function placeOf(r, ctx, pages) {
   return href ? `<a href="${href}">${where}</a>` : where;
 }
 
+/** All of a championship's disciplines, space-separated for the filter's word test (primary only if the list is absent). */
+const disciplinesOf = (c) => (c.disciplines?.length ? c.disciplines : [c.discipline]).join(' ');
+
 // Styles: .calendar-row in src/styles/global.css (d = dates, c = championship, p = place): hundreds of rows, so
 // their classes live there once. The data-* attributes are what CalendarFilters reads (end: hides a round the
 // visitor's clock says is over, when the morning build is late).
@@ -97,7 +100,7 @@ export function roundRow(r, ctx, pages = new Map(), { place = true } = {}) {
   const sub = [roundLabel(r), DISCIPLINES[c.discipline]].filter(Boolean).join(' · ');
   const name = roundName(r);
   return (
-    `<li class="calendar-row" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
+    `<li class="calendar-row" data-discipline="${esc(disciplinesOf(c))}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
     `<div class="d">${esc(dateRange(r.start_date, r.end_date))}${r.status === 'cancelled' ? '<span>Cancelled</span>' : ''}</div>` +
     `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span></div>` +
     (place
@@ -138,7 +141,7 @@ function lateList(late, ctx) {
     late
       .map(
         (c) =>
-          `<li class="calendar-late" data-discipline="${esc(c.discipline)}" data-region="${esc(c.region)}">` +
+          `<li class="calendar-late" data-discipline="${esc(disciplinesOf(c))}" data-region="${esc(c.region)}">` +
           `<a href="/calendar/${esc(c.slug)}/" class="cal-card${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}` +
           `<span>${esc(displayName(c))}</span>` +
           `<span>Last season known: ${esc(c.shown.label)} · ${c.shown.rounds.length} rounds</span></a></li>`,
