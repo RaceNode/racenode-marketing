@@ -365,7 +365,7 @@ test('the index has one section per meeting: the circuit by its official name, i
   );
   assert.equal(p.match(/class="calendar-row"/g).length, 4);
   // The heading says the circuit, the country and the dates: the rows do not repeat them, nor the event's name.
-  assert.doesNotMatch(p, /Portimao|Algarve<|Portugal<\/a>|class="d"/);
+  assert.doesNotMatch(p, /Portimao|>Portimão<|Portugal<\/a>|class="d"/);
   // A championship on fewer days than the meeting says its own.
   assert.match(p, /GTWC Europe<\/a><span>GT<\/span>/);
   assert.match(p, /GT2<\/a><span>GT · 15–18 Oct<\/span>/);
