@@ -299,7 +299,7 @@ test('championships sharing a weekend are the ones at the same meeting, never gu
   assert.deepEqual(sharedWeekends(alone, alone.championships[0]), []);
 });
 
-test('the index has one section per meeting: the circuit by its short name, its championships below', () => {
+test('the index has one section per meeting: the circuit by its official name, its championships below', () => {
   const portimao = {
     venue_slug: 'portimao-pt',
     venue_name: 'Autódromo Internacional do Algarve',
@@ -361,7 +361,7 @@ test('the index has one section per meeting: the circuit by its short name, its 
   const [p, n] = sections;
   assert.match(
     p,
-    /<div class="cal-meeting-head has-logo"><img class="cal-logo" data-tone="l" src="\/calendar\/logos\/circuits\/autodromo-internacional-do-algarve\.webp" alt="" width="48" height="32" loading="lazy" decoding="async"><h3><a href="\/calendar\/circuits\/autodromo-internacional-do-algarve\/">Portimão<\/a><\/h3><p>14–18 Oct · Portugal<\/p><\/div>/,
+    /<div class="cal-meeting-head has-logo"><img class="cal-logo" data-tone="l" src="\/calendar\/logos\/circuits\/autodromo-internacional-do-algarve\.webp" alt="" width="48" height="32" loading="lazy" decoding="async"><h3><a href="\/calendar\/circuits\/autodromo-internacional-do-algarve\/">Autódromo Internacional do Algarve<\/a><\/h3><p>14–18 Oct · Portugal<\/p><\/div>/,
   );
   assert.equal(p.match(/class="calendar-row"/g).length, 4);
   // The heading says the circuit, the country and the dates: the rows do not repeat them, nor the event's name.

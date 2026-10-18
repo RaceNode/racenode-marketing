@@ -144,7 +144,8 @@ export function sharedWeekends(calendar, championship) {
 }
 
 /** The name a calendar line gives a circuit ("Portimão"), never the event's name ("Portimao" at SRO). */
-export const venueName = (r) => r.venue_short_name || r.venue_name || '';
+// The circuit's official name (Willi, 2026-10-18: "Autódromo Internacional do Algarve", not "Portimão").
+export const venueName = (r) => r.venue_name || r.venue_short_name || '';
 
 /**
  * Rounds grouped by meeting: the events of every championship at one circuit on the same days share the catalog's
