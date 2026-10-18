@@ -2,5 +2,19 @@
 User-agent: *
 Allow: /
 
+# AI training crawlers: not welcome. Search engines and the AI assistants' search and
+# user-triggered agents (Googlebot, Bingbot, OAI-SearchBot, ChatGPT-User, PerplexityBot,
+# Perplexity-User, Claude-SearchBot, Claude-User) stay allowed by the rule above.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: meta-externalagent
+User-agent: Applebot-Extended
+User-agent: cohere-ai
+Disallow: /
+
 # Sitemap
 Sitemap: https://www.racenode.com/sitemap-index.xml

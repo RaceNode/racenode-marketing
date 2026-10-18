@@ -110,11 +110,10 @@ export const catalog = () =>
  * What a page hands its browser to read the catalog again (LiveRefresh.astro): where to ask (the site's relay; a
  * preview on sample data gets the static sample copy instead) and the render context. Never a database URL or key.
  */
-export function liveConfig({ data, ctx }, { slug = null, circuit = null } = {}) {
+export function liveConfig({ data, ctx }, { slug }) {
   return {
     api: data.sample ? SAMPLE_API : LIVE_API,
     ...ctx,
     slug,
-    circuit,
   };
 }

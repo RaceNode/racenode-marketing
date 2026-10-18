@@ -16,7 +16,6 @@ import {
   countriesOf,
   hash,
   indexBody,
-  indexSummary,
   roundRow,
 } from './render.mjs';
 import {
@@ -529,10 +528,10 @@ test('the browser leaves the page alone when nothing changed since the build', a
   const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
   const cal = calendarOf(data, ctx);
   ctx.circuitPages = circuitPageSlugs(cal);
-  const p = page({ summary: indexSummary(cal), body: indexBody(cal, ctx) });
+  const p = page({ body: championshipBody(cal, 'british-gt', ctx) });
   const before = p.els.body.innerHTML;
   serve(data);
-  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx }), 'same');
+  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx, slug: 'british-gt' }), 'same');
   assert.equal(p.els.body.innerHTML, before);
   assert.deepEqual(p.events, []);
 });
@@ -542,17 +541,15 @@ test('the browser updates what changed since the build, and only that', async ()
   const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
   const cal = calendarOf(data, ctx);
   ctx.circuitPages = circuitPageSlugs(cal);
-  const p = page({ summary: indexSummary(cal), body: indexBody(cal, ctx) });
-  const summary = p.els.summary.innerHTML;
+  const p = page({ body: championshipBody(cal, 'british-gt', ctx) });
   // During the day an organizer moves a round.
   const moved = structuredClone(data);
   const r = moved.events.find((e) => e.season_year === 2027 && e.series_slug === 'british-gt');
   r.start_date = '2027-04-24';
   r.end_date = '2027-04-25';
   serve(moved);
-  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx }), 'updated');
+  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx, slug: 'british-gt' }), 'updated');
   assert.match(p.els.body.innerHTML, /24–25 Apr/);
-  assert.equal(p.els.summary.innerHTML, summary);
   assert.deepEqual(p.events, ['calendar:updated']);
 });
 
@@ -573,32 +570,18 @@ test("a championship's page asks the views for that championship only", async ()
   assert.deepEqual(calls, [`${SAMPLE_API}?series=british-gt`]);
 });
 
-test("a circuit's page reads the whole catalog and finds nothing new when nothing changed", async () => {
-  const data = await sampleData();
-  const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
-  const cal = calendarOf(data, ctx);
-  ctx.circuitPages = circuitPageSlugs(cal);
-  const p = page({ body: circuitBody(cal, 'spa-francochamps-circuit', ctx) });
-  assert.ok(p.els.body.innerHTML.length > 0);
-  const calls = serve(data);
-  assert.equal(
-    await refresh(p.doc, { api: SAMPLE_API, ...ctx, circuit: 'spa-francochamps-circuit' }),
-    'same',
-  );
-  assert.deepEqual(calls, [SAMPLE_API]);
-});
-
 test('the build version stays when the views fail or answer nothing', async () => {
   const data = await sampleData();
   const ctx = { year: 2027, today: '2026-10-08', countries: countriesOf(data) };
   const cal = calendarOf(data, ctx);
   ctx.circuitPages = circuitPageSlugs(cal);
-  const p = page({ body: indexBody(cal, ctx) });
+  const p = page({ body: championshipBody(cal, 'british-gt', ctx) });
   const before = p.els.body.innerHTML;
+  const cfg = { api: LIVE_API, ...ctx, slug: 'british-gt' };
   serve(data, { status: 502 }); // the relay could not read the views
-  await assert.rejects(refresh(p.doc, { api: LIVE_API, ...ctx }));
+  await assert.rejects(refresh(p.doc, cfg));
   serve({ series: [], seasons: [], events: [] });
-  assert.equal(await refresh(p.doc, { api: LIVE_API, ...ctx }), 'empty');
+  assert.equal(await refresh(p.doc, cfg), 'empty');
   assert.equal(p.els.body.innerHTML, before);
 });
 
@@ -644,7 +627,7 @@ test('dates and labels read the way a team writes them', () => {
 // --- The relay (relay.mjs): what the browser may ask, and what never leaves the server -------------------------
 
 const ask = (
-  query = '',
+  query = '?series=british-gt',
   headers = { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '1.2.3.4' },
 ) => new Request(`https://www.racenode.com${LIVE_API}${query}`, { headers });
 const relayEnv = {
@@ -677,7 +660,7 @@ test('a page never carries a database URL or key, only where to ask', () => {
     const live = JSON.stringify(liveConfig({ data: { sample: false }, ctx }, { slug: 'gt4' }));
     assert.doesNotMatch(live, /server-secret|db\.test|api-secret|api\.test|wblt-engineering/);
     assert.equal(JSON.parse(live).api, LIVE_API);
-    assert.equal(liveConfig({ data: { sample: true }, ctx }).api, SAMPLE_API);
+    assert.equal(liveConfig({ data: { sample: true }, ctx }, { slug: 'gt4' }).api, SAMPLE_API);
   } finally {
     for (const [k, v] of Object.entries(before)) {
       if (v === undefined) delete process.env[k];
@@ -717,13 +700,15 @@ test('the relay answers a page with the contract fields, from the catalog once, 
 test('the relay turns away other sites, scripts, odd queries and greedy addresses', async () => {
   const read = async () => ({ series: [], seasons: [], events: [] });
   // No browser same-origin header: a script, or another site's page.
-  assert.equal((await relay(ask('', {}), relayEnv, { read })).status, 403);
+  assert.equal((await relay(ask(undefined, {}), relayEnv, { read })).status, 403);
   assert.equal(
-    (await relay(ask('', { 'sec-fetch-site': 'cross-site' }), relayEnv, { read })).status,
+    (await relay(ask(undefined, { 'sec-fetch-site': 'cross-site' }), relayEnv, { read })).status,
     403,
   );
   // Only `series`, and only a slug: no PostgREST filter, column or ordering goes through.
   for (const q of [
+    '', // no series: the whole catalog is never served
+    '?series=',
     '?select=*',
     '?series=eq.x',
     '?series=x&order=start_date',
@@ -739,7 +724,7 @@ test('the relay turns away other sites, scripts, odd queries and greedy addresse
   for (let i = 0; i < 3; i++) statuses.push((await relay(ask(), relayEnv, { read, allow })).status);
   assert.deepEqual(statuses, [200, 200, 429]);
   const other = await relay(
-    ask('', { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '9.9.9.9' }),
+    ask(undefined, { 'sec-fetch-site': 'same-origin', 'cf-connecting-ip': '9.9.9.9' }),
     relayEnv,
     { read, allow },
   );

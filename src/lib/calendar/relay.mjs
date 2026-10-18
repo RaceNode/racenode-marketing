@@ -1,9 +1,9 @@
 // The relay between the visitor's browser and the catalog (a Pages Function: functions/calendar/api/catalog.js).
 // The browser never talks to the catalog: the relay reads it (the motorsport-data API: catalogSource in
 // contract.mjs) with the server's key and answers the one
-// question a calendar page asks (the whole catalog, or one championship), from the edge cache when it can. It is
+// question a championship page asks (that championship, ?series= required), from the edge cache when it can. It is
 // no more open than the pages themselves, and makes bulk downloads slow: same-origin requests only, a per-IP
-// budget, fixed queries (no filter, column or ordering of the caller's choosing).
+// budget, fixed queries (no filter, column or ordering of the caller's choosing, never the whole catalog).
 import { catalogSource } from './contract.mjs';
 
 /** Where the browser asks (liveConfig in build.mjs). */
@@ -63,10 +63,8 @@ export async function relay(
 
   const url = new URL(request.url);
   const series = url.searchParams.get('series');
-  if (
-    [...url.searchParams.keys()].some((k) => k !== 'series') ||
-    (series !== null && !SERIES.test(series))
-  ) {
+  // One championship per question, never the whole catalog.
+  if ([...url.searchParams.keys()].some((k) => k !== 'series') || !SERIES.test(series ?? '')) {
     return json({ error: 'bad query' }, 400);
   }
 
@@ -75,7 +73,7 @@ export async function relay(
   }
 
   // One cache entry per question, whatever else the request carried.
-  const key = new Request(`${url.origin}${LIVE_API}${series ? `?series=${series}` : ''}`);
+  const key = new Request(`${url.origin}${LIVE_API}?series=${series}`);
   const hit = cache && (await cache.match(key));
   if (hit) return hit;
 
@@ -84,7 +82,7 @@ export async function relay(
   let data;
   try {
     data = await (read ?? source.read)(source.url, source.key, {
-      series: series ?? undefined,
+      series,
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
   } catch {
