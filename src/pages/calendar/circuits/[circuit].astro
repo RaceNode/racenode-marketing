@@ -1,16 +1,15 @@
 ---
 // One page per circuit with enough rounds in the catalog (circuits() of model.mjs), for searches such as
-// "Spa-Francorchamps 2027 calendar": every championship's upcoming rounds there, in date order. The visitor's
-// browser brings that part up to date (LiveRefresh); the other circuits listed wait for the next build.
+// "Spa-Francorchamps 2027 calendar": every championship's upcoming rounds there, in date order. Morning build only
+// (no browser refresh: that is for championship pages).
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import CalendarCTA from '../../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../../components/calendar/SampleDataNotice.astro';
-import LiveRefresh from '../../../components/calendar/LiveRefresh.astro';
-import { catalog, liveConfig } from '../../../lib/calendar/build.mjs';
+import { catalog } from '../../../lib/calendar/build.mjs';
 import { circuits, displayName } from '../../../lib/calendar/model.mjs';
-import { circuitBody, hash } from '../../../lib/calendar/render.mjs';
+import { circuitBody } from '../../../lib/calendar/render.mjs';
 
 export async function getStaticPaths() {
   const { cal } = await catalog();
@@ -131,7 +130,7 @@ const eventsSchema = {
 
       <section class="cal-body">
         <div class="page">
-          <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
+          <div set:html={body} />
 
           {nearby.length > 0 && (
             <section class="mt-12">
@@ -163,5 +162,4 @@ const eventsSchema = {
     </main>
     <Footer />
   </div>
-  <LiveRefresh config={liveConfig(loaded, { circuit: c.slug })} />
 </BaseLayout>

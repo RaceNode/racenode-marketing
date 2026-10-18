@@ -1,16 +1,15 @@
 ---
 // Every championship's upcoming rounds on one chronological page, built each morning from the catalog; the
-// visitor's browser then brings the summary and the rounds up to date (LiveRefresh). Filters run in the browser too.
+// morning build only (no browser refresh: that is for championship pages). Filters run in the browser.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import CalendarFilters from '../../components/calendar/CalendarFilters.astro';
 import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
-import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
-import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
+import { catalog } from '../../lib/calendar/build.mjs';
 import { circuits, upcomingRounds } from '../../lib/calendar/model.mjs';
-import { hash, indexBody, indexSummary } from '../../lib/calendar/render.mjs';
+import { indexBody, indexSummary } from '../../lib/calendar/render.mjs';
 import { DISCIPLINES, MONTHS, REGIONS } from '../../lib/calendar/format.mjs';
 
 const loaded = await catalog();
@@ -75,8 +74,8 @@ const breadcrumbSchema = {
             to its official page.
           </p>
           <p class="mt-4 max-w-3xl text-sm text-smoke">
-            <span data-calendar-live="summary" data-hash={hash(summary)} set:html={summary} /> Each
-            championship's page says when its calendar was last checked against the official one.
+            <span set:html={summary} /> Each championship's page says when its calendar was last
+            checked against the official one.
           </p>
         </div>
       </section>
@@ -91,7 +90,7 @@ const breadcrumbSchema = {
             months={months}
           />
 
-          <div data-calendar-live="body" data-hash={hash(body)} set:html={body} />
+          <div set:html={body} />
 
           <p class="muted mt-8 text-sm">Rounds already run are on each championship's page.</p>
 
@@ -119,5 +118,4 @@ const breadcrumbSchema = {
     </main>
     <Footer />
   </div>
-  <LiveRefresh config={liveConfig(loaded)} />
 </BaseLayout>
