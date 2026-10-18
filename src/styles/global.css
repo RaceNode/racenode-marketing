@@ -331,7 +331,7 @@
     @apply col-start-2;
   }
   .calendar-meeting .calendar-row {
-    @apply grid-cols-1 border-b-0 py-1.5 pl-8 sm:grid-cols-[14rem_1fr];
+    @apply grid-cols-1 border-b-0 py-1.5 pl-8 sm:grid-cols-[18rem_1fr] lg:grid-cols-[26rem_1fr];
   }
   .calendar-meeting .calendar-row > .p {
     @apply sm:col-start-2 sm:self-center;
