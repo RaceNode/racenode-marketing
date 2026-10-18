@@ -83,21 +83,26 @@ export function roundLabel(r) {
   return [label, r.sub_label].filter(Boolean).join(' · ');
 }
 
-/** The round's name, unless it only repeats the venue ("Circuit de Magny-Cours" at "Circuit de Nevers Magny-Cours"). */
+/**
+ * The round's name, unless it only repeats the venue ("Circuit de Magny-Cours" at "Circuit de Nevers Magny-Cours");
+ * `short` also drops a name that repeats the venue's short name ("Portimao" under a "Portimão" heading).
+ */
 const GENERIC =
   /\b(?:circuit|circuito|autodromo|autódromo|international|internacional|raceway|speedway|motorsport|park|de|del|di|du|the|of)\b/g;
-export function roundName(r) {
+export function roundName(r, { short = false } = {}) {
   const n = (s) =>
     s
+      .normalize('NFKD')
+      .replace(/[̀-ͯ]/g, '')
       .toLowerCase()
       .replace(GENERIC, '')
       .replace(/[^a-z0-9]+/g, '');
   const name = n(r.name);
-  const venue = n(r.venue_name ?? '');
-  return name &&
-    venue &&
-    (venue.includes(name) || name.includes(venue)) &&
-    name.length <= venue.length + 2
-    ? null
-    : r.name;
+  const repeats = (v) => {
+    const venue = n(v ?? '');
+    return (
+      venue && (venue.includes(name) || name.includes(venue)) && name.length <= venue.length + 2
+    );
+  };
+  return name && (repeats(r.venue_name) || (short && repeats(r.venue_short_name))) ? null : r.name;
 }

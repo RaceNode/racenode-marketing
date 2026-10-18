@@ -305,6 +305,40 @@
   .calendar-row > .p > a {
     @apply hover:text-accent hover:underline;
   }
+  /* The index's meetings (byMeeting in render.mjs): a heading per circuit and weekend, its championships below, without the dates and place the heading already gives. */
+  .calendar-meeting {
+    @apply border-b border-line pb-2 last:border-b-0;
+  }
+  .cal-meeting-head {
+    @apply px-4 pt-4 pb-1;
+  }
+  .cal-meeting-head > h3 {
+    @apply font-display text-lg leading-tight font-semibold text-ink;
+  }
+  .cal-meeting-head > h3 > a {
+    @apply hover:text-accent hover:underline;
+  }
+  .cal-meeting-head > p {
+    @apply font-mono text-xs text-graphite;
+  }
+  .cal-meeting-head.has-logo {
+    @apply grid grid-cols-[3rem_1fr] gap-x-3;
+  }
+  .cal-meeting-head.has-logo > .cal-logo {
+    @apply row-span-2 self-center;
+  }
+  .cal-meeting-head.has-logo > :not(.cal-logo) {
+    @apply col-start-2;
+  }
+  .calendar-meeting .calendar-row {
+    @apply grid-cols-1 border-b-0 py-1.5 pl-8 sm:grid-cols-[14rem_1fr];
+  }
+  .calendar-meeting .calendar-row > .p {
+    @apply sm:col-start-2 sm:self-center;
+  }
+  .calendar-row > .c > .x {
+    @apply font-semibold text-blocking;
+  }
   .cal-season-row {
     @apply grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_10.5rem_1fr_auto];
   }

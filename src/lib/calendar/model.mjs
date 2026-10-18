@@ -123,18 +123,17 @@ export function circuits(calendar) {
 /** Championships with no season for the featured year yet, with the latest season they do have. */
 export const notPublished = (calendar) => calendar.championships.filter((c) => !c.featured);
 
-/** Other championships racing at the same venue within a day of one of this season's rounds. */
+/** Other championships at the same meeting (the catalog's `meeting_id`) as one of this season's rounds. */
 export function sharedWeekends(calendar, championship) {
+  const ids = new Set(championship.shown.rounds.map((r) => r.meeting_id).filter(Boolean));
   const out = new Map();
-  for (const r of championship.shown.rounds) {
-    for (const c of calendar.championships) {
-      if (c.slug === championship.slug) continue;
-      for (const season of c.seasons) {
-        for (const o of season.rounds) {
-          if (o.venue_slug !== r.venue_slug || !overlaps(r, o)) continue;
-          if (!out.has(c.slug)) out.set(c.slug, { championship: c, count: 0 });
-          out.get(c.slug).count += 1;
-        }
+  for (const c of calendar.championships) {
+    if (c.slug === championship.slug) continue;
+    for (const season of c.seasons) {
+      for (const o of season.rounds) {
+        if (!ids.has(o.meeting_id)) continue;
+        if (!out.has(c.slug)) out.set(c.slug, { championship: c, count: 0 });
+        out.get(c.slug).count += 1;
       }
     }
   }
@@ -144,8 +143,34 @@ export function sharedWeekends(calendar, championship) {
   );
 }
 
-const DAY = 86400000;
-function overlaps(a, b) {
-  const t = (d) => Date.parse(`${d}T00:00:00Z`);
-  return t(a.start_date) <= t(b.end_date) + DAY && t(b.start_date) <= t(a.end_date) + DAY;
+/** The name a calendar line gives a circuit ("Portimão"), never the event's name ("Portimao" at SRO). */
+export const venueName = (r) => r.venue_short_name || r.venue_name || '';
+
+/**
+ * Rounds grouped by meeting: the events of every championship at one circuit on the same days share the catalog's
+ * `meeting_id`; a round without one is a meeting of its own. Each meeting has its circuit (from its first round), its
+ * dates (first start, last end of the rounds given) and its rounds in the order given; meetings by date, then name.
+ */
+export function meetingsOf(rounds) {
+  const out = new Map();
+  rounds.forEach((r, i) => {
+    const k = r.meeting_id ?? `#${i}`;
+    if (!out.has(k)) out.set(k, []);
+    out.get(k).push(r);
+  });
+  return [...out.values()]
+    .map((list) => ({
+      id: list[0].meeting_id ?? null,
+      venue_slug: list[0].venue_slug,
+      venue_name: list[0].venue_name,
+      venue_short_name: list[0].venue_short_name,
+      venue_country_code: list[0].venue_country_code,
+      start_date: list.reduce((d, r) => (r.start_date < d ? r.start_date : d), list[0].start_date),
+      end_date: list.reduce((d, r) => (r.end_date > d ? r.end_date : d), list[0].end_date),
+      rounds: list,
+    }))
+    .sort(
+      (a, b) =>
+        a.start_date.localeCompare(b.start_date) || venueName(a).localeCompare(venueName(b)),
+    );
 }

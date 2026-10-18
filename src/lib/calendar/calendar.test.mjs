@@ -23,6 +23,7 @@ import {
   buildCalendar,
   circuits,
   featuredYear,
+  meetingsOf,
   notPublished,
   upcomingRounds,
   sharedWeekends,
@@ -61,12 +62,22 @@ test('only the contract fields reach the pages, and removed rounds never do', ()
     series: [{ ...series('a'), logo_dark_url: 'x', source: 'sro' }],
     seasons: [{ ...season('a', 2027), id: 'u' }],
     events: [
-      { ...round('a', 2027, '2027-04-01'), raw: { team: 'secret' }, id: 'e1' },
+      {
+        ...round('a', 2027, '2027-04-01'),
+        raw: { team: 'secret' },
+        id: 'e1',
+        meeting_id: 'm1',
+        venue_short_name: 'Spa',
+        venue_logo_url: 'x',
+      },
       round('a', 2027, '2027-05-01', { status: 'removed' }),
       round('a', 2027, '2027-06-01', { status: 'cancelled' }),
     ],
   });
   assert.equal(clean.series[0].logo_dark_url, undefined);
+  assert.equal(clean.events[0].venue_logo_url, undefined);
+  assert.equal(clean.events[0].meeting_id, 'm1', 'the relay passes the meeting on');
+  assert.equal(clean.events[0].venue_short_name, 'Spa');
   assert.equal(clean.series[0].source, undefined);
   assert.equal(clean.seasons[0].id, undefined);
   assert.equal(clean.events.length, 2);
@@ -257,15 +268,17 @@ test('a folded double-header counts its rounds: a circuit with two meetings, one
   assert.match(html, /Rounds 1–2/);
 });
 
-test('championships sharing a weekend at the same venue are found', () => {
+test('championships sharing a weekend are the ones at the same meeting, never guessed from the dates', () => {
   const cal = buildCalendar(
     {
-      series: [series('gtwc'), series('gt4'), series('elsewhere')],
-      seasons: [season('gtwc', 2027), season('gt4', 2027), season('elsewhere', 2027)],
+      series: [series('gtwc'), series('gt4'), series('elsewhere'), series('next-week')],
+      seasons: ['gtwc', 'gt4', 'elsewhere', 'next-week'].map((s) => season(s, 2027)),
       events: [
-        round('gtwc', 2027, '2027-04-15', { end_date: '2027-04-17' }),
-        round('gt4', 2027, '2027-04-16', { end_date: '2027-04-17' }),
-        round('elsewhere', 2027, '2027-04-16', { venue_slug: 'monza' }),
+        round('gtwc', 2027, '2027-04-15', { end_date: '2027-04-17', meeting_id: 'm1' }),
+        round('gt4', 2027, '2027-04-16', { end_date: '2027-04-17', meeting_id: 'm1' }),
+        round('elsewhere', 2027, '2027-04-16', { venue_slug: 'monza', meeting_id: 'm2' }),
+        // Same circuit, a day after: dates alone would have called it the same weekend.
+        round('next-week', 2027, '2027-04-18', { meeting_id: 'm3' }),
       ],
     },
     { today: new Date('2026-10-07') },
@@ -275,6 +288,94 @@ test('championships sharing a weekend at the same venue are found', () => {
     sharedWeekends(cal, gtwc).map((x) => x.championship.slug),
     ['gt4'],
   );
+  // No meeting known: nothing shared.
+  const alone = buildCalendar(
+    {
+      series: [series('a'), series('b')],
+      seasons: [season('a', 2027), season('b', 2027)],
+      events: [round('a', 2027, '2027-04-15'), round('b', 2027, '2027-04-15')],
+    },
+    { today: new Date('2026-10-07') },
+  );
+  assert.deepEqual(sharedWeekends(alone, alone.championships[0]), []);
+});
+
+test('the index has one section per meeting: the circuit by its short name, its championships below', () => {
+  const portimao = {
+    venue_slug: 'portimao-pt',
+    venue_name: 'Autódromo Internacional do Algarve',
+    venue_short_name: 'Portimão',
+    venue_country_code: 'PT',
+    meeting_id: 'm-portimao',
+  };
+  const cal = buildCalendar(
+    {
+      series: [
+        series('gtwc', { short_name: 'GTWC Europe' }),
+        series('gt2'),
+        series('gt4'),
+        series('mclaren'),
+        series('solo'),
+      ],
+      seasons: ['gtwc', 'gt2', 'gt4', 'mclaren', 'solo'].map((s) => season(s, 2026)),
+      events: [
+        round('gtwc', 2026, '2026-10-14', {
+          ...portimao,
+          end_date: '2026-10-18',
+          name: 'Portimao',
+        }),
+        round('gt2', 2026, '2026-10-15', { ...portimao, end_date: '2026-10-18', name: 'Portimão' }),
+        round('gt4', 2026, '2026-10-15', { ...portimao, end_date: '2026-10-18', name: 'Portimao' }),
+        round('mclaren', 2026, '2026-10-16', {
+          ...portimao,
+          end_date: '2026-10-18',
+          name: 'Portimao',
+          status: 'cancelled',
+        }),
+        // No meeting known: a section of its own, all the same.
+        round('solo', 2026, '2026-10-16', { venue_slug: 'navarra-es', venue_name: 'Navarra' }),
+        // Already run: not on the index.
+        round('gtwc', 2026, '2026-10-01', { ...portimao, meeting_id: 'm-old' }),
+      ],
+    },
+    { today: new Date('2026-10-07') },
+  );
+  const [first, second] = meetingsOf(upcomingRounds(cal, '2026-10-08'));
+  assert.equal(first.id, 'm-portimao');
+  assert.deepEqual(
+    first.rounds.map((r) => r.series_slug),
+    ['gtwc', 'gt2', 'gt4', 'mclaren'],
+  );
+  assert.deepEqual([first.start_date, first.end_date], ['2026-10-14', '2026-10-18']);
+  assert.equal(second.id, null);
+
+  const ctx = {
+    year: 2027,
+    today: '2026-10-08',
+    countries: { PT: 'Portugal' },
+    circuitPages: { 'portimao-pt': 'autodromo-internacional-do-algarve' },
+    circuitLogos: { 'portimao-pt': { slug: 'autodromo-internacional-do-algarve', tone: 'l' } },
+  };
+  const html = indexBody(cal, ctx);
+  const sections = html.match(/<section class="calendar-meeting">.*?<\/section>/g);
+  assert.equal(sections.length, 2);
+  const [p, n] = sections;
+  assert.match(
+    p,
+    /<div class="cal-meeting-head has-logo"><img class="cal-logo" data-tone="l" src="\/calendar\/logos\/circuits\/autodromo-internacional-do-algarve\.webp" alt="" width="48" height="32" loading="lazy" decoding="async"><h3><a href="\/calendar\/circuits\/autodromo-internacional-do-algarve\/">Portimão<\/a><\/h3><p>14–18 Oct · Portugal<\/p><\/div>/,
+  );
+  assert.equal(p.match(/class="calendar-row"/g).length, 4);
+  // The heading says the circuit, the country and the dates: the rows do not repeat them, nor the event's name.
+  assert.doesNotMatch(p, /Portimao|Algarve<|Portugal<\/a>|class="d"/);
+  // A championship on fewer days than the meeting says its own.
+  assert.match(p, /GTWC Europe<\/a><span>GT<\/span>/);
+  assert.match(p, /GT2<\/a><span>GT · 15–18 Oct<\/span>/);
+  assert.match(p, /<span class="x">Cancelled<\/span>/);
+  // No logo, no circuit page: the heading is text.
+  assert.match(n, /<div class="cal-meeting-head"><h3>Navarra<\/h3><p>16 Oct<\/p><\/div>/);
+  assert.doesNotMatch(n, /<img/);
+  // Each row still carries what the filters read.
+  assert.match(p, /data-circuit="autodromo-internacional-do-algarve" data-month="2026-10"/);
 });
 
 test('production never publishes sample data: without the API key the build fails', async () => {
@@ -687,18 +788,30 @@ function asApi(views) {
     })),
     // The API lists events by date first; the views by championship, then date.
     events: views.events
-      .map(({ venue_slug, venue_name, venue_country_code, venue_timezone, ...e }) => ({
-        id: `id-${e.series_slug}-${e.start_date}-${e.name}`,
-        ...e,
-        tickets_url: 'https://tickets.test',
-        venue: {
-          id: 'v',
-          slug: venue_slug,
-          name: venue_name,
-          country_code: venue_country_code,
-          timezone: venue_timezone,
-        },
-      }))
+      .map(
+        ({
+          venue_slug,
+          venue_name,
+          venue_short_name,
+          venue_country_code,
+          venue_timezone,
+          venue_logo_url,
+          ...e
+        }) => ({
+          id: `id-${e.series_slug}-${e.start_date}-${e.name}`,
+          ...e,
+          tickets_url: 'https://tickets.test',
+          venue: {
+            id: 'v',
+            slug: venue_slug,
+            name: venue_name,
+            short_name: venue_short_name ?? null,
+            country_code: venue_country_code,
+            timezone: venue_timezone,
+            logo: venue_logo_url ? { url: venue_logo_url, light: null, dark: null } : null,
+          },
+        }),
+      )
       .sort((a, b) => a.start_date.localeCompare(b.start_date)),
   };
 }
@@ -750,7 +863,18 @@ const rawSample = async () => {
   const series = s.series.map((x, i) =>
     i % 3 ? x : { ...x, logo_url: `https://logos.test/${x.slug}.svg` },
   );
-  return { series, seasons: s.seasons, events: s.events };
+  // The sample predates meetings and circuit logos: a few events get them, as the API now serves them.
+  const events = s.events.map((e, i) =>
+    i % 5
+      ? e
+      : {
+          ...e,
+          meeting_id: `m-${e.venue_slug}-${e.start_date}`,
+          venue_short_name: 'Short',
+          venue_logo_url: `https://logos.test/venues/${e.venue_slug}.png`,
+        },
+  );
+  return { series, seasons: s.seasons, events };
 };
 
 test('the API gives the build the contract rows, flattened, across pages, by championship then date', async () => {
@@ -760,6 +884,7 @@ test('the API gives the build the contract rows, flattened, across pages, by cha
   try {
     const a = await loadCatalog(api.env, { delays: [] });
     assert.ok(a.events.length > 800 && a.series.some((s) => s.logo_url));
+    assert.ok(a.events.some((e) => e.meeting_id && e.venue_short_name && e.venue_logo_url));
     assert.deepEqual(a, { sample: false, ...sanitize(views, { logos: true }) });
     // 825 events in pages of 37: every page was read, each with the cursor of the one before.
     assert.equal(
@@ -788,6 +913,10 @@ test("a championship's relay answer from the API: that championship only, no log
       ['british-gt'],
     );
     assert.ok(!('logo_url' in body.series[0]) && !('venue' in body.events[0]));
+    // The meeting goes to the browser (it groups the same way); the circuit's logo does not.
+    assert.ok(body.events.some((e) => e.meeting_id));
+    assert.ok(body.events.every((e) => !('venue_logo_url' in e)));
+    assert.doesNotMatch(JSON.stringify(body), /logos\.test/);
     assert.doesNotMatch(JSON.stringify(body), /site-key|127\.0\.0\.1|tickets|alias/);
     const none = await (await relay(ask('?series=no-such-series'), api.env, {})).json();
     assert.deepEqual(none, { series: [], seasons: [], events: [] });

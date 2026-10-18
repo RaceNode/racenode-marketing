@@ -13,7 +13,15 @@ import {
   roundLabel,
   roundName,
 } from './format.mjs';
-import { buildCalendar, circuits, displayName, notPublished, upcomingRounds } from './model.mjs';
+import {
+  buildCalendar,
+  circuits,
+  displayName,
+  meetingsOf,
+  notPublished,
+  upcomingRounds,
+  venueName,
+} from './model.mjs';
 
 const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ESC[c]);
@@ -55,9 +63,22 @@ export const calendarOf = (data, ctx) =>
  */
 export function logoOf(slug, ctx, { large = false } = {}) {
   const tone = ctx.logos?.[slug];
-  if (!tone) return '';
+  return tone ? logoImg(`/calendar/logos/${slug}.webp`, tone, large) : '';
+}
+
+/**
+ * A circuit's logo, the same way (`ctx.circuitLogos`: catalog `venue_slug` → { slug, tone }, decided by the build):
+ * /calendar/logos/circuits/<slug>.webp, the slug being the circuit's own (from its name, as its page's URL), never
+ * the catalog's reference. '' without one: the meeting's heading stays text.
+ */
+export function circuitLogoOf(venueSlug, ctx) {
+  const l = ctx.circuitLogos?.[venueSlug];
+  return l ? logoImg(`/calendar/logos/circuits/${l.slug}.webp`, l.tone) : '';
+}
+
+function logoImg(src, tone, large = false) {
   const [w, h] = large ? [72, 48] : [48, 32];
-  return `<img class="cal-logo${large ? ' cal-logo-lg' : ''}" data-tone="${esc(tone)}" src="/calendar/logos/${esc(slug)}.webp" alt="" width="${w}" height="${h}" loading="lazy" decoding="async">`;
+  return `<img class="cal-logo${large ? ' cal-logo-lg' : ''}" data-tone="${esc(tone)}" src="${esc(src)}" alt="" width="${w}" height="${h}" loading="lazy" decoding="async">`;
 }
 
 // --- All championships (/calendar/) ---------------------------------------------------------------------------
@@ -94,16 +115,28 @@ const disciplinesOf = (c) => (c.disciplines?.length ? c.disciplines : [c.discipl
 
 // Styles: .calendar-row in src/styles/global.css (d = dates, c = championship, p = place): hundreds of rows, so
 // their classes live there once. The data-* attributes are what CalendarFilters reads (end: hides a round the
-// visitor's clock says is over, when the morning build is late).
-export function roundRow(r, ctx, pages = new Map(), { place = true } = {}) {
+// visitor's clock says is over, when the morning build is late). Under a meeting's heading (`meeting`), a row drops
+// what the heading says (circuit, country, dates) and keeps its own dates only when they differ from the meeting's.
+export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = null } = {}) {
   const c = r.championship;
-  const sub = [roundLabel(r), DISCIPLINES[c.discipline]].filter(Boolean).join(' · ');
-  const name = roundName(r);
+  const own = dateRange(r.start_date, r.end_date);
+  const sub = [
+    roundLabel(r),
+    DISCIPLINES[c.discipline],
+    meeting && own !== dateRange(meeting.start_date, meeting.end_date) ? own : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+  const cancelled = r.status === 'cancelled';
+  const name = roundName(r, { short: Boolean(meeting) });
   return (
     `<li class="calendar-row" data-discipline="${esc(disciplinesOf(c))}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
-    `<div class="d">${esc(dateRange(r.start_date, r.end_date))}${r.status === 'cancelled' ? '<span>Cancelled</span>' : ''}</div>` +
-    `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span></div>` +
-    (place
+    (meeting
+      ? ''
+      : `<div class="d">${esc(own)}${cancelled ? '<span>Cancelled</span>' : ''}</div>`) +
+    `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span>` +
+    `${meeting && cancelled ? '<span class="x">Cancelled</span>' : ''}</div>` +
+    (place && !meeting
       ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>`
       : name
         ? `<div class="p"><span>${esc(name)}</span></div>`
@@ -118,19 +151,62 @@ export function indexSummary(cal) {
   return `${cal.championships.length - late} of ${cal.championships.length} championships have published their ${cal.year} calendar.`;
 }
 
-/** Rounds by the month they start in ("November 2026"), in date order. */
-function byMonth(rounds, ctx, pages, opts) {
+/** Things that have a start_date, by the month they start in ("November 2026"), in the order given. */
+function monthsOf(list) {
   const months = new Map();
-  for (const r of rounds) {
-    const m = `${MONTHS[monthOf(r.start_date) - 1]} ${r.start_date.slice(0, 4)}`;
+  for (const x of list) {
+    const m = `${MONTHS[monthOf(x.start_date) - 1]} ${x.start_date.slice(0, 4)}`;
     if (!months.has(m)) months.set(m, []);
-    months.get(m).push(r);
+    months.get(m).push(x);
   }
+  return months;
+}
+
+/** Rounds by the month they start in, in date order. */
+function byMonth(rounds, ctx, pages, opts) {
   let html = '';
-  for (const [m, list] of months)
+  for (const [m, list] of monthsOf(rounds))
     html +=
       `<div class="calendar-month mb-8"><h2 class="cal-month-title">${esc(m)}</h2>` +
       `<ul class="cal-sheet">${list.map((r) => roundRow(r, ctx, pages, opts)).join('')}</ul></div>`;
+  return html;
+}
+
+/**
+ * A meeting's heading: its circuit by the name a calendar line uses (never the event's name), linked to its page when
+ * it has one, with its logo when the build hosts one; the meeting's dates and the country.
+ */
+function meetingHead(m, ctx, pages) {
+  const name = esc(venueName(m));
+  const href = circuitHref(m, pages);
+  const logo = circuitLogoOf(m.venue_slug, ctx);
+  const facts = [dateRange(m.start_date, m.end_date), country(m.venue_country_code, ctx)]
+    .filter(Boolean)
+    .join(' · ');
+  return (
+    `<div class="cal-meeting-head${logo ? ' has-logo' : ''}">${logo}` +
+    `<h3>${href ? `<a href="${href}">${name}</a>` : name}</h3><p>${esc(facts)}</p></div>`
+  );
+}
+
+/**
+ * Rounds by month, then by meeting (meetingsOf): one section per circuit and weekend, its championships below. A
+ * meeting sits in the month it starts in, a meeting of one round is a section all the same.
+ */
+function byMeeting(rounds, ctx, pages) {
+  let html = '';
+  for (const [m, list] of monthsOf(meetingsOf(rounds)))
+    html +=
+      `<div class="calendar-month mb-8"><h2 class="cal-month-title">${esc(m)}</h2><div class="cal-sheet">` +
+      list
+        .map(
+          (meeting) =>
+            `<section class="calendar-meeting">${meetingHead(meeting, ctx, pages)}<ul>` +
+            meeting.rounds.map((r) => roundRow(r, ctx, pages, { meeting })).join('') +
+            '</ul></section>',
+        )
+        .join('') +
+      '</div></div>';
   return html;
 }
 
@@ -152,12 +228,13 @@ function lateList(late, ctx) {
 }
 
 /**
- * One chronological list from the build's day (`ctx.today`), every season mixed, by month; then the championships
- * whose featured season is not out. Rounds already run are not listed: they are on each championship's page.
+ * One chronological list from the build's day (`ctx.today`), every season mixed, by month and meeting; then the
+ * championships whose featured season is not out. Rounds already run are not listed: they are on each championship's
+ * page.
  */
 export function indexBody(cal, ctx) {
   const pages = pagesOf(ctx);
-  let html = byMonth(upcomingRounds(cal, ctx.today ?? ''), ctx, pages);
+  let html = byMeeting(upcomingRounds(cal, ctx.today ?? ''), ctx, pages);
   html +=
     '<p id="calendar-empty" class="cal-note muted" hidden>No upcoming round matches these filters.</p>';
 

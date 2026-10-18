@@ -7,7 +7,8 @@
 // Rules (Willi, 2026-10-07): dates and venues are publishable facts; no organizer document, we link to the
 // organizer's own page; never team data, raw scrapes or logs. Logos (Willi, 2026-10-08, once 80% of the championships
 // had one): the official ones, hosted by us (the build downloads them, logos.mjs), never linked from the catalog's
-// storage: the logo URLs are read by the build only (`logos`), the relay and the browser never see them.
+// storage: the logo URLs (championships' and circuits') are read by the build only (`logos`), the relay and the
+// browser never see them.
 
 export const FIELDS = {
   series: [
@@ -48,13 +49,18 @@ export const FIELDS = {
     'url',
     'venue_slug',
     'venue_name',
+    'venue_short_name',
     'venue_country_code',
     'venue_timezone',
+    // The meeting the event belongs to: every championship at that circuit on those days shares it.
+    'meeting_id',
   ],
 };
 
 /** The series columns only the build reads: where the catalog stores each championship's logo. */
 export const LOGO_FIELDS = ['logo_url', 'logo_light_url', 'logo_dark_url'];
+/** The same for the circuit, on each event: read by the build only. */
+export const VENUE_LOGO_FIELDS = ['venue_logo_url', 'venue_logo_light_url', 'venue_logo_dark_url'];
 
 /** Keeps the contract's fields and nothing else; a removed round never reaches a page. */
 export function sanitize(data, { logos = false } = {}) {
@@ -77,7 +83,7 @@ export function sanitize(data, { logos = false } = {}) {
     seasons: (data.seasons ?? []).map(pick('seasons')),
     events: (data.events ?? [])
       .filter((e) => e.status === 'scheduled' || e.status === 'cancelled')
-      .map(pick('events')),
+      .map(pick('events', logos ? VENUE_LOGO_FIELDS : [])),
   };
 }
 
@@ -114,8 +120,12 @@ const FROM_API = {
     ...a,
     venue_slug: a.venue?.slug ?? null,
     venue_name: a.venue?.name ?? null,
+    venue_short_name: a.venue?.short_name ?? null,
     venue_country_code: a.venue?.country_code ?? null,
     venue_timezone: a.venue?.timezone ?? null,
+    venue_logo_url: a.venue?.logo?.url ?? null,
+    venue_logo_light_url: a.venue?.logo?.light ?? null,
+    venue_logo_dark_url: a.venue?.logo?.dark ?? null,
   }),
 };
 

@@ -1,6 +1,6 @@
 ---
 // Filters of the all-championships calendar. Without JavaScript every upcoming round stays listed; with it, rows,
-// month headings and the "not published yet" list follow the selects, and the choice is kept in the URL. A round
+// meetings, month headings and the "not published yet" list follow the selects, and the choice is kept in the URL. A round
 // the visitor's clock says is over is hidden too (the morning build may be a day behind).
 import {
   DISCIPLINES as DISCIPLINE_NAMES,
@@ -100,6 +100,10 @@ const select = 'cal-select';
         shown += 1;
         championships.add(row.querySelector('a')?.getAttribute('href') ?? '');
       }
+    });
+    // A meeting (a circuit's weekend) whose rounds are all hidden goes too, then a month with nothing left.
+    document.querySelectorAll<HTMLElement>('.calendar-meeting').forEach((m) => {
+      m.hidden = !m.querySelector('.calendar-row:not([hidden])');
     });
     document.querySelectorAll<HTMLElement>('.calendar-month').forEach((m) => {
       m.hidden = !m.querySelector('.calendar-row:not([hidden])');

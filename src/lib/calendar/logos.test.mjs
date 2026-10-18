@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import sharp from 'sharp';
 import { sanitize } from './contract.mjs';
-import { loadLogos, pickLogo } from './logos.mjs';
-import { logoOf, roundRow } from './render.mjs';
+import { loadLogos, pickLogo, venueLogos } from './logos.mjs';
+import { circuitLogoOf, logoOf, roundRow } from './render.mjs';
 
 const serie = { slug: 'a', name: 'A', short_name: null, discipline: 'gt', region: 'europe' };
 
@@ -19,6 +19,31 @@ test('the logo URLs are read by the build only: the relay and the browser never 
   assert.equal(
     sanitize({ series: [row] }, { logos: true }).series[0].logo_url,
     'https://x.supabase.co/a.png',
+  );
+});
+
+test("a circuit's logo is read from its rounds, by the build only, under the circuit's own slug", () => {
+  const ev = { series_slug: 'a', status: 'scheduled', venue_slug: 'portimao-pt' };
+  const withLogo = { ...ev, venue_logo_url: 'https://x.supabase.co/v.png' };
+  assert.equal(sanitize({ events: [withLogo] }).events[0].venue_logo_url, undefined);
+  assert.equal(
+    sanitize({ events: [withLogo] }, { logos: true }).events[0].venue_logo_url,
+    'https://x.supabase.co/v.png',
+  );
+  assert.deepEqual(
+    venueLogos([
+      { slug: 'portimao', rounds: [ev, withLogo] },
+      { slug: 'navarra', rounds: [ev] },
+    ]),
+    [
+      {
+        slug: 'portimao',
+        logo_url: 'https://x.supabase.co/v.png',
+        logo_light_url: null,
+        logo_dark_url: null,
+      },
+      { slug: 'navarra', logo_url: null, logo_light_url: null, logo_dark_url: null },
+    ],
   );
 });
 
@@ -100,6 +125,14 @@ test('a row shows the hosted logo in a fixed box, lazy; no logo, no image; the p
   assert.doesNotMatch(roundRow(r, { countries: {} }), /<img|has-logo/);
   assert.doesNotMatch(withLogo, /supabase/);
   assert.equal(logoOf('x', { logos: {} }), '');
+  // A circuit's logo: its path from the circuit's own slug, never the catalog's reference.
+  assert.equal(
+    circuitLogoOf('portimao-pt', {
+      circuitLogos: { 'portimao-pt': { slug: 'portimao', tone: 'd' } },
+    }),
+    '<img class="cal-logo" data-tone="d" src="/calendar/logos/circuits/portimao.webp" alt="" width="48" height="32" loading="lazy" decoding="async">',
+  );
+  assert.equal(circuitLogoOf('portimao-pt', {}), '');
   assert.match(
     logoOf('dtm', { logos: { dtm: 'd' } }, { large: true }),
     /cal-logo-lg" data-tone="d".*width="72" height="48"/,

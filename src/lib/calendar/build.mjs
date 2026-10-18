@@ -1,7 +1,7 @@
 // The catalog for the build (Node), kept apart from contract.mjs, which the visitor's browser loads too.
 import { catalogSource, sanitize } from './contract.mjs';
-import { featuredYear } from './model.mjs';
-import { loadLogos } from './logos.mjs';
+import { circuits, featuredYear } from './model.mjs';
+import { loadLogos, venueLogos } from './logos.mjs';
 import { LIVE_API } from './relay.mjs';
 import { calendarOf, circuitPageSlugs, countriesOf } from './render.mjs';
 
@@ -69,7 +69,8 @@ export const SAMPLE_API = '/calendar/sample-api/catalog.json';
 let cached;
 /**
  * One load per build, shared by every calendar page: the catalog, the calendar for the build's featured year, and
- * the render context (ctx) of render.mjs (featured year, the build's day, country names, circuits with a page), the same the browser gets
+ * the render context (ctx) of render.mjs (featured year, the build's day, country names, circuits with a page, which
+ * championships and circuits have a logo), the same the browser gets
  * back through liveConfig().
  */
 export const catalog = () =>
@@ -93,7 +94,16 @@ export const catalog = () =>
       throw new Error(
         'calendar: a series has the slug "circuits", reserved for /calendar/circuits/',
       );
-    return { data, ctx, cal, logoFiles };
+    // The circuits' logos, the same way (served by src/pages/calendar/logos/circuits/[slug].webp.ts): ctx.circuitLogos
+    // maps the catalog's venue_slug to the circuit's own slug, the only thing a path is built from, and its tone.
+    const all = circuits(cal);
+    const circuitLogoFiles = await loadLogos(venueLogos(all));
+    ctx.circuitLogos = Object.fromEntries(
+      all
+        .filter((c) => circuitLogoFiles.has(c.slug))
+        .map((c) => [c.venue_slug, { slug: c.slug, tone: circuitLogoFiles.get(c.slug).tone }]),
+    );
+    return { data, ctx, cal, logoFiles, circuitLogoFiles };
   }));
 
 /**
