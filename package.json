@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/store/check.mjs && node scripts/guardrails.mjs && astro build && node scripts/guardrails.mjs --dist",
+    "build:local": "node scripts/build-local.mjs",
     "guardrails": "node scripts/guardrails.mjs",
     "test:guardrails": "node --test scripts/guardrails.test.mjs",
     "test:calendar": "node --test src/lib/calendar/calendar.test.mjs src/lib/calendar/logos.test.mjs",

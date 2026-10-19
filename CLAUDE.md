@@ -5,7 +5,7 @@ Public marketing site of RaceNode (www.racenode.com), separate from the app (`ap
 ## Ship
 
 - Push to main = live ([docs/deployment.md](docs/deployment.md)). CI checks Prettier: run `npm run format` before committing.
-- `npm run build` runs the guardrails (`scripts/guardrails.mjs`); a violation blocks the deploy. Fix the copy; a rule only changes with Willi's agreement.
+- `npm run build` runs the guardrails (`scripts/guardrails.mjs`); a violation blocks the deploy. Local build with the real catalog: `cle /main --projet racenode -- npm run build:local` (no `bash -c`). Fix the copy; a rule only changes with Willi's agreement.
 - This repo is public: no strategy, roadmap, prospects or secret values (secrets: Cloudflare Pages env, Infisical `racenode`).
 
 ## Rules that bite
