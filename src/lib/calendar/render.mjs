@@ -116,7 +116,8 @@ const disciplinesOf = (c) => (c.disciplines?.length ? c.disciplines : [c.discipl
 // Styles: .calendar-row in src/styles/global.css (d = dates, c = championship, p = place): hundreds of rows, so
 // their classes live there once. The data-* attributes are what CalendarFilters reads (end: hides a round the
 // visitor's clock says is over, when the morning build is late). Under a meeting's heading (`meeting`), a row drops
-// what the heading says (circuit, country, dates) and keeps its own dates only when they differ from the meeting's.
+// what the heading says (circuit, country, dates) and the organizer's event name (Willi 20/10: unclear, sometimes a
+// circuit, sometimes a sponsor), and keeps its own dates only when they differ from the meeting's.
 export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = null } = {}) {
   const c = r.championship;
   const own = dateRange(r.start_date, r.end_date);
@@ -128,7 +129,7 @@ export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = nu
     .filter(Boolean)
     .join(' · ');
   const cancelled = r.status === 'cancelled';
-  const name = roundName(r, { short: Boolean(meeting) });
+  const name = meeting ? null : roundName(r);
   return (
     `<li class="calendar-row" data-discipline="${esc(disciplinesOf(c))}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
     (meeting
@@ -138,9 +139,7 @@ export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = nu
     `${meeting && cancelled ? '<span class="x">Cancelled</span>' : ''}</div>` +
     (place && !meeting
       ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>`
-      : name
-        ? `<div class="p"><span>${esc(name)}</span></div>`
-        : '') +
+      : '') +
     '</li>'
   );
 }
