@@ -2,7 +2,6 @@
 // home cards (name + `summary` + the captures). The pages are stable URLs (scripts/guardrails.mjs).
 import type { ImageMetadata } from 'astro';
 import { CREW_DAYS_IN_PLANNING } from './crew-days';
-import personalPhone from '../assets/screenshots/crew-app-race-weekend.png';
 import managementPhone from '../assets/screenshots/management-overview-phone.png';
 import logisticsPhone from '../assets/screenshots/logistics-overview-phone.png';
 import timetablePhone from '../assets/screenshots/timetable-schedule-phone.png';
@@ -19,25 +18,15 @@ export interface Module {
   short: string;
   /** Two or three lines on the home card: what it does, concretely. */
   summary: string;
-  /** The app's phone screen: the card's picture on a phone, and Personal's everywhere (the crew's own app). */
+  /** The app's phone screen: the card's picture on a phone. */
   phone: ImageMetadata;
   phoneAlt: string;
-  /** The team manager's screen, at a desk: the card's picture from sm up. Personal has none. */
+  /** The team manager's screen, at a desk: the card's picture from sm up. */
   screen?: ImageMetadata;
   screenAlt?: string;
 }
 
 export const modules: Module[] = [
-  {
-    name: 'Personal',
-    href: '/crew-app/',
-    short: "Each crew member's weekend, on their phone",
-    summary:
-      "Role, flight, hotel, meals and the next session on each crew member's own phone, taken from what you already entered. Free for every team member.",
-    phone: personalPhone,
-    phoneAlt:
-      "RaceNode crew app: a chief mechanic's race weekend with what is up next, his roles, his next meal and his hotel",
-  },
   {
     name: 'Management',
     href: '/management/',

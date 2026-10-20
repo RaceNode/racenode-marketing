@@ -136,7 +136,7 @@ When you delete your account, the following personal data is permanently erased:
 - Emergency contact
 - Profile photo
 - Personal preferences and settings
-- Personal schedule
+- Your own planning (Planning, Me view)
 - Login credentials
 - Product analytics data (erased within about a week)
 
