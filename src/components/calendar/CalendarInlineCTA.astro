@@ -1,0 +1,20 @@
+---
+// One-line way into the app, right under a calendar page's title. Like CalendarCTA it only invites a team
+// to set its season up in RaceNode, it does not promise an import.
+interface Props {
+  subject: string;
+}
+const { subject } = Astro.props;
+const appUrl = 'https://app.racenode.com';
+---
+
+<p class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+  <span>Racing {subject}? Plan your team's season in RaceNode.</span>
+  <a
+    href={`${appUrl}/signup`}
+    class="link font-semibold"
+    data-ph-capture-attribute-cta="calendar-top"
+  >
+    Sign up free
+  </a>
+</p>

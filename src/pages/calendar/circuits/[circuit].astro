@@ -6,6 +6,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import CalendarCTA from '../../../components/calendar/CalendarCTA.astro';
+import CalendarInlineCTA from '../../../components/calendar/CalendarInlineCTA.astro';
 import SampleDataNotice from '../../../components/calendar/SampleDataNotice.astro';
 import { catalog } from '../../../lib/calendar/build.mjs';
 import { circuits, displayName } from '../../../lib/calendar/model.mjs';
@@ -124,6 +125,7 @@ const eventsSchema = {
             {c.name} {year} calendar
           </h1>
           {place && <p class="lede mt-6">Circuit · {place}</p>}
+          <CalendarInlineCTA subject={`at ${c.name}`} />
         </div>
       </section>
       <div class="kerb" aria-hidden="true"></div>
