@@ -31,8 +31,8 @@ test('the guardrails catch a drift', (t) => {
   );
   fs.rmSync(join(copy, 'src', 'pages', 'account-deletion.astro'));
   fs.renameSync(
-    join(copy, 'src', 'pages', 'crew-app.astro'),
-    join(copy, 'src', 'pages', 'crew.astro'),
+    join(copy, 'src', 'pages', 'timetable.astro'),
+    join(copy, 'src', 'pages', 'timetable-moved.astro'),
   );
   // No .claude/settings.json in the copy, and a build that skips the guardrails.
   fs.writeFileSync(join(copy, 'package.json'), '{"scripts":{"build":"astro build"}}');
@@ -48,7 +48,7 @@ test('the guardrails catch a drift', (t) => {
     /guardrails hook/,
     /npm run build/,
     /\/account-deletion has no page/,
-    /\/crew-app has no page/,
+    /\/timetable has no page/,
   ])
     assert.match(found, re);
   assert.doesNotMatch(found, /Fine\.astro/);

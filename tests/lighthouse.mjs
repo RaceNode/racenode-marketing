@@ -11,7 +11,7 @@
  *
  *   npm run build && npm run test:lighthouse
  *   LIGHTHOUSE_BASE=https://www.racenode.com npm run test:lighthouse
- *   npm run test:lighthouse -- /pricing/ /crew-app/
+ *   npm run test:lighthouse -- /pricing/ /crew-planning/
  *
  * Performance depends on the machine: best of two runs below 90. The chrome
  * Lighthouse drives is CHROME_PATH, or the one it finds.

@@ -59,7 +59,7 @@ const RULES = [
 
 // URLs declared or linked outside this repo: removing or renaming one breaks something we do not control.
 // /account-deletion is declared in Google Play Console (Data Safety); /privacy and /terms in both stores and
-// the app; the module pages and /crew-app are linked from the app, the store listings and search results; /calendar
+// the app; the module pages are linked from the app, the store listings and search results; /calendar
 // is indexed by Google (live since 2026-10-07).
 // Willi, 2026-10-06. Specific to this site: the WBLT site template has no such list (only scripts/legacy-urls, for
 // redirects); a candidate to bring up to the template.
@@ -71,7 +71,6 @@ export const STABLE_URLS = [
   '/logistics',
   '/management',
   '/timetable',
-  '/crew-app',
   '/calendar',
 ];
 

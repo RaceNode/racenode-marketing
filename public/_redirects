@@ -4,3 +4,7 @@
 /ios/         https://apps.apple.com/app/id6804234080                          302
 /android      https://play.google.com/store/apps/details?id=com.racenode.app   302
 /android/     https://play.google.com/store/apps/details?id=com.racenode.app   302
+
+# Personal left the app's screens on 2026-10-19: its page is now Planning (Me view).
+/crew-app    /crew-planning/    301
+/crew-app/   /crew-planning/    301
