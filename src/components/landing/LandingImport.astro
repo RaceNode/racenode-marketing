@@ -1,0 +1,32 @@
+---
+import Shot from '../Shot.astro';
+import importScreen from '../../assets/screenshots/logistics-import.png';
+import importPhone from '../../assets/screenshots/logistics-import-phone.png';
+---
+
+<!-- The product's proof, right under the hero: a document in, the bookings out, checked before saving.
+     The formats are the ones the app reads (racenode: src/lib/documentImport/read/readDocument.ts). -->
+<section id="how-it-works" class="py-14 md:py-24">
+  <div class="page grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+    <div class="lg:col-span-4">
+      <h2 class="title">
+        Drop the agency's mail or the hotel's PDF: the bookings fill themselves.
+      </h2>
+      <p class="muted mt-5 text-lg leading-relaxed">
+        The hotel, the flights, the car or the transfer it holds come out as bookings, with the
+        people named on them. Nothing is saved until you have checked it.
+      </p>
+      <p class="muted mt-4 text-sm leading-relaxed">
+        PDF, mail (.eml), Excel or CSV, a web page, a calendar (.ics), a photo or a screenshot.
+      </p>
+    </div>
+    <div class="lg:col-span-8">
+      <Shot
+        desktop={importScreen}
+        phone={importPhone}
+        phoneClass="max-w-[14rem]"
+        alt="RaceNode Logistics import: a travel agency's confirmation on the left, the hotel and flights it holds on the right, to check before importing"
+      />
+    </div>
+  </div>
+</section>

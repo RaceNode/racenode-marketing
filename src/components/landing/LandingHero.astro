@@ -8,24 +8,25 @@ const appUrl = 'https://app.racenode.com';
 
 <!-- Opening: the promise on the left, the crew's phone rising from the track edge on the right. -->
 <section class="band-dark overflow-hidden">
-  <div class="page grid gap-12 pt-14 md:pt-20 lg:grid-cols-12 lg:gap-10">
+  <!-- On a 390 px phone, the free line stays above the cookie banner: buttons side by side, tight top. -->
+  <div class="page grid gap-12 pt-8 md:pt-20 lg:grid-cols-12 lg:gap-10">
     <div class="lg:col-span-7 lg:pb-24">
       <p class="font-display text-lg font-medium text-smoke">
         Built by William Brillouet, former GT3 team manager
       </p>
 
-      <h1 class="display mt-5">Stop rebuilding the event PDF.</h1>
+      <h1 class="display mt-3 md:mt-5">Stop rebuilding the event PDF.</h1>
 
-      <p class="lede mt-8 max-w-2xl">
+      <p class="lede mt-5 max-w-2xl md:mt-8">
         RaceNode puts travel, hotels, roles and the weekend timetable in one place, and on every
         crew member's phone. For GT, endurance, single-seater and rally teams.
       </p>
 
-      <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+      <div class="mt-6 flex flex-wrap items-center gap-3 md:mt-10">
+        <a href={`${appUrl}/signup`} class="btn-primary sm:text-lg">
           Start free
         </a>
-        <a href="#how-it-works" class="btn-ghost text-lg">
+        <a href="#how-it-works" class="btn-ghost sm:text-lg">
           See how it works
         </a>
       </div>
@@ -42,7 +43,7 @@ const appUrl = 'https://app.racenode.com';
     </div>
 
     <!-- The phone sits on the bottom edge of the band and is cut by it. -->
-    <div class="flex h-[26rem] items-start justify-center sm:h-[30rem] lg:col-span-5 lg:h-auto lg:items-end lg:justify-end">
+    <div class="flex h-[22rem] items-start justify-center sm:h-[30rem] lg:col-span-5 lg:h-auto lg:items-end lg:justify-end">
       <div class="phone w-[17rem] translate-y-0 sm:w-[19rem] lg:-mb-40 lg:w-[21rem]">
         <Image
           src={raceWeekend}

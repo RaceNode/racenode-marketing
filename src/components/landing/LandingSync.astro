@@ -1,5 +1,4 @@
 ---
-import StoreBadges from '../StoreBadges.astro';
 import CrewScreen from '../CrewScreen.astro';
 
 // The lower half of the screen in the hero: the same race weekend, scrolled.
@@ -18,22 +17,17 @@ const items = [
 ---
 
 <div class="kerb" aria-hidden="true"></div>
-<section class="band band-dark">
+<section class="band-dark py-14 md:py-24">
   <div class="page">
     <div class="head">
       <h2 class="title">Assign once, everyone knows.</h2>
       <p class="lede">
         When you assign a role, a car, a flight or a meal, your team member sees it in their
-        RaceNode app. Your drivers too: their flights, hotel and timetable, on the same app as the
-        crew.
+        RaceNode app, on iPhone and Android. Your drivers too: their flights, hotel and timetable,
+        on the same app as the crew.
       </p>
     </div>
 
     <CrewScreen screen="more" items={items} />
-
-    <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <p class="max-w-md font-medium text-smoke">Your crew gets the app on iPhone and Android:</p>
-      <StoreBadges align="start" />
-    </div>
   </div>
 </section>

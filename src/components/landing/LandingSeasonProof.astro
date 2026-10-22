@@ -2,21 +2,22 @@
 import { seasonProof, seasonProofLabel } from '../../data/season-proof';
 ---
 
-<section class="band band-paper" aria-label={seasonProofLabel}>
+<!-- Three across even on a phone: the logo above its name, in gray but dark enough to read. -->
+<section class="band-paper py-10 md:py-14" aria-label={seasonProofLabel}>
   <div class="page">
     <p class="muted text-sm">{seasonProofLabel}</p>
-    <ul class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <ul class="mt-5 grid grid-cols-3 gap-4 sm:gap-8">
       {seasonProof.map((item) => (
-        <li class="flex items-center gap-3">
+        <li class="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
           <img
             src={item.logo}
             alt=""
-            width="48"
-            height="32"
+            width="96"
+            height="48"
             loading="lazy"
-            class="h-8 w-12 shrink-0 object-contain opacity-60 grayscale"
+            class="h-12 w-24 shrink-0 object-contain object-left opacity-90 grayscale"
           />
-          <span class="text-sm font-medium">{item.name}</span>
+          <span class="text-xs font-medium leading-snug sm:text-sm">{item.name}</span>
         </li>
       ))}
     </ul>
