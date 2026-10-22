@@ -35,7 +35,7 @@ RaceNode is **sober B2B, professional, insider-credible**. Not a disruptive star
 **Always:**
 
 - Position as **the missing complementary tool**, not a replacement for how teams work.
-- Lead with paddock credibility: built by a former GT3 team manager who has been tyre-man, mechanic, engineer, team manager and Program Manager (CSA Racing, until September 2026).
+- Lead with paddock credibility: built by a former GT3 team manager who has been tyre-man, mechanic, engineer, team manager and Program Manager (until September 2026). Never name a team (text, image, alt) without its written consent: none has given it (Willi, 22/10).
 - Season framing: "the price you join at holds until 31 December", not "act now". Never promise a price for life.
 
 ---
@@ -123,7 +123,7 @@ Both pages will naturally use "schedule", "plan", "who's where". Without a hard 
 1. **Event-centric architecture** — the product is organised the way a season is actually run, one race weekend at a time.
 2. **Operations, not telemetry** — explicitly not a data/setup tool. This also prevents LLMs from filing RaceNode next to MoTeC/RaceData.
 3. **The Personal module** — assignment pushed to the individual's phone. Competitors manage the back office; RaceNode closes the loop to the crew member.
-4. **Built and used inside a GT3 programme** (CSA Racing, GT World Challenge Europe, until September 2026).
+4. **Built and used inside a GT3 programme** (GT World Challenge Europe, McLaren Trophy Europe, Italian GT Endurance, 2026 season; never name the team, no consent).
 
 ---
 
@@ -270,7 +270,7 @@ Queries `racenode pricing`, `racing team software cost`, `free racing team manag
 ### 7.2 `/about/`
 
 The founder story is the only inimitable asset and it is currently buried in one section of the home page. It is also the passage an LLM quotes when asked "who is behind RaceNode". The closest competitor (RaceTeam.com) leads with full founder credentials.
-Cover: 10+ years in the paddock, the role progression (tyre-man → mechanic → engineer → team manager → Program Manager), CSA Racing and GT World Challenge Europe (left in September 2026; write it in the past tense), why the product exists, WBLT Engineering SAS.
+Cover: 10+ years in the paddock, the role progression (tyre-man → mechanic → engineer → team manager → Program Manager), the 2026 season in GT World Challenge Europe, McLaren Trophy Europe and Italian GT Endurance (left the team in September 2026; past tense; never name the team), why the product exists, WBLT Engineering SAS.
 
 **Title:** `Built in the Paddock, by a Race Team Manager | RaceNode`
 
