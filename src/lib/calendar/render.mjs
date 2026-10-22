@@ -309,7 +309,7 @@ export function championshipBody(cal, slug, ctx) {
   const provisional = shown.calendar_provisional
     ? '<p class="cal-prov-note"><strong>Provisional calendar</strong>' +
       (shown.calendar_source_date
-        ? ` · ${esc(organizer)}'s calendar of ${longDate(shown.calendar_source_date)}`
+        ? ` · ${organizer}'s calendar of ${longDate(shown.calendar_source_date)}`
         : '') +
       '. Dates and venues may change.</p>'
     : '';

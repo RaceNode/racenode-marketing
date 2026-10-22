@@ -469,6 +469,22 @@ test('a provisional season says so on its page and on its rows; false or absent 
   );
   const page = (slug) => championshipBody(cal, slug, { countries: {} });
   assert.match(
+    championshipBody(
+      buildCalendar(
+        {
+          series: [series('amp', { organizer_name: 'A & B' })],
+          seasons: [{ ...season('amp', 2027), calendar_provisional: true }],
+          events: [round('amp', 2027, '2027-04-01')],
+        },
+        { today: new Date('2026-10-07') },
+      ),
+      'amp',
+      { countries: {} },
+    ),
+    /A &amp; B\./,
+    'the organizer is escaped once',
+  );
+  assert.match(
     page('dated'),
     /Provisional calendar<\/strong> · Org's calendar of 11 September 2026/,
   );
