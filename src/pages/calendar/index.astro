@@ -8,7 +8,7 @@ import CalendarFilters from '../../components/calendar/CalendarFilters.astro';
 import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
 import { catalog } from '../../lib/calendar/build.mjs';
-import { circuits, upcomingRounds } from '../../lib/calendar/model.mjs';
+import { circuits, notPublished, upcomingRounds } from '../../lib/calendar/model.mjs';
 import { indexBody, indexSummary } from '../../lib/calendar/render.mjs';
 import { DISCIPLINES, MONTHS, REGIONS } from '../../lib/calendar/format.mjs';
 
@@ -41,7 +41,8 @@ const summary = indexSummary(cal);
 const body = indexBody(cal, ctx);
 
 const title = `Motorsport Calendar ${cal.year}: Every Championship, Dates & Circuits | RaceNode`;
-const description = `The ${cal.year} race calendars of ${cal.championships.length} championships on one page: GT, endurance, single-seaters, one-make cups. Filter by discipline, region, circuit and month to see who races where, and when.`;
+const published = cal.championships.length - notPublished(cal).length;
+const description = `${cal.championships.length} championships on one page, ${published} with their ${cal.year} calendar already out: GT, endurance, single-seaters, one-make cups. Dates, circuits, official links.`;
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
