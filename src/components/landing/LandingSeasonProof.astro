@@ -1,0 +1,24 @@
+---
+import { seasonProof, seasonProofLabel } from '../../data/season-proof';
+---
+
+<section class="band band-paper" aria-label={seasonProofLabel}>
+  <div class="page">
+    <p class="muted text-sm">{seasonProofLabel}</p>
+    <ul class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {seasonProof.map((item) => (
+        <li class="flex items-center gap-3">
+          <img
+            src={item.logo}
+            alt=""
+            width="48"
+            height="32"
+            loading="lazy"
+            class="h-8 w-12 shrink-0 object-contain opacity-60 grayscale"
+          />
+          <span class="text-sm font-medium">{item.name}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
