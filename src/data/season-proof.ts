@@ -3,10 +3,12 @@
 // (/calendar/logos/<slug>.webp, src/lib/calendar/logos.mjs); a partner team's entry can be added here later.
 export type SeasonProofItem = { name: string; logo: string };
 
-export const seasonProofLabel = 'Used through the 2026 season in';
+export const seasonProofLabel =
+  'Used through the 2026 GT World Challenge Europe and McLaren Trophy seasons, part of Italian GT, and a Formula 2 race weekend.';
 
 export const seasonProof: SeasonProofItem[] = [
   { name: 'GT World Challenge Europe', logo: '/calendar/logos/gt-world-challenge-europe.webp' },
-  { name: 'McLaren Trophy Europe', logo: '/calendar/logos/mclaren-trophy-europe.webp' },
-  { name: 'Italian GT Endurance', logo: '/calendar/logos/italian-gt-endurance.webp' },
+  { name: 'McLaren Trophy', logo: '/calendar/logos/mclaren-trophy-europe.webp' },
+  { name: 'Italian GT', logo: '/calendar/logos/italian-gt-endurance.webp' },
+  { name: 'Formula 2', logo: '/calendar/logos/fia-formula-2.webp' },
 ];

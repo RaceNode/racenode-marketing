@@ -5,10 +5,10 @@ import { seasonProof, seasonProofLabel } from '../../data/season-proof';
 <!-- Three across even on a phone: the logo above its name, in gray but dark enough to read. -->
 <section class="band-paper py-10 md:py-14" aria-label={seasonProofLabel}>
   <div class="page">
-    <p class="muted text-sm">{seasonProofLabel}</p>
-    <ul class="mt-5 grid grid-cols-3 gap-4 sm:gap-8">
+    <p class="muted max-w-3xl">{seasonProofLabel}</p>
+    <ul class="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 sm:gap-8">
       {seasonProof.map((item) => (
-        <li class="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
+        <li class="flex flex-col items-start gap-2">
           <img
             src={item.logo}
             alt=""
