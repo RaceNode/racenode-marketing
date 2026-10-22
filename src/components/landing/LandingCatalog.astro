@@ -6,7 +6,8 @@
 import { catalog } from '../../lib/calendar/build.mjs';
 import { notPublished } from '../../lib/calendar/model.mjs';
 
-const { cal, sample } = (await catalog()) as any;
+const { data, cal } = await catalog();
+const sample = data.sample;
 const count = cal.championships.length;
 const published = count - notPublished(cal).length;
 const lede = sample
