@@ -129,6 +129,7 @@ export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = nu
     .filter(Boolean)
     .join(' · ');
   const cancelled = r.status === 'cancelled';
+  const provisional = c.seasons?.find((s) => s.label === r.season_label)?.calendar_provisional;
   const name = meeting ? null : roundName(r);
   return (
     `<li class="calendar-row" data-discipline="${esc(disciplinesOf(c))}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
@@ -136,7 +137,8 @@ export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = nu
       ? ''
       : `<div class="d">${esc(own)}${cancelled ? '<span>Cancelled</span>' : ''}</div>`) +
     `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span>` +
-    `${meeting && cancelled ? '<span class="x">Cancelled</span>' : ''}</div>` +
+    `${meeting && cancelled ? '<span class="x">Cancelled</span>' : ''}` +
+    `${provisional ? '<span class="prov">Provisional</span>' : ''}</div>` +
     (place && !meeting
       ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>`
       : '') +
@@ -303,8 +305,17 @@ export function championshipBody(cal, slug, ctx) {
   const source = shown.source_url
     ? ` ${external(shown.source_url, 'Official calendar ↗', 'link')}`
     : '';
+  // A flag from the organizer's source, never a guarantee the other way: no flag says nothing, not "confirmed".
+  const provisional = shown.calendar_provisional
+    ? '<p class="cal-prov-note"><strong>Provisional calendar</strong>' +
+      (shown.calendar_source_date
+        ? ` · ${esc(organizer)}'s calendar of ${longDate(shown.calendar_source_date)}`
+        : '') +
+      '. Dates and venues may change.</p>'
+    : '';
   let html = c.featured
-    ? `<p class="muted text-sm mb-8">${shown.rounds.length} rounds published by ${organizer}${shown.calendar_status === 'provisional' ? ' (provisional calendar)' : ''}.${checked('Checked')}${source}</p>`
+    ? provisional +
+      `<p class="muted text-sm mb-8">${shown.rounds.length} rounds published by ${organizer}.${checked('Checked')}${source}</p>`
     : '<div class="cal-note" role="note">' +
       `<p class="font-semibold text-ink mb-1">The ${year} calendar is not published yet.</p>` +
       `<p class="muted text-sm">${organizer} has not released its ${year} dates. Below, the ${esc(shown.label)} season for reference.${checked('Last checked')}${source}</p></div>`;

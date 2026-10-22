@@ -451,6 +451,43 @@ test('a 4xx (missing route, bad key) is not retried', async () => {
   }
 });
 
+test('a provisional season says so on its page and on its rows; false or absent says nothing, never "confirmed"', () => {
+  const seasons = [
+    { ...season('dated', 2027), calendar_provisional: true, calendar_source_date: '2026-09-11' },
+    { ...season('undated', 2027), calendar_provisional: true, calendar_source_date: null },
+    { ...season('no', 2027), calendar_provisional: false, calendar_source_date: null },
+    season('absent', 2027),
+  ];
+  const slugs = seasons.map((s) => s.series_slug);
+  const cal = buildCalendar(
+    {
+      series: slugs.map((s) => series(s, { organizer_name: 'Org' })),
+      seasons,
+      events: slugs.map((s) => round(s, 2027, '2027-04-01')),
+    },
+    { today: new Date('2026-10-07') },
+  );
+  const page = (slug) => championshipBody(cal, slug, { countries: {} });
+  assert.match(
+    page('dated'),
+    /Provisional calendar<\/strong> · Org's calendar of 11 September 2026/,
+  );
+  assert.match(page('undated'), /Provisional calendar<\/strong>\. /);
+  assert.doesNotMatch(page('undated'), /calendar of/);
+  for (const slug of ['no', 'absent']) assert.doesNotMatch(page(slug), /rovisional|confirmed/);
+  const row = (slug) =>
+    roundRow(
+      {
+        ...round(slug, 2027, '2027-04-01'),
+        championship: cal.championships.find((c) => c.slug === slug),
+      },
+      { countries: {} },
+    );
+  assert.match(row('dated'), /class="prov">Provisional</);
+  assert.match(row('undated'), /class="prov">Provisional</);
+  for (const slug of ['no', 'absent']) assert.doesNotMatch(row(slug), /prov/);
+});
+
 test('the rows of the all-championships calendar escape what the catalog says', () => {
   const c = { slug: 'a', name: 'A <b>', short_name: null, discipline: 'gt', region: null };
   const html = roundRow(

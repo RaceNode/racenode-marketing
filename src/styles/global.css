@@ -339,6 +339,16 @@
   .calendar-row > .c > .x {
     @apply font-semibold text-blocking;
   }
+  /* A provisional season (render.mjs): a state, in the muted tones, never a color. */
+  .calendar-row > .c > .prov {
+    @apply text-graphite italic;
+  }
+  .cal-prov-note {
+    @apply mb-3 border-l-2 border-graphite bg-paper px-3 py-2 text-sm text-graphite;
+  }
+  .cal-prov-note > strong {
+    @apply text-ink;
+  }
   .cal-season-row {
     @apply grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_10.5rem_1fr_auto];
   }
