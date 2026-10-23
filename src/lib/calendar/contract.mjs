@@ -27,7 +27,9 @@ export const FIELDS = {
     'series_slug',
     'label',
     'year',
-    'calendar_status',
+    // The organizer's calendar is a draft (a date, when the source gives one). calendar_status, always null, is gone.
+    'calendar_provisional',
+    'calendar_source_date',
     'source_url',
     'last_checked_at',
     'event_count',
