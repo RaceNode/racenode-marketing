@@ -11,28 +11,38 @@ const assurances = [
 ];
 ---
 
-<div class="kerb" aria-hidden="true"></div>
-<section class="band band-dark">
-  <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
-    <div class="lg:col-span-8">
-      <h2 class="title">Set up your 2027 season now.</h2>
-      <p class="lede mt-5 max-w-2xl">
-        Free until 31 December 2026: pay nothing this year. Try it on your next event yourself: no
-        demo to book, no card.
-      </p>
-      <ul class="mt-6 grid gap-2 sm:grid-cols-3 sm:gap-6">
-        {assurances.map((line) => (
-          <li class="flex items-center gap-2.5 font-medium text-fog">
-            <Icon name="check" class="size-4 shrink-0 text-smoke" />
-            {line}
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="lg:col-span-4 lg:text-right">
-      <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-        Start free
-      </a>
+<!-- The end of the dark block that opens with the crew's app (LandingSync): a hairline, who built it, then the call.
+     The paddock line was a light band of its own between two dark ones; it now leads into the call. -->
+<section class="band-dark pb-20 md:pb-28">
+  <div class="page">
+    <div class="hair grid gap-8 pt-12 md:pt-16 lg:grid-cols-12 lg:items-end lg:gap-10">
+      <div class="lg:col-span-8">
+        <p class="font-display text-lg font-medium text-fog">
+          Built from 10+ years in the paddock.
+        </p>
+        <p class="mt-2 max-w-2xl text-sm leading-relaxed text-smoke md:text-base">
+          GT3 team manager, tyre man, mechanic and race engineer before that: every problem on this
+          page comes from those race weekends.
+        </p>
+        <h2 class="title mt-8 md:mt-10">Set up your 2027 season now.</h2>
+        <p class="lede mt-5 max-w-2xl">
+          Free until 31 December 2026: pay nothing this year. Try it on your next event yourself: no
+          demo to book, no card.
+        </p>
+        <ul class="mt-6 grid gap-2 sm:grid-cols-3 sm:gap-6">
+          {assurances.map((line) => (
+            <li class="flex items-center gap-2.5 font-medium text-fog">
+              <Icon name="check" class="size-4 shrink-0 text-smoke" />
+              {line}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="lg:col-span-4 lg:text-right">
+        <a href={`${appUrl}/signup`} class="btn-primary text-lg">
+          Start free
+        </a>
+      </div>
     </div>
   </div>
 </section>
