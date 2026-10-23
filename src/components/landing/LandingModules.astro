@@ -6,7 +6,8 @@ import { modules } from '../../data/modules';
 <!-- One row per module, the whole row a link to its page: a screen of the app, then the name and two or three
      concrete lines, beside it on wide screens (sides alternate). The team manager's four modules are used at a
      desk: their laptop screen, whole, on two thirds of the width so its text stays readable. On a phone, every
-     module shows the app's phone screen (a laptop screen shrunk to 360 px is unreadable). -->
+     module shows the app's phone screen (a laptop screen shrunk to 360 px is unreadable), straight on the page's
+     light ground like the import's: no dark plate behind it, which on a phone read as one more dark band. -->
 <section class="page pb-20 md:pb-28">
   <div class="hair pt-10 md:pt-14">
     <div class="head">
@@ -22,12 +23,7 @@ import { modules } from '../../data/modules';
         <li>
           <a href={module.href} class="group grid items-center gap-y-6 lg:grid-cols-12 lg:gap-x-12">
             <div class:list={['lg:col-span-8', i % 2 === 1 && 'lg:order-2']}>
-              <div
-                class:list={[
-                  'flex justify-center rounded-[4px] bg-asphalt px-6 py-8',
-                  module.screen && 'sm:hidden',
-                ]}
-              >
+              <div class:list={['flex justify-center', module.screen && 'sm:hidden']}>
                 <div class="phone w-56 shrink-0 lg:w-48 border-[5px] transition-transform duration-300 motion-safe:group-hover:-translate-y-1">
                   <Image
                     src={module.phone}
