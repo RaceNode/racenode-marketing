@@ -10,20 +10,16 @@ import { modules } from '../data/modules';
 const appUrl = 'https://app.racenode.com';
 const title = 'Pricing — Free until your first event is over | RaceNode';
 const description =
-  'RaceNode is free until your first event is over. Then €99 per month excl. VAT, or €990 excl. VAT for 12 months. No payment before 1 January 2027. Every module, for the whole team.';
+  'RaceNode is free until your first event is over. Then €99 per month excl. VAT, or €990 per year excl. VAT. No payment before 1 January 2027. Every module, for the whole team.';
 
 const faq = [
   {
     q: 'How much does RaceNode cost?',
-    a: '€99 per month excl. VAT, or €990 excl. VAT for 12 months. Every module, for the whole team. These are 2027 prices.',
+    a: '€99 per month excl. VAT, or €990 per year excl. VAT. Every module, for the whole team. These are 2027 prices.',
   },
   {
     q: 'When do I start paying?',
     a: 'Once your first event is over, and not before 1 January 2027.',
-  },
-  {
-    q: 'How does the annual subscription work?',
-    a: 'It runs for 12 months from the date of payment.',
   },
 ];
 
@@ -60,7 +56,7 @@ const faqSchema = faqJsonLd(
                 <span class="display">€99</span>
                 <span class="text-smoke">per month, excl. VAT</span>
               </p>
-              <p class="mt-2 text-fog">or €990 excl. VAT for 12 months</p>
+              <p class="mt-2 text-fog">or €990 per year excl. VAT</p>
               <p class="hair mt-6 pt-5 text-sm text-smoke">
                 Every module, for the whole team. 2027 prices.
               </p>
