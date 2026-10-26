@@ -6,20 +6,29 @@ import { breadcrumbJsonLd, faqJsonLd } from '../lib/seo';
 import { site } from '../site.config';
 import { modules } from '../data/modules';
 
-// Prices and wording: Willi, 2026-10-26. Factual, no slogan; the price is the page's main figure.
+// Prices and wording: Willi, 2026-10-26. Free for everyone until 31 December 2026; from 2027 a free trial that
+// lasts until the end of the team's first event (any kind of event), then a subscription. Simple, factual, no slogan.
 const appUrl = 'https://app.racenode.com';
-const title = 'Pricing — Free until your first event is over | RaceNode';
+const title = 'Pricing — €99 per month, your first event free | RaceNode';
 const description =
-  'RaceNode is free until your first event is over. Then €99 per month excl. VAT, or €990 per year excl. VAT. No payment before 1 January 2027. Every module, for the whole team.';
+  'RaceNode is free for everyone until 31 December 2026. Then try it free on your first event, and subscribe for €99 per month or €990 per year, excl. VAT, per team. Every module included.';
 
 const faq = [
   {
     q: 'How much does RaceNode cost?',
-    a: '€99 per month excl. VAT, or €990 per year excl. VAT. Every module, for the whole team. These are 2027 prices.',
+    a: '€99 per month or €990 per year, excl. VAT, per team. Every module included.',
   },
   {
-    q: 'When do I start paying?',
-    a: 'Once your first event is over, and not before 1 January 2027.',
+    q: 'How does the free trial work?',
+    a: 'Your trial lasts until your first event on RaceNode is over, whatever that event is. No card needed.',
+  },
+  {
+    q: 'What happens after my first event?',
+    a: 'Subscribe to keep using RaceNode. Your data is not deleted.',
+  },
+  {
+    q: 'Is RaceNode free in 2026?',
+    a: 'Yes. RaceNode is free for everyone until 31 December 2026.',
   },
 ];
 
@@ -41,29 +50,27 @@ const faqSchema = faqJsonLd(
   <div class="min-h-screen bg-concrete">
     <Header />
     <main>
-      <!-- Opening, as on the module pages: the page's name, the rule, then the price in the app's own card. -->
+      <!-- Opening, as on the module pages: the page's name, the trial, then the price on the band itself. -->
       <section class="band band-dark">
-        <div class="page grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-10">
+        <div class="page grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-10">
           <div class="lg:col-span-7">
             <p class="font-display text-lg font-medium text-smoke">Pricing</p>
-            <h1 class="display mt-5">Free until your first event is over.</h1>
-            <p class="lede mt-6 max-w-xl">No payment before 1 January 2027.</p>
+            <h1 class="display mt-5">Try RaceNode free on your first event.</h1>
           </div>
           <div class="lg:col-span-5">
-            <div class="app-card p-6 md:p-8">
-              <p class="app-label">Then, per team</p>
-              <p class="mt-4 flex items-baseline gap-3">
-                <span class="display">€99</span>
-                <span class="text-smoke">per month, excl. VAT</span>
-              </p>
-              <p class="mt-2 text-fog">or €990 per year excl. VAT</p>
-              <p class="hair mt-6 pt-5 text-sm text-smoke">
-                Every module, for the whole team. 2027 prices.
-              </p>
-              <a href={`${appUrl}/signup`} class="btn-primary mt-6 w-full text-lg">
+            <p class="flex items-baseline gap-3">
+              <span class="display">€99</span>
+              <span class="lede">per month</span>
+            </p>
+            <p class="lede mt-2">or €990 per year</p>
+            <p class="mt-3 text-smoke">Excl. VAT, per team. Every module included.</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+              <a href={`${appUrl}/signup`} class="btn-primary text-lg">
                 Start free
               </a>
+              <span class="text-sm text-smoke">No card needed for the trial</span>
             </div>
+            <p class="hair mt-8 pt-5 text-fog">Free for everyone until 31 December 2026.</p>
           </div>
         </div>
       </section>
@@ -73,7 +80,7 @@ const faqSchema = faqJsonLd(
       <section class="band">
         <div class="page">
           <div class="head">
-            <h2 class="title">Every module, for the whole team.</h2>
+            <h2 class="title">Every module included.</h2>
           </div>
           <ul class="grid gap-x-12 gap-y-10 md:grid-cols-2">
             {modules.map((module) => (
