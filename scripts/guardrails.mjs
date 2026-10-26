@@ -6,6 +6,10 @@
 // - pricing: Willi, 2026-09-28, only three promises hold (free until 31/12/2026; the price you join at holds
 //   until 31 December; monthly with an annual option). "Early adopter price kept for life", "regardless of
 //   team size", "Personal free, always" were withdrawn that day. Prices stay unpublished until he decides.
+//   Willi, 2026-10-26, set the 2027 prices (Timetable 150 € HT/month, Management + Logistics pack 150 € HT/month,
+//   Planning included, pay from the end of the first event and never before 1 January 2027): figures may now
+//   appear on the pricing page and llms.txt only; the withdrawn promises stay banned everywhere, and so does a
+//   price per car or by team size (never price per car or event: a bigger budget means fewer cars).
 // - vocabulary: docs/racenode-marketing-site-seo-reference.md §3.3 rules out "roadbook" (rally-raid intent in
 //   English) and "motorsport logistics" (freight intent); "freight" was taken off the Logistics breadcrumb on
 //   2026-10-04, "roadbook" was still on the home page on 2026-10-05.
@@ -34,8 +38,15 @@ const RULES = [
   {
     name: 'pricing',
     dirs: ['src', 'public/llms.txt', 'store/listing.json'],
-    re: /for life|lifetime (?:price|deal|access)|early[- ]adopter|regardless of (?:team )?size|free,? (?:always|forever)|€\s?\d|\d\s?€|\bper month\b|\/\s?month\b/i,
-    why: 'pricing promise or price figure: only the three promises of 2026-09-28 hold and prices stay unpublished until Willi decides',
+    re: /for life|lifetime (?:price|deal|access)|early[- ]adopter|regardless of (?:team )?size|free,? (?:always|forever)|(?:price[ds]?|pay|billed|charged?|costs?) per (?:car|vehicle|entry|driver)\b|(?:price[ds]?|pay|billed|charged?) by team size/i,
+    why: 'withdrawn pricing promise (2026-09-28) or a price per car or by team size: only the promises of the pricing page hold',
+  },
+  {
+    name: 'price figures',
+    dirs: ['src', 'public/llms.txt', 'store/listing.json'],
+    except: ['src/pages/pricing.astro', 'public/llms.txt'],
+    re: /€\s?\d|\d\s?€|\bper month\b|\/\s?month\b/i,
+    why: 'price figure outside the pricing page: prices live on /pricing/ (and llms.txt) only, so one change of price is one place to edit',
   },
   {
     name: 'vocabulary',
@@ -110,7 +121,7 @@ export function check(root) {
   for (const rule of RULES) {
     const found = rule.dirs
       .flatMap((d) => files(root, d))
-      .filter((f) => rule.re.test(code(f.text)));
+      .filter((f) => !(rule.except ?? []).includes(f.rel) && rule.re.test(code(f.text)));
     const tolerated = TOLERATED[rule.name] ?? [];
     for (const f of found) {
       if (tolerated.includes(f.rel)) continue;

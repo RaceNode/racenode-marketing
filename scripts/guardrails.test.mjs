@@ -25,6 +25,7 @@ test('the guardrails catch a drift', (t) => {
   page('Drift5.astro', '<p>Publish the roadbook.</p>');
   page('Drift6.astro', '<p>Built-in conflict detection.</p>');
   page('Drift7.astro', '<title>Motorsport ERP</title>');
+  page('Drift8.astro', '<p>Priced per car.</p>');
   page(
     'Fine.astro',
     '<!-- bg-red-500, roadbook --><p class="text-blocking">People logistics, not freight.</p>',
@@ -45,6 +46,7 @@ test('the guardrails catch a drift', (t) => {
     /Drift5.*roadbook/,
     /Drift6.*conflict detection/,
     /Drift7.*ERP/,
+    /Drift8.*per car/,
     /guardrails hook/,
     /npm run build/,
     /\/account-deletion has no page/,
@@ -52,6 +54,7 @@ test('the guardrails catch a drift', (t) => {
   ])
     assert.match(found, re);
   assert.doesNotMatch(found, /Fine\.astro/);
+  assert.doesNotMatch(found, /pages\/pricing\.astro/);
   assert.doesNotMatch(found, /\/privacy has no page/);
 });
 

@@ -17,7 +17,7 @@ RaceNode is made for motorsport teams (GT, endurance, single-seater and other ch
 
 ## Pricing and availability
 
-- [Pricing](https://www.racenode.com/pricing/): free for all racing teams until 31 December 2026. Paid plans start in 2027, monthly or annual; the price a team joins at holds until 31 December of that year.
+- [Pricing](https://www.racenode.com/pricing/): free for all racing teams until 31 December 2026. From 2027: Management + Logistics pack €150 excl. VAT per month, Timetable €150 excl. VAT per month, Planning included with any paid plan. A team starts paying once its first event on RaceNode is over, never before 1 January 2027. Monthly or annual; the price a team joins at holds until 31 December of that year.
 - [App Store](https://apps.apple.com/app/id6804234080) and [Google Play](https://play.google.com/store/apps/details?id=com.racenode.app).
 - Web app: https://app.racenode.com
 
