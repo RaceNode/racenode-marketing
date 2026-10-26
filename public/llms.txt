@@ -17,7 +17,7 @@ RaceNode is made for motorsport teams (GT, endurance, single-seater and other ch
 
 ## Pricing and availability
 
-- [Pricing](https://www.racenode.com/pricing/): RaceNode is free until a team's first event is over (an event can also be a test). Then €99 per month excl. VAT, or €990 excl. VAT for 12 months from the date of payment, no pro rata. No payment before 1 January 2027. All modules, for the whole team; 2027 prices. Planning (Me view) is free for every team member.
+- [Pricing](https://www.racenode.com/pricing/): RaceNode is free until a team's first event is over (an event can also be a test). Then €99 per month excl. VAT, or €990 excl. VAT for 12 months from the date of payment. No payment before 1 January 2027. All modules, for the whole team; 2027 prices. Planning (Me view) is free for every team member.
 - [App Store](https://apps.apple.com/app/id6804234080) and [Google Play](https://play.google.com/store/apps/details?id=com.racenode.app).
 - Web app: https://app.racenode.com
 
