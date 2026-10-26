@@ -3,9 +3,9 @@ import Icon from '../Icon.astro';
 
 const appUrl = 'https://app.racenode.com';
 
-// What holds once a team pays (src/pages/pricing.astro), without a price: the grid is not set.
+// What holds once a team pays (src/pages/pricing.astro); the price itself stays on that page.
 const assurances = [
-  'Your price holds for the whole season.',
+  'Every module included.',
   'Your crew uses it for free.',
   'Data hosted in the EU.',
 ];
@@ -26,8 +26,8 @@ const assurances = [
         </p>
         <h2 class="title mt-8 md:mt-10">Set up your 2027 season now.</h2>
         <p class="lede mt-5 max-w-2xl">
-          Free until 31 December 2026: pay nothing this year. Try it on your next event yourself: no
-          demo to book, no card.
+          Free until 31 December 2026, then free on your first event. Try it on your next event
+          yourself: no demo to book, no card.
         </p>
         <ul class="mt-6 grid gap-2 sm:grid-cols-3 sm:gap-6">
           {assurances.map((line) => (

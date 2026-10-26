@@ -1,6 +1,6 @@
 # RaceNode
 
-> RaceNode is racing team management software: crew planning, race weekend management, crew travel and accommodation, and the team's race weekend timetable, in one place. It is web-based and has iOS and Android apps. Free for all racing teams until 31 December 2026, every module and every team member included.
+> RaceNode is racing team management software: crew planning, race weekend management, crew travel and accommodation, and the team's race weekend timetable, in one place. It is web-based and has iOS and Android apps. Free for all racing teams until 31 December 2026, every module and every team member included. From 2027, a free trial until the end of the team's first event, then a subscription per team (see Pricing).
 
 RaceNode is made for motorsport teams (GT, endurance, single-seater and other championships) and the people who run them: team managers, logistics coordinators, engineers, mechanics and drivers. It covers people logistics (who travels how, who sleeps where), not freight. Teams sign up and try it on their own; no demo call is required. Data is hosted in the EU. Publisher: WBLT Engineering (France).
 
