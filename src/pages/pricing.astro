@@ -5,71 +5,46 @@ import Footer from '../components/Footer.astro';
 import { breadcrumbJsonLd, faqJsonLd } from '../lib/seo';
 import { site } from '../site.config';
 import StoreBadges from '../components/StoreBadges.astro';
-import Icon from '../components/Icon.astro';
 
+// Prices and wording: Willi, 2026-10-26. Factual, no slogan: his three sentences lead the page.
 const appUrl = 'https://app.racenode.com';
-const title = 'Pricing — Your first race weekend is on us | RaceNode';
+const title = 'Pricing — Free until your first event is over | RaceNode';
 const description =
-  'RaceNode is free for all racing teams until 31 December 2026, and you only start paying once your first event is over. Then €150 excl. VAT per month for the Management + Logistics pack or for Timetable, with Planning included.';
-const plans = [
+  'RaceNode is free until your first event is over. Then €99 per month excl. VAT, or €990 excl. VAT for 12 months. No payment before 1 January 2027. All modules, for the whole team.';
+
+const facts = [
   {
-    name: 'Management + Logistics',
-    price: '€150',
-    description:
-      "Run every race weekend: events, staff and fleet, plus your crew's travel, accommodation and meals.",
+    label: 'Included',
+    text: 'All modules, for the whole team.',
     links: [
       { label: 'Management', href: '/management/' },
       { label: 'Logistics', href: '/logistics/' },
+      { label: 'Timetable', href: '/timetable/' },
+      { label: 'Planning', href: '/crew-planning/' },
     ],
   },
+  { label: 'Prices', text: '2027 prices.' },
+  { label: 'Annual', text: '12 months from the date of payment. No pro rata.' },
   {
-    name: 'Timetable',
-    price: '€150',
-    description:
-      "Your team's race weekend timetable, minute by minute, on every crew member's phone.",
-    links: [{ label: 'Timetable', href: '/timetable/' }],
-  },
-];
-const points = [
-  {
-    title: 'Free until 31 December 2026',
-    description:
-      'Every module, every team, no payment details required. Nothing is charged before January 2027.',
-  },
-  {
-    title: 'You pay once your first event is over',
-    description:
-      'Billing starts after your first race weekend on RaceNode, never before 1 January 2027. You see it work on a real event first.',
-  },
-  {
-    title: 'Monthly or annual',
-    description: 'Plans are billed monthly, with the option to pay for the year upfront.',
-  },
-  {
-    title: 'Your price holds for the whole season',
-    description:
-      'Whenever you join during the year, the price you subscribe at is guaranteed until 31 December. No mid-season increase.',
-  },
-  {
-    title: 'Free for every team member',
-    description:
-      "Each crew member's own schedule, travel, and assignments, in Planning (Me view), cost your crew nothing.",
+    label: 'Team members',
+    text: 'Planning (Me view) is free for every team member.',
     badges: true,
   },
+  { label: 'First event', text: 'An event can also be a test.' },
 ];
 
 const faq = [
   {
     q: 'How much does RaceNode cost?',
-    a: 'From 2027, the Management + Logistics pack is €150 excl. VAT per month, and Timetable is €150 excl. VAT per month. Planning is included with any paid plan. Until 31 December 2026, everything is free.',
+    a: '€99 per month excl. VAT, or €990 excl. VAT for 12 months. All modules, for the whole team. These are 2027 prices.',
   },
   {
     q: 'When do I start paying?',
-    a: 'Once your first event on RaceNode is over, and never before 1 January 2027. Your first race weekend is on us.',
+    a: 'Once your first event is over, and not before 1 January 2027. An event can also be a test.',
   },
   {
-    q: 'Monthly or annual?',
-    a: 'Plans are billed monthly, with an option to pay annually. The price you subscribe at is guaranteed until 31 December of that year, whenever you join.',
+    q: 'How does the annual subscription work?',
+    a: 'It runs for 12 months from the date of payment. There is no pro rata.',
   },
   {
     q: 'Does my crew have to pay for the app?',
@@ -96,17 +71,18 @@ const faqSchema = faqJsonLd(
   <div class="min-h-screen bg-concrete">
     <Header />
     <main>
-      <!-- Hero -->
+      <!-- Willi's three sentences -->
       <section class="band band-dark">
         <div class="page">
-          <h1 class="display max-w-4xl">Your first race weekend is on us.</h1>
-          <p class="lede mt-8 max-w-2xl">
-            Everything is free until 31 December 2026, and you only start paying once your first
-            event is over.
+          <p class="tag text-smoke">Pricing</p>
+          <h1 class="display mt-6 max-w-4xl">RaceNode is free until your first event is over.</h1>
+          <p class="subtitle mt-8 max-w-3xl">
+            Then: €99 per month excl. VAT, or €990 excl. VAT for 12 months.
           </p>
+          <p class="lede mt-5 max-w-2xl">No payment before 1 January 2027.</p>
           <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
             <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-              Start free
+              Sign up
             </a>
             <span class="text-sm text-smoke">No payment details required</span>
           </div>
@@ -114,60 +90,36 @@ const faqSchema = faqJsonLd(
       </section>
       <div class="kerb" aria-hidden="true"></div>
 
-      <!-- Plans -->
+      <!-- The facts -->
       <section class="band">
         <div class="page">
-          <h2 class="title">{plansTitle}</h2>
-          <ul class="mt-12 grid gap-12 md:grid-cols-2">
-            {plans.map((plan) => (
-              <li class="ruled">
-                <h3 class="subtitle">{plan.name}</h3>
-                <p class="mt-5">
-                  <span class="display">{plan.price}</span>
-                  <span class="muted ml-2 text-lg">per month, excl. VAT</span>
-                </p>
-                {plan.rise && <p class="mt-3 text-base font-medium">{plan.rise}</p>}
-                <p class="muted mt-5 max-w-xl text-lg leading-relaxed">{plan.description}</p>
-                <p class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
-                  {plan.links.map((l) => (
-                    <a href={l.href} class="link">
-                      {l.label}
-                    </a>
-                  ))}
-                </p>
-              </li>
+          <dl class="max-w-3xl">
+            {facts.map((fact) => (
+              <div class="hair grid gap-2 py-6 sm:grid-cols-[11rem_1fr] sm:gap-8">
+                <dt class="font-display text-lg font-semibold">{fact.label}</dt>
+                <dd>
+                  <p class="text-lg leading-relaxed">{fact.text}</p>
+                  {fact.links && (
+                    <p class="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                      {fact.links.map((l) => (
+                        <a href={l.href} class="link">
+                          {l.label}
+                        </a>
+                      ))}
+                    </p>
+                  )}
+                  {fact.badges && <StoreBadges size="sm" align="start" class="mt-4" />}
+                </dd>
+              </div>
             ))}
-          </ul>
-          {included && (
-            <p class="mt-12 max-w-2xl text-lg leading-relaxed">
-              <strong>{included}</strong>
-            </p>
-          )}
-        </div>
-      </section>
-
-      <!-- The deal -->
-      <section class="band band-paper">
-        <div class="page">
-          <ul class="grid gap-x-12 gap-y-14 md:grid-cols-2">
-            {points.map((point) => (
-              <li class="promise">
-                <span class="promise-mark">
-                  <Icon name="check" />
-                </span>
-                <h2 class="flag-title mt-6">{point.title}</h2>
-                <p class="muted mt-4 max-w-xl text-lg leading-relaxed">{point.description}</p>
-                {point.badges && <StoreBadges size="sm" align="start" class="mt-5" />}
-              </li>
-            ))}
-          </ul>
+          </dl>
         </div>
       </section>
 
       <!-- FAQ -->
-      <section class="band">
+      <section class="band band-paper">
         <div class="page grid gap-10 lg:grid-cols-12 lg:gap-10">
-          <h2 class="title lg:col-span-4">Frequently asked questions</h2>
+          <h2 class="title lg:col-span-4">Questions</h2>
           <div class="lg:col-span-8">
             {faq.map((item) => (
               <div class="hair py-6">
@@ -180,20 +132,17 @@ const faqSchema = faqJsonLd(
         </div>
       </section>
 
-      <!-- CTA -->
+      <!-- Sign up -->
       <div class="kerb" aria-hidden="true"></div>
       <section class="band band-dark">
         <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
           <div class="lg:col-span-8">
-            <h2 class="title">Get your 2027 season ready.</h2>
-            <p class="lede mt-5 max-w-2xl">
-              Free until 31 December 2026, and your first race weekend is on us. Try it yourself: no
-              demo to book, no card.
-            </p>
+            <h2 class="title">Create your team's account.</h2>
+            <p class="lede mt-5 max-w-2xl">Free until your first event is over.</p>
           </div>
           <div class="lg:col-span-4 lg:text-right">
             <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-              Start free
+              Sign up
             </a>
           </div>
         </div>
