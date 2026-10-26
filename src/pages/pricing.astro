@@ -4,52 +4,26 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { breadcrumbJsonLd, faqJsonLd } from '../lib/seo';
 import { site } from '../site.config';
-import StoreBadges from '../components/StoreBadges.astro';
+import { modules } from '../data/modules';
 
-// Prices and wording: Willi, 2026-10-26. Factual, no slogan: his three sentences lead the page.
+// Prices and wording: Willi, 2026-10-26. Factual, no slogan; the price is the page's main figure.
 const appUrl = 'https://app.racenode.com';
 const title = 'Pricing — Free until your first event is over | RaceNode';
 const description =
-  'RaceNode is free until your first event is over. Then €99 per month excl. VAT, or €990 excl. VAT for 12 months. No payment before 1 January 2027. All modules, for the whole team.';
-
-const facts = [
-  {
-    label: 'Included',
-    text: 'All modules, for the whole team.',
-    links: [
-      { label: 'Management', href: '/management/' },
-      { label: 'Logistics', href: '/logistics/' },
-      { label: 'Timetable', href: '/timetable/' },
-      { label: 'Planning', href: '/crew-planning/' },
-    ],
-  },
-  { label: 'Prices', text: '2027 prices.' },
-  { label: 'Annual', text: '12 months from the date of payment.' },
-  {
-    label: 'Team members',
-    text: 'Planning (Me view) is free for every team member.',
-    badges: true,
-  },
-  { label: 'First event', text: 'An event can also be a test.' },
-];
+  'RaceNode is free until your first event is over. Then €99 per month excl. VAT, or €990 excl. VAT for 12 months. No payment before 1 January 2027. Every module, for the whole team.';
 
 const faq = [
   {
     q: 'How much does RaceNode cost?',
-    a: '€99 per month excl. VAT, or €990 excl. VAT for 12 months. All modules, for the whole team. These are 2027 prices.',
+    a: '€99 per month excl. VAT, or €990 excl. VAT for 12 months. Every module, for the whole team. These are 2027 prices.',
   },
   {
     q: 'When do I start paying?',
-    a: 'Once your first event is over, and not before 1 January 2027. An event can also be a test.',
+    a: 'Once your first event is over, and not before 1 January 2027.',
   },
   {
     q: 'How does the annual subscription work?',
     a: 'It runs for 12 months from the date of payment.',
-  },
-  {
-    q: 'Does my crew have to pay for the app?',
-    a: 'No. Planning (Me view) is free for every team member.',
-    badges: true,
   },
 ];
 
@@ -71,79 +45,67 @@ const faqSchema = faqJsonLd(
   <div class="min-h-screen bg-concrete">
     <Header />
     <main>
-      <!-- Willi's three sentences -->
+      <!-- Opening, as on the module pages: the page's name, the rule, then the price in the app's own card. -->
       <section class="band band-dark">
-        <div class="page">
-          <p class="tag text-smoke">Pricing</p>
-          <h1 class="display mt-6 max-w-4xl">RaceNode is free until your first event is over.</h1>
-          <p class="subtitle mt-8 max-w-3xl">
-            Then: €99 per month excl. VAT, or €990 excl. VAT for 12 months.
-          </p>
-          <p class="lede mt-5 max-w-2xl">No payment before 1 January 2027.</p>
-          <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
-            <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-              Sign up
-            </a>
-            <span class="text-sm text-smoke">No payment details required</span>
+        <div class="page grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-10">
+          <div class="lg:col-span-7">
+            <p class="font-display text-lg font-medium text-smoke">Pricing</p>
+            <h1 class="display mt-5">Free until your first event is over.</h1>
+            <p class="lede mt-6 max-w-xl">No payment before 1 January 2027.</p>
+          </div>
+          <div class="lg:col-span-5">
+            <div class="app-card p-6 md:p-8">
+              <p class="app-label">Then, per team</p>
+              <p class="mt-4 flex items-baseline gap-3">
+                <span class="display">€99</span>
+                <span class="text-smoke">per month, excl. VAT</span>
+              </p>
+              <p class="mt-2 text-fog">or €990 excl. VAT for 12 months</p>
+              <p class="hair mt-6 pt-5 text-sm text-smoke">
+                Every module, for the whole team. 2027 prices.
+              </p>
+              <a href={`${appUrl}/signup`} class="btn-primary mt-6 w-full text-lg">
+                Start free
+              </a>
+            </div>
           </div>
         </div>
       </section>
       <div class="kerb" aria-hidden="true"></div>
 
-      <!-- The facts -->
+      <!-- What the price covers: the four modules, from the same data as the header menu. -->
       <section class="band">
         <div class="page">
-          <dl class="max-w-3xl">
-            {facts.map((fact) => (
-              <div class="hair grid gap-2 py-6 sm:grid-cols-[11rem_1fr] sm:gap-8">
-                <dt class="font-display text-lg font-semibold">{fact.label}</dt>
-                <dd>
-                  <p class="text-lg leading-relaxed">{fact.text}</p>
-                  {fact.links && (
-                    <p class="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-                      {fact.links.map((l) => (
-                        <a href={l.href} class="link">
-                          {l.label}
-                        </a>
-                      ))}
-                    </p>
-                  )}
-                  {fact.badges && <StoreBadges size="sm" align="start" class="mt-4" />}
-                </dd>
-              </div>
+          <div class="head">
+            <h2 class="title">Every module, for the whole team.</h2>
+          </div>
+          <ul class="grid gap-x-12 gap-y-10 md:grid-cols-2">
+            {modules.map((module) => (
+              <li>
+                <a href={module.href} class="group block">
+                  <h3 class="ruled font-display text-2xl font-bold">{module.name}</h3>
+                  <p class="muted mt-3 max-w-xl leading-relaxed">{module.short}</p>
+                  <span class="link mt-3 inline-block decoration-transparent group-hover:decoration-current">
+                    See {module.name} <span aria-hidden="true">→</span>
+                  </span>
+                </a>
+              </li>
             ))}
-          </dl>
+          </ul>
         </div>
       </section>
 
       <!-- FAQ -->
       <section class="band band-paper">
         <div class="page grid gap-10 lg:grid-cols-12 lg:gap-10">
-          <h2 class="title lg:col-span-4">Questions</h2>
+          <h2 class="title lg:col-span-4">Frequently asked questions</h2>
           <div class="lg:col-span-8">
             {faq.map((item) => (
               <div class="hair py-6">
                 <h3 class="font-display text-xl font-semibold">{item.q}</h3>
                 <p class="muted mt-2 max-w-2xl text-lg leading-relaxed">{item.a}</p>
-                {item.badges && <StoreBadges size="sm" align="start" class="mt-4" />}
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <!-- Sign up -->
-      <div class="kerb" aria-hidden="true"></div>
-      <section class="band band-dark">
-        <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
-          <div class="lg:col-span-8">
-            <h2 class="title">Create your team's account.</h2>
-            <p class="lede mt-5 max-w-2xl">Free until your first event is over.</p>
-          </div>
-          <div class="lg:col-span-4 lg:text-right">
-            <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-              Sign up
-            </a>
           </div>
         </div>
       </section>
