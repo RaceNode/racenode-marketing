@@ -117,45 +117,57 @@ const inModule = modules.some((module) => isCurrent(module.href));
         </a>
       </div>
 
-      <!-- Mobile Menu Button -->
-      <button
-        type="button"
-        id="mobile-menu-button"
-        class="lg:hidden p-2 rounded-[3px] text-smoke hover:text-white hover:bg-asphalt-raised transition-colors"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        aria-label="Open navigation menu"
-      >
-        <svg
-          id="menu-icon-open"
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+      <!-- Mobile: Pricing stays in the bar, next to the menu button (Willi, 2026-10-26). -->
+      <div class="flex items-center gap-1 lg:hidden">
+        <a
+          href="/pricing/"
+          class:list={[
+            'px-2 py-2 font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white',
+            isCurrent('/pricing/') ? 'text-white' : 'text-smoke',
+          ]}
+          aria-current={isCurrent('/pricing/') ? 'page' : undefined}
         >
-          <line x1="4" x2="20" y1="12" y2="12" />
-          <line x1="4" x2="20" y1="6" y2="6" />
-          <line x1="4" x2="20" y1="18" y2="18" />
-        </svg>
-        <svg
-          id="menu-icon-close"
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6 hidden"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          Pricing
+        </a>
+        <button
+          type="button"
+          id="mobile-menu-button"
+          class="lg:hidden p-2 rounded-[3px] text-smoke hover:text-white hover:bg-asphalt-raised transition-colors"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Open navigation menu"
         >
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
-        </svg>
-      </button>
+          <svg
+            id="menu-icon-open"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+          <svg
+            id="menu-icon-close"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6 hidden"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 
