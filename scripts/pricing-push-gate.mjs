@@ -35,7 +35,7 @@ for (const line of readFileSync(0, 'utf8').split('\n').filter(Boolean)) {
 if (refused.length) {
   console.error(
     `Refused: ${refused.join(', ')} changes the pricing page or price wording without Willi's yes.\n` +
-      'Show him a capture first; once he says yes, add the trailer "Oui-Willi: <date and his words>" to a commit of the push.',
+      'Show him a direct preview first (CLAUDE.md, Ship); once he says yes, add the trailer "Oui-Willi: <date and his words>" to a commit of the push.',
   );
   process.exit(1);
 }

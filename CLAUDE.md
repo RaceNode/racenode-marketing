@@ -6,7 +6,7 @@ Public marketing site of RaceNode (www.racenode.com), separate from the app (`ap
 
 - Push to main = live ([docs/deployment.md](docs/deployment.md)). CI checks Prettier: run `npm run format` before committing.
 - `npm run build` runs the guardrails (`scripts/guardrails.mjs`); a violation blocks the deploy. Local build with the real catalog: `cle /main --projet racenode -- npm run build:local` (no `bash -c`). Fix the copy; a rule only changes with Willi's agreement.
-- Pricing (the page or any price wording) leaves this machine only after Willi's yes, preview branches included: show him a capture, then commit with the trailer `Oui-Willi: <date, his words>`. The pre-push hook `.githooks/pre-push` enforces it; enable it once per clone with `git config core.hooksPath .githooks`.
+- Pricing (the page or any price wording) leaves this machine only after Willi's yes, preview branches included: show him a direct preview that skips the repo (`npm run build:local` under `cle`, then `wrangler pages deploy dist --project-name racenode-marketing --branch <name>` under `cle /cloudflare`; pages.dev previews are served noindex), then commit with the trailer `Oui-Willi: <date, his words>`. The pre-push hook `.githooks/pre-push` enforces it; enable it once per clone with `git config core.hooksPath .githooks`.
 - This repo is public: no strategy, roadmap, prospects or secret values (secrets: Cloudflare Pages env, Infisical `racenode`).
 
 ## Rules that bite
