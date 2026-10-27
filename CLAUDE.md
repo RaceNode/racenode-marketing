@@ -6,11 +6,13 @@ Public marketing site of RaceNode (www.racenode.com), separate from the app (`ap
 
 - Push to main = live ([docs/deployment.md](docs/deployment.md)). CI checks Prettier: run `npm run format` before committing.
 - `npm run build` runs the guardrails (`scripts/guardrails.mjs`); a violation blocks the deploy. Local build with the real catalog: `cle /main --projet racenode -- npm run build:local` (no `bash -c`). Fix the copy; a rule only changes with Willi's agreement.
+- Pricing (the page or any price wording) leaves this machine only after Willi's yes, preview branches included: show him a capture, then commit with the trailer `Oui-Willi: <date, his words>`. The pre-push hook `.githooks/pre-push` enforces it; enable it once per clone with `git config core.hooksPath .githooks`.
 - This repo is public: no strategy, roadmap, prospects or secret values (secrets: Cloudflare Pages env, Infisical `racenode`).
 
 ## Rules that bite
 
 - **Design**: mirrors the app (`src/styles/tokens.css`; source of truth `docs/architecture/design-system.md` in the app repo). Color signals a state, never a category: no module colors, no gradients, accent through tokens only (`bg-accent`), never a literal color class.
+- **New or redone page**: build it from the existing components and classes (`.head`, `band`, `ruled`, the module heroes and CTAs), not a layout of its own. Before showing it, take a 390 px capture and compare it with a neighbouring page.
 - **Generated brand files**: never edit `public/logo_*.svg`, `public/email/logo-*.png`, `public/og-image.png` by hand; run `node scripts/brand/logo.mjs` then `node scripts/brand/generate.mjs`.
 - **Single source**: identity, contact and legal entity in `src/site.config.ts`.
 - **Legal texts**: edit `src/data/legal/`, not the pages. Never bump `public/privacy-version.json` without Willi's yes: it emails every account.

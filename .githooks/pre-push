@@ -1,0 +1,6 @@
+#!/bin/sh
+# Pricing needs Willi's yes before it leaves this machine (Willi via chef-racenode, 2026-10-27).
+# This repo is public: a pushed branch is already visible, preview or not. A push whose commits touch the
+# pricing page or price wording is refused unless one of those commits carries the trailer "Oui-Willi: <date>".
+# Installed by `git config core.hooksPath .githooks` (see docs/deployment.md).
+exec node "$(git rev-parse --show-toplevel)/scripts/pricing-push-gate.mjs"

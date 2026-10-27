@@ -1,4 +1,4 @@
-# Deployment and operations
+(public repo: pricing waits for Willi's yes, enforced by `.githooks/pre-push`)# Deployment and operations
 
 The site follows the WBLT site template (`WBLT-Engineering/template-site`) where its bricks fit, with one big difference: it is hosted on **Cloudflare Pages** (Git integration), not on Workers + assets. What differs from the template and why: "Écarts au template WBLT" in [CLAUDE.md](../CLAUDE.md).
 
