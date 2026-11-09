@@ -1,5 +1,7 @@
 ---
-import { localePathsOf } from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+import { link, localePathsOf, type Locale } from '@/i18n';
 
 export const getStaticPaths = () => localePathsOf('management');
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -13,13 +15,13 @@ import ManagementFeatures from '@/components/management/ManagementFeatures.astro
 import ManagementSync from '@/components/management/ManagementSync.astro';
 import ManagementCTA from '@/components/management/ManagementCTA.astro';
 
-const title = 'Race Weekend & Crew Management Software | RaceNode';
-const description =
-  'Plan every race weekend in one place: crew assignments and roles, racecar entries, team structure and meals. Event management built for racing teams.';
+const locale = getLocale() as Locale;
+const title = m.mgmt_title();
+const description = m.mgmt_description();
 
 const breadcrumbSchema = breadcrumbJsonLd(site, [
-  { name: 'Home', url: '/' },
-  { name: 'Race Team Management', url: '/management/' },
+  { name: m.common_breadcrumb_home(), url: link(locale, '') },
+  { name: m.mgmt_breadcrumb(), url: link(locale, 'management') },
 ]);
 ---
 

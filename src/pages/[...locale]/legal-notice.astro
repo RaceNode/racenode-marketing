@@ -3,13 +3,17 @@ import { localePathsOf } from '@/i18n';
 
 export const getStaticPaths = () => localePathsOf('legal-notice');
 import LegalLayout from '@/layouts/LegalLayout.astro';
-import { Content } from '@/data/legal/legal-notice.mdx';
+import { legalText } from '@/data/legal';
+import { getLocale } from '@/paraglide/runtime';
+import { m } from '@/paraglide/messages';
+
+const Content = legalText('legal-notice.mdx', getLocale());
 ---
 
 <LegalLayout
-  title="Legal Notice - RaceNode"
-  description="Legal notice (mentions légales) of the RaceNode website: publisher, hosting provider and intellectual property."
-  heading="Legal Notice"
+  title={m.legal_notice_title()}
+  description={m.legal_notice_description()}
+  heading={m.legal_notice_heading()}
 >
   <Content />
 </LegalLayout>

@@ -1,4 +1,5 @@
 ---
+import { m } from '@/paraglide/messages';
 import Shot from '../Shot.astro';
 import staff from '../../assets/screenshots/management-event-staff.png';
 import staffPhone from '../../assets/screenshots/management-event-staff-phone.png';
@@ -16,42 +17,37 @@ const features = [
   {
     desktop: staff,
     phone: staffPhone,
-    badge: 'Event Staff',
-    title: 'Your full crew, roles and meals included.',
-    description:
-      'Everyone on the event with their roles and meals. The same list as in Logistics: assign once, visible everywhere.',
+    badge: m.common_badge_event_staff(),
+    title: m.mgmt_f1_title(),
+    description: m.mgmt_f1_text(),
   },
   {
     desktop: racecars,
     phone: racecarsPhone,
-    badge: 'Racecars',
-    title: 'Assign your cars to each event.',
-    description:
-      'Pick the cars from your racecar list: chassis, model and race number come with them, nothing to type again.',
+    badge: m.mgmt_badge_racecars(),
+    title: m.mgmt_f2_title(),
+    description: m.mgmt_f2_text(),
   },
   {
     desktop: team,
     phone: teamPhone,
-    badge: 'Team',
-    title: 'Build your crew structure, event by event.',
-    description:
-      'Team roles and car roles defined once, filled per event. When the crew changes, reassign: the structure stays.',
+    badge: m.mgmt_badge_team(),
+    title: m.mgmt_f3_title(),
+    description: m.mgmt_f3_text(),
   },
   {
     desktop: meals,
     phone: mealsPhone,
-    badge: 'Meals',
-    title: 'Plan every meal across the event.',
-    description:
-      'Breakfast, lunch and dinner for every day, with the place, the time and who eats there.',
+    badge: m.mgmt_badge_meals(),
+    title: m.mgmt_f4_title(),
+    description: m.mgmt_f4_text(),
   },
   {
     desktop: info,
     phone: infoPhone,
-    badge: 'Info Board',
-    title: 'The intel your crew needs, in their pocket.',
-    description:
-      'Radio channels, garage plans, the latest timetable: notes and files the crew reads in their app, always the latest version.',
+    badge: m.common_badge_info_board(),
+    title: m.mgmt_f5_title(),
+    description: m.mgmt_f5_text(),
   },
 ];
 ---
@@ -59,7 +55,7 @@ const features = [
 <section class="band band-paper">
   <div class="page">
     <div class="head">
-      <h2 class="title">Every tool, one workspace.</h2>
+      <h2 class="title">{m.common_every_tool_one_workspace()}</h2>
     </div>
 
     <!-- One row per tool: the words beside a screen big enough to read, sides alternating. -->
@@ -81,7 +77,7 @@ const features = [
             <Shot
               desktop={feature.desktop}
               phone={feature.phone}
-              alt={`RaceNode ${feature.badge} - ${feature.title}`}
+              alt={m.common_feature_alt({ badge: feature.badge, title: feature.title })}
             />
           </div>
         </div>

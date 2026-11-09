@@ -1,14 +1,14 @@
 ---
+import { m } from '@/paraglide/messages';
+import { appUrl } from '@/lib/app';
+import type { Locale } from '@/i18n';
+import { getLocale } from '@/paraglide/runtime';
 import Icon from '../Icon.astro';
 
-const appUrl = 'https://app.racenode.com';
+const locale = getLocale() as Locale;
 
 // What holds once a team pays (src/pages/pricing.astro); the price itself stays on that page.
-const assurances = [
-  'Every module included.',
-  'Your crew uses it for free.',
-  'Data hosted in the EU.',
-];
+const assurances = [m.home_assure_modules(), m.home_assure_crew(), m.home_assure_eu()];
 ---
 
 <!-- The end of the dark block that opens with the crew's app (LandingSync): a hairline, who built it, then the call.
@@ -17,18 +17,12 @@ const assurances = [
   <div class="page">
     <div class="hair grid gap-8 pt-12 md:pt-16 lg:grid-cols-12 lg:items-end lg:gap-10">
       <div class="lg:col-span-8">
-        <p class="font-display text-lg font-medium text-fog">
-          Built from 10+ years in the paddock.
-        </p>
+        <p class="font-display text-lg font-medium text-fog">{m.home_cta_built()}</p>
         <p class="mt-2 max-w-2xl text-sm leading-relaxed text-smoke md:text-base">
-          GT3 team manager, tyre man, mechanic and race engineer before that: every problem on this
-          page comes from those race weekends.
+          {m.home_cta_bio()}
         </p>
-        <h2 class="title mt-8 md:mt-10">Set up your 2027 season now.</h2>
-        <p class="lede mt-5 max-w-2xl">
-          Free for everyone until 31 December 2026. From 2027, try RaceNode free on your first
-          event. No demo to book, no card.
-        </p>
+        <h2 class="title mt-8 md:mt-10">{m.home_cta_title()}</h2>
+        <p class="lede mt-5 max-w-2xl">{m.common_free_until_cta()}</p>
         <ul class="mt-6 grid gap-2 sm:grid-cols-3 sm:gap-6">
           {assurances.map((line) => (
             <li class="flex items-center gap-2.5 font-medium text-fog">
@@ -39,8 +33,8 @@ const assurances = [
         </ul>
       </div>
       <div class="lg:col-span-4 lg:text-right">
-        <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-          Start free
+        <a href={appUrl(locale, '/signup')} class="btn-primary text-lg">
+          {m.common_start_free()}
         </a>
       </div>
     </div>

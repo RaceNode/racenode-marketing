@@ -16,8 +16,12 @@ Public marketing site of RaceNode (www.racenode.com), separate from the app (`ap
 - **Generated brand files**: never edit `public/logo_*.svg`, `public/email/logo-*.png`, `public/og-image.png` by hand; run `node scripts/brand/logo.mjs` then `node scripts/brand/generate.mjs`.
 - **Single source**: identity, contact and legal entity in `src/site.config.ts`.
 - **Legal texts**: edit `src/data/legal/`, not the pages. Never bump `public/privacy-version.json` without Willi's yes: it emails every account.
-- **Copy**: keep `public/llms.txt` in line when modules or pricing change. Store listing copy is `store/listing.json`, published by the app's mobile release.
+- **Copy**: keep `public/llms.txt` and `public/fr/llms.txt` in line when modules or pricing change. Store listing copy is `store/listing.json`, published by the app's mobile release.
 - **WBLT template** (`~/script/wblt/templates/template-site`): aligned both ways, whichever performs better. Deliberate deviations in [docs/template-wblt.md](docs/template-wblt.md): do not "fix" one back.
+
+## Languages
+
+English at the root, French under `/fr/` (Paraglide, WBLT template mode). Copy lives in `messages/<language>.json`, never hard-coded in a component; links through `link(locale, path)`, app links through `appUrl()`. Pages not translated yet: `notYet` in `src/i18n/index.ts`. French is rewritten for what a French team searches, not translated word for word. Detail and adding a language: [docs/languages.md](docs/languages.md).
 
 ## Race calendar
 

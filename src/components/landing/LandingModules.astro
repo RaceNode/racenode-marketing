@@ -1,4 +1,5 @@
 ---
+import { m } from '@/paraglide/messages';
 import { Image } from 'astro:assets';
 import { modules } from '../../data/modules';
 ---
@@ -11,11 +12,8 @@ import { modules } from '../../data/modules';
 <section class="page pb-20 md:pb-28">
   <div class="hair pt-10 md:pt-14">
     <div class="head">
-      <h2 class="title">Modules that work together.</h2>
-      <p class="lede">
-        RaceNode is racing team management software organized around your race weekends. Staff,
-        fleet, racecars and events are shared by every module: entered once, used everywhere.
-      </p>
+      <h2 class="title">{m.home_modules_title()}</h2>
+      <p class="lede">{m.home_modules_lede()}</p>
     </div>
 
     <ul class="grid gap-y-16 lg:gap-y-24">
@@ -52,7 +50,7 @@ import { modules } from '../../data/modules';
               </h3>
               <p class="muted mt-3 max-w-xl leading-relaxed">{module.summary}</p>
               <span class="link mt-4 inline-block decoration-transparent group-hover:decoration-current">
-                See {module.name} <span aria-hidden="true">→</span>
+                {m.home_see_module({ name: module.name })} <span aria-hidden="true">→</span>
               </span>
             </div>
           </a>

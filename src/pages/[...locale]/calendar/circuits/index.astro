@@ -1,5 +1,7 @@
 ---
-import { localePathsOf } from '@/i18n';
+import { absoluteUrl, hasPrefix, link, localePathsOf, localeTag, type Locale } from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
 
 export const getStaticPaths = () => localePathsOf('calendar/circuits');
 // Every circuit that has its own calendar page, by country: the way in to /calendar/circuits/<slug>/ for visitors
@@ -9,38 +11,48 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import CalendarCTA from '@/components/calendar/CalendarCTA.astro';
 import SampleDataNotice from '@/components/calendar/SampleDataNotice.astro';
-import { catalog } from '@/lib/calendar/build.mjs';
+import { catalog, localized } from '@/lib/calendar/build.mjs';
 import { circuits } from '@/lib/calendar/model.mjs';
 
-const { data, ctx, cal } = await catalog();
+const locale = getLocale() as Locale;
+const loaded = await catalog();
+const { data, cal } = loaded;
+const calendarBase = link(locale, 'calendar');
+const circuitsBase = link(locale, 'calendar/circuits');
+const ctx = localized(loaded, locale, calendarBase);
+const homeUrl = hasPrefix(locale)
+  ? absoluteUrl(link(locale))
+  : absoluteUrl(link(locale)).replace(/\/$/, '');
 const pages = circuits(cal).filter((c: any) => c.page);
 const byCountry = new Map<string, any[]>();
 for (const c of pages) {
-  const name = c.country_code ? (ctx.countries[c.country_code] ?? c.country_code) : 'Other';
+  const name = c.country_code
+    ? (ctx.countries[c.country_code] ?? c.country_code)
+    : m.cal_other_country();
   if (!byCountry.has(name)) byCountry.set(name, []);
   byCountry.get(name)!.push(c);
 }
-const countries = [...byCountry].sort(([a], [b]) => a.localeCompare(b));
+const countries = [...byCountry].sort(([a], [b]) => a.localeCompare(b, localeTag(locale)));
 const upcoming = (c: any) => c.rounds.filter((r: any) => r.end_date >= ctx.today).length;
 
-const title = `Motorsport Calendar ${cal.year} by Circuit: Every Race at Each Track | RaceNode`;
-const description = `${pages.length} circuits, one page each: which championships race there in ${cal.year} and when. Dates as each organizer publishes them.`;
+const title = m.cal_circuits_index_title({ year: cal.year });
+const description = m.cal_circuits_index_description({ n: pages.length, year: cal.year });
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.racenode.com' },
+    { '@type': 'ListItem', position: 1, name: m.cal_crumb_home(), item: homeUrl },
     {
       '@type': 'ListItem',
       position: 2,
-      name: 'Motorsport Calendar',
-      item: 'https://www.racenode.com/calendar/',
+      name: m.cal_crumb_calendar(),
+      item: absoluteUrl(calendarBase),
     },
     {
       '@type': 'ListItem',
       position: 3,
-      name: 'Circuits',
-      item: 'https://www.racenode.com/calendar/circuits/',
+      name: m.cal_crumb_circuits(),
+      item: absoluteUrl(circuitsBase),
     },
   ],
 };
@@ -55,17 +67,14 @@ const breadcrumbSchema = {
         <div class="page">
           {data.sample && <SampleDataNotice />}
 
-          <nav class="cal-crumbs" aria-label="Breadcrumb">
-            <a href="/calendar/">Motorsport calendar</a>
+          <nav class="cal-crumbs" aria-label={m.cal_crumb_label()}>
+            <a href={calendarBase}>{m.cal_crumb_calendar_nav()}</a>
             <span class="mx-1">/</span>
-            <span aria-current="page">Circuits</span>
+            <span aria-current="page">{m.cal_crumb_circuits()}</span>
           </nav>
 
-          <h1 class="display">Race calendars by circuit</h1>
-          <p class="lede mt-6 max-w-3xl">
-            Every championship racing at a circuit, on one page, in date order. Dates as each
-            organizer publishes them.
-          </p>
+          <h1 class="display">{m.cal_circuits_index_h1()}</h1>
+          <p class="lede mt-6 max-w-3xl">{m.cal_circuits_index_lede()}</p>
         </div>
       </section>
       <div class="kerb" aria-hidden="true"></div>
@@ -78,12 +87,14 @@ const breadcrumbSchema = {
               <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {list.map((c: any) => (
                   <li>
-                    <a href={`/calendar/circuits/${c.slug}/`} class="cal-card">
+                    <a href={`${circuitsBase}${c.slug}/`} class="cal-card">
                       <span>{c.name}</span>
                       <span>
                         {upcoming(c)
-                          ? `${upcoming(c)} upcoming round${upcoming(c) === 1 ? '' : 's'}`
-                          : 'No upcoming round published yet'}
+                          ? upcoming(c) === 1
+                            ? m.cal_n_upcoming_one({ n: 1 })
+                            : m.cal_n_upcoming_other({ n: upcoming(c) })
+                          : m.cal_circuit_upcoming_none()}
                       </span>
                     </a>
                   </li>
@@ -93,8 +104,8 @@ const breadcrumbSchema = {
           ))}
 
           <p class="mt-10 text-sm">
-            <a href="/calendar/" class="link">
-              All championships on one calendar
+            <a href={calendarBase} class="link">
+              {m.cal_all_championships()}
             </a>
           </p>
         </div>

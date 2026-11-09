@@ -108,7 +108,7 @@
   .btn,
   .btn-primary,
   .btn-ghost {
-    @apply inline-flex min-h-12 items-center justify-center rounded-[3px] px-6 text-base font-semibold transition-colors;
+    @apply inline-flex min-h-12 items-center justify-center rounded-[3px] px-6 text-base font-semibold whitespace-nowrap transition-colors;
   }
   .btn-primary {
     @apply bg-accent text-accent-fg hover:bg-accent-hover;

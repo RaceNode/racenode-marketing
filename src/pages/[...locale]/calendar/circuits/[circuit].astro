@@ -1,5 +1,7 @@
 ---
-import { localePathsOf } from '@/i18n';
+import { absoluteUrl, hasPrefix, link, localePathsOf, type Locale } from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
 // One page per circuit with enough rounds in the catalog (circuits() of model.mjs), for searches such as
 // "Spa-Francorchamps 2027 calendar": every championship's upcoming rounds there, in date order. Morning build only
 // (no browser refresh: that is for championship pages).
@@ -9,7 +11,7 @@ import Footer from '@/components/Footer.astro';
 import CalendarCTA from '@/components/calendar/CalendarCTA.astro';
 import CalendarInlineCTA from '@/components/calendar/CalendarInlineCTA.astro';
 import SampleDataNotice from '@/components/calendar/SampleDataNotice.astro';
-import { catalog } from '@/lib/calendar/build.mjs';
+import { catalog, localized } from '@/lib/calendar/build.mjs';
 import { circuits, displayName } from '@/lib/calendar/model.mjs';
 import { circuitBody } from '@/lib/calendar/render.mjs';
 
@@ -20,10 +22,19 @@ export async function getStaticPaths() {
     .flatMap((c) => localePathsOf(`calendar/circuits/${c.slug}`, [{ circuit: c.slug }]));
 }
 
+const locale = getLocale() as Locale;
 const loaded = await catalog();
-const { data, ctx, cal } = loaded;
+const { data, cal } = loaded;
+const calendarBase = link(locale, 'calendar');
+const circuitsBase = link(locale, 'calendar/circuits');
+const ctx = localized(loaded, locale, calendarBase);
+const homeUrl = hasPrefix(locale)
+  ? absoluteUrl(link(locale))
+  : absoluteUrl(link(locale)).replace(/\/$/, '');
 const all = circuits(cal);
-const c = all.find((x: any) => x.slug === Astro.params.circuit)!;
+const c = all.find(
+  (x: any) => x.slug === (Astro.params as unknown as { circuit: string }).circuit,
+)!;
 const place = c.country_code ? (ctx.countries[c.country_code] ?? c.country_code) : null;
 const year = cal.year;
 const body = circuitBody(cal, c.slug, ctx);
@@ -36,28 +47,35 @@ const nearby = all.filter(
   (x: any) => x.page && x.slug !== c.slug && x.country_code === c.country_code,
 );
 
-const title = `${c.name} ${year} Calendar: Every Race & Date | RaceNode`;
+const title = m.cal_circuit_title({ name: c.name, year });
+const where = place ? `, ${place}` : '';
 const description = upcoming.length
-  ? `${upcoming.length} upcoming rounds at ${c.name}${place ? `, ${place}` : ''}: ${names.slice(0, 4).join(', ')}${names.length > 4 ? ' and more' : ''}. Dates as each organizer publishes them, with links to the official pages.`
-  : `Which championships race at ${c.name}${place ? `, ${place}` : ''}: the rounds published so far and the ones already run, with links to the official pages.`;
+  ? m.cal_circuit_description({
+      n: upcoming.length,
+      name: c.name,
+      place: where,
+      names: names.slice(0, 4).join(', '),
+      more: names.length > 4 ? m.cal_and_more() : '',
+    })
+  : m.cal_circuit_description_none({ name: c.name, place: where });
 
-const url = `https://www.racenode.com/calendar/circuits/${c.slug}/`;
+const url = absoluteUrl(`${circuitsBase}${c.slug}/`);
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.racenode.com' },
+    { '@type': 'ListItem', position: 1, name: m.cal_crumb_home(), item: homeUrl },
     {
       '@type': 'ListItem',
       position: 2,
-      name: 'Motorsport Calendar',
-      item: 'https://www.racenode.com/calendar/',
+      name: m.cal_crumb_calendar(),
+      item: absoluteUrl(calendarBase),
     },
     {
       '@type': 'ListItem',
       position: 3,
-      name: 'Circuits',
-      item: 'https://www.racenode.com/calendar/circuits/',
+      name: m.cal_crumb_circuits(),
+      item: absoluteUrl(circuitsBase),
     },
     { '@type': 'ListItem', position: 4, name: c.name, item: url },
   ],
@@ -66,7 +84,7 @@ const breadcrumbSchema = {
 const eventsSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: `${c.name} race calendar`,
+  name: m.cal_schema_circuit({ name: c.name }),
   itemListElement: upcoming.map((r: any, i: number) => ({
     '@type': 'ListItem',
     position: i + 1,
@@ -114,19 +132,17 @@ const eventsSchema = {
         <div class="page">
           {data.sample && <SampleDataNotice />}
 
-          <nav class="cal-crumbs" aria-label="Breadcrumb">
-            <a href="/calendar/">Motorsport calendar</a>
+          <nav class="cal-crumbs" aria-label={m.cal_crumb_label()}>
+            <a href={calendarBase}>{m.cal_crumb_calendar_nav()}</a>
             <span class="mx-1">/</span>
-            <a href="/calendar/circuits/">Circuits</a>
+            <a href={circuitsBase}>{m.cal_crumb_circuits()}</a>
             <span class="mx-1">/</span>
             <span aria-current="page">{c.name}</span>
           </nav>
 
-          <h1 class="display">
-            {c.name} {year} calendar
-          </h1>
-          {place && <p class="lede mt-6">Circuit · {place}</p>}
-          <CalendarInlineCTA subject={`at ${c.name}`} />
+          <h1 class="display">{m.cal_circuit_h1({ name: c.name, year })}</h1>
+          {place && <p class="lede mt-6">{m.cal_circuit_lede({ place })}</p>}
+          <CalendarInlineCTA name={c.name} kind="circuit" />
         </div>
       </section>
       <div class="kerb" aria-hidden="true"></div>
@@ -137,11 +153,11 @@ const eventsSchema = {
 
           {nearby.length > 0 && (
             <section class="mt-12">
-              <h2 class="subtitle mb-4">Other circuits in {place}</h2>
+              <h2 class="subtitle mb-4">{m.cal_other_circuits({ place })}</h2>
               <ul class="flex flex-wrap gap-2">
                 {nearby.map((x: any) => (
                   <li>
-                    <a href={`/calendar/circuits/${x.slug}/`} class="cal-chip">
+                    <a href={`${circuitsBase}${x.slug}/`} class="cal-chip">
                       {x.name}
                     </a>
                   </li>
@@ -151,17 +167,17 @@ const eventsSchema = {
           )}
 
           <p class="mt-10 text-sm">
-            <a href="/calendar/" class="link">
-              All championships on one calendar
+            <a href={calendarBase} class="link">
+              {m.cal_all_championships()}
             </a>
             <span class="mx-1">·</span>
-            <a href="/calendar/circuits/" class="link">
-              All circuits
+            <a href={circuitsBase} class="link">
+              {m.cal_all_circuits()}
             </a>
           </p>
         </div>
       </section>
-      <CalendarCTA title={`Racing at ${c.name}? Plan your season in RaceNode.`} />
+      <CalendarCTA title={m.cal_cta_circuit_title({ name: c.name })} />
     </main>
     <Footer />
   </div>

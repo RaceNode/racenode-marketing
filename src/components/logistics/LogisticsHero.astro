@@ -1,9 +1,13 @@
 ---
+import { m } from '@/paraglide/messages';
+import { appUrl } from '@/lib/app';
+import type { Locale } from '@/i18n';
+import { getLocale } from '@/paraglide/runtime';
 import Shot from '../Shot.astro';
 import overviewPhone from '../../assets/screenshots/logistics-overview-phone.png';
 import screenshotOverview from '../../assets/screenshots/logistics-overview.png';
 
-const appUrl = 'https://app.racenode.com';
+const locale = getLocale() as Locale;
 ---
 
 <!-- Opening: the promise on the left, the preparation dashboard rising from the track edge. -->
@@ -11,20 +15,17 @@ const appUrl = 'https://app.racenode.com';
   <div class="page pt-14 md:pt-20">
     <div class="grid gap-8 lg:grid-cols-12 lg:gap-10">
       <div class="lg:col-span-8">
-        <p class="font-display text-lg font-medium text-smoke">Logistics</p>
+        <p class="font-display text-lg font-medium text-smoke">{m.module_logistics_name()}</p>
 
-        <h1 class="display mt-5">Crew travel &amp; accommodation, centralized.</h1>
+        <h1 class="display mt-5">{m.logi_hero_title()}</h1>
       </div>
       <div class="lg:col-span-4 lg:self-end">
-        <p class="lede">
-          Flights, trains, hotels, rooms and on-site vehicles for the whole crew, every race
-          weekend. Your drivers get their flights, hotel and timetable on the same app as the crew.
-        </p>
-        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
-          <a href={`${appUrl}/signup`} class="btn-primary text-lg">
-            Start free
+        <p class="lede">{m.logi_hero_lede()}</p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
+          <a href={appUrl(locale, '/signup')} class="btn-primary text-lg">
+            {m.common_start_free()}
           </a>
-          <span class="text-sm text-smoke">Free for everyone until 31 December 2026</span>
+          <span class="text-sm text-smoke sm:min-w-48">{m.common_free_until_short()}</span>
         </div>
       </div>
     </div>
@@ -33,7 +34,7 @@ const appUrl = 'https://app.racenode.com';
     <Shot
       desktop={screenshotOverview}
       phone={overviewPhone}
-      alt="RaceNode race team travel and accommodation software showing race weekend preparation status"
+      alt={m.logi_hero_alt()}
       screenClass="-mx-4 mt-14 -mb-2 rounded-b-none sm:mx-0 md:mt-16"
       phoneClass="mt-12 -mb-40"
       sizes="(min-width: 1248px) 1800px, 150vw"

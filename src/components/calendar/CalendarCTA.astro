@@ -1,11 +1,16 @@
 ---
 // The way from a calendar into the app. The app cannot import a catalog season yet (adoption is on its roadmap):
 // until it ships, this only invites a team to set its season up in RaceNode, it does not promise an import.
+import type { Locale } from '@/i18n';
+import { appUrl } from '@/lib/app';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+
 interface Props {
   title?: string;
 }
-const { title = "Plan your team's season in RaceNode." } = Astro.props;
-const appUrl = 'https://app.racenode.com';
+const locale = getLocale() as Locale;
+const { title = m.cal_cta_title() } = Astro.props;
 ---
 
 <div class="kerb" aria-hidden="true"></div>
@@ -13,18 +18,15 @@ const appUrl = 'https://app.racenode.com';
   <div class="page grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
     <div class="lg:col-span-8">
       <h2 class="title">{title}</h2>
-      <p class="lede mt-5 max-w-2xl">
-        Events, crew, travel, hotels and the race weekend timetable in one place. Free for everyone
-        until 31 December 2026. From 2027, try RaceNode free on your first event.
-      </p>
+      <p class="lede mt-5 max-w-2xl">{m.cal_cta_text()}</p>
     </div>
     <div class="lg:col-span-4 lg:text-right">
       <a
-        href={`${appUrl}/signup`}
+        href={appUrl(locale, '/signup')}
         class="btn-primary text-lg"
         data-ph-capture-attribute-cta="calendar-bottom"
       >
-        Sign up free
+        {m.cal_signup()}
       </a>
     </div>
   </div>

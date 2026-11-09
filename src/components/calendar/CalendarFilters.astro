@@ -2,13 +2,24 @@
 // Filters of the all-championships calendar. Without JavaScript every upcoming round stays listed; with it, rows,
 // meetings, month headings and the "not published yet" list follow the selects, and the choice is kept in the URL. A round
 // the visitor's clock says is over is hidden too (the morning build may be a day behind).
-import {
-  DISCIPLINES as DISCIPLINE_NAMES,
-  REGIONS as REGION_NAMES,
-} from '../../lib/calendar/format.mjs';
+import { disciplineName, regionName } from '../../lib/calendar/format.mjs';
+import { link, type Locale } from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
 
-const DISCIPLINES: Record<string, string> = DISCIPLINE_NAMES;
-const REGIONS: Record<string, string> = REGION_NAMES;
+const locale = getLocale() as Locale;
+// The count line the script writes ("12 upcoming rounds across 5 championships"), its pieces in the page's language
+// with {n} left for the script to fill.
+const text = JSON.stringify({
+  roundOne: m.cal_n_upcoming_one({ n: '{n}' }),
+  roundOther: m.cal_n_upcoming_other({ n: '{n}' }),
+  champOne: m.cal_n_championships_one({ n: '{n}' }),
+  champOther: m.cal_n_championships_other({ n: '{n}' }),
+  join: m.cal_f_count_join({ rounds: '{rounds}', championships: '{championships}' }),
+  circuit: m.cal_f_circuit_calendar({ name: '{name}' }),
+  zeroIsOne: locale === 'fr',
+});
+const circuitsBase = link(locale, 'calendar/circuits');
 
 interface Props {
   disciplines: string[];
@@ -24,34 +35,35 @@ const select = 'cal-select';
 <form
   id="calendar-filters"
   class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"
-  aria-label="Filter the calendar"
+  aria-label={m.cal_f_label()}
+  data-text={text}
 >
   <label class="text-xs font-medium text-graphite">
-    Discipline
+    {m.cal_f_discipline()}
     <select name="discipline" class={select}>
-      <option value="">All disciplines</option>
+      <option value="">{m.cal_f_all_disciplines()}</option>
       {disciplines.map((d) => (
-        <option value={d}>{DISCIPLINES[d] ?? d}</option>
+        <option value={d}>{disciplineName(d, locale)}</option>
       ))}
     </select>
   </label>
   <label class="text-xs font-medium text-graphite">
-    Region
+    {m.cal_f_region()}
     <select name="region" class={select}>
-      <option value="">All regions</option>
+      <option value="">{m.cal_f_all_regions()}</option>
       {regions.map((r) => (
-        <option value={r}>{REGIONS[r] ?? r}</option>
+        <option value={r}>{regionName(r, locale)}</option>
       ))}
     </select>
   </label>
   <label class="text-xs font-medium text-graphite">
-    Circuit
+    {m.cal_f_circuit()}
     <select name="circuit" class={select}>
-      <option value="">All circuits</option>
+      <option value="">{m.cal_f_all_circuits()}</option>
       {circuits.map((c) => (
         <option
           value={c.page ? c.slug : c.venue_slug}
-          data-page={c.page ? `/calendar/circuits/${c.slug}/` : undefined}
+          data-page={c.page ? `${circuitsBase}${c.slug}/` : undefined}
         >
           {c.name}
         </option>
@@ -59,9 +71,9 @@ const select = 'cal-select';
     </select>
   </label>
   <label class="text-xs font-medium text-graphite">
-    Month
+    {m.cal_f_month()}
     <select name="month" class={select}>
-      <option value="">All months</option>
+      <option value="">{m.cal_f_all_months()}</option>
       {months.map((m) => (
         <option value={m.value}>{m.label}</option>
       ))}
@@ -121,13 +133,18 @@ const select = 'cal-select';
     const empty = document.getElementById('calendar-empty');
     if (empty) empty.hidden = shown > 0;
     if (count) {
-      count.textContent = `${shown} upcoming round${shown === 1 ? '' : 's'} across ${championships.size} championship${championships.size === 1 ? '' : 's'}`;
+      const words = JSON.parse(form.dataset.text ?? '{}');
+      const plural = (n: number, one: string, other: string) =>
+        (n === 1 || (n === 0 && words.zeroIsOne) ? one : other).replace('{n}', String(n));
+      count.textContent = words.join
+        .replace('{rounds}', plural(shown, words.roundOne, words.roundOther))
+        .replace('{championships}', plural(championships.size, words.champOne, words.champOther));
       const circuit = (form.elements.namedItem('circuit') as HTMLSelectElement).selectedOptions[0];
       if (circuit?.dataset.page) {
         const a = document.createElement('a');
         a.href = circuit.dataset.page;
         a.className = 'link';
-        a.textContent = `${circuit.textContent} calendar`;
+        a.textContent = words.circuit.replace('{name}', circuit.textContent ?? '');
         count.append(' · ', a);
       }
     }

@@ -1,0 +1,27 @@
+# RaceNode
+
+> RaceNode est un logiciel de gestion d'écurie de course : le planning des mécaniciens et du staff, la gestion du week-end de course, les déplacements et l'hébergement de l'équipe, et les horaires du week-end, au même endroit. Il fonctionne dans le navigateur et en application iOS et Android. Gratuit pour tous jusqu'au 31 décembre 2026. À partir de 2027, essayez RaceNode gratuitement sur votre premier événement, puis un abonnement par équipe (voir Tarifs).
+
+RaceNode est fait pour les équipes de sport automobile (GT, endurance, monoplace et autres championnats) et pour ceux qui les font tourner : team managers, responsables logistique, ingénieurs, mécaniciens et pilotes. Il gère la logistique des personnes (qui voyage comment, qui dort où), pas le fret. Une équipe s'inscrit et l'essaie seule, sans rendez-vous de démonstration. Les données sont hébergées dans l'Union européenne. Éditeur : WBLT Engineering (France). Version anglaise : https://www.racenode.com/llms.txt
+
+## Modules
+
+- [Gestion](https://www.racenode.com/fr/management/) : gestion du week-end de course et de l'équipe. Les rôles par voiture, les engagements des voitures, l'organisation de l'équipe et les repas de chaque événement.
+- [Planning](https://www.racenode.com/fr/crew-planning/) : planning de l'équipe sur toute la saison. Qui travaille sur quelle course, les disponibilités, les rotations, relié à chaque événement du calendrier. Chaque membre de l'équipe voit sur son téléphone sa saison, son rôle, son déplacement, son hôtel, ses repas et ses prochaines séances (vue Moi). Les membres de votre équipe l'utilisent gratuitement.
+- [Logistique](https://www.racenode.com/fr/logistics/) : déplacements et hébergement de l'équipe. Vols, camions, utilitaires de location, hôtels et répartition des chambres pour chaque week-end de course, avec ce qui manque encore avant l'événement. Une réservation se crée à partir de sa confirmation (PDF, mail, photo, tableur), vérifiée dans un aperçu avant d'être enregistrée.
+- [Horaires](https://www.racenode.com/fr/timetable/) : les horaires du week-end de course. Le programme de l'équipe construit autour des horaires officiels, les briefings récurrents, un compte à rebours en direct et un flux iCal partagé avec toute l'équipe. Les séances officielles se remplissent à partir des horaires de l'organisateur (PDF, tableur, fichier de calendrier), vérifiés dans un aperçu avant d'être enregistrés.
+
+## Calendrier sport auto
+
+- [Calendrier sport auto](https://www.racenode.com/fr/calendar/) : les calendriers des championnats du catalogue RaceNode sur une page, filtrables par discipline, région et mois, avec une page par championnat (https://www.racenode.com/fr/calendar/<championnat>/) et par circuit (https://www.racenode.com/fr/calendar/circuits/). Les dates et les circuits tels que chaque organisateur les publie, avec le lien vers la page officielle ; quand la saison suivante n'est pas encore publiée, la page le dit et montre la dernière saison connue.
+
+## Tarifs et disponibilité
+
+- [Tarifs](https://www.racenode.com/fr/pricing/) : gratuit pour tous jusqu'au 31 décembre 2026. À partir de 2027, essai gratuit jusqu'à la fin de votre premier événement sur RaceNode, sans carte bancaire ; puis 99 € HT par mois ou 990 € HT par an, par équipe. Tous les modules inclus.
+- [App Store](https://apps.apple.com/app/id6804234080) et [Google Play](https://play.google.com/store/apps/details?id=com.racenode.app).
+- Application web : https://app.racenode.com
+
+## Contact
+
+- contact@racenode.com
+- [Politique de confidentialité](https://www.racenode.com/fr/privacy/), [Conditions d'utilisation](https://www.racenode.com/fr/terms/)

@@ -3,13 +3,17 @@ import { localePathsOf } from '@/i18n';
 
 export const getStaticPaths = () => localePathsOf('terms');
 import LegalLayout from '@/layouts/LegalLayout.astro';
-import { Content } from '@/data/legal/terms-and-conditions.md';
+import { legalText } from '@/data/legal';
+import { getLocale } from '@/paraglide/runtime';
+import { m } from '@/paraglide/messages';
+
+const Content = legalText('terms-and-conditions.md', getLocale());
 ---
 
 <LegalLayout
-  title="Terms and Conditions - RaceNode"
-  description="Read the terms and conditions for using RaceNode, the racing team management platform. Learn about your rights and responsibilities."
-  heading="Terms and Conditions"
+  title={m.legal_terms_title()}
+  description={m.legal_terms_description()}
+  heading={m.legal_terms_heading()}
 >
   <Content />
 </LegalLayout>

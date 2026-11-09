@@ -3,13 +3,17 @@ import { localePathsOf } from '@/i18n';
 
 export const getStaticPaths = () => localePathsOf('account-deletion');
 import LegalLayout from '@/layouts/LegalLayout.astro';
-import { Content } from '@/data/legal/account-deletion.md';
+import { legalText } from '@/data/legal';
+import { getLocale } from '@/paraglide/runtime';
+import { m } from '@/paraglide/messages';
+
+const Content = legalText('account-deletion.md', getLocale());
 ---
 
 <LegalLayout
-  title="Account Deletion - RaceNode"
-  description="How to delete your RaceNode account and personal data: in-app steps, what is deleted, what is retained, and how to request deletion by email."
-  heading="Delete Your RaceNode Account"
+  title={m.deletion_title()}
+  description={m.deletion_description()}
+  heading={m.deletion_heading()}
 >
   <Content />
 </LegalLayout>

@@ -1,4 +1,5 @@
 ---
+import { m } from '@/paraglide/messages';
 import Shot from '../Shot.astro';
 import importScreen from '../../assets/screenshots/logistics-import.png';
 import importPhone from '../../assets/screenshots/logistics-import-phone.png';
@@ -9,23 +10,13 @@ import importPhone from '../../assets/screenshots/logistics-import-phone.png';
 <section class="band band-paper">
   <div class="page grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
     <div class="lg:col-span-4">
-      <p class="font-display text-lg font-medium text-graphite">Import</p>
-      <h2 class="title mt-2">Drop the confirmation. Check it. It's filled in.</h2>
-      <p class="muted mt-5 text-lg leading-relaxed">
-        Drop the agency's mail or the hotel's PDF on the event: the hotel, the flights, the car or
-        the transfer it holds come out as bookings, with the people named on them. Nothing is saved
-        until you have checked them.
-      </p>
-      <p class="muted mt-4 text-sm leading-relaxed">
-        PDF, mail, Excel, a picture or a screenshot… up to 10 MB.
-      </p>
+      <p class="font-display text-lg font-medium text-graphite">{m.logi_import_badge()}</p>
+      <h2 class="title mt-2">{m.logi_import_title()}</h2>
+      <p class="muted mt-5 text-lg leading-relaxed">{m.logi_import_text()}</p>
+      <p class="muted mt-4 text-sm leading-relaxed">{m.logi_import_formats()}</p>
     </div>
     <div class="lg:col-span-8">
-      <Shot
-        desktop={importScreen}
-        phone={importPhone}
-        alt="RaceNode Logistics import: a travel agency's confirmation on the left, the hotel and flights it holds on the right, to check before importing"
-      />
+      <Shot desktop={importScreen} phone={importPhone} alt={m.common_import_alt()} />
     </div>
   </div>
 </section>

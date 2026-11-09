@@ -1,16 +1,17 @@
 ---
+import { m } from '@/paraglide/messages';
 import StoreBadges from '../StoreBadges.astro';
 import CrewScreen from '../CrewScreen.astro';
 
 const items = [
   {
-    label: 'Up next',
-    text: 'The next items of the day with a countdown, rolling over on its own as the weekend runs.',
+    label: m.common_up_next(),
+    text: m.tt_sync_next_text(),
   },
-  { label: 'View all', text: 'One tap opens the whole timetable.' },
+  { label: m.tt_sync_all(), text: m.tt_sync_all_text() },
   {
-    label: 'Always current',
-    text: 'Change the schedule once: the phones show the new time, no new PDF to send.',
+    label: m.tt_sync_current(),
+    text: m.tt_sync_current_text(),
   },
 ];
 ---
@@ -19,17 +20,14 @@ const items = [
 <section class="band band-dark">
   <div class="page">
     <div class="head">
-      <h2 class="title">Everyone sees what's next, in real time.</h2>
-      <p class="lede">
-        The timetable you build is the one each person carries in the RaceNode app. Here, a chief
-        mechanic's race weekend.
-      </p>
+      <h2 class="title">{m.tt_sync_title()}</h2>
+      <p class="lede">{m.tt_sync_lede()}</p>
     </div>
 
     <CrewScreen screen="top" items={items} />
 
     <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <p class="max-w-md font-medium text-smoke">Your crew gets the app on iPhone and Android:</p>
+      <p class="max-w-md font-medium text-smoke">{m.common_crew_gets_app()}</p>
       <StoreBadges align="start" />
     </div>
   </div>

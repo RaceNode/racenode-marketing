@@ -1,24 +1,22 @@
 ---
+import { m } from '@/paraglide/messages';
 import PainList from '../PainList.astro';
 import type { IconName } from '../icons';
 
 const painPoints: { title: string; description: string; icon: IconName }[] = [
   {
-    title: 'Rebuilt in Excel every weekend',
-    description:
-      'A new spreadsheet for every event, copied from the last one, out of date the moment the official schedule shifts.',
+    title: m.tt_pain_1_title(),
+    description: m.tt_pain_1_text(),
     icon: 'table',
   },
   {
-    title: 'Briefings lost in the group chat',
-    description:
-      'Setup windows, briefings, and departure times sent by message — then buried under the next fifty notifications.',
+    title: m.tt_pain_2_title(),
+    description: m.tt_pain_2_text(),
     icon: 'message',
   },
   {
-    title: '"When\'s my session again?"',
-    description:
-      "Everyone asking the same questions all weekend because there's no single, live view of the plan.",
+    title: m.tt_pain_3_title(),
+    description: m.tt_pain_3_text(),
     icon: 'help',
   },
 ];
@@ -27,7 +25,7 @@ const painPoints: { title: string; description: string; icon: IconName }[] = [
 <section class="band">
   <div class="page">
     <div class="head">
-      <h2 class="title">The schedule is the plan. Yet it lives everywhere but one place.</h2>
+      <h2 class="title">{m.tt_pain_title()}</h2>
     </div>
 
     <PainList points={painPoints} columns={3} />

@@ -1,17 +1,18 @@
 ---
+import { m } from '@/paraglide/messages';
 import CrewScreen from '../CrewScreen.astro';
 
 // The lower half of the screen in the hero: the same race weekend, scrolled.
 const items = [
-  { label: 'My accommodation', text: 'The hotel and who shares the room, from Logistics.' },
+  { label: m.common_my_accommodation(), text: m.home_sync_acc_text() },
   {
-    label: 'Departure and return',
-    text: 'The route, the vehicle or the flight, and who travels with them.',
+    label: m.common_departure_return(),
+    text: m.common_departure_return_text(),
   },
-  { label: 'Daily transfer', text: 'The vehicle that takes them to the circuit.' },
+  { label: m.common_daily_transfer(), text: m.home_sync_daily_text() },
   {
-    label: 'Above it',
-    text: 'Up next from the Timetable, their role and their next meal from Management.',
+    label: m.home_sync_above(),
+    text: m.home_sync_above_text(),
   },
 ];
 ---
@@ -22,12 +23,8 @@ const items = [
 <section class="band-dark py-14 md:py-24">
   <div class="page">
     <div class="head">
-      <h2 class="title">Assign once, everyone knows.</h2>
-      <p class="lede">
-        When you assign a role, a car, a flight or a meal, your team member sees it in their
-        RaceNode app, on iPhone and Android. Your drivers too: their flights, hotel and timetable,
-        on the same app as the crew.
-      </p>
+      <h2 class="title">{m.home_sync_title()}</h2>
+      <p class="lede">{m.home_sync_lede()}</p>
     </div>
 
     <CrewScreen screen="more" items={items} />

@@ -85,6 +85,12 @@ export const site = {
     registration:
       'Registered with the Meaux Trade and Companies Register (RCS Meaux) under number 993 956 028',
     vat: 'FR20993956028',
+    /** The same identity worded for the French pages (src/data/legal/fr/). */
+    fr: {
+      legalForm: 'SASU (société par actions simplifiée unipersonnelle) au capital de 1 000 euros',
+      registration: 'Immatriculée au RCS de Meaux sous le numéro 993 956 028',
+      publisher: 'William Brillouet, Président de WBLT Engineering',
+    },
     address: '3 impasse de la Bourgeotte, 77120 Chailly-en-Brie, France',
     publisher: 'William Brillouet, President of WBLT Engineering',
     /** Hosting provider, as required by French law (LCEN art. 6). */

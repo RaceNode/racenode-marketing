@@ -1,4 +1,5 @@
 ---
+import { m } from '@/paraglide/messages';
 import StoreBadges from '../StoreBadges.astro';
 import { Image } from 'astro:assets';
 import { CREW_DAYS_IN_PLANNING } from '../../data/crew-days';
@@ -12,18 +13,13 @@ import screenshotMonth from '../../assets/screenshots/crew-app-month.png';
     <div class="head">
       {CREW_DAYS_IN_PLANNING ? (
         <>
-          <h2 class="title">Availability flows both ways.</h2>
-          <p class="lede">
-            The grid isn't only written by the manager. Every team member posts their own days in
-            their planning, and what they post lands in yours.
-          </p>
+          <h2 class="title">{m.plan_sync_title_both()}</h2>
+          <p class="lede">{m.plan_sync_lede_both()}</p>
         </>
       ) : (
         <>
-          <h2 class="title">Your plan, on their phone.</h2>
-          <p class="lede">
-            The days you plan for each person show up in their own season, in the RaceNode app.
-          </p>
+          <h2 class="title">{m.plan_sync_title_one()}</h2>
+          <p class="lede">{m.plan_sync_lede_one()}</p>
         </>
       )}
     </div>
@@ -34,31 +30,25 @@ import screenshotMonth from '../../assets/screenshots/crew-app-month.png';
       {CREW_DAYS_IN_PLANNING && (
         <li class="app-card p-5 md:p-6">
           <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold">
-            <span class="ok-dot" aria-hidden="true"></span>Their days reach you
+            <span class="ok-dot" aria-hidden="true"></span>
+            {m.plan_card_1()}
           </h4>
-          <p class="mt-2 text-smoke">
-            A member posts a week away and it lands in your grid as unavailable: dates only, their
-            reasons stay their own.
-          </p>
+          <p class="mt-2 text-smoke">{m.plan_card_1_text()}</p>
         </li>
       )}
       <li class="app-card p-5 md:p-6">
         <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold">
-          <span class="ok-dot" aria-hidden="true"></span>Your days reach them
+          <span class="ok-dot" aria-hidden="true"></span>
+          {m.plan_card_2()}
         </h4>
-        <p class="mt-2 text-smoke">
-          The days you plan for someone show up in their own season view, with your note. No
-          forwarded screenshots of a spreadsheet.
-        </p>
+        <p class="mt-2 text-smoke">{m.plan_card_2_text()}</p>
       </li>
       <li class="app-card p-5 md:p-6">
         <h4 class="flex items-center gap-2.5 font-display text-xl font-semibold">
-          <span class="ok-dot" aria-hidden="true"></span>Nothing typed twice
+          <span class="ok-dot" aria-hidden="true"></span>
+          {m.plan_card_3()}
         </h4>
-        <p class="mt-2 text-smoke">
-          Assigning someone to an event is the planning entry: track days derive from it, and follow
-          when the event's dates move.
-        </p>
+        <p class="mt-2 text-smoke">{m.plan_card_3_text()}</p>
       </li>
     </ul>
 
@@ -68,42 +58,34 @@ import screenshotMonth from '../../assets/screenshots/crew-app-month.png';
         <div class="phone mx-auto w-full max-w-[17rem]">
           <Image
             src={screenshotAgenda}
-            alt="RaceNode Planning (Me view) on a phone - a crew member's season in Agenda view"
+            alt={m.plan_agenda_alt()}
             widths={[340, 680]}
             sizes="17rem"
             loading="lazy"
             quality={85}
           />
         </div>
-        <p class="mx-auto mt-4 max-w-[17rem] text-sm text-smoke">
-          Their side: the season as an agenda — what is coming, in order.
-        </p>
+        <p class="mx-auto mt-4 max-w-[17rem] text-sm text-smoke">{m.plan_agenda_caption()}</p>
       </figure>
       <figure>
         <div class="phone mx-auto w-full max-w-[17rem]">
           <Image
             src={screenshotMonth}
-            alt="RaceNode Planning (Me view) on a phone - a crew member's season in Month view"
+            alt={m.plan_month_alt()}
             widths={[340, 680]}
             sizes="17rem"
             loading="lazy"
             quality={85}
           />
         </div>
-        <p class="mx-auto mt-4 max-w-[17rem] text-sm text-smoke">
-          The same season as a month — events, travel, and the days they posted.
-        </p>
+        <p class="mx-auto mt-4 max-w-[17rem] text-sm text-smoke">{m.plan_month_caption()}</p>
       </figure>
     </div>
 
     <div class="mt-14 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
       <div class="max-w-md">
-        {CREW_DAYS_IN_PLANNING && (
-          <p class="mb-2 text-sm text-smoke">
-            No availability emails to chase, no spreadsheet versions to reconcile.
-          </p>
-        )}
-        <p class="font-medium text-smoke">Your crew gets the app on iPhone and Android:</p>
+        {CREW_DAYS_IN_PLANNING && <p class="mb-2 text-sm text-smoke">{m.plan_sync_chase()}</p>}
+        <p class="font-medium text-smoke">{m.common_crew_gets_app()}</p>
       </div>
       <StoreBadges align="start" />
     </div>

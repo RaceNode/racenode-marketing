@@ -1,4 +1,5 @@
 ---
+import { m } from '@/paraglide/messages';
 import Shot from '../Shot.astro';
 import staff from '../../assets/screenshots/logistics-staff.png';
 import staffPhone from '../../assets/screenshots/logistics-staff-phone.png';
@@ -16,42 +17,37 @@ const features = [
   {
     desktop: staff,
     phone: staffPhone,
-    badge: 'Event Staff',
-    title: 'Your full crew, their complete logistics, one view.',
-    description:
-      'Departure, hotel, return and on-site vehicle, one row per person. Select several people to book a shared trip or hotel at once.',
+    badge: m.common_badge_event_staff(),
+    title: m.logi_f1_title(),
+    description: m.logi_f1_text(),
   },
   {
     desktop: accommodation,
     phone: accommodationPhone,
-    badge: 'Accommodation',
-    title: 'Hotels, rooms, and rooming lists. Handled.',
-    description:
-      'Hotels, rooms and who sleeps where, with check-in and check-out. Attach the confirmation: the crew downloads it from their app.',
+    badge: m.logi_badge_accommodation(),
+    title: m.logi_f2_title(),
+    description: m.logi_f2_text(),
   },
   {
     desktop: travel,
     phone: travelPhone,
-    badge: 'Travel',
-    title: 'Every journey planned, every seat assigned.',
-    description:
-      'Departure and return by plane, train, bus or team vehicle, split into legs, each with its people and its tickets.',
+    badge: m.logi_badge_travel(),
+    title: m.logi_f3_title(),
+    description: m.logi_f3_text(),
   },
   {
     desktop: vehicles,
     phone: vehiclesPhone,
-    badge: 'Event Vehicles',
-    title: 'Fleet vehicles and rentals, ready for the road.',
-    description:
-      "Your own fleet and this weekend's rentals, used for travel and for the daily transfers at the circuit.",
+    badge: m.logi_badge_vehicles(),
+    title: m.logi_f4_title(),
+    description: m.logi_f4_text(),
   },
   {
     desktop: info,
     phone: infoPhone,
-    badge: 'Info Board',
-    title: 'The briefing board, shared with everyone.',
-    description:
-      'Where the trucks park, where the passes are, what to do if you arrive after 22:00: notes the crew reads in the app.',
+    badge: m.common_badge_info_board(),
+    title: m.logi_f5_title(),
+    description: m.logi_f5_text(),
   },
 ];
 ---
@@ -59,7 +55,7 @@ const features = [
 <section class="band band-paper">
   <div class="page">
     <div class="head">
-      <h2 class="title">Every tool, one workspace.</h2>
+      <h2 class="title">{m.common_every_tool_one_workspace()}</h2>
     </div>
 
     <!-- One row per tool: the words beside a screen big enough to read, sides alternating. -->
@@ -81,7 +77,7 @@ const features = [
             <Shot
               desktop={feature.desktop}
               phone={feature.phone}
-              alt={`RaceNode ${feature.badge} - ${feature.title}`}
+              alt={m.common_feature_alt({ badge: feature.badge, title: feature.title })}
             />
           </div>
         </div>

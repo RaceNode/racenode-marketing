@@ -2,23 +2,50 @@
 // Served by Cloudflare Pages with a real 404 status for any unknown URL.
 // Without it, Pages falls back to the home page with a 200, so every typo
 // or dead link is indexed as a duplicate of the home page.
+// One file serves every address, so the texts of both languages are in the page and a script shows the one
+// matching the URL prefix (`/fr/...`); English stays visible without JavaScript. Header and footer follow the
+// build language (English).
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { href, locales, defaultLocale, hasPrefix } from '@/i18n';
+import { m } from '@/paraglide/messages';
+
+const others = locales.filter((locale) => locale !== defaultLocale && hasPrefix(locale));
 ---
 
-<BaseLayout title="Page not found | RaceNode" noindex>
+<BaseLayout title={m.notfound_title({}, { locale: defaultLocale })} noindex>
   <div class="min-h-screen bg-concrete">
     <Header />
     <main class="band band-dark">
       <div class="page">
-        <h1 class="display">Page not found</h1>
-        <p class="lede mt-6 max-w-xl">This page does not exist or has moved.</p>
-        <a href="/" class="btn-primary mt-10 text-lg">
-          Back to the home page
-        </a>
+        <div data-lang={defaultLocale}>
+          <h1 class="display">{m.notfound_heading({}, { locale: defaultLocale })}</h1>
+          <p class="lede mt-6 max-w-xl">{m.notfound_text({}, { locale: defaultLocale })}</p>
+          <a href={href(defaultLocale)} class="btn-primary mt-10 text-lg">
+            {m.notfound_back({}, { locale: defaultLocale })}
+          </a>
+        </div>
+        {others.map((locale) => (
+          <div data-lang={locale} hidden>
+            <h1 class="display">{m.notfound_heading({}, { locale })}</h1>
+            <p class="lede mt-6 max-w-xl">{m.notfound_text({}, { locale })}</p>
+            <a href={href(locale)} class="btn-primary mt-10 text-lg">
+              {m.notfound_back({}, { locale })}
+            </a>
+          </div>
+        ))}
       </div>
     </main>
     <Footer />
   </div>
+  <script is:inline define:vars={{ others }}>
+    const first = location.pathname.split('/')[1];
+    if (others.indexOf(first) !== -1) {
+      document.querySelectorAll('[data-lang]').forEach(function (block) {
+        block.hidden = block.getAttribute('data-lang') !== first;
+      });
+      document.documentElement.lang = first;
+    }
+  </script>
 </BaseLayout>

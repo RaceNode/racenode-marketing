@@ -42,7 +42,8 @@ const {
 
 const locale = getLocale() as Locale;
 // hreflang only where there is another language to point to, and never from a page kept out of the index.
-const alternates = multilingual && !noindex ? (given ?? alternatesOf(localeRelative(Astro.url.pathname))) : {};
+const alternates =
+  multilingual && !noindex ? (given ?? alternatesOf(localeRelative(Astro.url.pathname))) : {};
 const alternateLinks = Object.entries(alternates) as Array<[Locale, string]>;
 const hasTranslations = alternateLinks.length > 1;
 

@@ -30,10 +30,10 @@ test('the guardrails catch a drift', (t) => {
     'Fine.astro',
     '<!-- bg-red-500, roadbook --><p class="text-blocking">People logistics, not freight.</p>',
   );
-  fs.rmSync(join(copy, 'src', 'pages', 'account-deletion.astro'));
+  fs.rmSync(join(copy, 'src', 'pages', '[...locale]', 'account-deletion.astro'));
   fs.renameSync(
-    join(copy, 'src', 'pages', 'timetable.astro'),
-    join(copy, 'src', 'pages', 'timetable-moved.astro'),
+    join(copy, 'src', 'pages', '[...locale]', 'timetable.astro'),
+    join(copy, 'src', 'pages', '[...locale]', 'timetable-moved.astro'),
   );
   // No .claude/settings.json in the copy, and a build that skips the guardrails.
   fs.writeFileSync(join(copy, 'package.json'), '{"scripts":{"build":"astro build"}}');

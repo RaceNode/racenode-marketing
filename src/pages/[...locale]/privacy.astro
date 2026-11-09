@@ -3,16 +3,20 @@ import { localePathsOf } from '@/i18n';
 
 export const getStaticPaths = () => localePathsOf('privacy');
 import LegalLayout from '@/layouts/LegalLayout.astro';
-import { Content } from '@/data/legal/privacy-policy.md';
+import { legalText } from '@/data/legal';
+import { getLocale } from '@/paraglide/runtime';
+import { m } from '@/paraglide/messages';
 import AnalyticsDisclosure from '@/components/AnalyticsDisclosure.astro';
+
+const Content = legalText('privacy-policy.md', getLocale());
 ---
 
 <LegalLayout
-  title="Privacy Policy - RaceNode"
-  description="Learn how RaceNode protects your data. Our privacy policy explains how we collect, use, and safeguard your information."
-  heading="Privacy Policy"
+  title={m.legal_privacy_title()}
+  description={m.legal_privacy_description()}
+  heading={m.legal_privacy_heading()}
 >
   <Content />
-  <h2 id="cookies">Annex: Cookies and consent</h2>
+  <h2 id="cookies">{m.legal_cookies_annex()}</h2>
   <AnalyticsDisclosure />
 </LegalLayout>

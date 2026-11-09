@@ -54,6 +54,16 @@ export default defineConfig({
       priority: 0.7,
       lastmod: new Date(),
       // Every page lists its translations (xhtml:link), the same path under each language's prefix.
+      // One sitemap per language besides the default one (sitemap-fr-0.xml…), all listed in sitemap-index.xml:
+      // Search Console then reports the indexing of each language apart.
+      chunks: Object.fromEntries(
+        locales
+          .filter((locale) => locale !== defaultLocale)
+          .map((locale) => [
+            locale,
+            (item) => (new URL(item.url).pathname.startsWith(`/${locale}/`) ? item : undefined),
+          ]),
+      ),
       i18n: {
         defaultLocale,
         locales: Object.fromEntries(locales.map((locale) => [locale, locale])),

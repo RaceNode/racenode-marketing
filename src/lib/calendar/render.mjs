@@ -3,16 +3,19 @@
 // changed since the build by comparing a hash of its own render with the build's, and touch the page only then.
 // Pure: no Intl at render time (country names come from `ctx.countries`, collected at build time), no clock (the
 // featured year and the day the lists start from are the build's, `ctx.year` and `ctx.today`); the same data gives
-// the same string in Node and in any browser.
+// the same string in Node and in any browser. The page's language is `ctx.locale` ('en' when absent, or 'fr'), set by
+// the build and handed to the browser with the rest of the context; `ctx.calendarBase` is the calendar's root path in
+// that language ('/fr/calendar/'; '/calendar/' when absent).
 import {
-  DISCIPLINES,
-  MONTHS,
   dateRange,
+  disciplineName,
   longDate,
+  monthName,
   monthOf,
   roundLabel,
   roundName,
 } from './format.mjs';
+import { m } from '../../paraglide/messages.js';
 import {
   buildCalendar,
   circuits,
@@ -33,9 +36,15 @@ export function hash(s) {
   return (h >>> 0).toString(36);
 }
 
-/** Country names for every code in the catalog, in English, computed once at build time and shipped to the page. */
-export function countriesOf(data) {
-  const names = new Intl.DisplayNames(['en'], { type: 'region' });
+const locOf = (ctx) => ctx.locale ?? 'en';
+/** A message in the page's language. */
+const t = (fn, ctx, params = {}) => fn(params, { locale: locOf(ctx) });
+/** The calendar's root path in the page's language: "/calendar/" or "/fr/calendar/". */
+const base = (ctx) => ctx.calendarBase ?? '/calendar/';
+
+/** Country names for every code in the catalog, in the page's language, computed once at build time and shipped to the page. */
+export function countriesOf(data, locale = 'en') {
+  const names = new Intl.DisplayNames([locale], { type: 'region' });
   const codes = new Set(
     [
       ...data.series.map((s) => s.country_code),
@@ -48,7 +57,9 @@ export function countriesOf(data) {
 // A code the build did not know (a venue added since) falls back to the browser's own name for it.
 const country = (code, ctx) =>
   code
-    ? (ctx.countries[code] ?? new Intl.DisplayNames(['en'], { type: 'region' }).of(code) ?? code)
+    ? (ctx.countries[code] ??
+      new Intl.DisplayNames([locOf(ctx)], { type: 'region' }).of(code) ??
+      code)
     : '';
 
 /** The calendar as the pages see it, for the build's featured year. */
@@ -83,9 +94,9 @@ function logoImg(src, tone, large = false) {
 
 // --- All championships (/calendar/) ---------------------------------------------------------------------------
 
-/** "/calendar/circuits/<slug>/" when the round's circuit has its own page, else null. */
-const circuitHref = (r, pages) =>
-  pages.has(r.venue_slug) ? `/calendar/circuits/${pages.get(r.venue_slug)}/` : null;
+/** "/calendar/circuits/<slug>/" (in the page's language) when the round's circuit has its own page, else null. */
+const circuitHref = (r, pages, ctx) =>
+  pages.has(r.venue_slug) ? `${base(ctx)}circuits/${pages.get(r.venue_slug)}/` : null;
 
 /**
  * The circuits that have their own page, catalog `venue_slug` → URL slug, decided by the build
@@ -106,7 +117,7 @@ export const circuitKey = (venueSlug, pages) => pages.get(venueSlug) ?? venueSlu
 /** "Circuit de Spa-Francorchamps, Belgium", linked to the circuit's page when it has one. */
 function placeOf(r, ctx, pages) {
   const where = `${esc(r.venue_name ?? '')}${r.venue_country_code ? `, ${esc(country(r.venue_country_code, ctx))}` : ''}`;
-  const href = circuitHref(r, pages);
+  const href = circuitHref(r, pages, ctx);
   return href ? `<a href="${href}">${where}</a>` : where;
 }
 
@@ -120,11 +131,14 @@ const disciplinesOf = (c) => (c.disciplines?.length ? c.disciplines : [c.discipl
 // circuit, sometimes a sponsor), and keeps its own dates only when they differ from the meeting's.
 export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = null } = {}) {
   const c = r.championship;
-  const own = dateRange(r.start_date, r.end_date);
+  const loc = locOf(ctx);
+  const own = dateRange(r.start_date, r.end_date, { locale: loc });
   const sub = [
-    roundLabel(r),
-    DISCIPLINES[c.discipline],
-    meeting && own !== dateRange(meeting.start_date, meeting.end_date) ? own : null,
+    roundLabel(r, loc),
+    disciplineName(c.discipline, loc),
+    meeting && own !== dateRange(meeting.start_date, meeting.end_date, { locale: loc })
+      ? own
+      : null,
   ]
     .filter(Boolean)
     .join(' · ');
@@ -135,10 +149,10 @@ export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = nu
     `<li class="calendar-row" data-discipline="${esc(disciplinesOf(c))}" data-region="${esc(c.region)}" data-circuit="${esc(circuitKey(r.venue_slug, pages))}" data-month="${r.start_date.slice(0, 7)}" data-end="${esc(r.end_date)}">` +
     (meeting
       ? ''
-      : `<div class="d">${esc(own)}${cancelled ? '<span>Cancelled</span>' : ''}</div>`) +
-    `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="/calendar/${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span>` +
-    `${meeting && cancelled ? '<span class="x">Cancelled</span>' : ''}` +
-    `${provisional ? '<span class="prov">Provisional</span>' : ''}</div>` +
+      : `<div class="d">${esc(own)}${cancelled ? `<span>${esc(t(m.cal_cancelled, ctx))}</span>` : ''}</div>`) +
+    `<div class="c${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}<a href="${base(ctx)}${esc(c.slug)}/">${esc(displayName(c))}</a><span>${esc(sub)}</span>` +
+    `${meeting && cancelled ? `<span class="x">${esc(t(m.cal_cancelled, ctx))}</span>` : ''}` +
+    `${provisional ? `<span class="prov">${esc(t(m.cal_provisional, ctx))}</span>` : ''}</div>` +
     (place && !meeting
       ? `<div class="p">${name ? `<span>${esc(name)} · </span>` : ''}${placeOf(r, ctx, pages)}</div>`
       : '') +
@@ -147,18 +161,22 @@ export function roundRow(r, ctx, pages = new Map(), { place = true, meeting = nu
 }
 
 /** "19 of 82 championships have published their 2027 calendar." */
-export function indexSummary(cal) {
+export function indexSummary(cal, ctx = {}) {
   const late = notPublished(cal).length;
-  return `${cal.championships.length - late} of ${cal.championships.length} championships have published their ${cal.year} calendar.`;
+  return t(m.cal_index_summary, ctx, {
+    n: cal.championships.length - late,
+    total: cal.championships.length,
+    year: cal.year,
+  });
 }
 
 /** Things that have a start_date, by the month they start in ("November 2026"), in the order given. */
-function monthsOf(list) {
+function monthsOf(list, ctx) {
   const months = new Map();
   for (const x of list) {
-    const m = `${MONTHS[monthOf(x.start_date) - 1]} ${x.start_date.slice(0, 4)}`;
-    if (!months.has(m)) months.set(m, []);
-    months.get(m).push(x);
+    const key = `${monthName(monthOf(x.start_date), locOf(ctx))} ${x.start_date.slice(0, 4)}`;
+    if (!months.has(key)) months.set(key, []);
+    months.get(key).push(x);
   }
   return months;
 }
@@ -166,9 +184,9 @@ function monthsOf(list) {
 /** Rounds by the month they start in, in date order. */
 function byMonth(rounds, ctx, pages, opts) {
   let html = '';
-  for (const [m, list] of monthsOf(rounds))
+  for (const [month, list] of monthsOf(rounds, ctx))
     html +=
-      `<div class="calendar-month mb-8"><h2 class="cal-month-title">${esc(m)}</h2>` +
+      `<div class="calendar-month mb-8"><h2 class="cal-month-title">${esc(month)}</h2>` +
       `<ul class="cal-sheet">${list.map((r) => roundRow(r, ctx, pages, opts)).join('')}</ul></div>`;
   return html;
 }
@@ -179,9 +197,12 @@ function byMonth(rounds, ctx, pages, opts) {
  */
 function meetingHead(m, ctx, pages) {
   const name = esc(venueName(m));
-  const href = circuitHref(m, pages);
+  const href = circuitHref(m, pages, ctx);
   const logo = circuitLogoOf(m.venue_slug, ctx);
-  const facts = [dateRange(m.start_date, m.end_date), country(m.venue_country_code, ctx)]
+  const facts = [
+    dateRange(m.start_date, m.end_date, { locale: locOf(ctx) }),
+    country(m.venue_country_code, ctx),
+  ]
     .filter(Boolean)
     .join(' · ');
   return (
@@ -196,9 +217,9 @@ function meetingHead(m, ctx, pages) {
  */
 function byMeeting(rounds, ctx, pages) {
   let html = '';
-  for (const [m, list] of monthsOf(meetingsOf(rounds)))
+  for (const [month, list] of monthsOf(meetingsOf(rounds), ctx))
     html +=
-      `<div class="calendar-month mb-8"><h2 class="cal-month-title">${esc(m)}</h2><div class="cal-sheet">` +
+      `<div class="calendar-month mb-8"><h2 class="cal-month-title">${esc(month)}</h2><div class="cal-sheet">` +
       list
         .map(
           (meeting) =>
@@ -219,9 +240,9 @@ function lateList(late, ctx) {
       .map(
         (c) =>
           `<li class="calendar-late" data-discipline="${esc(disciplinesOf(c))}" data-region="${esc(c.region)}">` +
-          `<a href="/calendar/${esc(c.slug)}/" class="cal-card${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}` +
+          `<a href="${base(ctx)}${esc(c.slug)}/" class="cal-card${ctx.logoColumn ? ' has-logo' : ''}">${logoOf(c.slug, ctx)}` +
           `<span>${esc(displayName(c))}</span>` +
-          `<span>Last season known: ${esc(c.shown.label)} · ${c.shown.rounds.length} rounds</span></a></li>`,
+          `<span>${esc(t(m.cal_last_season, ctx, { label: c.shown.label, n: c.shown.rounds.length }))}</span></a></li>`,
       )
       .join('') +
     '</ul>'
@@ -236,15 +257,14 @@ function lateList(late, ctx) {
 export function indexBody(cal, ctx) {
   const pages = pagesOf(ctx);
   let html = byMeeting(upcomingRounds(cal, ctx.today ?? ''), ctx, pages);
-  html +=
-    '<p id="calendar-empty" class="cal-note muted" hidden>No upcoming round matches these filters.</p>';
+  html += `<p id="calendar-empty" class="cal-note muted" hidden>${esc(t(m.cal_empty_filters, ctx))}</p>`;
 
   const late = notPublished(cal);
   if (late.length > 0) {
     html +=
       `<section id="calendar-not-published" class="mt-12 mb-4">` +
-      `<h2 class="subtitle mb-2">${cal.year} not published yet</h2>` +
-      `<p class="muted mb-4">These organizers have not released their ${cal.year} dates. Each page shows their last season until they do.</p>` +
+      `<h2 class="subtitle mb-2">${esc(t(m.cal_not_published_title, ctx, { year: cal.year }))}</h2>` +
+      `<p class="muted mb-4">${esc(t(m.cal_not_published_text, ctx, { year: cal.year }))}</p>` +
       lateList(late, ctx) +
       '</section>';
   }
@@ -259,20 +279,20 @@ const external = (href, text, cls) =>
 /** A season's rounds: a table from sm up, stacked cards on a phone. */
 export function seasonTable(season, ctx, pages = new Set()) {
   const rows = season.rounds.map((r) => {
-    const label = roundLabel(r);
+    const label = roundLabel(r, locOf(ctx));
     const name = roundName(r);
     return (
       '<li class="cal-season-row">' +
       `<span class="text-xs sm:text-sm text-graphite col-span-2 sm:col-span-1">${esc(label)}</span>` +
-      `<span class="font-mono text-sm text-ink sm:order-none">${esc(dateRange(r.start_date, r.end_date, { withYear: true }))}` +
+      `<span class="font-mono text-sm text-ink sm:order-none">${esc(dateRange(r.start_date, r.end_date, { withYear: true, locale: locOf(ctx) }))}` +
       (r.status === 'cancelled'
-        ? '<span class="ml-2 text-xs text-blocking font-sans font-semibold">Cancelled</span>'
+        ? `<span class="ml-2 text-xs text-blocking font-sans font-semibold">${esc(t(m.cal_cancelled, ctx))}</span>`
         : '') +
       '</span>' +
       (r.url
         ? external(
             r.url,
-            'Official page ↗',
+            t(m.cal_official_page, ctx),
             'text-xs font-semibold text-accent hover:text-accent-hover hover:underline whitespace-nowrap sm:col-start-4 sm:row-start-1',
           )
         : '<span></span>') +
@@ -280,8 +300,8 @@ export function seasonTable(season, ctx, pages = new Set()) {
       (name
         ? `<span class="text-ink">${esc(name)}<br class="sm:hidden" /><span class="hidden sm:inline"> · </span></span>`
         : '') +
-      (circuitHref(r, pages)
-        ? `<a href="${circuitHref(r, pages)}" class="hover:text-accent hover:underline">${esc(r.venue_name)}</a>`
+      (circuitHref(r, pages, ctx)
+        ? `<a href="${circuitHref(r, pages, ctx)}" class="hover:text-accent hover:underline">${esc(r.venue_name)}</a>`
         : esc(r.venue_name)) +
       `${r.venue_country_code ? `<span>, ${esc(country(r.venue_country_code, ctx))}</span>` : ''}` +
       '</span></li>'
@@ -297,34 +317,33 @@ export function championshipBody(cal, slug, ctx) {
   const { shown } = c;
   const year = cal.year;
   const pages = pagesOf(ctx);
-  const organizer = esc(c.organizer_name ?? 'The organizer');
-  const checked = (lead) =>
-    shown.last_checked_at
-      ? ` ${lead} against the official calendar on ${longDate(shown.last_checked_at)}.`
-      : '';
+  const organizer = esc(c.organizer_name ?? t(m.cal_the_organizer, ctx));
+  const date = (ts) => longDate(ts, locOf(ctx));
+  const checked = (fn) =>
+    shown.last_checked_at ? ` ${t(fn, ctx, { date: date(shown.last_checked_at) })}` : '';
   const source = shown.source_url
-    ? ` ${external(shown.source_url, 'Official calendar ↗', 'link')}`
+    ? ` ${external(shown.source_url, t(m.cal_official_calendar, ctx), 'link')}`
     : '';
   // A flag from the organizer's source, never a guarantee the other way: no flag says nothing, not "confirmed".
   const provisional = shown.calendar_provisional
-    ? '<p class="cal-prov-note"><strong>Provisional calendar</strong>' +
+    ? `<p class="cal-prov-note"><strong>${esc(t(m.cal_provisional_calendar, ctx))}</strong>` +
       (shown.calendar_source_date
-        ? ` · ${organizer}'s calendar of ${longDate(shown.calendar_source_date)}`
+        ? ` · ${t(m.cal_provisional_of, ctx, { organizer, date: date(shown.calendar_source_date) })}`
         : '') +
-      '. Dates and venues may change.</p>'
+      `. ${esc(t(m.cal_may_change, ctx))}</p>`
     : '';
   let html = c.featured
     ? provisional +
-      `<p class="muted text-sm mb-8">${shown.rounds.length} rounds published by ${organizer}.${checked('Checked')}${source}</p>`
+      `<p class="muted text-sm mb-8">${t(m.cal_rounds_published, ctx, { n: shown.rounds.length, organizer })}${checked(m.cal_checked)}${source}</p>`
     : '<div class="cal-note" role="note">' +
-      `<p class="font-semibold text-ink mb-1">The ${year} calendar is not published yet.</p>` +
-      `<p class="muted text-sm">${organizer} has not released its ${year} dates. Below, the ${esc(shown.label)} season for reference.${checked('Last checked')}${source}</p></div>`;
-  html += `<h2 class="subtitle mb-3">${esc(shown.label)} season</h2>${seasonTable(shown, ctx, pages)}`;
+      `<p class="font-semibold text-ink mb-1">${esc(t(m.cal_year_not_published, ctx, { year }))}</p>` +
+      `<p class="muted text-sm">${t(m.cal_organizer_not_released, ctx, { organizer, year, label: esc(shown.label) })}${checked(m.cal_last_checked)}${source}</p></div>`;
+  html += `<h2 class="subtitle mb-3">${esc(t(m.cal_season, ctx, { label: shown.label }))}</h2>${seasonTable(shown, ctx, pages)}`;
   const previous = c.featured ? c.seasons.find((s) => s.year < year) : null;
   if (previous)
     html +=
       '<details class="mt-8 group"><summary class="cal-summary">' +
-      `${esc(previous.label)} season · ${previous.rounds.length} rounds</summary><div class="mt-3">${seasonTable(previous, ctx, pages)}</div></details>`;
+      `${esc(t(m.cal_season_rounds, ctx, { label: previous.label, n: previous.rounds.length }))}</summary><div class="mt-3">${seasonTable(previous, ctx, pages)}</div></details>`;
   return html;
 }
 
@@ -344,24 +363,28 @@ export function circuitBody(cal, slug, ctx) {
   const upcoming = c.rounds.filter((r) => r.end_date >= today);
   const past = c.rounds.filter((r) => r.end_date < today).reverse();
   const n = new Set(upcoming.map((r) => r.championship.slug)).size;
+  const rounds = t(upcoming.length === 1 ? m.cal_n_upcoming_one : m.cal_n_upcoming_other, ctx, {
+    n: upcoming.length,
+  });
+  const champs = t(n === 1 ? m.cal_n_championships_one : m.cal_n_championships_other, ctx, { n });
   let html = upcoming.length
-    ? `<p class="muted text-sm mb-8">${upcoming.length} upcoming round${upcoming.length === 1 ? '' : 's'} of ${n} championship${n === 1 ? '' : 's'} at ${esc(c.name)}, as each organizer publishes them.</p>` +
+    ? `<p class="muted text-sm mb-8">${esc(t(m.cal_circuit_summary, ctx, { rounds, championships: champs, name: c.name }))}</p>` +
       byMonth(upcoming, ctx, pages, { place: false })
-    : `<div class="cal-note" role="note"><p class="font-semibold text-ink mb-1">No round scheduled at ${esc(c.name)} in the calendars published so far.</p>` +
-      '<p class="muted text-sm">Below, the rounds already run here.</p></div>';
+    : `<div class="cal-note" role="note"><p class="font-semibold text-ink mb-1">${esc(t(m.cal_circuit_none, ctx, { name: c.name }))}</p>` +
+      `<p class="muted text-sm">${esc(t(m.cal_circuit_none_below, ctx))}</p></div>`;
 
   const late = notPublished(cal).filter((x) => x.shown.rounds.some((r) => r.venue_slug === venue));
   if (late.length > 0)
     html +=
       '<section class="mt-12 mb-4">' +
-      `<h2 class="subtitle mb-2">Raced here, ${cal.year} not published yet</h2>` +
-      `<p class="muted mb-4">These championships came to ${esc(c.name)} in their last season and have not released their ${cal.year} dates.</p>` +
+      `<h2 class="subtitle mb-2">${esc(t(m.cal_raced_here_title, ctx, { year: cal.year }))}</h2>` +
+      `<p class="muted mb-4">${esc(t(m.cal_raced_here_text, ctx, { name: c.name, year: cal.year }))}</p>` +
       lateList(late, ctx) +
       '</section>';
 
   if (past.length > 0)
     html +=
       '<details class="mt-10"><summary class="cal-summary mb-3">' +
-      `Rounds already run at ${esc(c.name)} · ${past.length}</summary>${byMonth(past, ctx, pages, { place: false })}</details>`;
+      `${esc(t(m.cal_rounds_run_at, ctx, { name: c.name, n: past.length }))}</summary>${byMonth(past, ctx, pages, { place: false })}</details>`;
   return html;
 }

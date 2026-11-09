@@ -1,20 +1,21 @@
 ---
+import { m } from '@/paraglide/messages';
 import Icon from '../Icon.astro';
 import type { IconName } from '../icons';
 
 // Four short lines, after the proof: the pains are named, not illustrated (the cards made a screen and a half on a phone).
 const painPoints: { text: string; icon: IconName }[] = [
-  { text: 'A clean pre-event PDF, and each person reads one line of it.', icon: 'file-text' },
-  { text: 'Details lost in WhatsApp threads and email chains.', icon: 'message' },
-  { text: "A brief you can't send while half of it is missing.", icon: 'file-x' },
-  { text: 'A change after the "final" V3. Again.', icon: 'refresh' },
+  { text: m.home_pain_1(), icon: 'file-text' },
+  { text: m.home_pain_2(), icon: 'message' },
+  { text: m.home_pain_3(), icon: 'file-x' },
+  { text: m.home_pain_4(), icon: 'refresh' },
 ];
 ---
 
 <!-- Same light ground as the import above and the catalogue below: a hairline, not a band, between them. -->
 <section class="page pb-14 md:pb-20">
   <div class="hair grid gap-8 pt-10 md:pt-14 lg:grid-cols-12 lg:gap-10">
-    <h2 class="subtitle lg:col-span-5">Running a race team means juggling everything at once.</h2>
+    <h2 class="subtitle lg:col-span-5">{m.home_pain_title()}</h2>
     <ul class="grid gap-x-10 gap-y-4 md:grid-cols-2 lg:col-span-7">
       {painPoints.map((point) => (
         <li class="flex items-start gap-3">

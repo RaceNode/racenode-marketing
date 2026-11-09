@@ -1,8 +1,9 @@
 ---
+import { m } from '@/paraglide/messages';
 // Shown on every calendar page rendered from the sample file instead of the live catalog (previews, local runs).
 ---
 
 <div class="app-card mb-8 px-4 py-3 text-sm text-fog" role="note">
-  <span class="font-medium text-watch-on-dark">Preview with sample data.</span> This preview did not
-  read the live catalog; dates may be out of date.
+  <span class="font-medium text-watch-on-dark">{m.cal_sample_title()}</span>
+  {m.cal_sample_text()}
 </div>

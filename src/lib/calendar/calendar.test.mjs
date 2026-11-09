@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import { test } from 'node:test';
 import { SAMPLE_API, liveConfig, loadCatalog } from './build.mjs';
 import { API_URL, catalogSource, sanitize } from './contract.mjs';
-import { dateRange, roundLabel, roundName } from './format.mjs';
+import { dateRange, longDate, roundLabel, roundName } from './format.mjs';
 import { refresh } from './refresh.mjs';
 import { LIVE_API, ipBudget, relay } from './relay.mjs';
 import {
@@ -675,6 +675,39 @@ test('dates and labels read the way a team writes them', () => {
     roundName({ name: 'CrowdStrike 24 Hours of Spa', venue_name: 'Spa' }),
     'CrowdStrike 24 Hours of Spa',
   );
+});
+
+test('in French: dates, round labels, disciplines and the row read the way a French team writes them', async () => {
+  const fr = { locale: 'fr' };
+  assert.equal(dateRange('2027-04-15', '2027-04-17', fr), '15–17 avr.');
+  assert.equal(dateRange('2027-04-30', '2027-05-02', fr), '30 avr. – 2 mai');
+  assert.equal(dateRange('2027-05-01', '2027-05-03', fr), '1er–3 mai');
+  assert.equal(dateRange('2026-12-30', '2027-01-02', fr), '30 déc. 2026 – 2 janv. 2027');
+  assert.equal(dateRange('2027-04-15', '2027-04-15', { ...fr, withYear: true }), '15 avr. 2027');
+  assert.equal(longDate('2026-10-07T10:00:00Z', 'fr'), '7 octobre 2026');
+  assert.equal(longDate('2026-10-01T10:00:00Z', 'fr'), '1er octobre 2026');
+  assert.equal(roundLabel({ round_number: 3 }, 'fr'), 'Manche 3');
+  assert.equal(roundLabel({ round_number: 1, round_numbers: [1, 2] }, 'fr'), 'Manches 1 et 2');
+  assert.equal(roundLabel({ round_numbers: [1, 2, 3] }, 'fr'), 'Manches 1 à 3');
+  assert.equal(roundLabel({ round_numbers: [4, 6] }, 'fr'), 'Manches 4, 6');
+  assert.equal(roundLabel({ kind: 'test' }, 'fr'), 'Essais');
+  assert.equal(roundLabel({ round_number: 3 }), 'Round 3');
+  const c = { slug: 'a', name: 'A', short_name: null, discipline: 'single_seater', region: null };
+  const html = roundRow(
+    {
+      ...round('a', 2027, '2027-04-15'),
+      venue_name: 'Spa',
+      venue_country_code: 'BE',
+      status: 'cancelled',
+      championship: c,
+    },
+    { locale: 'fr', calendarBase: '/fr/calendar/', countries: { BE: 'Belgique' } },
+  );
+  assert.match(html, /<a href="\/fr\/calendar\/a\/">A<\/a>/);
+  assert.match(html, /Monoplace/);
+  assert.match(html, /Annulée/);
+  assert.match(html, /Spa, Belgique/);
+  assert.equal(countriesOf(await sampleData(), 'fr').BE, 'Belgique');
 });
 
 // --- The relay (relay.mjs): what the browser may ask, and what never leaves the server -------------------------

@@ -1,5 +1,7 @@
 ---
-import { localePathsOf } from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+import { link, localePathsOf, type Locale } from '@/i18n';
 
 export const getStaticPaths = () => localePathsOf('logistics');
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -14,13 +16,13 @@ import LogisticsSync from '@/components/logistics/LogisticsSync.astro';
 import LogisticsImport from '@/components/logistics/LogisticsImport.astro';
 import LogisticsCTA from '@/components/logistics/LogisticsCTA.astro';
 
-const title = 'Race Team Travel & Accommodation Software | RaceNode';
-const description =
-  'Manage crew travel, flights, hotels and room allocation for every race weekend. People logistics for racing teams — not freight.';
+const locale = getLocale() as Locale;
+const title = m.logi_title();
+const description = m.logi_description();
 
 const breadcrumbSchema = breadcrumbJsonLd(site, [
-  { name: 'Home', url: '/' },
-  { name: 'Race Team Travel & Accommodation', url: '/logistics/' },
+  { name: m.common_breadcrumb_home(), url: link(locale, '') },
+  { name: m.logi_breadcrumb(), url: link(locale, 'logistics') },
 ]);
 ---
 

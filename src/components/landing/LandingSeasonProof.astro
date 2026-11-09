@@ -5,7 +5,7 @@ import { seasonProof, seasonProofLabel } from '../../data/season-proof';
 <!-- The hero's last row, in its dark band: the sentence, then the logos in their own colors, two across on a phone,
      four in a row beside the sentence on wide screens. A logo without a dark-background version sits on a light plate. -->
 <div class="grid gap-6 py-10 md:py-14 lg:grid-cols-12 lg:items-center lg:gap-10">
-  <p class="max-w-md text-smoke lg:col-span-4">{seasonProofLabel}</p>
+  <p class="max-w-md text-smoke lg:col-span-4">{seasonProofLabel()}</p>
   <ul class="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4 sm:gap-8 lg:col-span-8">
     {seasonProof.map((item) => (
       <li class="flex flex-col items-start gap-2.5">

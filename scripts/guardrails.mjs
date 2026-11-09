@@ -37,14 +37,14 @@ const RULES = [
   },
   {
     name: 'pricing',
-    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
+    dirs: ['src', 'messages', 'public/llms.txt', 'public/fr/llms.txt', 'store/listing.json'],
     re: /for life|lifetime (?:price|deal|access)|early[- ]adopter|regardless of (?:team )?size|free,? (?:always|forever)|(?:price[ds]?|pay|billed|charged?|costs?) per (?:car|vehicle|entry|driver)\b|(?:price[ds]?|pay|billed|charged?) by team size|\bà vie\b|quelle que soit la taille|gratuit,? (?:pour toujours|à jamais)|(?:prix|tarif|factur\w*|pay\w*) (?:par|à la) (?:voiture|véhicule|engagement|pilote)\b|selon la taille de l'équipe/i,
     why: 'withdrawn pricing promise (2026-09-28) or a price per car or by team size: only the promises of the pricing page hold',
   },
   {
     name: 'price figures',
-    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
-    except: ['src/pages/[...locale]/pricing.astro', 'public/llms.txt'],
+    dirs: ['src', 'messages', 'public/llms.txt', 'public/fr/llms.txt', 'store/listing.json'],
+    except: ['src/pages/[...locale]/pricing.astro', 'public/llms.txt', 'public/fr/llms.txt'],
     // In messages/<language>.json, the pricing page's own keys (`pricing_…`) are that page: they may hold figures.
     without: (f) => (f.rel.startsWith('messages/') ? withoutKeys(f.text, 'pricing_') : f.text),
     re: /€\s?\d|\d\s?€|\bper month\b|\/\s?month\b|\bpar mois\b|\bpar an\b/i,
@@ -52,7 +52,7 @@ const RULES = [
   },
   {
     name: 'vocabulary',
-    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
+    dirs: ['src', 'messages', 'public/llms.txt', 'public/fr/llms.txt', 'store/listing.json'],
     re: /\broadbook|motorsport logistics/i,
     why: 'word the SEO reference rules out in English (§3.3): "roadbook" reads as rally-raid navigation, "motorsport logistics" as freight; write event brief, crew travel, people logistics',
   },
@@ -64,7 +64,7 @@ const RULES = [
   },
   {
     name: 'conflict detection',
-    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
+    dirs: ['src', 'messages', 'public/llms.txt', 'public/fr/llms.txt', 'store/listing.json'],
     re: /conflict detection|detects? (?:scheduling )?conflicts?|conflict (?:alerts?|warnings?)|détect\w* (?:de |les |des )?conflits?|alertes? de conflits?/i,
     why: 'conflict detection does not work well yet (Willi, 2026-08-23): do not market it until he says it is solid',
   },
@@ -95,7 +95,9 @@ const EXTS = ['.astro', '.ts', '.js', '.mjs', '.md', '.mdx', '.css', '.txt', '.j
 const withoutKeys = (text, prefix) => {
   try {
     const json = JSON.parse(text);
-    return JSON.stringify(Object.fromEntries(Object.entries(json).filter(([k]) => !k.startsWith(prefix))));
+    return JSON.stringify(
+      Object.fromEntries(Object.entries(json).filter(([k]) => !k.startsWith(prefix))),
+    );
   } catch {
     return text;
   }
@@ -119,7 +121,9 @@ function files(root, target) {
     }
     if (st.isDirectory()) {
       for (const e of fs.readdirSync(p))
-        if (e !== 'node_modules' && !e.startsWith('.')) walk(join(p, e));
+        // src/paraglide is compiled from messages/, which the rules read already.
+        if (e !== 'node_modules' && !e.startsWith('.') && !(e === 'paraglide' && p.endsWith('src')))
+          walk(join(p, e));
     } else if (EXTS.some((x) => p.endsWith(x))) {
       out.push({ rel: relative(root, p).replaceAll('\\', '/'), text: fs.readFileSync(p, 'utf8') });
     }

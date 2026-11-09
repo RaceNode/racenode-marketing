@@ -1,4 +1,5 @@
 ---
+import { m } from '@/paraglide/messages';
 // What a crew member sees: the event screen of the RaceNode app on a chief mechanic's phone (demo team),
 // then, right after it, what is on it. The screen does the explaining; the list only names the parts.
 // Always the whole screen: a crop of it inside a phone frame read as a fake, boxed-in device (Willi, 2026-10-08).
@@ -14,10 +15,7 @@ interface Props {
 
 const { screen, items } = Astro.props;
 const image = screen === 'top' ? top : more;
-const alt =
-  screen === 'top'
-    ? "RaceNode app on a phone: a chief mechanic's race weekend — up next, his role, his next meal"
-    : "RaceNode app on a phone: a chief mechanic's race weekend — his hotel, his departure, the daily transfer, his return";
+const alt = screen === 'top' ? m.common_crewscreen_alt_top() : m.common_crewscreen_alt_more();
 ---
 
 <div class="grid items-center gap-10 md:grid-cols-12 md:gap-10">

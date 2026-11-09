@@ -1,23 +1,17 @@
 ---
+import { m } from '@/paraglide/messages';
 import Shot from '../Shot.astro';
 import screenshotBox from '../../assets/screenshots/timetable-box.png';
 
-const points = [
-  'Big-screen display with live per-session countdowns',
-  'iCal feed for phones and calendar apps',
-  'One link per event, revoke it anytime',
-];
+const points = [m.tt_share_1(), m.tt_share_2(), m.tt_share_3()];
 ---
 
 <section class="band">
   <div class="page grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-10">
     <!-- Text -->
     <div class="lg:col-span-5">
-      <h2 class="title">Put the countdown on the wall.</h2>
-      <p class="lede mt-5">
-        Cast the display page to the TV in your box: every session with a live countdown. Or give
-        the team one iCal link.
-      </p>
+      <h2 class="title">{m.tt_share_title()}</h2>
+      <p class="lede mt-5">{m.tt_share_lede()}</p>
       <ul class="mt-8">
         {points.map((point) => (
           <li class="hair py-3 leading-snug">{point}</li>
@@ -29,7 +23,7 @@ const points = [
     <div class="lg:col-span-7">
       <Shot
         desktop={screenshotBox}
-        alt="RaceNode public timetable display with live countdowns to each session"
+        alt={m.tt_share_alt()}
         sizes="(min-width: 1024px) 720px, 100vw"
       />
     </div>

@@ -5,6 +5,8 @@ import { loadLogos, venueLogos } from './logos.mjs';
 import { LIVE_API } from './relay.mjs';
 import { calendarOf, circuitPageSlugs, countriesOf } from './render.mjs';
 
+const countryNames = new WeakMap(); // catalog data → locale → names
+
 /**
  * Waits between attempts at the catalog: a passing 5xx or timeout (PGRST002 while PostgREST reloads its schema cache,
  * a slow cold start) costs a few seconds instead of the deploy; about a minute of waiting in all, then the build fails.
@@ -107,10 +109,24 @@ export const catalog = () =>
   }));
 
 /**
+ * The render context for a page in `locale`: the build's ctx with the language, the country names in that language
+ * and the calendar's root path in it (`calendarBase`, from link(locale, 'calendar') of @/i18n, which this file cannot
+ * import: tests run it in plain Node). English stays the build's ctx as is.
+ */
+export function localized({ data, ctx }, locale, calendarBase = '/calendar/') {
+  if (locale === 'en' && calendarBase === '/calendar/') return ctx;
+  if (!countryNames.has(data)) countryNames.set(data, {});
+  const names = countryNames.get(data);
+  names[locale] ??= countriesOf(data, locale);
+  return { ...ctx, locale, calendarBase, countries: names[locale] };
+}
+
+/**
  * What a page hands its browser to read the catalog again (LiveRefresh.astro): where to ask (the site's relay; a
  * preview on sample data gets the static sample copy instead) and the render context. Never a database URL or key.
  */
 export function liveConfig({ data, ctx }, { slug }) {
+  // `ctx` is the page's own (localized()): its language and country names travel with it.
   return {
     api: data.sample ? SAMPLE_API : LIVE_API,
     ...ctx,

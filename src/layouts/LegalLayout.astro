@@ -2,6 +2,9 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { link } from '@/i18n';
+import { getLocale } from '@/paraglide/runtime';
+import { m } from '@/paraglide/messages';
 
 interface Props {
   title: string;
@@ -10,6 +13,7 @@ interface Props {
 }
 
 const { title, description, heading } = Astro.props;
+const home = link(getLocale());
 ---
 
 <BaseLayout title={title} description={description}>
@@ -19,8 +23,8 @@ const { title, description, heading } = Astro.props;
       <div class="page max-w-4xl py-12 md:py-16">
         <!-- Header with back link -->
         <div class="mb-10">
-          <a href="/" class="link mb-8 inline-block">
-            Back to Home
+          <a href={home} class="link mb-8 inline-block">
+            {m.legal_back_home()}
           </a>
           <h1 class="title">{heading}</h1>
         </div>
@@ -45,8 +49,8 @@ const { title, description, heading } = Astro.props;
 
         <!-- Footer -->
         <div class="mt-10">
-          <a href="/" class="link">
-            Return to RaceNode
+          <a href={home} class="link">
+            {m.legal_return()}
           </a>
         </div>
       </div>

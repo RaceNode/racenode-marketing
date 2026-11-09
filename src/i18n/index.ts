@@ -100,18 +100,7 @@ export function formatDate(
  * list is empty; a new language starts with the pages it does not have yet (docs/languages.md).
  */
 export const notYet: Partial<Record<Locale, string[]>> = {
-  fr: [
-    '',
-    'crew-planning',
-    'logistics',
-    'management',
-    'timetable',
-    'pricing',
-    'terms',
-    'privacy',
-    'legal-notice',
-    'account-deletion',
-  ],
+  fr: [],
 };
 
 const clean = (path: string) => path.replace(/^\/+|\/+$/g, '');

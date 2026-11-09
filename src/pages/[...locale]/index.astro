@@ -1,4 +1,5 @@
 ---
+import { m } from '@/paraglide/messages';
 import { localePathsOf } from '@/i18n';
 
 export const getStaticPaths = () => localePathsOf('');
@@ -14,10 +15,7 @@ import LandingSync from '@/components/landing/LandingSync.astro';
 import LandingCTA from '@/components/landing/LandingCTA.astro';
 ---
 
-<BaseLayout
-  title="Racing Team Management Software | RaceNode"
-  description="Travel, hotels, roles and the race weekend timetable, on every crew member's phone. Built by William Brillouet, former GT3 team manager. Free until 31 December 2026."
->
+<BaseLayout title={m.home_title()} description={m.home_description()}>
   <div class="min-h-screen bg-concrete flex flex-col">
     <Header />
     <main class="flex-1">

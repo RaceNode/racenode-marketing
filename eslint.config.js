@@ -35,7 +35,7 @@ export default tseslint.config(
   {
     // RaceNode: the calendar's data comes from plain .mjs modules (src/lib/calendar, tested with node --test,
     // no types), so its pages annotate it as `any`.
-    files: ['src/pages/calendar/**'],
+    files: ['src/pages/**/calendar/**'],
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
 );

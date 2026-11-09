@@ -3,6 +3,9 @@
 // morning, docs/calendar.md). Built once, never refreshed in the browser: no part of render.mjs. Not every
 // championship has published its next season: the published count says so. Dates and circuits only: the
 // official session times are not in the app.
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+import { link, type Locale } from '@/i18n';
 import { catalog } from '../../lib/calendar/build.mjs';
 import { notPublished } from '../../lib/calendar/model.mjs';
 
@@ -10,21 +13,22 @@ const { data, cal } = await catalog();
 const sample = data.sample;
 const count = cal.championships.length;
 const published = count - notPublished(cal).length;
+const locale = getLocale() as Locale;
 const lede = sample
-  ? 'Dates and circuits, updated as each organizer publishes.'
-  : `Dates and circuits, updated as each organizer publishes: ${published} have their ${cal.year} calendar out.`;
+  ? m.home_catalog_lede_sample()
+  : m.home_catalog_lede({ published, year: cal.year });
 ---
 
 <!-- Light, like the sections around it: a hairline above, the count set as large as a section title. -->
 <section class="page pb-14 md:pb-20">
   <div class="hair grid gap-6 pt-10 md:pt-14 lg:grid-cols-12 lg:items-start lg:gap-10">
     <h2 class="title lg:col-span-7">
-      {sample ? 'Championships' : `${count} championships`} already in.
+      {sample ? m.home_catalog_title_sample() : m.home_catalog_title({ count })}
     </h2>
     <div class="lg:col-span-5">
       <p class="lede">{lede}</p>
-      <a href="/calendar/" class="link mt-5 inline-block">
-        See the race calendar <span aria-hidden="true">→</span>
+      <a href={link(locale, 'calendar')} class="link mt-5 inline-block">
+        {m.home_catalog_link()} <span aria-hidden="true">→</span>
       </a>
     </div>
   </div>

@@ -1,24 +1,22 @@
 ---
+import { m } from '@/paraglide/messages';
 import PainList from '../PainList.astro';
 import type { IconName } from '../icons';
 
 const painPoints: { title: string; description: string; icon: IconName }[] = [
   {
-    title: 'Last-minute changes after V3',
-    description:
-      'The logistics sheet is rebuilt and sent again at every change. By Thursday, three versions are going round the crew.',
+    title: m.logi_pain_1_title(),
+    description: m.logi_pain_1_text(),
     icon: 'refresh',
   },
   {
-    title: 'Bookings in five places',
-    description:
-      "The agency's mails, the hotel's PDF, the rental confirmation, a spreadsheet: each on someone else's laptop.",
+    title: m.logi_pain_2_title(),
+    description: m.logi_pain_2_text(),
     icon: 'files',
   },
   {
-    title: '"Which hotel am I in?"',
-    description:
-      'Mechanics, engineers and drivers ask you one by one, all week, then again on the way to the circuit.',
+    title: m.logi_pain_3_title(),
+    description: m.logi_pain_3_text(),
     icon: 'users',
   },
 ];
@@ -27,7 +25,7 @@ const painPoints: { title: string; description: string; icon: IconName }[] = [
 <section class="band">
   <div class="page">
     <div class="head">
-      <h2 class="title">One flight moves. Six people need to know.</h2>
+      <h2 class="title">{m.logi_pain_title()}</h2>
     </div>
 
     <PainList points={painPoints} columns={3} />
