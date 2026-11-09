@@ -66,7 +66,12 @@ export function websiteJsonLd(site: SiteConfig, language: string): JsonLd {
 /** The app: web and the two stores. The offer is the one the pricing page states. */
 export function softwareApplicationJsonLd(
   site: SiteConfig,
-  { description, installUrl }: { description: string; installUrl: string[] },
+  {
+    description,
+    installUrl,
+    offer = 'Free until 31 December 2026',
+    language,
+  }: { description: string; installUrl: string[]; offer?: string; language?: string },
 ): JsonLd {
   return compact({
     '@context': 'https://schema.org',
@@ -76,12 +81,13 @@ export function softwareApplicationJsonLd(
     operatingSystem: 'Web, iOS, Android',
     description,
     url: site.url,
+    inLanguage: language,
     installUrl,
     offers: {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'USD',
-      description: 'Free until 31 December 2026',
+      description: offer,
       validThrough: '2026-12-31',
     },
     publisher: { '@id': companyId(site) },

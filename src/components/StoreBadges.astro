@@ -16,6 +16,7 @@ const { size = 'md', align = 'center', class: className = '' } = Astro.props;
 
 const heightClass = size === 'sm' ? 'h-9' : 'h-10';
 const alignClass = align === 'center' ? 'justify-center' : 'justify-start';
+import { m } from '@/paraglide/messages';
 ---
 
 <div class:list={['flex flex-wrap items-center gap-3', alignClass, className]}>
@@ -24,11 +25,11 @@ const alignClass = align === 'center' ? 'justify-center' : 'justify-start';
     target="_blank"
     rel="noopener"
     class="inline-flex hover:opacity-80 transition-opacity"
-    aria-label="Download RaceNode on the App Store"
+    aria-label={m.store_apple_aria()}
   >
     <img
       src="/badge-app-store.svg"
-      alt="Download on the App Store"
+      alt={m.store_apple_alt()}
       width="120"
       height="40"
       class={`${heightClass} w-auto`}
@@ -40,11 +41,11 @@ const alignClass = align === 'center' ? 'justify-center' : 'justify-start';
     target="_blank"
     rel="noopener"
     class="inline-flex hover:opacity-80 transition-opacity"
-    aria-label="Get RaceNode on Google Play"
+    aria-label={m.store_google_aria()}
   >
     <img
       src="/badge-google-play.svg"
-      alt="Get it on Google Play"
+      alt={m.store_google_alt()}
       width="135"
       height="40"
       class={`${heightClass} w-auto`}

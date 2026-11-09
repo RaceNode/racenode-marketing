@@ -1,0 +1,37 @@
+---
+/**
+ * Links to the same page in the other languages, each named in its own
+ * language. Only rendered on a site with several languages (`Header.astro`).
+ */
+import { href, locales, type Locale } from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+
+interface Props {
+  alternates: Partial<Record<Locale, string>>;
+}
+
+const { alternates } = Astro.props;
+const current = getLocale() as Locale;
+const others = locales.filter((locale) => locale !== current);
+const name = (locale: Locale) => {
+  const own = new Intl.DisplayNames([locale], { type: 'language' }).of(locale) ?? locale;
+  return own.charAt(0).toLocaleUpperCase(locale) + own.slice(1);
+};
+---
+
+<ul class="flex items-center gap-3" aria-label={m.lang_switch_label()}>
+  {others.map((locale) => (
+    <li>
+      <a
+        href={alternates[locale] ?? href(locale)}
+        hreflang={locale}
+        lang={locale}
+        class="px-2 py-2 font-display text-[0.95rem] font-medium tracking-wide text-smoke uppercase transition-colors hover:text-white"
+        title={name(locale)}
+      >
+        {locale}
+      </a>
+    </li>
+  ))}
+</ul>

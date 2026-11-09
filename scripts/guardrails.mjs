@@ -37,33 +37,35 @@ const RULES = [
   },
   {
     name: 'pricing',
-    dirs: ['src', 'public/llms.txt', 'store/listing.json'],
-    re: /for life|lifetime (?:price|deal|access)|early[- ]adopter|regardless of (?:team )?size|free,? (?:always|forever)|(?:price[ds]?|pay|billed|charged?|costs?) per (?:car|vehicle|entry|driver)\b|(?:price[ds]?|pay|billed|charged?) by team size/i,
+    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
+    re: /for life|lifetime (?:price|deal|access)|early[- ]adopter|regardless of (?:team )?size|free,? (?:always|forever)|(?:price[ds]?|pay|billed|charged?|costs?) per (?:car|vehicle|entry|driver)\b|(?:price[ds]?|pay|billed|charged?) by team size|\bà vie\b|quelle que soit la taille|gratuit,? (?:pour toujours|à jamais)|(?:prix|tarif|factur\w*|pay\w*) (?:par|à la) (?:voiture|véhicule|engagement|pilote)\b|selon la taille de l'équipe/i,
     why: 'withdrawn pricing promise (2026-09-28) or a price per car or by team size: only the promises of the pricing page hold',
   },
   {
     name: 'price figures',
-    dirs: ['src', 'public/llms.txt', 'store/listing.json'],
-    except: ['src/pages/pricing.astro', 'public/llms.txt'],
-    re: /€\s?\d|\d\s?€|\bper month\b|\/\s?month\b/i,
+    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
+    except: ['src/pages/[...locale]/pricing.astro', 'public/llms.txt'],
+    // In messages/<language>.json, the pricing page's own keys (`pricing_…`) are that page: they may hold figures.
+    without: (f) => (f.rel.startsWith('messages/') ? withoutKeys(f.text, 'pricing_') : f.text),
+    re: /€\s?\d|\d\s?€|\bper month\b|\/\s?month\b|\bpar mois\b|\bpar an\b/i,
     why: 'price figure outside the pricing page: prices live on /pricing/ (and llms.txt) only, so one change of price is one place to edit',
   },
   {
     name: 'vocabulary',
-    dirs: ['src', 'public/llms.txt', 'store/listing.json'],
+    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
     re: /\broadbook|motorsport logistics/i,
     why: 'word the SEO reference rules out in English (§3.3): "roadbook" reads as rally-raid navigation, "motorsport logistics" as freight; write event brief, crew travel, people logistics',
   },
   {
     name: 'ERP',
-    dirs: ['src', 'public', 'store/listing.json'],
+    dirs: ['src', 'messages', 'public', 'store/listing.json'],
     re: /\bERPs?\b/i,
     why: 'never the word ERP (Willi, 2026-10-07): say racing team management software',
   },
   {
     name: 'conflict detection',
-    dirs: ['src', 'public/llms.txt', 'store/listing.json'],
-    re: /conflict detection|detects? (?:scheduling )?conflicts?|conflict (?:alerts?|warnings?)/i,
+    dirs: ['src', 'messages', 'public/llms.txt', 'store/listing.json'],
+    re: /conflict detection|detects? (?:scheduling )?conflicts?|conflict (?:alerts?|warnings?)|détect\w* (?:de |les |des )?conflits?|alertes? de conflits?/i,
     why: 'conflict detection does not work well yet (Willi, 2026-08-23): do not market it until he says it is solid',
   },
 ];
@@ -88,6 +90,16 @@ export const STABLE_URLS = [
 const PAGE_EXTS = ['.astro', '.md', '.mdx'];
 
 const EXTS = ['.astro', '.ts', '.js', '.mjs', '.md', '.mdx', '.css', '.txt', '.json'];
+
+/** A messages file without the keys starting with `prefix`. */
+const withoutKeys = (text, prefix) => {
+  try {
+    const json = JSON.parse(text);
+    return JSON.stringify(Object.fromEntries(Object.entries(json).filter(([k]) => !k.startsWith(prefix))));
+  } catch {
+    return text;
+  }
+};
 
 /** The text without its comments: the rule is about what the page shows, not what a comment says. */
 export const code = (t) =>
@@ -121,6 +133,7 @@ export function check(root) {
   for (const rule of RULES) {
     const found = rule.dirs
       .flatMap((d) => files(root, d))
+      .map((f) => (rule.without ? { ...f, text: rule.without(f) } : f))
       .filter((f) => !(rule.except ?? []).includes(f.rel) && rule.re.test(code(f.text)));
     const tolerated = TOLERATED[rule.name] ?? [];
     for (const f of found) {
@@ -135,7 +148,8 @@ export function check(root) {
   }
 
   for (const url of STABLE_URLS) {
-    const page = join(root, 'src/pages', url);
+    // The default language at the root: its pages live under src/pages/[...locale]/ (docs/languages.md).
+    const page = join(root, 'src/pages/[...locale]', url);
     if (!PAGE_EXTS.some((x) => fs.existsSync(page + x) || fs.existsSync(join(page, 'index' + x))))
       out.push(
         `${url} has no page in src/pages any more: it is a stable URL (declared at Google Play or linked from the app and stores), put the page back`,

@@ -1,17 +1,28 @@
 ---
 import { modules } from '../data/modules';
 
-const appUrl = 'https://app.racenode.com';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { alternatesOf, link, localeRelative, multilingual, type Locale } from '@/i18n';
+import { appUrl } from '@/lib/app';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+
+// This page in the other languages it exists in, for the language switcher (same rule as BaseLayout's hreflang).
+const alternates = alternatesOf(localeRelative(Astro.url.pathname));
+const switcher = multilingual && Object.keys(alternates).length > 1;
+const locale = getLocale() as Locale;
+const home = link(locale);
 
 // Home is the logo; the modules sit behind "Modules" (desktop) or are listed open (mobile menu).
 const navLinks = [
-  { href: '/calendar/', label: 'Calendar' },
-  { href: '/pricing/', label: 'Pricing' },
+  { href: link(locale, 'calendar'), label: m.nav_calendar() },
+  { href: link(locale, 'pricing'), label: m.nav_pricing() },
 ];
 
 const path = Astro.url.pathname;
-const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
-const inModule = modules.some((module) => isCurrent(module.href));
+const isCurrent = (href: string) => (href === home ? path === home : path.startsWith(href));
+const pricing = link(locale, 'pricing');
+const inModule = modules().some((module) => isCurrent(module.href));
 ---
 
 <header class="band-dark sticky top-0 z-50 border-b border-asphalt-line">
@@ -19,14 +30,14 @@ const inModule = modules.some((module) => isCurrent(module.href));
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
       <div class="flex items-center">
-        <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+        <a href={home} class="flex items-center hover:opacity-80 transition-opacity">
           <img src="/logo_horizontal.svg" alt="RaceNode" class="h-8 w-auto" />
         </a>
       </div>
 
       <!-- Desktop Navigation: the modules behind one disclosure (click, hover with a mouse, keyboard), then
            Calendar and Pricing. A disclosure, not an ARIA menu: Tab walks the links, Escape closes. -->
-      <nav class="hidden lg:flex items-center gap-7 h-full" aria-label="Main">
+      <nav class="hidden lg:flex items-center gap-7 h-full" aria-label={m.nav_main()}>
         <div class="relative h-full flex items-center" data-modules>
           <button
             type="button"
@@ -40,7 +51,7 @@ const inModule = modules.some((module) => isCurrent(module.href));
             aria-controls="modules-panel"
             data-modules-button
           >
-            Modules
+            {m.nav_modules()}
             <svg
               class="size-4 transition-transform in-aria-expanded:rotate-180"
               viewBox="0 0 24 24"
@@ -60,7 +71,7 @@ const inModule = modules.some((module) => isCurrent(module.href));
             data-modules-panel
           >
             <ul class="app-card w-[25rem] p-2 shadow-2xl shadow-black/50">
-              {modules.map((module) => (
+              {modules().map((module) => (
                 <li>
                   <a
                     href={module.href}
@@ -103,31 +114,33 @@ const inModule = modules.some((module) => isCurrent(module.href));
 
       <!-- CTA Buttons (Desktop) -->
       <div class="hidden lg:flex items-center space-x-3">
+        {switcher && <LanguageSwitcher alternates={alternates} />}
         <a
-          href={`${appUrl}/login`}
+          href={appUrl(locale, '/login')}
           class="px-3 py-2 text-smoke hover:text-white transition-colors font-medium"
         >
-          Login
+          {m.nav_login()}
         </a>
         <a
-          href={`${appUrl}/signup`}
+          href={appUrl(locale, '/signup')}
           class="bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-[3px] font-semibold transition-colors"
         >
-          Sign Up
+          {m.nav_signup()}
         </a>
       </div>
 
       <!-- Mobile: Pricing stays in the bar, next to the menu button (Willi, 2026-10-26). -->
       <div class="flex items-center gap-1 lg:hidden">
+        {switcher && <LanguageSwitcher alternates={alternates} />}
         <a
-          href="/pricing/"
+          href={pricing}
           class:list={[
             'px-2 py-2 font-display text-[0.95rem] font-medium tracking-wide transition-colors hover:text-white',
-            isCurrent('/pricing/') ? 'text-white' : 'text-smoke',
+            isCurrent(pricing) ? 'text-white' : 'text-smoke',
           ]}
-          aria-current={isCurrent('/pricing/') ? 'page' : undefined}
+          aria-current={isCurrent(pricing) ? 'page' : undefined}
         >
-          Pricing
+          {m.nav_pricing()}
         </a>
         <button
           type="button"
@@ -135,7 +148,9 @@ const inModule = modules.some((module) => isCurrent(module.href));
           class="lg:hidden p-2 rounded-[3px] text-smoke hover:text-white hover:bg-asphalt-raised transition-colors"
           aria-expanded="false"
           aria-controls="mobile-menu"
-          aria-label="Open navigation menu"
+          aria-label={m.nav_menu_open()}
+          data-label-open={m.nav_menu_open()}
+          data-label-close={m.nav_menu_close()}
         >
           <svg
             id="menu-icon-open"
@@ -175,12 +190,12 @@ const inModule = modules.some((module) => isCurrent(module.href));
   <nav
     id="mobile-menu"
     class="hidden lg:hidden border-t border-asphalt-line max-h-[calc(100dvh-4rem)] overflow-y-auto"
-    aria-label="Main"
+    aria-label={m.nav_main()}
   >
     <div class="px-4 py-4 space-y-3">
-      <p class="app-label px-3">Modules</p>
+      <p class="app-label px-3">{m.nav_modules()}</p>
       <ul>
-        {modules.map((module) => (
+        {modules().map((module) => (
           <li>
             <a
               href={module.href}
@@ -209,16 +224,16 @@ const inModule = modules.some((module) => isCurrent(module.href));
       </div>
       <div class="pt-3 border-t border-asphalt-line space-y-3">
         <a
-          href={`${appUrl}/login`}
+          href={appUrl(locale, '/login')}
           class="block font-display text-lg text-smoke hover:text-white hover:bg-asphalt-raised rounded-[3px] px-3 py-2 transition-colors"
         >
-          Login
+          {m.nav_login()}
         </a>
         <a
-          href={`${appUrl}/signup`}
+          href={appUrl(locale, '/signup')}
           class="block bg-accent hover:bg-accent-hover text-white px-3 py-2.5 rounded-[3px] font-semibold transition-colors text-center"
         >
-          Sign Up
+          {m.nav_signup()}
         </a>
       </div>
     </div>
@@ -288,7 +303,7 @@ const inModule = modules.some((module) => isCurrent(module.href));
 
       menuButton.setAttribute(
         'aria-label',
-        isExpanded ? 'Open navigation menu' : 'Close navigation menu',
+        (isExpanded ? menuButton.dataset.labelOpen : menuButton.dataset.labelClose) ?? '',
       );
     });
   }

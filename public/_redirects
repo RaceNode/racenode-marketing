@@ -8,3 +8,4 @@
 # Personal left the app's screens on 2026-10-19: its page is now Planning (Me view).
 /crew-app    /crew-planning/    301
 /crew-app/   /crew-planning/    301
+/en/*   /:splat   301

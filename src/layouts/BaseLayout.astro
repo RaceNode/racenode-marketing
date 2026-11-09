@@ -5,6 +5,18 @@ import { organizationJsonLd, softwareApplicationJsonLd, websiteJsonLd } from '..
 import { site } from '../site.config';
 import { preloadFonts } from '../styles/fonts';
 import Analytics from '../components/Analytics.astro';
+import {
+  absoluteUrl,
+  alternatesOf,
+  defaultLocale,
+  link,
+  localeRelative,
+  localeTag,
+  multilingual,
+  type Locale,
+} from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
 
 interface Props {
   title: string;
@@ -12,15 +24,27 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  /**
+   * URL of this page in each language it exists in. Defaults to the same path in every language that has it
+   * (`notYet` in src/i18n). Ignored on a single-language site: no hreflang.
+   */
+  alternates?: Partial<Record<Locale, string>>;
 }
 
 const {
   title,
-  description = "Racing team management software: travel, hotels, roles and the race weekend timetable, on every crew member's phone.",
+  description = m.meta_description_default(),
   image = site.ogImage,
   type = 'website',
   noindex = false,
+  alternates: given,
 } = Astro.props;
+
+const locale = getLocale() as Locale;
+// hreflang only where there is another language to point to, and never from a page kept out of the index.
+const alternates = multilingual && !noindex ? (given ?? alternatesOf(localeRelative(Astro.url.pathname))) : {};
+const alternateLinks = Object.entries(alternates) as Array<[Locale, string]>;
+const hasTranslations = alternateLinks.length > 1;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const imageURL = new URL(image, Astro.site);
@@ -29,13 +53,18 @@ const imageURL = new URL(image, Astro.site);
 const stores = [APP_STORE_URL, PLAY_STORE_URL];
 const schemas = [
   organizationJsonLd(site, stores),
-  websiteJsonLd(site, 'en'),
-  softwareApplicationJsonLd(site, { description, installUrl: stores }),
+  websiteJsonLd(site, locale),
+  softwareApplicationJsonLd(site, {
+    description,
+    installUrl: stores,
+    offer: m.schema_offer_description(),
+    language: locale,
+  }),
 ];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,6 +81,13 @@ const schemas = [
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
+    {hasTranslations &&
+      alternateLinks.map(([lang, path]) => (
+        <link rel="alternate" hreflang={lang} href={absoluteUrl(path)} />
+      ))}
+    {hasTranslations && alternates[defaultLocale] && (
+      <link rel="alternate" hreflang="x-default" href={absoluteUrl(alternates[defaultLocale])} />
+    )}
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={type} />
@@ -60,7 +96,13 @@ const schemas = [
     <meta property="og:description" content={description} />
     <meta property="og:image" content={imageURL} />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={localeTag(locale).replace('-', '_')} />
+    {hasTranslations &&
+      alternateLinks
+        .filter(([lang]) => lang !== locale)
+        .map(([lang]) => (
+          <meta property="og:locale:alternate" content={localeTag(lang).replace('-', '_')} />
+        ))}
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -86,7 +128,7 @@ const schemas = [
     ))}
     <Analytics />
   </head>
-  <body class="min-h-screen bg-concrete text-ink" data-privacy-href="/privacy/">
+  <body class="min-h-screen bg-concrete text-ink" data-privacy-href={link(locale, 'privacy')}>
     <slot />
   </body>
 </html>

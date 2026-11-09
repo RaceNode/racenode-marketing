@@ -4,7 +4,8 @@ import { defineConfig, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { site } from './src/site.config';
+import { paraglideVitePlugin } from '@inlang/paraglide-js';
+import { defaultLocale, locales, site } from './src/site.config';
 
 // https://astro.build/config
 export default defineConfig({
@@ -32,8 +33,19 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'always',
   },
+  // Astro's i18n helpers with routing left to the `[...locale]/` pages and the Paraglide middleware (WBLT template).
+  i18n: {
+    locales: [...locales],
+    defaultLocale,
+    routing: 'manual',
+  },
   vite: {
-    plugins: [tailwindcss()],
+    // Compiler options live in `project.inlang/paraglide.config.ts`.
+    plugins: [
+      tailwindcss(),
+      paraglideVitePlugin({ project: './project.inlang', outdir: './src/paraglide' }),
+    ],
+    optimizeDeps: { include: ['@inlang/paraglide-js/urlpattern-polyfill'] },
   },
   integrations: [
     mdx(),
@@ -41,6 +53,11 @@ export default defineConfig({
       changefreq: 'weekly',
       priority: 0.7,
       lastmod: new Date(),
+      // Every page lists its translations (xhtml:link), the same path under each language's prefix.
+      i18n: {
+        defaultLocale,
+        locales: Object.fromEntries(locales.map((locale) => [locale, locale])),
+      },
     }),
   ],
 });

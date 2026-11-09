@@ -1,14 +1,17 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { breadcrumbJsonLd } from '../lib/seo';
-import { site } from '../site.config';
-import ManagementHero from '../components/management/ManagementHero.astro';
-import ManagementPainPoints from '../components/management/ManagementPainPoints.astro';
-import ManagementFeatures from '../components/management/ManagementFeatures.astro';
-import ManagementSync from '../components/management/ManagementSync.astro';
-import ManagementCTA from '../components/management/ManagementCTA.astro';
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('management');
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { breadcrumbJsonLd } from '@/lib/seo';
+import { site } from '@/site.config';
+import ManagementHero from '@/components/management/ManagementHero.astro';
+import ManagementPainPoints from '@/components/management/ManagementPainPoints.astro';
+import ManagementFeatures from '@/components/management/ManagementFeatures.astro';
+import ManagementSync from '@/components/management/ManagementSync.astro';
+import ManagementCTA from '@/components/management/ManagementCTA.astro';
 
 const title = 'Race Weekend & Crew Management Software | RaceNode';
 const description =

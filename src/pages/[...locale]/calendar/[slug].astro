@@ -3,28 +3,31 @@
 // "GT World Challenge Europe 2027 calendar". When the organizer has not published the featured season yet,
 // the page says so and shows the last season known, instead of an empty page. The visitor's browser then brings
 // the season part up to date (LiveRefresh); the rest (same weekends, related) waits for the next build.
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import CalendarCTA from '../../components/calendar/CalendarCTA.astro';
-import CalendarInlineCTA from '../../components/calendar/CalendarInlineCTA.astro';
-import SampleDataNotice from '../../components/calendar/SampleDataNotice.astro';
-import LiveRefresh from '../../components/calendar/LiveRefresh.astro';
-import { catalog, liveConfig } from '../../lib/calendar/build.mjs';
-import { displayName, sharedWeekends } from '../../lib/calendar/model.mjs';
-import { championshipBody, hash, logoOf } from '../../lib/calendar/render.mjs';
+import { localePathsOf } from '@/i18n';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import CalendarCTA from '@/components/calendar/CalendarCTA.astro';
+import CalendarInlineCTA from '@/components/calendar/CalendarInlineCTA.astro';
+import SampleDataNotice from '@/components/calendar/SampleDataNotice.astro';
+import LiveRefresh from '@/components/calendar/LiveRefresh.astro';
+import { catalog, liveConfig } from '@/lib/calendar/build.mjs';
+import { displayName, sharedWeekends } from '@/lib/calendar/model.mjs';
+import { championshipBody, hash, logoOf } from '@/lib/calendar/render.mjs';
 import {
   DISCIPLINES as DISCIPLINE_NAMES,
   REGIONS as REGION_NAMES,
   country,
-} from '../../lib/calendar/format.mjs';
+} from '@/lib/calendar/format.mjs';
 
 const DISCIPLINES: Record<string, string> = DISCIPLINE_NAMES;
 const REGIONS: Record<string, string> = REGION_NAMES;
 
 export async function getStaticPaths() {
   const { cal } = await catalog();
-  return cal.championships.map((c: any) => ({ params: { slug: c.slug } }));
+  return cal.championships.flatMap((c: any) =>
+    localePathsOf(`calendar/${c.slug}`, [{ slug: c.slug }]),
+  );
 }
 
 const loaded = await catalog();

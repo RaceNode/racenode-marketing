@@ -1,7 +1,10 @@
 ---
-import LegalLayout from '../layouts/LegalLayout.astro';
-import { Content } from '../data/legal/privacy-policy.md';
-import AnalyticsDisclosure from '../components/AnalyticsDisclosure.astro';
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('privacy');
+import LegalLayout from '@/layouts/LegalLayout.astro';
+import { Content } from '@/data/legal/privacy-policy.md';
+import AnalyticsDisclosure from '@/components/AnalyticsDisclosure.astro';
 ---
 
 <LegalLayout

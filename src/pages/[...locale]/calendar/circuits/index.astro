@@ -1,13 +1,16 @@
 ---
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('calendar/circuits');
 // Every circuit that has its own calendar page, by country: the way in to /calendar/circuits/<slug>/ for visitors
 // and search engines. Built each morning with the rest; nothing here is refreshed in the browser.
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Header from '../../../components/Header.astro';
-import Footer from '../../../components/Footer.astro';
-import CalendarCTA from '../../../components/calendar/CalendarCTA.astro';
-import SampleDataNotice from '../../../components/calendar/SampleDataNotice.astro';
-import { catalog } from '../../../lib/calendar/build.mjs';
-import { circuits } from '../../../lib/calendar/model.mjs';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import CalendarCTA from '@/components/calendar/CalendarCTA.astro';
+import SampleDataNotice from '@/components/calendar/SampleDataNotice.astro';
+import { catalog } from '@/lib/calendar/build.mjs';
+import { circuits } from '@/lib/calendar/model.mjs';
 
 const { data, ctx, cal } = await catalog();
 const pages = circuits(cal).filter((c: any) => c.page);

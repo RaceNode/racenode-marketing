@@ -3,28 +3,30 @@ import StoreBadges from './StoreBadges.astro';
 import { site } from '../site.config';
 import { analytics } from '@/analytics/config';
 import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+import { link, type Locale } from '@/i18n';
+import { modules } from '../data/modules';
+
+const locale = getLocale() as Locale;
 
 const currentYear = new Date().getFullYear();
 const email = site.contact.email;
 
 const footerLinks = {
   product: [
-    { href: '/management/', label: 'Management' },
-    { href: '/logistics/', label: 'Logistics' },
-    { href: '/timetable/', label: 'Timetable' },
-    { href: '/crew-planning/', label: 'Planning' },
-    { href: '/pricing/', label: 'Pricing' },
-    { href: '/calendar/', label: 'Motorsport calendar' },
+    ...modules().map((module) => ({ href: module.href, label: module.name })),
+    { href: link(locale, 'pricing'), label: m.nav_pricing() },
+    { href: link(locale, 'calendar'), label: m.footer_calendar() },
   ],
   company: [
     // { href: "/about", label: "About" },  // TODO: Create About page
-    { href: `mailto:${email}`, label: 'Contact' },
+    { href: `mailto:${email}`, label: m.footer_contact() },
   ],
   legal: [
-    { href: '/terms/', label: 'Terms' },
-    { href: '/privacy/', label: 'Privacy' },
-    { href: '/account-deletion/', label: 'Account Deletion' },
-    { href: '/legal-notice/', label: 'Legal Notice' },
+    { href: link(locale, 'terms'), label: m.footer_terms() },
+    { href: link(locale, 'privacy'), label: m.footer_privacy() },
+    { href: link(locale, 'account-deletion'), label: m.footer_account_deletion() },
+    { href: link(locale, 'legal-notice'), label: m.footer_legal_notice() },
   ],
 };
 ---
@@ -35,11 +37,11 @@ const footerLinks = {
     <div class="grid grid-cols-2 md:grid-cols-12 gap-x-8 gap-y-10">
       <!-- Logo & Info -->
       <div class="col-span-2 md:col-span-6">
-        <a href="/" class="inline-block mb-4">
+        <a href={link(locale)} class="inline-block mb-4">
           <img src="/logo_horizontal.svg" alt="RaceNode" class="h-8 w-auto" />
         </a>
         <p class="font-display text-2xl font-semibold text-white mb-4 max-w-xs leading-tight">
-          Racing team management software.
+          {m.footer_tagline()}
         </p>
         <a
           href={`mailto:${email}`}
@@ -61,13 +63,13 @@ const footerLinks = {
           <span>{email}</span>
         </a>
 
-        <h3 class="text-smoke font-medium text-sm mt-8 mb-3">Get the app</h3>
+        <h3 class="text-smoke font-medium text-sm mt-8 mb-3">{m.footer_get_app()}</h3>
         <StoreBadges size="sm" align="start" />
       </div>
 
       <!-- Product Links -->
       <div class="md:col-span-2">
-        <h3 class="font-display text-smoke font-medium text-sm mb-4">Product</h3>
+        <h3 class="font-display text-smoke font-medium text-sm mb-4">{m.footer_product()}</h3>
         <ul class="space-y-3">
           {footerLinks.product.map((link) => (
             <li>
@@ -81,7 +83,7 @@ const footerLinks = {
 
       <!-- Company Links -->
       <div class="md:col-span-2">
-        <h3 class="font-display text-smoke font-medium text-sm mb-4">Company</h3>
+        <h3 class="font-display text-smoke font-medium text-sm mb-4">{m.footer_company()}</h3>
         <ul class="space-y-3">
           {footerLinks.company.map((link) => (
             <li>
@@ -95,7 +97,7 @@ const footerLinks = {
 
       <!-- Legal Links -->
       <div class="md:col-span-2">
-        <h3 class="font-display text-smoke font-medium text-sm mb-4">Legal</h3>
+        <h3 class="font-display text-smoke font-medium text-sm mb-4">{m.footer_legal()}</h3>
         <ul class="space-y-3">
           {footerLinks.legal.map((link) => (
             <li>
@@ -121,9 +123,9 @@ const footerLinks = {
 
     <!-- Copyright -->
     <div class="mt-14 pt-6 border-t border-asphalt-line">
-      <p class="text-smoke text-sm">&copy; {currentYear} RaceNode. All rights reserved.</p>
+      <p class="text-smoke text-sm">&copy; {currentYear} RaceNode. {m.footer_rights()}</p>
       <p class="text-smoke text-xs mt-2">
-        Designed by{' '}
+        {m.footer_designed_by()}{' '}
         <a
           href="https://wblt-engineering.com"
           rel="nofollow"

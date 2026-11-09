@@ -1,8 +1,8 @@
 /**
  * Site configuration — the single place to describe the company and the site.
  *
- * Reduced from the WBLT site template's `site.config.ts`: one language, no
- * contact form, no local business; hosting `cloudflare-pages`, a value the
+ * Reduced from the WBLT site template's `site.config.ts`: no contact form, no
+ * local business; hosting `cloudflare-pages`, a value the
  * template does not have (docs/deployment.md). Brand colours and fonts live in
  * `src/styles/tokens.css`.
  * Keep this file free of secrets: it is bundled into the public site.
@@ -17,11 +17,32 @@
  *   in the template: it has no `/api/geo` endpoint, so `src/analytics/geo.ts`
  *   sends no request and the visitor's country stays unknown.
  */
+/**
+ * Languages served by the site, as in the WBLT template. Must match
+ * `project.inlang/settings.json`. English, the language the site was first
+ * published in, stays at the root (`/calendar/`); every other language lives
+ * under its prefix (`/fr/calendar/`). Adding a language: docs/languages.md.
+ */
+export const locales = ['en', 'fr'] as const;
+export type Locale = (typeof locales)[number];
+
+/** Language at the root, and the target of `x-default`. */
+export const defaultLocale: Locale = 'en';
+
+/** `false`: the default language at the root, addresses already online do not move. */
+export const prefixDefaultLocale: boolean = false;
+
 export const hostings = ['cloudflare', 'static-php', 'cloudflare-pages'] as const;
 export type Hosting = (typeof hostings)[number];
 
 export const site = {
   hosting: 'cloudflare-pages' as Hosting,
+
+  /** BCP 47 tags per locale, used for `og:locale`, `inLanguage` and `Intl`. */
+  localeTags: { en: 'en-US', fr: 'fr-FR' } satisfies Record<Locale, string>,
+
+  /** Time zone used when formatting dates on the site. */
+  timeZone: 'Europe/Paris',
 
   /** Public name, used in titles, structured data and the legal notice. */
   name: 'RaceNode',
@@ -76,3 +97,18 @@ export const site = {
 };
 
 export type SiteConfig = typeof site;
+
+/** Derived, not settings. Several languages: hreflang and a language switcher. */
+export const multilingual = locales.length > 1;
+
+/** Every URL carries a `/<locale>/` prefix, the default language's too. */
+export const prefixed = multilingual && prefixDefaultLocale;
+
+/** Whether the pages of a language live under `/<locale>/`. */
+export function hasPrefix(locale: Locale): boolean {
+  return prefixed || locale !== defaultLocale;
+}
+
+export function isLocale(value: unknown): value is Locale {
+  return typeof value === 'string' && (locales as readonly string[]).includes(value);
+}

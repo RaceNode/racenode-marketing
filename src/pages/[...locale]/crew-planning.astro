@@ -1,14 +1,17 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { breadcrumbJsonLd } from '../lib/seo';
-import { site } from '../site.config';
-import PlanningHero from '../components/planning/PlanningHero.astro';
-import PlanningPainPoints from '../components/planning/PlanningPainPoints.astro';
-import PlanningFeatures from '../components/planning/PlanningFeatures.astro';
-import PlanningSync from '../components/planning/PlanningSync.astro';
-import PlanningCTA from '../components/planning/PlanningCTA.astro';
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('crew-planning');
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { breadcrumbJsonLd } from '@/lib/seo';
+import { site } from '@/site.config';
+import PlanningHero from '@/components/planning/PlanningHero.astro';
+import PlanningPainPoints from '@/components/planning/PlanningPainPoints.astro';
+import PlanningFeatures from '@/components/planning/PlanningFeatures.astro';
+import PlanningSync from '@/components/planning/PlanningSync.astro';
+import PlanningCTA from '@/components/planning/PlanningCTA.astro';
 
 const title = 'Crew Planning & Season Scheduling for Race Teams | RaceNode';
 const description =

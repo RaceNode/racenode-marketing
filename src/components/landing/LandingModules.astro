@@ -19,7 +19,7 @@ import { modules } from '../../data/modules';
     </div>
 
     <ul class="grid gap-y-16 lg:gap-y-24">
-      {modules.map((module, i) => (
+      {modules().map((module, i) => (
         <li>
           <a href={module.href} class="group grid items-center gap-y-6 lg:grid-cols-12 lg:gap-x-12">
             <div class:list={['lg:col-span-8', i % 2 === 1 && 'lg:order-2']}>

@@ -8,11 +8,11 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/store/check.mjs && node scripts/guardrails.mjs && astro build && node scripts/guardrails.mjs --dist",
+    "build": "npm run i18n:compile && node scripts/store/check.mjs && node scripts/guardrails.mjs && astro build && node scripts/guardrails.mjs --dist",
     "build:local": "node scripts/build-local.mjs",
     "guardrails": "node scripts/guardrails.mjs",
     "test:guardrails": "node --test scripts/guardrails.test.mjs",
-    "test:calendar": "node --test src/lib/calendar/calendar.test.mjs src/lib/calendar/logos.test.mjs",
+    "test:calendar": "npm run i18n:compile && node --test src/lib/calendar/calendar.test.mjs src/lib/calendar/logos.test.mjs",
     "test:unit": "vitest run",
     "test:lighthouse": "node tests/lighthouse.mjs",
     "test": "npm run check && npm run lint && npm run format:check && npm run test:guardrails && npm run test:calendar && npm run test:unit",
@@ -22,7 +22,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "astro": "astro"
+    "astro": "astro",
+    "i18n:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.7",
@@ -30,6 +31,7 @@
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@fontsource/ibm-plex-sans-condensed": "^5.3.0",
+    "@inlang/paraglide-js": "^2.29.3",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^7.2.8",

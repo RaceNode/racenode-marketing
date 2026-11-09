@@ -1,10 +1,13 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { breadcrumbJsonLd, faqJsonLd } from '../lib/seo';
-import { site } from '../site.config';
-import { modules } from '../data/modules';
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('pricing');
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { breadcrumbJsonLd, faqJsonLd } from '@/lib/seo';
+import { site } from '@/site.config';
+import { modules } from '@/data/modules';
 
 // Prices and wording: Willi, 2026-10-26. Free for everyone until 31 December 2026; from 2027 a free trial that
 // lasts until the end of the team's first event (any kind of event), then a subscription. Simple, factual, no slogan.
@@ -83,7 +86,7 @@ const faqSchema = faqJsonLd(
             <h2 class="title">Every module included.</h2>
           </div>
           <ul class="grid gap-x-12 gap-y-10 md:grid-cols-2">
-            {modules.map((module) => (
+            {modules().map((module) => (
               <li>
                 <a href={module.href} class="group block">
                   <h3 class="ruled font-display text-2xl font-bold">{module.name}</h3>

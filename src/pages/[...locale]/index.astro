@@ -1,0 +1,34 @@
+---
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('');
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import LandingHero from '@/components/landing/LandingHero.astro';
+import LandingImport from '@/components/landing/LandingImport.astro';
+import LandingProblem from '@/components/landing/LandingProblem.astro';
+import LandingCatalog from '@/components/landing/LandingCatalog.astro';
+import LandingModules from '@/components/landing/LandingModules.astro';
+import LandingSync from '@/components/landing/LandingSync.astro';
+import LandingCTA from '@/components/landing/LandingCTA.astro';
+---
+
+<BaseLayout
+  title="Racing Team Management Software | RaceNode"
+  description="Travel, hotels, roles and the race weekend timetable, on every crew member's phone. Built by William Brillouet, former GT3 team manager. Free until 31 December 2026."
+>
+  <div class="min-h-screen bg-concrete flex flex-col">
+    <Header />
+    <main class="flex-1">
+      <LandingHero />
+      <LandingImport />
+      <LandingProblem />
+      <LandingCatalog />
+      <LandingModules />
+      <LandingSync />
+      <LandingCTA />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

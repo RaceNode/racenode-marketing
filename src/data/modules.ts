@@ -1,6 +1,9 @@
-// The modules, in the order of the app's own navigation. One list for the header menu (name + `short`) and the
+// The modules, in the order of the app's own navigation, in the language of the page being built (getLocale()). One list for the header menu (name + `short`) and the
 // home cards (name + `summary` + the captures). The pages are stable URLs (scripts/guardrails.mjs).
 import type { ImageMetadata } from 'astro';
+import { link, type Locale } from '@/i18n';
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
 import { CREW_DAYS_IN_PLANNING } from './crew-days';
 import managementPhone from '../assets/screenshots/management-overview-phone.png';
 import logisticsPhone from '../assets/screenshots/logistics-overview-phone.png';
@@ -26,56 +29,48 @@ export interface Module {
   screenAlt?: string;
 }
 
-export const modules: Module[] = [
-  {
-    name: 'Management',
-    href: '/management/',
-    short: 'Roles, racecars and meals per event',
-    summary:
-      'Roles per car and per crew, racecar entries and meals for every event: set once, seen by the whole crew, with what is still missing before the event.',
-    phone: managementPhone,
-    phoneAlt:
-      'RaceNode Management on a phone: one item to resolve before the event, team roles, staff with a role and a meal',
-    screen: managementScreen,
-    screenAlt:
-      'RaceNode Management: one staff without a team role to resolve before the event, team roles, staff with a role and a meal',
-  },
-  {
-    name: 'Logistics',
-    href: '/logistics/',
-    short: 'Crew travel, hotels and vehicles',
-    summary:
-      'Flights, trains, team vehicles and hotels, room by room. Flags anyone missing a flight, a hotel or a ride, and fills bookings in from the confirmation you drop.',
-    phone: logisticsPhone,
-    phoneAlt:
-      'RaceNode Logistics on a phone: staff without departure or return travel, flagged before the event',
-    screen: logisticsScreen,
-    screenAlt:
-      'RaceNode Logistics: three staff without departure or return travel flagged before the event, travel, accommodation and vehicles covered',
-  },
-  {
-    name: 'Timetable',
-    href: '/timetable/',
-    short: 'The race weekend schedule, live',
-    summary:
-      'Your team schedule alongside the official sessions, briefings set once and anchored to them, and a live countdown on the screen in your box.',
-    phone: timetablePhone,
-    phoneAlt:
-      "RaceNode Timetable on a phone: the team's race weekend schedule with the time left before each item",
-    screen: timetableScreen,
-    screenAlt:
-      "RaceNode Timetable: the team's Friday schedule, briefings and official sessions, with the time left before each item",
-  },
-  {
-    name: 'Planning',
-    href: '/crew-planning/',
-    short: 'The whole season on one grid',
-    summary: `Staff, racecars and trucks across the whole season on one grid, painted day by day${CREW_DAYS_IN_PLANNING ? ', with availability posted by your own crew' : ''}.`,
-    phone: planningPhone,
-    phoneAlt:
-      "RaceNode Planning on a phone: a racing team's week, who is on track, travelling or at the workshop",
-    screen: planningScreen,
-    screenAlt:
-      "RaceNode Planning: a racing team's month on one grid, who is on track, travelling or at the workshop, day by day",
-  },
-];
+export function modules(): Module[] {
+  const locale = getLocale() as Locale;
+  return [
+    {
+      name: m.module_management_name(),
+      href: link(locale, 'management'),
+      short: m.module_management_short(),
+      summary: m.module_management_summary(),
+      phone: managementPhone,
+      phoneAlt: m.module_management_phone_alt(),
+      screen: managementScreen,
+      screenAlt: m.module_management_screen_alt(),
+    },
+    {
+      name: m.module_logistics_name(),
+      href: link(locale, 'logistics'),
+      short: m.module_logistics_short(),
+      summary: m.module_logistics_summary(),
+      phone: logisticsPhone,
+      phoneAlt: m.module_logistics_phone_alt(),
+      screen: logisticsScreen,
+      screenAlt: m.module_logistics_screen_alt(),
+    },
+    {
+      name: m.module_timetable_name(),
+      href: link(locale, 'timetable'),
+      short: m.module_timetable_short(),
+      summary: m.module_timetable_summary(),
+      phone: timetablePhone,
+      phoneAlt: m.module_timetable_phone_alt(),
+      screen: timetableScreen,
+      screenAlt: m.module_timetable_screen_alt(),
+    },
+    {
+      name: m.module_planning_name(),
+      href: link(locale, 'crew-planning'),
+      short: m.module_planning_short(),
+      summary: `${m.module_planning_summary()}${CREW_DAYS_IN_PLANNING ? m.module_planning_summary_crew_days() : ''}.`,
+      phone: planningPhone,
+      phoneAlt: m.module_planning_phone_alt(),
+      screen: planningScreen,
+      screenAlt: m.module_planning_screen_alt(),
+    },
+  ];
+}

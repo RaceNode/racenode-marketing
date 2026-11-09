@@ -1,22 +1,23 @@
 ---
+import { localePathsOf } from '@/i18n';
 // One page per circuit with enough rounds in the catalog (circuits() of model.mjs), for searches such as
 // "Spa-Francorchamps 2027 calendar": every championship's upcoming rounds there, in date order. Morning build only
 // (no browser refresh: that is for championship pages).
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Header from '../../../components/Header.astro';
-import Footer from '../../../components/Footer.astro';
-import CalendarCTA from '../../../components/calendar/CalendarCTA.astro';
-import CalendarInlineCTA from '../../../components/calendar/CalendarInlineCTA.astro';
-import SampleDataNotice from '../../../components/calendar/SampleDataNotice.astro';
-import { catalog } from '../../../lib/calendar/build.mjs';
-import { circuits, displayName } from '../../../lib/calendar/model.mjs';
-import { circuitBody } from '../../../lib/calendar/render.mjs';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import CalendarCTA from '@/components/calendar/CalendarCTA.astro';
+import CalendarInlineCTA from '@/components/calendar/CalendarInlineCTA.astro';
+import SampleDataNotice from '@/components/calendar/SampleDataNotice.astro';
+import { catalog } from '@/lib/calendar/build.mjs';
+import { circuits, displayName } from '@/lib/calendar/model.mjs';
+import { circuitBody } from '@/lib/calendar/render.mjs';
 
 export async function getStaticPaths() {
   const { cal } = await catalog();
   return circuits(cal)
     .filter((c) => c.page)
-    .map((c) => ({ params: { circuit: c.slug } }));
+    .flatMap((c) => localePathsOf(`calendar/circuits/${c.slug}`, [{ circuit: c.slug }]));
 }
 
 const loaded = await catalog();

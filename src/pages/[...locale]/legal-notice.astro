@@ -1,6 +1,9 @@
 ---
-import LegalLayout from '../layouts/LegalLayout.astro';
-import { Content } from '../data/legal/legal-notice.mdx';
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('legal-notice');
+import LegalLayout from '@/layouts/LegalLayout.astro';
+import { Content } from '@/data/legal/legal-notice.mdx';
 ---
 
 <LegalLayout

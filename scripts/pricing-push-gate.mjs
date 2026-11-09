@@ -6,8 +6,9 @@ import { readFileSync } from 'node:fs';
 const ZERO = /^0+$/;
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' });
 // Same figures as the "price figures" rule of scripts/guardrails.mjs, plus the pricing words themselves.
-const PRICE = /€\s?\d|\d\s?€|\bper month\b|\/\s?month\b|\bper year\b|free trial|subscription/i;
-const PAGES = ['src/pages/pricing.astro'];
+const PRICE =
+  /€\s?\d|\d\s?€|\bper month\b|\/\s?month\b|\bper year\b|free trial|subscription|\bpar mois\b|\bpar an\b|essai gratuit|abonne|gratuit/i;
+const PAGES = ['src/pages/[...locale]/pricing.astro'];
 // The rules themselves quote the words they look for.
 const RULES = [
   'scripts/pricing-push-gate.mjs',

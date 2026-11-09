@@ -1,15 +1,18 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { breadcrumbJsonLd } from '../lib/seo';
-import { site } from '../site.config';
-import LogisticsHero from '../components/logistics/LogisticsHero.astro';
-import LogisticsPainPoints from '../components/logistics/LogisticsPainPoints.astro';
-import LogisticsFeatures from '../components/logistics/LogisticsFeatures.astro';
-import LogisticsSync from '../components/logistics/LogisticsSync.astro';
-import LogisticsImport from '../components/logistics/LogisticsImport.astro';
-import LogisticsCTA from '../components/logistics/LogisticsCTA.astro';
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('logistics');
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { breadcrumbJsonLd } from '@/lib/seo';
+import { site } from '@/site.config';
+import LogisticsHero from '@/components/logistics/LogisticsHero.astro';
+import LogisticsPainPoints from '@/components/logistics/LogisticsPainPoints.astro';
+import LogisticsFeatures from '@/components/logistics/LogisticsFeatures.astro';
+import LogisticsSync from '@/components/logistics/LogisticsSync.astro';
+import LogisticsImport from '@/components/logistics/LogisticsImport.astro';
+import LogisticsCTA from '@/components/logistics/LogisticsCTA.astro';
 
 const title = 'Race Team Travel & Accommodation Software | RaceNode';
 const description =

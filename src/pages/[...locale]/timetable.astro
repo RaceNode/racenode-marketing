@@ -1,15 +1,18 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { breadcrumbJsonLd } from '../lib/seo';
-import { site } from '../site.config';
-import TimetableHero from '../components/timetable/TimetableHero.astro';
-import TimetablePainPoints from '../components/timetable/TimetablePainPoints.astro';
-import TimetableFeatures from '../components/timetable/TimetableFeatures.astro';
-import TimetableSync from '../components/timetable/TimetableSync.astro';
-import TimetableShare from '../components/timetable/TimetableShare.astro';
-import TimetableCTA from '../components/timetable/TimetableCTA.astro';
+import { localePathsOf } from '@/i18n';
+
+export const getStaticPaths = () => localePathsOf('timetable');
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { breadcrumbJsonLd } from '@/lib/seo';
+import { site } from '@/site.config';
+import TimetableHero from '@/components/timetable/TimetableHero.astro';
+import TimetablePainPoints from '@/components/timetable/TimetablePainPoints.astro';
+import TimetableFeatures from '@/components/timetable/TimetableFeatures.astro';
+import TimetableSync from '@/components/timetable/TimetableSync.astro';
+import TimetableShare from '@/components/timetable/TimetableShare.astro';
+import TimetableCTA from '@/components/timetable/TimetableCTA.astro';
 
 const title = 'Race Weekend Timetable & Schedule Software | RaceNode';
 const description =
