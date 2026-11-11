@@ -6,10 +6,10 @@ RaceNode est fait pour les équipes de sport automobile (GT, endurance, monoplac
 
 ## Modules
 
-- [Gestion](https://www.racenode.com/fr/management/) : gestion du week-end de course et de l'équipe. Les rôles par voiture, les engagements des voitures, l'organisation de l'équipe et les repas de chaque événement.
+- [Management](https://www.racenode.com/fr/management/) : gestion du week-end de course et de l'équipe. Les rôles par voiture, les engagements des voitures, l'organisation de l'équipe et les repas de chaque événement.
 - [Planning](https://www.racenode.com/fr/crew-planning/) : planning de l'équipe sur toute la saison. Qui travaille sur quelle course, les disponibilités, les rotations, relié à chaque événement du calendrier. Chaque membre de l'équipe voit sur son téléphone sa saison, son rôle, son déplacement, son hôtel, ses repas et ses prochaines séances (vue Moi). Les membres de votre équipe l'utilisent gratuitement.
 - [Logistique](https://www.racenode.com/fr/logistics/) : déplacements et hébergement de l'équipe. Vols, camions, utilitaires de location, hôtels et répartition des chambres pour chaque week-end de course, avec ce qui manque encore avant l'événement. Une réservation se crée à partir de sa confirmation (PDF, mail, photo, tableur), vérifiée dans un aperçu avant d'être enregistrée.
-- [Horaires](https://www.racenode.com/fr/timetable/) : les horaires du week-end de course. Le programme de l'équipe construit autour des horaires officiels, les briefings récurrents, un compte à rebours en direct et un flux iCal partagé avec toute l'équipe. Les séances officielles se remplissent à partir des horaires de l'organisateur (PDF, tableur, fichier de calendrier), vérifiés dans un aperçu avant d'être enregistrés.
+- [Timetable](https://www.racenode.com/fr/timetable/) : les horaires du week-end de course. Le programme de l'équipe construit autour des horaires officiels, les briefings récurrents, un compte à rebours en direct et un flux iCal partagé avec toute l'équipe. Les séances officielles se remplissent à partir des horaires de l'organisateur (PDF, tableur, fichier de calendrier), vérifiés dans un aperçu avant d'être enregistrés.
 
 ## Calendrier sport auto
 
