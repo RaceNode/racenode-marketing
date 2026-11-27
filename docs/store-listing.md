@@ -17,7 +17,7 @@ lands in a seeded team.
 |              |                                                                                                                                                                                                                               |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Email        | `reviewer@racenode.com`                                                                                                                                                                                                       |
-| Password     | Infisical `racenode` / `prod` / `/main` / `REVIEW_ACCOUNT_PASSWORD` — never in this repository, which is public |
+| Password     | Infisical `racenode` / `prod` / `/main` / `REVIEW_ACCOUNT_PASSWORD` — never in this repository, which is public                                                                                                               |
 | Organization | Falcon GT Racing — 6 staff, 2 trucks, 2 GT3 cars, 2 upcoming events, timetable, hotel, meals, crew, budget                                                                                                                    |
 | Seed         | `scripts/seed-demo-org.sql` — run in the dashboard SQL editor; destructive and idempotent on its own fixed ids; event dates are relative to run day, so **re-run it before each submission** to keep the data looking current |
 
